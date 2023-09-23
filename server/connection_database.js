@@ -2,7 +2,7 @@ const { Sequelize } = require('sequelize')
 const sequelize = new Sequelize('unibooksocial', 'root', '', {
   host: 'localhost',
   dialect: 'mysql',
-  logging:false
+  logging: false
 })
 const connectionDatabase = async () => {
   try {
@@ -12,4 +12,5 @@ const connectionDatabase = async () => {
     console.error('Unable to connect to the database:', error);
   }
 }
-connectionDatabase()
+module.exports = connectionDatabase
+
