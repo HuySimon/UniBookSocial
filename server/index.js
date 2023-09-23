@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require('cors')
 require('dotenv').config()
 
+require('./connection_database')
 const app = express()
 app.use(cors({
   origin: process.env.CLIENT_URL,
