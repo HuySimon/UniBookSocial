@@ -34,7 +34,7 @@ module.exports = {
       },
       isGeneralSubject: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.BOOLEAN
       },
       userConfirm: {
         type: Sequelize.STRING,
