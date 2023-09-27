@@ -1,0 +1,3 @@
+const routes = {
+    profile: "/profile"
+}
