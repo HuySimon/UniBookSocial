@@ -41,6 +41,7 @@ module.exports = (sequelize, DataTypes) => {
         instance.coverImage = 'coverImageDefault.jpg'
       }
     },
+
     sequelize,
     modelName: 'User',
   });

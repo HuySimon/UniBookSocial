@@ -14,6 +14,9 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
 
     }
+    validatePassword(candidatePassword, userPassword) {
+      return bcrypt.compareSync(candidatePassword, userPassword);
+    }
   }
   Account.init({
     email: {
@@ -40,6 +43,11 @@ module.exports = (sequelize, DataTypes) => {
         instance.status = 'working'
       }
     },
+    // instanceMethods: {
+    //   validatePassword: function (candidatePassword, userPassword) {
+    //     return bcrypt.compareSync(candidatePassword, userPassword);
+    //   }
+    // },
     sequelize,
     modelName: 'Account',
   });
