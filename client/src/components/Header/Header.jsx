@@ -90,7 +90,7 @@ const Header = () => {
 					<div className="flex flex-col h-full items-stretch justify-end p-2 md:p-4">
 						{
 							!isAuth ? (
-								<div className="w-full flex justify-between items-center gap-2">
+								<div className="hidden md:flex w-full justify-between items-center gap-2">
 									<button className='w-28 bg-primary-900 rounded-md text-white border border-primary-900 '>
 										<Link to={"/login"} className='w-full h-full block px-6 py-2'>
 											Login
