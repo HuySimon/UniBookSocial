@@ -91,13 +91,13 @@ const Header = () => {
 						{
 							!isAuth ? (
 								<div className="w-full flex justify-between items-center gap-2">
-									<button className='w-28 bg-primary-900 px-6 py-2 rounded-md text-white border border-primary-900 '>
-										<Link to={"/login"}>
+									<button className='w-28 bg-primary-900 rounded-md text-white border border-primary-900 '>
+										<Link to={"/login"} className='w-full h-full block px-6 py-2'>
 											Login
 										</Link>
 									</button>
-									<button className='w-28 border border-primary-900 text-primary-900 px-6 py-2 rounded-md'>
-										<Link to={"/signup"}>
+									<button className='w-28 border border-primary-900 text-primary-900 rounded-md'>
+										<Link to={"/signup"} className='w-full h-full block px-6 py-2'>
 											Sign up
 										</Link>
 									</button>

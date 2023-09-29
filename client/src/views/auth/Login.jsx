@@ -117,12 +117,6 @@ const Login = () => {
 					</div>
 				</motion.div>
 			</section>
-			{
-				isVisibleForgot && (<ForgotPassword isVisible={isVisibleForgot} setIsVisible={setIsVisibleForgot} />)
-			}
-			<div className="overlay w-full h-screen">
-
-			</div>
 		</>
 	)
 }

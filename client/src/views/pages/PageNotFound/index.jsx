@@ -1,9 +1,9 @@
 import React from 'react'
 
-const NotFound = () => {
+const Index = () => {
 	return (
 		<div>NotFound</div>
 	)
 }
 
-export default NotFound
+export default Index

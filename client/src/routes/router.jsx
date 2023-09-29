@@ -4,8 +4,9 @@ import DefaultLayout from "../views/layout/DefaultLayout";
 import Home from "../views/pages/Home";
 import SignUp from "../views/auth/SignUp";
 import Profile from "../views/pages/Profile";
-import NotFound from '../views/pages/NotFound'
+import NotFound from '../views/pages/PageNotFound'
 import ForgotPassword from "../views/auth/forgotPassword/ForgotPassword";
+import Search from '../views/pages/Search'
 const router = createBrowserRouter([
 	{
 		path: "/",
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
 			{
 				path: "/profile",
 				element: <Profile />
+			},
+			{
+				path: "/search",
+				element: <Search />
 			}
 		]
 	},
