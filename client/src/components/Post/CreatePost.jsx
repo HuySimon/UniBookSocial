@@ -11,7 +11,7 @@ const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 			<motion.div
 				initial={{
 					scale: 0,
-					opacity: 0
+					opacity: 0,
 				}}
 				animate={{
 					scale: 1,
@@ -26,12 +26,12 @@ const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 					scale: 0,
 					opacity: 0,
 					transition: {
-						duration: 0.15,
+						duration: 0.5,
 						ease: [0.12, 0, 0.39, 0],
 						type: "spring"
 					}
 				}}
-				className='fixed inset-0 m-auto w-[600px] h-fit max-h-screen bg-white z-10 rounded-lg overflow-hidden'>
+				className='fixed inset-0 m-auto w-[600px] h-fit max-h-screen bg-white z-20 rounded-lg overflow-hidden'>
 				<div className="w-full h-full flex flex-col">
 					<p className='text-base text-center font-semibold py-2 border-b'>Create new post</p>
 					<form className="flex flex-col" method='POST' action='#'>
@@ -113,20 +113,20 @@ const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 					</form>
 				</div>
 			</motion.div>
-			<div
+			<motion.div
 				onClick={() => {
 					handleCreatePost()
 					setActiveOverlay(0)
 				}}
-				className="fixed w-full h-screen bg-black/50">
-			</div>
+				className="fixed w-full h-screen bg-black/50 z-10">
+			</motion.div>
 			<AiOutlineClose
 				onClick={() => {
 					handleCreatePost()
 					setActiveOverlay(0)
 				}}
 				size={22}
-				className='fixed top-4 right-4 text-white cursor-pointer hover:rotate-[360deg] transition-all duration-300' />
+				className='fixed top-4 right-4 text-white cursor-pointer hover:rotate-[360deg] transition-all duration-300 z-20' />
 		</>
 	)
 }

@@ -7,6 +7,7 @@ import Profile from "../views/pages/Profile";
 import NotFound from '../views/pages/PageNotFound'
 import ForgotPassword from "../views/auth/forgotPassword/ForgotPassword";
 import Search from '../views/pages/Search'
+import CreatePost from "../components/Post/CreatePost";
 const router = createBrowserRouter([
 	{
 		path: "/",
@@ -23,6 +24,9 @@ const router = createBrowserRouter([
 			{
 				path: "/search",
 				element: <Search />
+			}, {
+				path: "/create",
+				element: <CreatePost />
 			}
 		]
 	},
