@@ -5,6 +5,7 @@ import Home from "../views/pages/Home";
 import SignUp from "../views/auth/SignUp";
 import Profile from "../views/pages/Profile";
 import NotFound from '../views/pages/NotFound'
+import ForgotPassword from "../views/auth/forgotPassword/ForgotPassword";
 const router = createBrowserRouter([
 	{
 		path: "/",
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
 	{
 		path: "/login",
 		element: <Login />
+	},
+	{
+		path: "/forgotpassword",
+		element: <ForgotPassword />
 	},
 	{
 		path: "/signup",

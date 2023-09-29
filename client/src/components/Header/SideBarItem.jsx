@@ -12,7 +12,7 @@ const SideBarItem = ({ title, href, index, activeOverlay, setActiveOverlay, expa
             }}
             className='px-2 md:px-4 pb-4 flex items-center font-semibold relative'>
             <Link
-                // to={href}
+                to={href}
                 className={`
                     relative
                     flex items-center w-full h-12 transition-all hover:text-primary-main

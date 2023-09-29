@@ -5,17 +5,15 @@ import { PiEyeBold, PiEyeClosedBold } from 'react-icons/pi'
 import { motion } from 'framer-motion'
 import { FcGoogle } from 'react-icons/fc'
 import { slideUpSignUp } from './animation'
-import {useForm} from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 const SignUp = () => {
 
 	const [showPassword, setShowPassword] = useState(false)
-	const [confirmPassword,setShowConfirmPassword] = useState(false)
-	const [password, setPassword] = useState("")
-	const [email, setEmail] = useState("")
+	const [confirmPassword, setShowConfirmPassword] = useState(false)
 	console.log("re-render")
 	return (
 		<section
-			className='w-full h-screen flex justify-center items-center bg-gray-200'>
+			className='w-full h-screen flex justify-center items-center bg-gray-100'>
 			<motion.div
 				variants={slideUpSignUp}
 				initial={"initial"}
@@ -26,24 +24,31 @@ const SignUp = () => {
 					<p className='  font-bold text-4xl'>Sign up</p>
 					<form
 						action="" method="post" className='mt-3'>
-						<div className="flex flex-col mb-3">
-							<label htmlFor="email" className='font-semibold mb-1'>Email</label>
-							<input type="email" name="email" id="email"
-								value={email}
-								onChange={(e) => setEmail(e.target.value)}
-								className='border border-primary-900 rounded-md text-primary-main placeholder:text-primary-700 placeholder:text-sm px-4 py-2 w-full' placeholder='Enter your email' />
+						<div className="flex justify-between items-center gap-5">
+							<div className="flex flex-col mb-3">
+								<label htmlFor="email" className='font-semibold mb-1'>First Name</label>
+								<input type="text" name="first-name" id="first-name"
+									className='border border-primary-900 rounded-md text-primary-main placeholder:text-primary-700 placeholder:text-sm px-4 py-2 w-full' placeholder='Enter your first name' />
+							</div>
+							<div className="flex flex-col mb-3">
+								<label htmlFor="email" className='font-semibold mb-1'>Last Name</label>
+								<input type="text" name="last-name" id="last-name"
+									className='border border-primary-900 rounded-md text-primary-main placeholder:text-primary-700 placeholder:text-sm px-4 py-2 w-full' placeholder='Enter your last name' />
+							</div>
 						</div>
 						<div className="flex flex-col mb-3">
 							<label htmlFor="email" className='font-semibold mb-1'>Email</label>
 							<input type="email" name="email" id="email"
-								value={email}
-								onChange={(e) => setEmail(e.target.value)}
 								className='border border-primary-900 rounded-md text-primary-main placeholder:text-primary-700 placeholder:text-sm px-4 py-2 w-full' placeholder='Enter your email' />
+						</div>
+						<div className="flex flex-col mb-3">
+							<label htmlFor="email" className='font-semibold mb-1'>Phone Number</label>
+							<input type="tel" name="phone" id="phone"
+								className='border border-primary-900 rounded-md text-primary-main placeholder:text-primary-700 placeholder:text-sm px-4 py-2 w-full' placeholder='Enter your phone number' />
 						</div>
 						<div className="flex flex-col relative mb-3">
 							<label htmlFor="password" className='font-semibold mb-1'>Password</label>
 							<input type={`${!showPassword ? "password" : "text"}`} name="password" id="password"
-								value={password}
 								onChange={(e) => setPassword(e.target.value)}
 								className='border border-primary-900 rounded-md text-primary-main placeholder:text-primary-700 placeholder:text-sm px-4 py-2 w-full' placeholder='Enter your password' />
 							{
@@ -87,9 +92,9 @@ const SignUp = () => {
 								className='ml-1 font-semibold text-primary-main hover:underline underline-offset-2'>Login here</Link>
 						</div>
 						<div className="flex flex-col justify-center items-center gap-3 mt-2 w-full">
-							<p className='text-primary-500'>Or, sign up with</p>
+							<p className='text-black'>Or, sign up with</p>
 							<Link
-								className='w-full px-4 py-2 border border-primary-300 rounded-lg
+								className='w-full px-4 py-2 border border-primary-900 rounded-lg
                                             transition-all hover:bg-primary-900 hover:text-white
                                             flex justify-center items-center gap-2 font-semibold
                                             '
