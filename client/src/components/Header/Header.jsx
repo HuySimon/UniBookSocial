@@ -1,16 +1,18 @@
 import React, { useEffect, useState, useMemo } from 'react'
 import CreatePost from '../Post/CreatePost'
+import Notification from '../Notification'
 import { Link } from 'react-router-dom'
-import { Logo } from '../../assets'
+import { Logo, Portrait } from '../../assets'
 import { CiSearch } from 'react-icons/ci'
 import { AiOutlineLogout } from 'react-icons/ai'
 import { PiHeartLight, PiEnvelopeLight, PiListBold, PiHouseLight, PiPlusCircleLight } from 'react-icons/pi'
-import { motion} from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import SideBarItem from './SideBarItem'
 const Header = () => {
 
 	const [expand, setExpand] = useState(true)
 	const [isVisiblePost, setIsVisiblePost] = useState(false)
+	const [isVisibleNotify, setIsVisibleNotify] = useState(false)
 	const [isAuth, setIsAuth] = useState(false)
 	const [activeOverlay, setActiveOverlay] = useState(0)
 	useEffect(() => {
@@ -24,7 +26,7 @@ const Header = () => {
 		return () => {
 			window.removeEventListener('resize', checkTabletMode);
 		};
-	}, []);
+	}, [isVisibleNotify, isVisiblePost]);
 
 	const iconList = [
 		{
@@ -40,19 +42,19 @@ const Header = () => {
 		{
 			icon: PiHeartLight,
 			title: "Notifications",
-			link: "/notification"
+			link: `/`,
+			handleCreatePost: () => { setIsVisibleNotify(!isVisibleNotify) }
 		},
 		{
 			icon: PiPlusCircleLight,
 			title: "Create",
-			link: "/",
 			handleCreatePost: () => { setIsVisiblePost(!isVisiblePost) }
 		},
 	]
 
 	return (
 		<>
-			<motion.div className={`sticky top-0 ${expand ? "w-[251px]" : "w-16"} h-screen bg-white border-r border-gray-300 transition-all`}>
+			<motion.div className={`sticky top-0 ${expand ? "w-[251px]" : "w-16 duration-[800ms]"} h-screen bg-white border-r border-gray-300 transition-all z-10`}>
 				<div className="relative grow-[1] w-full h-full flex flex-col items-stretch">
 					<div className="navbar-logo h-16 !ml-0 my-4">
 						<Link
@@ -84,7 +86,7 @@ const Header = () => {
 							expand={expand}
 							title={"Profile"}
 							href={"/profile"}
-							icon={<PiEnvelopeLight size={30} className='z-10' />}
+							icon={<img src={Portrait} className='w-[30px] h-[30px] rounded-full object-cover' />}
 						/>
 					</motion.ul>
 					<div className="flex flex-col h-full items-stretch justify-end p-2 md:p-4">
@@ -123,12 +125,17 @@ const Header = () => {
 						}
 					</div>
 				</div>
-			</motion.div >
+			</motion.div>
 			{
 				isVisiblePost && (
 					<CreatePost isVisiblePost={isVisiblePost} handleCreatePost={setIsVisiblePost} setActiveOverlay={setActiveOverlay} />
 				)
 			}
+			<AnimatePresence mode='wait'>
+				{
+					isVisibleNotify && <Notification isVisibleNotify={isVisibleNotify} handleNotify={setIsVisibleNotify} setActiveOverlay={setActiveOverlay} />
+				}
+			</AnimatePresence>
 		</>
 	)
 }
