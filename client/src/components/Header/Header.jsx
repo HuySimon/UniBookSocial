@@ -32,12 +32,14 @@ const Header = () => {
 		{
 			icon: PiHouseLight,
 			title: "Home",
-			link: "/"
+			link: "/",
+			handleCreatePost: () => { setIsVisibleNotify(false) }
 		},
 		{
 			icon: CiSearch,
 			title: "Search",
-			link: "/search"
+			link: "/search",
+			handleCreatePost: () => { setIsVisibleNotify(false) }
 		},
 		{
 			icon: PiHeartLight,
@@ -86,6 +88,7 @@ const Header = () => {
 							expand={expand}
 							title={"Profile"}
 							href={"/profile"}
+							handleCreatePost={() => setIsVisibleNotify(false)}
 							icon={<img src={Portrait} className='w-[30px] h-[30px] rounded-full object-cover' />}
 						/>
 					</motion.ul>

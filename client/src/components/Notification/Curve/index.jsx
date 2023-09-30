@@ -22,7 +22,6 @@ export default function Index() {
 	return (
 		<svg className="absolute top-0 left-[250px] w-[300px] h-full fill-white stroke-none">
 			<motion.path variants={curve} initial="initial" animate="enter" exit="exit"></motion.path>
-			{/* <path d={initialPath}></path> */}
 		</svg>
 	)
 }
