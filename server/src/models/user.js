@@ -28,13 +28,20 @@ module.exports = (sequelize, DataTypes) => {
         notNull: {
           msg: 'Vui lòng nhập email'
         }
-
       }
     },
     username: DataTypes.STRING,
     avatar: DataTypes.STRING,
     coverImage: DataTypes.STRING
   }, {
+    hooks: {
+      beforeCreate: function (instance, options) {
+        instance.username = instance.firstName + instance.lastName
+        instance.avatar = 'avatarDefault.jpg'
+        instance.coverImage = 'coverImageDefault.jpg'
+      }
+    },
+
     sequelize,
     modelName: 'User',
   });
