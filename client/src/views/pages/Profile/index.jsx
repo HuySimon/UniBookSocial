@@ -43,7 +43,7 @@ const Index = () => {
 				<div className="coverImage w-full h-full absolute inset-0">
 					<img src={SignupImg} alt="" className='w-full h-full object-cover object-top' />
 				</div>
-				<div className="w-full h-full flex justify-end items-center relative top-48">
+				<div className="w-full flex justify-end items-center relative top-80">
 					<div className="w-32 h-32 rounded-full overflow-hidden mx-auto">
 						<img src={Portrait} alt="" className='w-full h-full object-cover object-top' />
 					</div>
