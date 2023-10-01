@@ -1,13 +1,15 @@
 import React, { useEffect, useState, useMemo } from 'react'
-import CreatePost from '../Post/CreatePost'
-import Notification from '../Notification'
 import { Link } from 'react-router-dom'
-import { Logo, Portrait } from '../../assets'
 import { CiSearch } from 'react-icons/ci'
 import { AiOutlineLogout } from 'react-icons/ai'
-import { PiHeartLight, PiEnvelopeLight, PiListBold, PiHouseLight, PiPlusCircleLight } from 'react-icons/pi'
+import { PiHeartLight, PiEnvelopeLight, PiListBold, PiHouseLight, PiPlusCircleLight, PiUsersLight, PiNewspaperLight, PiChartBarLight } from 'react-icons/pi'
 import { AnimatePresence, motion } from 'framer-motion'
+
+import CreatePost from '../Post/CreatePost'
+import Notification from '../Notification'
+import { Logo, Portrait } from '../../assets'
 import SideBarItem from './SideBarItem'
+
 const Header = () => {
 
 	const [expand, setExpand] = useState(true)
@@ -49,6 +51,21 @@ const Header = () => {
 			icon: PiPlusCircleLight,
 			title: "Create",
 			handleCreatePost: () => { setIsVisiblePost(!isVisiblePost) }
+		},
+		{
+			icon: PiUsersLight,
+			title: "Users",
+			link: "/users"
+		},
+		{
+			icon: PiNewspaperLight,
+			title: "Posts",
+			link: "/posts"
+		},
+		{
+			icon: PiChartBarLight,
+			title: "Statics",
+			link: "/statics"
 		},
 	]
 

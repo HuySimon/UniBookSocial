@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import Login from "../views/auth/Login";
 import DefaultLayout from "../views/layout/DefaultLayout";
+import Dashboard from "../views/pages/Dashboard"; 
 import Home from "../views/pages/Home";
 import SignUp from "../views/auth/SignUp";
 import Profile from "../views/pages/Profile";
@@ -8,6 +9,7 @@ import NotFound from '../views/pages/PageNotFound'
 import ForgotPassword from "../views/auth/forgotPassword/ForgotPassword";
 import Search from '../views/pages/Search'
 import CreatePost from "../components/Post/CreatePost";
+import Users from "../views/pages/Users";
 const router = createBrowserRouter([
 	{
 		path: "/",
@@ -27,7 +29,23 @@ const router = createBrowserRouter([
 			}, {
 				path: "/create",
 				element: <CreatePost />
-			}
+			},
+			{
+				path: "/dashboard",
+				element: <Dashboard />
+			},
+			{
+				path: "/users",
+				element: <Users />
+			},
+			// {
+			// 	path: "/posts",
+			// 	element: 
+			// },
+			// {
+			// 	path: "/statics",
+			// 	element: <Dashboard />
+			// }
 		]
 	},
 	{
