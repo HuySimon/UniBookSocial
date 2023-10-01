@@ -55,17 +55,17 @@ const Header = () => {
 		{
 			icon: PiUsersLight,
 			title: "Users",
-			link: `/users`,
+			link: "/users"
 		},
 		{
 			icon: PiNewspaperLight,
 			title: "Posts",
-			link: `/posts`,
+			link: "/posts"
 		},
 		{
 			icon: PiChartBarLight,
 			title: "Statics",
-			link: `/statics`,
+			link: "/statics"
 		},
 	]
 

@@ -9,6 +9,7 @@ import NotFound from '../views/pages/PageNotFound'
 import ForgotPassword from "../views/auth/forgotPassword/ForgotPassword";
 import Search from '../views/pages/Search'
 import CreatePost from "../components/Post/CreatePost";
+import Users from "../views/pages/Users";
 const router = createBrowserRouter([
 	{
 		path: "/",
@@ -32,7 +33,19 @@ const router = createBrowserRouter([
 			{
 				path: "/dashboard",
 				element: <Dashboard />
-			}
+			},
+			{
+				path: "/users",
+				element: <Users />
+			},
+			// {
+			// 	path: "/posts",
+			// 	element: 
+			// },
+			// {
+			// 	path: "/statics",
+			// 	element: <Dashboard />
+			// }
 		]
 	},
 	{
