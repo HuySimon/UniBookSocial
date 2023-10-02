@@ -45,27 +45,27 @@ const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 							<div className="w-full flex justify-between items-center gap-5 mt-4">
 								<div className="w-full flex flex-col">
 									<span className='block mb-2 text-gray-400'>Core Image:</span>
-									<div class="flex items-center justify-center w-full">
-										<label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-36 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer">
-											<div class="flex flex-col items-center justify-center pt-5 pb-6">
+									<div className="flex items-center justify-center w-full">
+										<label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-36 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer">
+											<div className="flex flex-col items-center justify-center pt-5 pb-6">
 												<FiUpload size={45} className='text-[#6e6d74] p-3 mb-2 bg-[#F8F8F8] rounded-lg' />
-												<p class="mb-2 text-sm text-primary-500 font-medium "><span class="font-medium !text-black">Drag & drop files or</span> browse files</p>
-												<p class="text-xs text-gray-500 ">JPG, PNG or GIF - Max file size 2MB</p>
+												<p className="mb-2 text-sm text-primary-500 font-medium "><span className="font-medium !text-black">Drag & drop files or</span> browse files</p>
+												<p className="text-xs text-gray-500 ">JPG, PNG or GIF - Max file size 2MB</p>
 											</div>
-											<input id="dropzone-file" type="file" class="hidden" />
+											<input id="dropzone-file" type="file" className="hidden" />
 										</label>
 									</div>
 								</div>
 								<div className="w-full flex flex-col">
 									<span className='block mb-2 text-gray-400'>Sub Image:</span>
-									<div class="flex items-center justify-center w-full">
-										<label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-36 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer">
-											<div class="flex flex-col items-center justify-center pt-5 pb-6">
+									<div className="flex items-center justify-center w-full">
+										<label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-36 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer">
+											<div className="flex flex-col items-center justify-center pt-5 pb-6">
 												<FiUpload size={45} className='text-[#6e6d74] p-3 mb-2 bg-[#F8F8F8] rounded-lg' />
-												<p class="mb-2 text-sm text-primary-500 font-medium "><span class="font-medium !text-black">Drag & drop files or</span> browse files</p>
-												<p class="text-xs text-gray-500 ">JPG, PNG or GIF - Max file size 2MB</p>
+												<p className="mb-2 text-sm text-primary-500 font-medium "><span className="font-medium !text-black">Drag & drop files or</span> browse files</p>
+												<p className="text-xs text-gray-500 ">JPG, PNG or GIF - Max file size 2MB</p>
 											</div>
-											<input id="dropzone-file" type="file" class="hidden" />
+											<input id="dropzone-file" type="file" className="hidden" />
 										</label>
 									</div>
 								</div>
