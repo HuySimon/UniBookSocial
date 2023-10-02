@@ -3,7 +3,7 @@ import Post from '../../../../components/Post/Post'
 
 const HistoryPost = () => {
 	return (
-		<div className='flex flex-col'>
+		<div className='flex flex-col gap-5'>
 			<Post />
 			<Post />
 			<Post />

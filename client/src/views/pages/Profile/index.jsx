@@ -68,7 +68,7 @@ const Index = () => {
 									}}
 									className={`w-full flex items-center text-[#929292] relative cursor-pointer mb-1 p-3 rounded-md transition-all duration-300 ${activeButton === index ? 'bg-primary-main text-white shadow-md !shadow-primary-700 ' : ''}`}>
 									<item.icon size={26} className='md:block hidden' />
-									<span className='inline-block ml-3 text-lg font-medium'>{item.title}</span>
+									<span className='inline-block ml-3 text-base font-medium'>{item.title}</span>
 								</div>
 							))
 						}

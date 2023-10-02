@@ -17,7 +17,7 @@ const SideBarItem = ({ title, href, index, activeOverlay, setActiveOverlay, expa
                     relative
                     flex items-center w-full h-12 transition-all hover:text-primary-main
                     pl-2 py-3 group
-                    hover:
+                    hover:bg-black/10 rounded-md
                     ${activeOverlay === index ? "text-primary-main" : "text-black"}
         `}>
                 {icon}

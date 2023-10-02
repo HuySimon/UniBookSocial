@@ -47,7 +47,7 @@ const Post = () => {
 						</td>
 					</tbody>
 				</table>
-				<button type="submit" className='px-10 py-2 bg-primary-main text-white w-fit rounded-lg hover:shadow-lg hover:bg-primary-700 transition-all'>Buy</button>
+				<button type="submit" className='px-10 py-2 bg-primary-main text-white w-fit rounded-lg hover:shadow !shadow-primary-700 hover:bg-primary-700 transition-all'>Buy</button>
 			</div>
 		</div>
 	)
