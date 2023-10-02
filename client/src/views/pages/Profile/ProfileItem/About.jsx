@@ -49,7 +49,30 @@ const About = () => {
 				<button
 					type="submit"
 					disabled
-					className='w-fit bg-primary-main px-8 py-2 text-white hover:bg-primary-800 transition-all rounded-md'> Submit
+					className='w-fit bg-primary-main px-8 py-2 text-white hover:bg-primary-800 cursor-pointer transition-all rounded-md'> Submit
+				</button>
+			</form>
+
+			<form action="" className='py-8'>
+				<span className='text-xl'>Change Password</span>
+				<div className="flex flex-col gap-3 mt-4">
+					<div className="flex justify-between items-center">
+						<label htmlFor="" className='w-1/4 font-medium'>Old Password</label>
+						<input type="password" name="" id="" className='w-3/4 rounded-md px-3 py-2 text-black' />
+					</div>
+					<div className="flex justify-between items-center">
+						<label htmlFor="" className='w-1/4 font-medium'>New Password</label>
+						<input type="password" name="" id="" className='w-3/4 rounded-md px-3 py-2 text-black' />
+					</div>
+					<div className="flex justify-between items-center">
+						<label htmlFor="" className='w-1/4 font-medium'>Confirm New Password</label>
+						<input type="password" name="" id="" className='w-3/4 rounded-md px-3 py-2 text-black' />
+					</div>
+				</div>
+				<button
+					type="submit"
+					disabled
+					className='w-fit bg-primary-main px-8 py-2 mt-5 text-white hover:bg-primary-800 cursor-pointer transition-all rounded-md'> Submit
 				</button>
 			</form>
 		</div>
