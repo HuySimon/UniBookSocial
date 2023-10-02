@@ -10,6 +10,8 @@ import ForgotPassword from "../views/auth/forgotPassword/ForgotPassword";
 import Search from '../views/pages/Search'
 import CreatePost from "../components/Post/CreatePost";
 import Users from "../views/pages/Users";
+import Statics from "../views/pages/Statics";
+import Posts from "../views/pages/Posts";
 const router = createBrowserRouter([
 	{
 		path: "/",
@@ -38,14 +40,14 @@ const router = createBrowserRouter([
 				path: "/users",
 				element: <Users />
 			},
-			// {
-			// 	path: "/posts",
-			// 	element: 
-			// },
-			// {
-			// 	path: "/statics",
-			// 	element: <Dashboard />
-			// }
+			{
+				path: "/posts",
+				element: <Posts />
+			},
+			{
+				path: "/statics",
+				element: <Statics />
+			}
 		]
 	},
 	{

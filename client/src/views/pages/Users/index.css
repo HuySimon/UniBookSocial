@@ -1,3 +1,15 @@
+a:hover i {
+    color: red;
+}
+
+a + a {
+    margin-left: 0.75rem;
+}
+
+.mg {
+    margin: 2rem;
+}
+
 .ml-42 {
     margin-left: 42rem;
 }
