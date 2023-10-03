@@ -34,12 +34,14 @@ const Header = () => {
 		{
 			icon: PiHouseLight,
 			title: "Home",
-			link: "/"
+			link: "/",
+			handleCreatePost: () => { setIsVisibleNotify(false) }
 		},
 		{
 			icon: CiSearch,
 			title: "Search",
-			link: "/search"
+			link: "/search",
+			handleCreatePost: () => { setIsVisibleNotify(false) }
 		},
 		{
 			icon: PiHeartLight,
@@ -71,8 +73,8 @@ const Header = () => {
 
 	return (
 		<>
-			<motion.div className={`sticky top-0 ${expand ? "w-[251px]" : "w-16 duration-[800ms]"} h-screen bg-white border-r border-gray-300 transition-all z-10`}>
-				<div className="relative grow-[1] w-full h-full flex flex-col items-stretch">
+			<motion.div className={`fixed top-0 ${expand ? "w-[251px]" : "w-16 duration-[800ms]"} h-full bg-white border-r border-gray-300 transition-all z-10`}>
+				<div className="relative w-full h-full flex flex-col items-stretch">
 					<div className="navbar-logo h-16 !ml-0 my-4">
 						<Link
 							className='flex justify-start items-center w-full grow-0 shrink-0'
@@ -103,6 +105,7 @@ const Header = () => {
 							expand={expand}
 							title={"Profile"}
 							href={"/profile"}
+							handleCreatePost={() => setIsVisibleNotify(false)}
 							icon={<img src={Portrait} className='w-[30px] h-[30px] rounded-full object-cover' />}
 						/>
 					</motion.ul>

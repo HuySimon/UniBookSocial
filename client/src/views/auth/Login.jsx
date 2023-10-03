@@ -10,6 +10,7 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
 import ForgotPassword from './forgotPassword/ForgotPassword'
+import { useAuthContext } from '../../hooks/useAuthContext'
 const Login = () => {
 	const [showPassword, setShowPassword] = useState(false)
 	const [isVisibleForgot, setIsVisibleForgot] = useState(false)
@@ -31,6 +32,7 @@ const Login = () => {
 		resolver: yupResolver(validationSchema),
 	})
 
+	const [state,dispatch] = useAuthContext();
 
 	const onSubmit = (data) => {
 		console.log("Form submitted", data)

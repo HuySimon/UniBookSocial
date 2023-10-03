@@ -30,24 +30,44 @@ const Post = () => {
 				</div>
 				<table className='flex border border-gray-500 rounded-lg my-4'>
 					<thead className='flex flex-col border-r w-1/2 xl:w-1/5 border-gray-500'>
-						<th className='border-b p-2 border-gray-500 font-medium text-sm'>Name</th>
-						<th className='border-b p-2 border-gray-500 font-medium text-sm'>Price</th>
-						<th className='border-b p-2 border-gray-500 font-medium text-sm'>Major</th>
-						<th className='border-b p-2 border-gray-500 font-medium text-sm'>Type</th>
-						<th className='p-2 font-medium text-sm'>Description</th>
+						<tr className='border-b p-2 border-gray-500 font-medium text-sm'>
+							<th>Name</th>
+						</tr>
+						<tr className='border-b p-2 border-gray-500 font-medium text-sm'>
+							<th>Price</th>
+						</tr>
+						<tr className='border-b p-2 border-gray-500 font-medium text-sm'>
+							<th>Major</th>
+						</tr>
+						<tr className='border-b p-2 border-gray-500 font-medium text-sm'>
+							<th>Type</th>
+						</tr>
+						<tr className='p-2 font-medium text-sm'>
+							<th>Description</th>
+						</tr>
 					</thead>
 					<tbody className='flex flex-col w-1/2 xl:w-4/5'>
-						<td className='p-2 text-sm'>John Doe</td>
-						<td className='p-2 border-t border-gray-500 text-sm'>45000</td>
-						<td className='p-2 border-t border-gray-500 text-sm'>General Subject</td>
-						<td className='p-2 border-t border-gray-500 text-sm'>Old</td>
-						<td className='p-2 border-t border-gray-500 text-sm'>
-							Yesterday with @Jack Phat and @My instagram at concert in LA. 
-							Was totally fantastic! People were really excited about this one!
-						</td>
+						<tr className='p-2 text-sm'>
+							<td>John Doe</td>
+						</tr>
+						<tr className='p-2 border-t border-gray-500 text-sm'>
+							<td>45000</td>
+						</tr>
+						<tr className='p-2 border-t border-gray-500 text-sm'>
+							<td>General Subject</td>
+						</tr>
+						<tr className='p-2 border-t border-gray-500 text-sm'>
+							<td>Old</td>
+						</tr>
+						<tr className='p-2 border-t border-gray-500 text-sm'>
+							<td>
+								Yesterday with @Jack Phat and @My instagram at concert in LA.
+								Was totally fantastic! People were really excited about this one!
+							</td>
+						</tr>
 					</tbody>
 				</table>
-				<button type="submit" className='px-10 py-2 bg-primary-main text-white w-fit rounded-lg hover:shadow-lg hover:bg-primary-700 transition-all'>Buy</button>
+				<button type="submit" className='px-10 py-2 bg-primary-main text-white w-fit rounded-lg hover:shadow !shadow-primary-700 hover:bg-primary-700 transition-all'>Buy</button>
 			</div>
 		</div>
 	)
