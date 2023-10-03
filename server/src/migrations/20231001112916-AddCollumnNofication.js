@@ -21,17 +21,6 @@ module.exports = {
       {
         after: 'userReceive'
       })
-    // await queryInterface.addConstraint('Notifications', {
-    //   fields: ['post'],
-    //   type: 'foreign key',
-    //   name: 'notifications_ibfk_3',
-    //   references: { //Required field
-    //     table: 'Posts',
-    //     field: 'id'
-    //   },
-    //   onDelete: 'cascade',
-    //   onUpdate: 'cascade'
-    // })
   },
 
   async down(queryInterface, Sequelize) {
