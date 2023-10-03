@@ -7,7 +7,7 @@ const DefaultLayout = ({children}) => {
         <>
             <div className='relative flex min-h-full h-full w-full'>
                 <Header />
-                <div className="pl-[250px] w-full min-h-screen">
+                <div className="pl-[63px] md:pl-[250px] w-full min-h-screen">
                     <Outlet />
                 </div>
             </div>

@@ -50,11 +50,11 @@ const HistoryConfirm = () => {
 				</div>
 				<div className="my-1">
 					<div className="w-full flex justify-between items-center border-y border-gray-400">
-						<div className="flex flex-[4] py-4">
-							<div className="w-32 h-32">
+						<div className="flex lg:flex-[4] py-4">
+							<div className="w-32 h-32 max-w-[128px]">
 								<img src={LoginImg} alt="" className='w-full h-full object-cover' />
 							</div>
-							<div className="flex flex-col gap-2 text-sm ml-3">
+							<div className="lg:w-fit w-1/2 flex flex-col gap-2 text-sm ml-3">
 								<p className='text-base	'>Everybody is a Genius. But If You Judge a Fish by Its Ability to Climb a Tree</p>
 								<p><span className='font-semibold'>Major:</span> Information Technology</p>
 							</div>
