@@ -30,14 +30,12 @@ const reducer = (state, action) => {
 
 export const AuthProvider = ({ children }) => {
 
-	useEffect(() => {
-		const user = JSON.parse(localStorage.getItem('user'))
-
-		if (user) {
-			dispatch({ type: 'LOGIN', value: user })
-		}
-	}, [])
-
+	// useEffect(() => {
+	// 	const user = JSON.parse(localStorage.getItem('user'))
+	// 	if (user) {
+	// 		dispatch({ type: 'LOGIN', value: user })
+	// 	}
+	// }, [])
 	const [state, dispatch] = useReducer(reducer, initialState)
 
 	const value = useMemo(() => ({ state, dispatch }), [state, dispatch])

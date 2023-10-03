@@ -8,6 +8,9 @@ import NotFound from '../views/pages/PageNotFound'
 import ForgotPassword from "../views/auth/forgotPassword/ForgotPassword";
 import Search from '../views/pages/Search'
 import CreatePost from "../components/Post/CreatePost";
+import PrivateRoutes from '../wrapper/PrivateRoutes'
+import { useAuthContext } from "../hooks/useAuthContext";
+
 const router = createBrowserRouter([
 	{
 		path: "/",

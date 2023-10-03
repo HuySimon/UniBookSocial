@@ -20,7 +20,7 @@ const Index = () => {
 			title: "History Post",
 			layout: <HistoryPost />
 		},
-		{
+		{	
 			icon: BsCheck2Circle,
 			title: "History Confirm",
 			layout: <HistoryConfirm />
