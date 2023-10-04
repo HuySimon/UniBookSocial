@@ -8,9 +8,9 @@ import { AnimatePresence, motion } from 'framer-motion'
 import CreatePost from '../Post/CreatePost'
 import Notification from '../Notification'
 import { Logo, Portrait } from '../../assets'
-import SideBarItem from './SideBarItem'
+import SideBarItem from './SideBarItemAdmin'
 
-const Header = () => {
+const HeaderAdmin = () => {
 
 	const [expand, setExpand] = useState(true)
 	const [isVisiblePost, setIsVisiblePost] = useState(false)
@@ -53,7 +53,22 @@ const Header = () => {
 			icon: PiPlusCircleLight,
 			title: "Create",
 			handleCreatePost: () => { setIsVisiblePost(!isVisiblePost) }
-		}
+		},
+		{
+			icon: PiUsersLight,
+			title: "Users",
+			link: "/users"
+		},
+		{
+			icon: PiNewspaperLight,
+			title: "Posts",
+			link: "/posts"
+		},
+		{
+			icon: PiChartBarLight,
+			title: "Statics",
+			link: "/statics"
+		},
 	]
 
 	return (
@@ -145,4 +160,4 @@ const Header = () => {
 	)
 }
 
-export default Header
+export default HeaderAdmin

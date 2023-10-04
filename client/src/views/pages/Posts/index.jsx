@@ -1,17 +1,18 @@
-import { Link } from 'react-router-dom'
-import { BiDotsVerticalRounded } from 'react-icons/bi'
-import { PiTrashSimpleLight } from 'react-icons/pi';
+import { Link } from 'react-router-dom';
+// import { BiDotsVerticalRounded } from 'react-icons/bi';
+// import { PiTrashSimpleLight } from 'react-icons/pi';
 
 import Pagination from '../../../components/Pagination';
-import { Avatar } from '../../../assets'
-import { PlaceHolderPostImg } from '../../../assets'
-import './Posts.scss'
+// import { Avatar } from '../../../assets';
+// import { PlaceHolderPostImg } from '../../../assets';
+import './Posts.scss';
+import Post from '../../../components/Dashboard/Post/Post';
 
 
-function Posts() {
+function Index() {
     return (
          
-    <div className="relative overflow-x-auto shadow-md sm:rounded-lg mg">
+    <div className="relative overflow-x-auto sm:rounded-lg">
     <div className="flex items-center pb-4 pt-4 bg-white ">
         <div className='ml-2'>
             <button id="dropdownActionButton" data-dropdown-toggle="dropdownAction" className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5 " type="button">
@@ -25,17 +26,17 @@ function Posts() {
             <div id="dropdownAction" className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 ">
                 <ul className="py-1 text-sm text-gray-700 " aria-labelledby="dropdownActionButton">
                     <li>
-                        <a href="#" className="block px-4 py-2 hover:bg-gray-100">Reward</a>
+                        <Link to="#" className="block px-4 py-2 hover:bg-gray-100">Reward</Link>
                     </li>
                     <li>
-                        <a href="#" className="block px-4 py-2 hover:bg-gray-100 ">Promote</a>
+                        <Link to="#" className="block px-4 py-2 hover:bg-gray-100 ">Promote</Link>
                     </li>
                     <li>
-                        <a href="#" className="block px-4 py-2 hover:bg-gray-100 ">Activate account</a>
+                        <Link to="#" className="block px-4 py-2 hover:bg-gray-100 ">Activate account</Link>
                     </li>
                 </ul>
                 <div className="py-1">
-                    <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 ">Delete User</a>
+                    <Link to="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 ">Delete User</Link>
                 </div>
             </div>
         </div>
@@ -52,7 +53,7 @@ function Posts() {
     </div>
 
         <div className='flex justify-between items-center pb-4 pt-4 bg-white'>
-            <div className='w-full h-fit px-6 py-5 border border-gray-400 shadow-md rounded-lg'>
+            {/* <div className='w-full h-fit px-6 py-5 ml-4 border border-gray-400 shadow-md rounded-lg'>
                     <div className="w-full flex flex-col">
                         <div className="w-full flex justify-between items-center">
                             <div className="flex gap-3">
@@ -106,8 +107,8 @@ function Posts() {
                             </a>
                         </div>
                     </div>
-            </div>
-            <div className='w-full h-fit px-6 py-5 ml-8 border border-gray-400 shadow-md rounded-lg'>
+            </div> */}
+            {/* <div className='w-full h-fit px-6 py-5 ml-4 border border-gray-400 shadow-md rounded-lg'>
                     <div className="w-full flex flex-col">
                         <div className="w-full flex justify-between items-center">
                             <div className="flex gap-3">
@@ -161,12 +162,14 @@ function Posts() {
                             </a>
                         </div>
                     </div>
-            </div>
+            </div> */}
+            <Post />
+            <Post />
         </div>
         {/* Pagination */}
         <Pagination />
-</div> 
+</div>
 );
 }
 
-export default Posts;
+export default Index;
