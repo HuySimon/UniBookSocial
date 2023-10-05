@@ -7,9 +7,8 @@ const router = express.Router()
 router.post('/signup', authController.signup);
 router.post('/login', authController.login);
 
-// router.route('/')
-//   .get(userController.getAll)
-//   .post(userController.create)
+router.route('/')
+  .get(userController.getAll)
 
 
 module.exports = router
