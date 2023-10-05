@@ -22,18 +22,18 @@ module.exports = {
       },
       userSend: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         references: {
           model: 'Users',
-          key: 'email'
+          key: 'id'
         }
       },
       userReceive: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         references: {
           model: 'Users',
-          key: 'email'
+          key: 'id'
         }
       },
       post: {
