@@ -1,8 +1,7 @@
 'use strict';
+const { Model } = require('sequelize');
 const bcrypt = require('bcryptjs')
-const {
-  Model
-} = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -13,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
     }
+
     validatePassword(candidatePassword, userPassword) {
       return bcrypt.compareSync(candidatePassword, userPassword);
     }
