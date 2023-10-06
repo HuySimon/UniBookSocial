@@ -54,3 +54,18 @@ exports.updateOne = Model => catchAsync(async (req, res, next) => {
     }
   });
 })
+
+exports.deleteOne = Model => catchAsync(async (req, res, next) => {
+  const data = await Model.destroy({
+    where: { id: req.params.id }
+  });
+
+  if (!data) {
+    return next(new AppError('No data found with that ID', 404));
+  }
+
+  res.status(204).json({
+    status: 'success',
+    data: null
+  });
+})
