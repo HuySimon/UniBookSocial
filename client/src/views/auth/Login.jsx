@@ -11,7 +11,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
 import ForgotPassword from './forgotPassword/ForgotPassword'
 import { useAuthContext } from '../../hooks/useAuthContext'
-import axios from 'axios'
+import Axios from '../../api'
 const Login = () => {
 	const [isLoading, setIsLoading] = useState(false)
 	const [showPassword, setShowPassword] = useState(false)
@@ -38,18 +38,14 @@ const Login = () => {
 
 	const onSubmit = (data) => {
 		console.log("Form submitted", data)
-		axios.post('http://localhost:5000/api/v1/users/login', {
-			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-			}
-		}, {
+		const user = {
 			email: data.email,
 			password: data.password
-		},).then(function (response) {
-			console.log('success', response);
-		}).catch(function (error) {
-			console.log(error);
-		});
+		}
+		Axios.post('/api/v1/users/login', { user }).then(res => {
+			console.log(res)
+			console.log(res.data)
+		})
 	}
 	return (
 		<>

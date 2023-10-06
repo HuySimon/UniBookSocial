@@ -3,14 +3,13 @@
 	"private": true,
 	"version": "0.0.0",
 	"type": "module",
-	"proxy": "http://localhost:5000",
 	"scripts": {
 		"dev": "vite --port=3000",
 		"build": "vite build",
 		"lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
 		"preview": "vite preview",
 		"start": "concurrently \"npm run server\" \"npm run dev\"",
-		"server": "cd ../ && cd server && npm start"
+		"server": "cd ../ && cd server && node index.js"
 	},
 	"dependencies": {
 		"@hookform/resolvers": "^3.3.1",
