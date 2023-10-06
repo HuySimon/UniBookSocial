@@ -15,6 +15,19 @@ exports.getAll = Model => catchAsync(async (req, res, next) => {
   });
 })
 
+exports.getOne = Model => catchAsync(async (req, res, next) => {
+  const data = await Model.findByPk(req.params.id);
+  if (!data) {
+    return next(new AppError('No data found with that ID', 404));
+  }
+  res.status(200).json({
+    status: 'success',
+    data: {
+      data
+    }
+  });
+})
+
 exports.createOne = Model => catchAsync(async (req, res, next) => {
   const data = await Model.create(req.body);
 
@@ -26,15 +39,18 @@ exports.createOne = Model => catchAsync(async (req, res, next) => {
   });
 })
 
-exports.getOne = Model => catchAsync(async (req, res, next) => {
-  const data = await Model.create(req.body);
+exports.updateOne = Model => catchAsync(async (req, res, next) => {
+  const data = await Model.update(req.body, {
+    where: { id: req.params.id },
+  });
   if (!data) {
-    return next(new AppError('No document found with that ID', 404));
+    return next(new AppError('No data found with that ID', 404));
   }
+  const updateData = await Model.findByPk(req.params.id)
   res.status(200).json({
     status: 'success',
     data: {
-      data
+      data: updateData
     }
   });
 })
