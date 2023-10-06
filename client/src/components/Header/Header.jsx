@@ -71,14 +71,14 @@ const Header = () => {
 			title: "Statics",
 			link: "/statics"
 		},
-		{
-			icon: PiGearLight,
-			title: "Setting",
-			link: window.location.href,
-			handleCreate: () => {
-				setIsVisibleSetting(!isVisibleSetting)
-			}
-		}
+		// {
+		// 	icon: PiGearLight,
+		// 	title: "Setting",
+		// 	link: window.location.href,
+		// 	handleCreate: () => {
+		// 		setIsVisibleSetting(!isVisibleSetting)
+		// 	}
+		// }
 	]
 	console.log(iconList)
 
@@ -166,9 +166,9 @@ const Header = () => {
 				{
 					isVisibleNotify && <Notification isVisibleNotify={isVisibleNotify} handleNotify={setIsVisibleNotify} setActiveOverlay={setActiveOverlay} />
 				}
-				{
+				{/* {
 					isVisibleSetting && <Setting />
-				}
+				} */}
 			</AnimatePresence>
 		</>
 	)

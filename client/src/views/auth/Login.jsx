@@ -38,9 +38,9 @@ const Login = () => {
 
 	const onSubmit = (data) => {
 		console.log("Form submitted", data)
-		axios.post('http://127.0.0.1:5000/api/v1/users/login', {
+		axios.post('http://localhost:5000/api/v1/users/login', {
 			headers: {
-				"Content-Type": "application/json"
+				'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
 			}
 		}, {
 			email: data.email,
@@ -51,7 +51,6 @@ const Login = () => {
 			console.log(error);
 		});
 	}
-
 	return (
 		<>
 			<section
