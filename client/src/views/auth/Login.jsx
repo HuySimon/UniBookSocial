@@ -11,7 +11,9 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
 import ForgotPassword from './forgotPassword/ForgotPassword'
 import { useAuthContext } from '../../hooks/useAuthContext'
+import axios from 'axios'
 const Login = () => {
+	const [isLoading, setIsLoading] = useState(false)
 	const [showPassword, setShowPassword] = useState(false)
 	const [isVisibleForgot, setIsVisibleForgot] = useState(false)
 	const validationSchema = Yup.object().shape({
@@ -32,10 +34,22 @@ const Login = () => {
 		resolver: yupResolver(validationSchema),
 	})
 
-	const [state,dispatch] = useAuthContext();
+	const [state, dispatch] = useAuthContext();
 
 	const onSubmit = (data) => {
 		console.log("Form submitted", data)
+		axios.post('http://127.0.0.1:5000/api/v1/users/login', {
+			headers: {
+				"Content-Type": "application/json"
+			}
+		}, {
+			email: data.email,
+			password: data.password
+		},).then(function (response) {
+			console.log('success', response);
+		}).catch(function (error) {
+			console.log(error);
+		});
 	}
 
 	return (
