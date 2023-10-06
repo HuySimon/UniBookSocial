@@ -1,29 +1,19 @@
 const AppError = require('../utils/appError')
 const catchAsync = require('../utils/catchAsync')
+const factory = require('./handlerFactory')
+
 const db = require('../models');
-// const user = require('../models/user');
 const User = db.User
 
-exports.getAll = catchAsync(async (req, res, next) => {
-  const users = await User.findAll({
-    include: 'contacts'
+exports.createUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'This route is not defined! Please use /signup instead'
   });
-  if (users.length == 2)
-    return next(new AppError('test '), 401)
-  res.status(200).json({
-    status: "success",
-    result: users.length,
-    data: users
-  })
-})
-
-
-exports.create = catchAsync(async (req, res) => {
-  const newUser = await User.create(req.body)
-
-  res.status(201).json({
-    status: "success",
-    data: newUser
-  })
-})
+};
+exports.getAllUsers = factory.getAll(User)
+exports.getUser = factory.getOne(User)
+//Do not update password with this!
+exports.updateUser = factory.updateOne(User)
+exports.deleteUser = factory.deleteOne(User)
 
