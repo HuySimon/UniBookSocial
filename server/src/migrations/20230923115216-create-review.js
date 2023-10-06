@@ -18,10 +18,10 @@ module.exports = {
       },
       user: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         references: {
           model: 'Users',
-          key: 'email'
+          key: 'id'
         }
       },
       post: {
