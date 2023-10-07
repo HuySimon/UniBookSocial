@@ -62,7 +62,7 @@ exports.login = catchAsync(async (req, res, next) => {
 		return next(new AppError('Please provide email and password!', 400));
 	}
 	// 2) Check if user exists && password is correct
-	const user = await User.findOne({ where: { email } });
+	const user = await User.scope('withPassword').findOne({ where: { email } });
 
 	if (!user || !(user.validatePassword(password, user.password))) {
 		return next(new AppError('Incorrect email or password', 401));
@@ -126,18 +126,18 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
 	// 2) If token has not expired, and there is user, set the new password
 	if (!resetPasswordToken) {
-		return next(new AppError('Token is invalid or has expired', 400));
+		return next(new AppError('Token is invalid or has expired', 400))
 	}
 	const user = await User.findOne({ where: { email: resetPasswordToken.email } })
-	user.password = await bcrypt.hash(req.body.password, 12);
+	user.password = req.body.password
 	await user.save()
 
 	resetPasswordToken.status = true
-	await resetPasswordToken.save();
+	await resetPasswordToken.save()
 
 	// 3) Update changedPasswordAt property for the user
 	// 4) Log the user in, send JWT
-	createSendToken(user, 200, res);
+	createSendToken(user, 200, res)
 });
 
 exports.protect = catchAsync(async (req, res, next) => {
@@ -195,3 +195,21 @@ exports.restrictTo = (...roles) => {
 		next();
 	};
 };
+
+exports.updatePassword = catchAsync(async (req, res, next) => {
+	// 1) Get user from collection
+	const user = await User.scope('withPassword').findById(req.user.id)
+
+	// 2) Check if POSTed current password is correct
+	if (!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
+		return next(new AppError('Your current password is wrong.', 401))
+	}
+
+	// 3) If so, update password
+	user.password = req.body.password
+	await user.save()
+	// User.findByIdAndUpdate will NOT work as intended!
+
+	// 4) Log user in, send JWT
+	createSendToken(user, 200, res)
+});

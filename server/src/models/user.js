@@ -68,6 +68,11 @@ module.exports = (sequelize, DataTypes) => {
         instance.password = await bcrypt.hash(instance.password, 12);
         instance.role = 1
         instance.status = 'Active'
+      },
+      beforeSave: async function (instance, options) {
+        if (instance.changed('password')) {
+          instance.password = await bcrypt.hash(instance.password, 12);
+        }
       }
     },
     sequelize,
