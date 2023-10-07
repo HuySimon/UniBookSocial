@@ -9,7 +9,7 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import { AuthProvider } from './context/AuthProvider'
 ReactDOM.createRoot(document.getElementById('root')).render(
-	<React.StrictMode>
+	<>
 		<AuthProvider>
 			<RouterProvider router={router} />
 		</AuthProvider>
@@ -25,5 +25,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 			pauseOnHover
 			theme="light"
 		/>
-	</React.StrictMode>,
+	</>,
 )

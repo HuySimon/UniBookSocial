@@ -80,7 +80,6 @@ const Header = () => {
 		// 	}
 		// }
 	]
-	console.log(iconList)
 
 	return (
 		<>
