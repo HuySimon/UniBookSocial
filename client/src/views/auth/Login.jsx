@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import { LoginImg } from '../../assets'
-import { Link } from 'react-router-dom'
+import { slideUpLogin } from './animation'
+import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { PiEyeBold, PiEyeClosedBold } from 'react-icons/pi'
 import { FcGoogle } from 'react-icons/fc'
-import { slideUpLogin } from './animation'
+import { ImSpinner9 } from 'react-icons/im'
 import { toast } from 'react-toastify'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -13,18 +14,15 @@ import ForgotPassword from './forgotPassword/ForgotPassword'
 import { useAuthContext } from '../../hooks/useAuthContext'
 import Axios from '../../api'
 const Login = () => {
-	const [isLoading, setIsLoading] = useState(false)
 	const [showPassword, setShowPassword] = useState(false)
-	const [isVisibleForgot, setIsVisibleForgot] = useState(false)
+	const [isLoading, setIsLoading] = useState(false)
+	const navigate = useNavigate()
+	const [state, dispatch] = useAuthContext();
+
+
 	const validationSchema = Yup.object().shape({
 		email: Yup.string().lowercase().trim().email("Invalid email format").required("Please enter your email"),
-		password: Yup
-			.string()
-			.required("Please enter your password")
-			.matches(
-				/^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
-				"Password must contain at least 8 characters, one uppercase, one number and one special case character. Ex(John123@)"
-			),
+		password: Yup.string().required("Please enter your password")
 	});
 	const { register, handleSubmit, formState: { errors } } = useForm({
 		defaultValues: {
@@ -33,20 +31,26 @@ const Login = () => {
 		},
 		resolver: yupResolver(validationSchema),
 	})
-
-	const [state, dispatch] = useAuthContext();
-
 	const onSubmit = (data) => {
-		console.log("Form submitted", data)
 		const user = {
 			email: data.email,
 			password: data.password
 		}
-		Axios.post('/api/v1/users/login', { user }).then(res => {
-			console.log(res)
-			console.log(res.data)
+		setIsLoading(true)
+		Axios.post('/api/v1/users/login', user).then(res => {
+			if (res.status === 200) {
+				dispatch({ type: "LOGIN", value: res.data.data.user })
+				toast.success("Login success!")
+				navigate('/')
+			}
+			setIsLoading(false)
+		}).catch((err) => {
+			toast.error("Incorrect password or email")
+			setIsLoading(false)
 		})
 	}
+	console.log(isLoading)
+	console.log(state.user)
 	return (
 		<>
 			<section
@@ -60,12 +64,13 @@ const Login = () => {
 					<div className={`w-full md:w-1/2 xl:w-[40%] py-16 px-8 md:p-16 text-primary-main transition-all duration-1000 relative`}>
 						<p className='  font-bold text-4xl'>Login</p>
 						<form onSubmit={handleSubmit(onSubmit)} className='mt-3'>
-							<div className="flex flex-col mb-3">
+							<div className="flex flex-col mb-6 relative">
 								<label htmlFor="email" className='font-semibold mb-1'>Email</label>
 								<input type="text" id="email" {...register("email")}
 									className='border border-primary-900 rounded-md text-primary-main placeholder:text-primary-700 placeholder:text-sm px-4 py-2 w-full focus:ring-1 focus:shadow-md focus:outline-none ring-primary-900' placeholder='Enter your email' />
+								<p className='absolute -bottom-6 text-red-600 text-sm'>{errors.email?.message}</p>
 							</div>
-							<div className="flex flex-col relative">
+							<div className="flex flex-col mb-6 relative">
 								<label htmlFor="password" className='font-semibold mb-1'>Password</label>
 								<input type={`${!showPassword ? "password" : "text"}`} id="password" {...register("password")}
 									className='border border-primary-900 rounded-md text-primary-main placeholder:text-primary-700 placeholder:text-sm px-4 py-2 w-full' placeholder='Enter your password' />
@@ -80,6 +85,7 @@ const Login = () => {
 											size={22} className='absolute top-[55%] right-3 cursor-pointer' />
 									)
 								}
+								<p className='absolute -bottom-6 text-red-600 text-sm'>{errors.password?.message}</p>
 							</div>
 							<div className="flex justify-between items-center my-6">
 								<div className="flex items-center gap-2">
@@ -88,20 +94,15 @@ const Login = () => {
 								</div>
 								<Link
 									to={"/forgotpassword"}
-									onClick={() => {
-										setIsVisibleForgot(!isVisibleForgot)
-									}}
 									className='underline-offset-2 underline'
 								>Forgot Password?</Link>
 							</div>
 							<button
 								type="submit"
-								onClick={() => {
-									toast.error(errors.email?.message)
-									toast.error(errors.password?.message)
-								}}
-								className='w-full py-3 px-14 font-semibold rounded-lg bg-primary-main border transition-all duration-300 border-primary-main hover:bg-transparent hover:text-primary-main text-white'>
-								Login
+								className='w-full flex justify-center h-[50px] items-center py-3 px-14 font-semibold rounded-lg bg-primary-main border transition-all duration-300 border-primary-main hover:bg-transparent hover:text-primary-main text-white'>
+								{
+									isLoading ? <ImSpinner9 className='animate-spin duration-500' /> : "Login"
+								}
 							</button>
 							<div className="flex my-4">
 								<span className='font-semibold text-black'>Not register yet?</span>
