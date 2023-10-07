@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 require('dotenv').config()
 const globalErrorHandler = require('./src/controllers/errorController');
 const initRoutes = require('./src/routes')
-const connectionDatabase = require('./connection_database')
+const connectionDatabase = require('./src/config/connection_database')
 
 const app = express()
 app.use(cors({
