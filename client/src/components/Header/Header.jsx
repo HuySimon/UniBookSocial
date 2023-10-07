@@ -2,17 +2,18 @@ import React, { useEffect, useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { CiSearch } from 'react-icons/ci'
 import { AiOutlineLogout } from 'react-icons/ai'
-import { PiHeartLight, PiEnvelopeLight, PiListBold, PiHouseLight, PiPlusCircleLight, PiUsersLight, PiNewspaperLight, PiChartBarLight } from 'react-icons/pi'
+import { PiHeartLight, PiEnvelopeLight, PiListBold, PiHouseLight, PiPlusCircleLight, PiUsersLight, PiNewspaperLight, PiChartBarLight, PiGearLight } from 'react-icons/pi'
 import { AnimatePresence, motion } from 'framer-motion'
 
 import CreatePost from '../Post/CreatePost'
 import Notification from '../Notification'
 import { Logo, Portrait } from '../../assets'
 import SideBarItem from './SideBarItem'
-
+import Setting from '../../views/pages/Setting'
 const Header = () => {
 
 	const [expand, setExpand] = useState(true)
+	const [isVisibleSetting, setIsVisibleSetting] = useState(false)
 	const [isVisiblePost, setIsVisiblePost] = useState(false)
 	const [isVisibleNotify, setIsVisibleNotify] = useState(false)
 	const [isAuth, setIsAuth] = useState(false)
@@ -35,24 +36,25 @@ const Header = () => {
 			icon: PiHouseLight,
 			title: "Home",
 			link: "/",
-			handleCreatePost: () => { setIsVisibleNotify(false) }
+			handleCreate: () => { setIsVisibleNotify(false) }
 		},
 		{
 			icon: CiSearch,
 			title: "Search",
 			link: "/search",
-			handleCreatePost: () => { setIsVisibleNotify(false) }
+			handleCreate: () => { setIsVisibleNotify(false) }
 		},
 		{
 			icon: PiHeartLight,
 			title: "Notifications",
-			link: `/`,
-			handleCreatePost: () => { setIsVisibleNotify(!isVisibleNotify) }
+			link: window.location.href,
+			handleCreate: () => { setIsVisibleNotify(!isVisibleNotify) },
 		},
 		{
 			icon: PiPlusCircleLight,
 			title: "Create",
-			handleCreatePost: () => { setIsVisiblePost(!isVisiblePost) }
+			link: window.location.href,
+			handleCreate: () => { setIsVisiblePost(!isVisiblePost) }
 		},
 		{
 			icon: PiUsersLight,
@@ -69,7 +71,16 @@ const Header = () => {
 			title: "Statics",
 			link: "/statics"
 		},
+		// {
+		// 	icon: PiGearLight,
+		// 	title: "Setting",
+		// 	link: window.location.href,
+		// 	handleCreate: () => {
+		// 		setIsVisibleSetting(!isVisibleSetting)
+		// 	}
+		// }
 	]
+	console.log(iconList)
 
 	return (
 		<>
@@ -94,7 +105,7 @@ const Header = () => {
 								activeOverlay={activeOverlay}
 								setActiveOverlay={setActiveOverlay}
 								expand={expand}
-								handleCreatePost={item.handleCreatePost}
+								handleCreate={item.handleCreate}
 								icon={<item.icon size={30} className='z-10' />}
 							/>
 						))}
@@ -105,7 +116,7 @@ const Header = () => {
 							expand={expand}
 							title={"Profile"}
 							href={"/profile"}
-							handleCreatePost={() => setIsVisibleNotify(false)}
+							handleCreate={() => setIsVisibleNotify(false)}
 							icon={<img src={Portrait} className='w-[30px] h-[30px] rounded-full object-cover' />}
 						/>
 					</motion.ul>
@@ -155,6 +166,9 @@ const Header = () => {
 				{
 					isVisibleNotify && <Notification isVisibleNotify={isVisibleNotify} handleNotify={setIsVisibleNotify} setActiveOverlay={setActiveOverlay} />
 				}
+				{/* {
+					isVisibleSetting && <Setting />
+				} */}
 			</AnimatePresence>
 		</>
 	)

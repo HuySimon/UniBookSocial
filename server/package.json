@@ -19,6 +19,7 @@
     },
     "homepage": "https://github.com/BuiBao3103/UniBookSocial#readme",
     "dependencies": {
+        "@bitovi/sequelize-querystring-parser": "^0.2.7",
         "bcryptjs": "^2.4.3",
         "cookie-parser": "^1.4.6",
         "cors": "^2.8.5",

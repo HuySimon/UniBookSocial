@@ -39,8 +39,8 @@ const Index = () => {
 
 	return (
 		<div className='w-full flex flex-col p-[25px] lg:px-[150px] xl:px-[250px] mx-auto'>
-			<div className="w-full flex flex-col h-[400px] relative">
-				<div className="coverImage w-full h-full absolute inset-0">
+			<div className="w-full flex flex-col h-[400px] relative z-[8]">
+				<div className="coverImage w-full h-full absolute inset-0 ">
 					<img src={SignupImg} alt="" className='w-full h-full object-cover object-top' />
 				</div>
 				<div className="w-full flex justify-end items-center relative top-80">
@@ -53,7 +53,7 @@ const Index = () => {
 				<p className='font-medium text-3xl'>John Doe</p>
 				<p className='text-sm text-[#929292] px-16'>Freelance Desginer and Front-end Developer</p>
 			</div>
-			<div className="pt-4 w-full h-screen">
+			<div className="pt-4 w-full z-[9]">
 				<div className="h-full flex lg:flex-row flex-col">
 					<div className="w-full lg:w-1/4 flex lg:h-full h-fit flex-row lg:flex-col justify-between lg:justify-start items-center gap-5 lg:border-r border-gray-400 lg:pr-6 lg:mb-0 mb-6">
 						{
