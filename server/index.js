@@ -10,7 +10,8 @@ const connectionDatabase = require('./connection_database')
 const app = express()
 app.use(cors({
   origin: process.env.CLIENT_URL,
-  methods: ['GET', 'POST', 'PATCH', 'DELETE']
+  methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+  credentials: true
 }))
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json())
