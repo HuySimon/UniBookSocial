@@ -11,6 +11,7 @@ import * as Yup from 'yup'
 import { toast } from 'react-toastify'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Axios from '../../api'
+import { signUpValidationSchema } from '../../validations/AuthValidation'
 const SignUp = () => {
 
 	const [showPassword, setShowPassword] = useState(false)
@@ -18,21 +19,6 @@ const SignUp = () => {
 	const [isLoading, setIsLoading] = useState(false)
 	const navigate = useNavigate()
 
-	const validationSchema = Yup.object().shape({
-		email: Yup.string().lowercase().trim().email("Invalid email format").required("Please enter email"),
-		firstName: Yup.string().trim().required("Please enter first name"),
-		lastName: Yup.string().trim().required("Please enter last name"),
-		phoneNumber: Yup.string().required("Please enter phone number").matches(
-			/^(0|84)(2(0[3-9]|1[0-6|8|9]|2[0-2|5-9]|3[2-9]|4[0-9]|5[1|2|4-9]|6[0-3|9]|7[0-7]|8[0-9]|9[0-4|6|7|9])|3[2-9]|5[5|6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])([0-9]{7})$/,
-			"Invalid Phone Number"
-		),
-		password: Yup.string().required("Please enter password").matches(
-			/^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
-			"Password must contain at least 8 characters, one uppercase, one number and one special case character.Ex(John123@)"
-		),
-		confirmPassword: Yup.string().required("Please enter confirm password").oneOf([Yup.ref('password')], 'Password not match!!')
-
-	});
 	const { register, handleSubmit, formState: { errors } } = useForm({
 		defaultValues: {
 			firstName: "",
@@ -42,7 +28,7 @@ const SignUp = () => {
 			password: "",
 			confirmPassword: ""
 		},
-		resolver: yupResolver(validationSchema)
+		resolver: yupResolver(signUpValidationSchema)
 	})
 
 	const onSubmit = (data) => {
@@ -58,13 +44,15 @@ const SignUp = () => {
 		Axios.post('/api/v1/users/signup', newUser).then(res => {
 			if (res.status === 201) {
 				toast.success("Signup successful!")
-				// navigate('/login')
-				console.log(res)
-				console.log(res.data)
+				navigate('/login')
 			}
 			setIsLoading(false)
 		}).catch((err) => {
-			toast.error("Failed to sign up")
+			if(err.response.status === 500 ){
+				toast.error("Email already in use!!")
+			}else {
+				toast.error("Failed to sign up")
+			}
 			setIsLoading(false)
 		})
 	}
@@ -89,7 +77,7 @@ const SignUp = () => {
 								<p className='absolute -bottom-5 text-[12px] text-red-600'>{errors.firstName?.message}</p>
 							</div>
 							<div className="flex flex-col mb-6 relative">
-								<label htmlFor="email" className='font-semibold mb-1'>Last Name</label>
+								<label htmlFor="lastName" className='font-semibold mb-1'>Last Name</label>
 								<input type="text" {...register("lastName")}
 									className='border border-primary-900 rounded-md text-primary-main placeholder:text-primary-700 placeholder:text-sm px-4 py-2 w-full' placeholder='Enter your last name' />
 								<p className='absolute -bottom-5 text-[12px] text-red-600'>{errors.lastName?.message}</p>

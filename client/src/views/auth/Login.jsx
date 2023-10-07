@@ -13,23 +13,19 @@ import * as Yup from 'yup'
 import ForgotPassword from './forgotPassword/ForgotPassword'
 import { useAuthContext } from '../../hooks/useAuthContext'
 import Axios from '../../api'
+import { loginValidationSchema } from '../../validations/AuthValidation'
 const Login = () => {
 	const [showPassword, setShowPassword] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
 	const navigate = useNavigate()
 	const [state, dispatch] = useAuthContext();
 
-
-	const validationSchema = Yup.object().shape({
-		email: Yup.string().lowercase().trim().email("Invalid email format").required("Please enter your email"),
-		password: Yup.string().required("Please enter your password")
-	});
 	const { register, handleSubmit, formState: { errors } } = useForm({
 		defaultValues: {
 			email: "",
 			password: ""
 		},
-		resolver: yupResolver(validationSchema),
+		resolver: yupResolver(loginValidationSchema),
 	})
 	const onSubmit = (data) => {
 		const user = {
@@ -40,6 +36,7 @@ const Login = () => {
 		Axios.post('/api/v1/users/login', user).then(res => {
 			if (res.status === 200) {
 				dispatch({ type: "LOGIN", value: res.data.data.user })
+				console.log(res.data.data)
 				toast.success("Login success!")
 				navigate('/')
 			}
@@ -49,7 +46,7 @@ const Login = () => {
 			setIsLoading(false)
 		})
 	}
-	console.log(isLoading)
+
 	console.log(state.user)
 	return (
 		<>
