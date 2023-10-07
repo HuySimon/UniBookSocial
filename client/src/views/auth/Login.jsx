@@ -33,7 +33,7 @@ const Login = () => {
 			password: data.password
 		}
 		setIsLoading(true)
-		Axios.post('/api/v1/users/login', user).then(res => {
+		Axios.post('/api/v1/users/login', user, { withCredentials: true }).then(res => {
 			if (res.status === 200) {
 				dispatch({ type: "LOGIN", value: res.data.data.user })
 				console.log(res.data.data)
