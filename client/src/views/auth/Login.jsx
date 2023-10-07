@@ -46,7 +46,6 @@ const Login = () => {
 			setIsLoading(false)
 		})
 	}
-
 	console.log(state.user)
 	return (
 		<>

@@ -14,22 +14,15 @@ const reducer = (state, action) => {
 			localStorage.setItem("user", JSON.stringify({
 				user: action.value,
 			}));
-			localStorage.setItem("auth", JSON.stringify({
-				isAuthorized: true,
-			}))
+			localStorage.setItem("auth", true)
 			return {
 				...state,
-				user: action.value,
-				isAuthorized: true
 			};
 		case "LOGOUT":
-			// Remove user information and isAuthorized from localStorage
 			localStorage.removeItem("user");
 			localStorage.setItem("auth", false)
 			return {
 				...state,
-				user: {},
-				isAuthorized: false
 			};
 		default:
 			throw new Error(`Unhandled action type: ${action.type}`);

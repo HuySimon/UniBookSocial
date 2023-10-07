@@ -56,6 +56,7 @@ const SignUp = () => {
 			setIsLoading(false)
 		})
 	}
+	
 
 	return (
 		<section

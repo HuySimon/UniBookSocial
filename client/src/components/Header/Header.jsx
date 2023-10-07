@@ -90,7 +90,7 @@ const Header = () => {
 	]
 	const logout = () => {
 		dispatch({ type: "LOGOUT" })
-		toast.success("You have logout!")
+		toast.success("Logout success!")
 	}
 	return (
 		<>
@@ -132,7 +132,7 @@ const Header = () => {
 					</motion.ul>
 					<div className="flex flex-col h-full items-stretch justify-end p-2 md:p-4">
 						{
-							state.isAuthorized ? (
+							localStorage.getItem("auth") === "false" ? (
 								<div className="hidden md:flex w-full justify-between items-center gap-2">
 									<button className='w-28 bg-primary-900 rounded-md text-white border border-primary-900 '>
 										<Link to={"/login"} className='w-full h-full block px-6 py-2'>
@@ -147,7 +147,7 @@ const Header = () => {
 								</div>
 							) : (
 								<div
-									onClick={() => dispatch({ type: "LOGOUT" })}
+									onClick={() => logout()}
 									className="group flex items-center justify-center md:justify-normal text-xl transition-all hover:bg-black/10 hover:text-primary-main p-2 rounded-lg cursor-pointer">
 									<AiOutlineLogout size={30} />
 									<span className={`ml-2 overflow-hidden ${expand ? "w-44" : "w-0 hidden"}`}>Log out</span>
