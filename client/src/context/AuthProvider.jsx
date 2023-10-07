@@ -10,32 +10,30 @@ const initialState = {
 const reducer = (state, action) => {
 	switch (action.type) {
 		case "LOGIN":
+			// Save user information and isAuthorized to localStorage
+			localStorage.setItem("authState", JSON.stringify({
+				user: action.value,
+				isAuthorized: true
+			}));
 			return {
 				...state,
 				user: action.value,
 				isAuthorized: true
-			}
-			break;
+			};
 		case "LOGOUT":
+			// Remove user information and isAuthorized from localStorage
+			localStorage.removeItem("authState");
 			return {
 				...state,
 				user: {},
 				isAuthorized: false
-			}
-			break;
+			};
 		default:
-			throw new Error(`Unhanded action type: ${action.type}`)
+			throw new Error(`Unhandled action type: ${action.type}`);
 	}
-}
+};
 
 export const AuthProvider = ({ children }) => {
-
-	// useEffect(() => {
-	// 	const user = JSON.parse(localStorage.getItem('user'))
-	// 	if (user) {
-	// 		dispatch({ type: 'LOGIN', value: user })
-	// 	}
-	// }, [])
 	const [state, dispatch] = useReducer(reducer, initialState)
 
 	const value = useMemo(() => ({ state, dispatch }), [state, dispatch])
