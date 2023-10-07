@@ -19,11 +19,9 @@ module.exports = {
       },
       value: {
         type: Sequelize.STRING,
-        allowNull: false
       },
       expired_at: {
         type: Sequelize.DATE,
-        allowNull: false
       },
       status: {
         type: Sequelize.BOOLEAN,

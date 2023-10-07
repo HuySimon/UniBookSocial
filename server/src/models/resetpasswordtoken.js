@@ -14,13 +14,12 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     createPasswordResetToken() {
-      const resetToken = crypto.randomBytes(32).toString('hex');
+      const resetToken = String(Math.floor(Math.random() * 10000)).padStart(4, '0');
       this.value = crypto
         .createHash('sha256')
         .update(resetToken)
         .digest('hex');
-      // console.log({ resetToken }, this.passwordResetToken);
-      this.expired_at = Date.now() + 10 * 60 * 1000; // 10 minutes
+      this.expired_at = Date.now() + 1 * 60 * 1000; // 1 minutes
       return resetToken;
     };
   }

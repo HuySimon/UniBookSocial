@@ -1,8 +1,12 @@
 const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
 const catchAsync = require('../utils/catchAsync');
+const bcrypt = require('bcryptjs')
+const { Op } = require('sequelize')
+const crypto = require('crypto')
 const AppError = require('../utils/appError');
 const sendEmail = require('../utils/email')
+
 
 
 const db = require('../models');
@@ -81,11 +85,8 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   await resetPasswordToken.save();
 
   // 3) Send it to user's email
-  const resetURL = `${req.protocol}://${req.get(
-    'host'
-  )}/api/v1/users/resetPassword/${resetToken}`;
 
-  const message = `Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: ${resetURL}.\nIf you didn't forget your password, please ignore this email!`;
+  const message = `Here is your OTP:\n${resetToken}\nIf you didn't forget your password, please ignore this email!`;
 
   try {
     await sendEmail({
@@ -96,7 +97,8 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 
     res.status(200).json({
       status: 'success',
-      message: 'Token sent to email!'
+      message: 'Token sent to email!',
+      resetToken
     });
   } catch (err) {
     await resetPasswordToken.destroy()
@@ -106,4 +108,34 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
       500
     );
   }
+});
+
+exports.resetPassword = catchAsync(async (req, res, next) => {
+  // 1) Get user based on the token
+  const hashedToken = crypto
+    .createHash('sha256')
+    .update(req.params.token)
+    .digest('hex');
+
+  const resetPasswordToken = await ResetPasswordToken.findOne({
+    where: {
+      value: hashedToken,
+      expired_at: { [Op.gt]: Date.now() }
+    }
+  });
+
+  // 2) If token has not expired, and there is user, set the new password
+  if (!resetPasswordToken) {
+    return next(new AppError('Token is invalid or has expired', 400));
+  }
+  const user = await User.findOne({ where: { email: resetPasswordToken.email } })
+  user.password = await bcrypt.hash(req.body.password, 12);
+  await user.save()
+
+  resetPasswordToken.status = true
+  await resetPasswordToken.save();
+
+  // 3) Update changedPasswordAt property for the user
+  // 4) Log the user in, send JWT
+  createSendToken(user, 200, res);
 });
