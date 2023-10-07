@@ -5,14 +5,9 @@ const db = require('../models');
 const User = db.User
 
 exports.getAll = catchAsync(async (req, res, next) => {
-  const users = await User.findAll({
-    include: 'contacts'
-  });
-  if (users.length == 2)
-    return next(new AppError('test '), 401)
+  const users = await User.findAll();
   res.status(200).json({
     status: "success",
-    result: users.length,
     data: users
   })
 })

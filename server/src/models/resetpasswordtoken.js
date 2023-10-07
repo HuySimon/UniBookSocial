@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
         .createHash('sha256')
         .update(resetToken)
         .digest('hex');
-      this.expired_at = Date.now() + 1 * 60 * 1000; // 1 minutes
+      this.expired_at = Date.now() + 10 * 60 * 1000; // 10 minutes
       return resetToken;
     };
   }
