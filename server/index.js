@@ -5,12 +5,13 @@ const cookieParser = require('cookie-parser');
 require('dotenv').config()
 const globalErrorHandler = require('./src/controllers/errorController');
 const initRoutes = require('./src/routes')
-const connectionDatabase = require('./connection_database')
+const connectionDatabase = require('./src/config/connection_database')
 
 const app = express()
 app.use(cors({
   origin: process.env.CLIENT_URL,
-  methods: ['GET', 'POST', 'PATCH', 'DELETE']
+  methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+  credentials: true
 }))
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json())
