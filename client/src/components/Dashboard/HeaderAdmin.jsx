@@ -57,17 +57,23 @@ const HeaderAdmin = () => {
 		{
 			icon: PiUsersLight,
 			title: "Users",
-			link: "/users"
+			link: "/dashboard/users",
+			handleCreatePost: () => { setIsVisibleNotify(false) }
+
 		},
 		{
 			icon: PiNewspaperLight,
 			title: "Posts",
-			link: "/posts"
+			link: "/dashboard/posts",
+			handleCreatePost: () => { setIsVisibleNotify(false) }
+
 		},
 		{
 			icon: PiChartBarLight,
 			title: "Statics",
-			link: "/statics"
+			link: "/dashboard/statics",
+			handleCreatePost: () => { setIsVisibleNotify(false) }
+
 		},
 	]
 
