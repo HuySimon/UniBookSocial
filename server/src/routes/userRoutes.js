@@ -11,7 +11,7 @@ router.post('/forgotPassword', authController.forgotPassword);
 router.patch('/resetPassword/:token', authController.resetPassword);
 
 router.route('/')
-  .get(authController.protect, userController.getAll)
+  .get(authController.protect, authController.restrictTo(1), userController.getAll)
 //   .post(userController.create)
 
 

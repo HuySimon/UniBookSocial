@@ -16,10 +16,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
-app.use((req, res, next) => {
-  console.log(req.cookies)
-  next()
-})
+// app.use((req, res, next) => {
+//   console.log(req.cookies)
+//   next()
+// })
 initRoutes(app)
 connectionDatabase()
 app.use(globalErrorHandler);
