@@ -9,6 +9,8 @@ const sendErrorDev = (err, req, res) => {
       stack: err.stack
     });
   }
+  console.error('ERROR 💥', err);
+
 }
 const sendErrorProd = (err, req, res) => {
   // A) API
