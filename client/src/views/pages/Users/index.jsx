@@ -1,14 +1,53 @@
 import {PiPencilSimpleLine , PiTrashSimpleLight} from 'react-icons/pi';
-
-import Pagination from '../../../components/Pagination';
+import { Link } from 'react-router-dom'
+import { useState , useEffect} from 'react'
+ 
+import Pagination from '../../../components/Dashboard/Pagination';
 import { AvatarUser } from '../../../assets';
-import './Users.css';
+import './Users.scss';
+
+// Dữ liệu mẫu về người dùng
+// const userData = [
+//     { id: 1, name: "Alice", email: "alice@example.com" },
+//     { id: 2, name: "Bob", email: "bob@example.com" },
+//     { id: 3, name: "Charlie", email: "charlie@example.com" },
+//     { id: 4, name: "Simon", email: "Simon@example.com" },
+//     { id: 5, name: "Jack", email: "Jack@example.com" },
+//     { id: 6, name: "Nhien", email: "Nhien@example.com" },
+//     { id: 7, name: "Quang", email: "Quang@example.com" },
+//     { id: 8, name: "Foden", email: "Foden@example.com" },
+//     { id: 9, name: "Messi", email: "Messi@example.com" },
+//     // Thêm nhiều người dùng khác ở đây
+//   ];
 
 const Users = () => {
+    const [userList, setUserList] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 5;
+
+    useEffect(() => {
+        fetch('https://jsonplaceholder.typicode.com/users')
+            .then(response => response.json())
+            .then(result => setUserList(result))
+            .catch(error => console.log(error))
+    }, [])
+
+    // eslint-disable-next-line no-unused-vars
+    const handleSearch = (searchTerm) => {
+        const filteredUsers = userList.filter((user) =>
+          user.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        setUserList(filteredUsers);
+      };
+
+      // 
+      const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber); 
+      };
     return (
         <>
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg mg">
-            <div className="flex items-center pb-4 pt-4 bg-white ">
+            <div className="flex items-center pb-4 pt-4 bg-white space-x-4"> 
                 <div className='ml-2'>
                     <button id="dropdownActionButton" data-dropdown-toggle="dropdownAction" className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5 " type="button">
                         <span className="sr-only">Action button</span>
@@ -21,17 +60,17 @@ const Users = () => {
                     <div id="dropdownAction" className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 ">
                         <ul className="py-1 text-sm text-gray-700 " aria-labelledby="dropdownActionButton">
                             <li>
-                                <a href="#" className="block px-4 py-2 hover:bg-gray-100">Reward</a>
+                                <Link to="#" className="block px-4 py-2 hover:bg-gray-100">Reward</Link>
                             </li>
                             <li>
-                                <a href="#" className="block px-4 py-2 hover:bg-gray-100 ">Promote</a>
+                                <Link to="#" className="block px-4 py-2 hover:bg-gray-100 ">Promote</Link>
                             </li>
                             <li>
-                                <a href="#" className="block px-4 py-2 hover:bg-gray-100 ">Activate account</a>
+                                <Link to="#" className="block px-4 py-2 hover:bg-gray-100 ">Activate account</Link>
                             </li>
                         </ul>
                         <div className="py-1">
-                            <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 ">Delete User</a>
+                            <Link to="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 ">Delete User</Link>
                         </div>
                     </div>
                 </div>
@@ -44,7 +83,7 @@ const Users = () => {
                     </div>
                     <input type="text" id="table-search-users" className="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500  none-outline" placeholder="Search for users" />
                 </div>
-                <button className="w-28 ml-42 py-2 bg-primary-900 rounded-md text-white border border-primary-900 ">Add user</button>
+                <button className="w-28 sm:w-20 py-2 px-1 bg-primary-900 rounded-md text-white border border-primary-900 inline-flex items-center justify-center ">Add user</button>
             </div>
             <table className="w-full text-sm text-left text-gray-500 -400">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 -700 -400">
@@ -74,7 +113,51 @@ const Users = () => {
                 </thead>
                 <tbody>
 
-                    <tr className="bg-white border-b -800 -700 hover:bg-gray-50 -gray-600">
+                {userList && userList.length > 0 ?
+                            userList.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((user) => (
+                                <tr key={user.id} className="bg-white border-b -800 -700 hover:bg-gray-50 -gray-600">
+                                <td className="px-6 py-4">
+                                    {user.id}
+                                </td>
+                                <th scope="row" className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap ">
+                                    <img className="w-10 h-10 rounded-full" src={AvatarUser} alt="Jese image" />
+                                    <div className="pl-3">
+                                        <div className="text-base font-semibold">{user.name}</div>
+                                        <div className="font-normal text-gray-500">{user.email}</div>
+                                    </div>
+                                </th>
+                                <td className="px-6 py-4">
+                                    Neil
+                                </td>
+                                <td className="px-6 py-4">
+                                    Sims
+                                </td>
+                                <td className="px-6 py-4">
+                                    Admin
+                                </td>
+                                <td className="px-6 py-4">
+                                    <div className="flex items-center">
+                                        <div className="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div> Online
+                                    </div>
+                                </td>
+                                <td className="px-6 py-4">
+                                    {/* <!-- Modal toggle --> */}
+                                    <div className='flex items-center space-x-2 md:space-x-2'>
+                                        <Link to="#" type="button" data-modal-target="editUserModal" data-modal-show="editUserModal" className=" font-semibold text-2xl text-blue-600">
+                                            <i >
+                                                <PiPencilSimpleLine />
+                                            </i>
+                                        </Link>
+                                        <Link to="#" type="button" data-modal-target="editUserModal" data-modal-show="editUserModal" className="font-medium text-2xl text-blue-600">
+                                        <i>
+                                            <PiTrashSimpleLight />
+                                        </i>
+                                        </Link>
+                                    </div>
+                                </td>
+                            </tr>)
+                            ) : 'Loading'}
+                    {/* <tr className="bg-white border-b -800 -700 hover:bg-gray-50 -gray-600">
                         <td className="px-6 py-4">
                             1
                         </td>
@@ -100,175 +183,22 @@ const Users = () => {
                             </div>
                         </td>
                         <td className="px-6 py-4">
-                            {/* <!-- Modal toggle --> */}
-                            <a href="#" type="button" data-modal-target="editUserModal" data-modal-show="editUserModal" className=" font-semibold text-2xl text-blue-600">
-                                <i >
-                                    <PiPencilSimpleLine />
+                            <!-- Modal toggle --> 
+                            <div className='flex items-center space-x-2 md:space-x-2'>
+                                <Link to="#" type="button" data-modal-target="editUserModal" data-modal-show="editUserModal" className=" font-semibold text-2xl text-blue-600">
+                                    <i >
+                                        <PiPencilSimpleLine />
+                                    </i>
+                                </Link>
+                                <Link to="#" type="button" data-modal-target="editUserModal" data-modal-show="editUserModal" className="font-medium text-2xl text-blue-600">
+                                <i>
+                                    <PiTrashSimpleLight />
                                 </i>
-                            </a>
-                            <a href="#" type="button" data-modal-target="editUserModal" data-modal-show="editUserModal" className="font-medium text-2xl text-blue-600">
-                            <i>
-                                <PiTrashSimpleLight />
-                            </i>
-                            </a>
-                        </td>
-                    </tr>
-                    <tr className="bg-white border-b -800 -700 hover:bg-gray-50 -gray-600">
-                        <td className="px-6 py-4">
-                            2
-                        </td>
-                        <th scope="row" className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap ">
-                            <img className="w-10 h-10 rounded-full" src={AvatarUser} alt="Jese image" />
-                            <div className="pl-3">
-                                <div className="text-base font-semibold">Neil Sims</div>
-                                <div className="font-normal text-gray-500">neil.sims@flowbite.com</div>
-                            </div>
-                        </th>
-                        <td className="px-6 py-4">
-                            Neil
-                        </td>
-                        <td className="px-6 py-4">
-                            Sims
-                        </td>
-                        <td className="px-6 py-4">
-                            Admin
-                        </td>
-                        <td className="px-6 py-4">
-                            <div className="flex items-center">
-                                <div className="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div> Online
+                                </Link>
                             </div>
                         </td>
-                        <td className="px-6 py-4">
-                            {/* <!-- Modal toggle --> */}
-                            <a href="#" type="button" data-modal-target="editUserModal" data-modal-show="editUserModal" className=" font-semibold text-2xl text-blue-600">
-                                <i >
-                                    <PiPencilSimpleLine />
-                                </i>
-                            </a>
-                            <a href="#" type="button" data-modal-target="editUserModal" data-modal-show="editUserModal" className="font-medium text-2xl text-blue-600  hover:underline">
-                            <i>
-                                <PiTrashSimpleLight />
-                            </i>
-                            </a>
-                        </td>
-                    </tr>
-                    <tr className="bg-white border-b -800 -700 hover:bg-gray-50 -gray-600">
-                        <td className="px-6 py-4">
-                            3
-                        </td>
-                        <th scope="row" className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap ">
-                            <img className="w-10 h-10 rounded-full" src={AvatarUser} alt="Jese image" />
-                            <div className="pl-3">
-                                <div className="text-base font-semibold">Neil Sims</div>
-                                <div className="font-normal text-gray-500">neil.sims@flowbite.com</div>
-                            </div>
-                        </th>
-                        <td className="px-6 py-4">
-                            Neil
-                        </td>
-                        <td className="px-6 py-4">
-                            Sims
-                        </td>
-                        <td className="px-6 py-4">
-                            Admin
-                        </td>
-                        <td className="px-6 py-4">
-                            <div className="flex items-center">
-                                <div className="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div> Online
-                            </div>
-                        </td>
-                        <td className="px-6 py-4">
-                            {/* <!-- Modal toggle --> */}
-                            <a href="#" type="button" data-modal-target="editUserModal" data-modal-show="editUserModal" className=" font-semibold text-2xl text-blue-600">
-                                <i >
-                                    <PiPencilSimpleLine />
-                                </i>
-                            </a>
-                            <a href="#" type="button" data-modal-target="editUserModal" data-modal-show="editUserModal" className="font-medium text-2xl text-blue-600  hover:underline">
-                            <i>
-                                <PiTrashSimpleLight />
-                            </i>
-                            </a>
-                        </td>
-                    </tr>
-                    <tr className="bg-white border-b -800 -700 hover:bg-gray-50 -gray-600">
-                        <td className="px-6 py-4">
-                            4
-                        </td>
-                        <th scope="row" className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap ">
-                            <img className="w-10 h-10 rounded-full" src={AvatarUser} alt="Jese image" />
-                            <div className="pl-3">
-                                <div className="text-base font-semibold">Neil Sims</div>
-                                <div className="font-normal text-gray-500">neil.sims@flowbite.com</div>
-                            </div>
-                        </th>
-                        <td className="px-6 py-4">
-                            Neil
-                        </td>
-                        <td className="px-6 py-4">
-                            Sims
-                        </td>
-                        <td className="px-6 py-4">
-                            Admin
-                        </td>
-                        <td className="px-6 py-4">
-                            <div className="flex items-center">
-                                <div className="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div> Online
-                            </div>
-                        </td>
-                        <td className="px-6 py-4">
-                            {/* <!-- Modal toggle --> */}
-                            <a href="#" type="button" data-modal-target="editUserModal" data-modal-show="editUserModal" className=" font-semibold text-2xl text-blue-600">
-                                <i >
-                                    <PiPencilSimpleLine />
-                                </i>
-                            </a>
-                            <a href="#" type="button" data-modal-target="editUserModal" data-modal-show="editUserModal" className="font-medium text-2xl text-blue-600  hover:underline">
-                            <i>
-                                <PiTrashSimpleLight />
-                            </i>
-                            </a>
-                        </td>
-                    </tr>
-                    <tr className="bg-white border-b -800 -700 hover:bg-gray-50 -gray-600">
-                        <td className="px-6 py-4">
-                            5
-                        </td>
-                        <th scope="row" className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap ">
-                            <img className="w-10 h-10 rounded-full" src={AvatarUser} alt="Jese image" />
-                            <div className="pl-3">
-                                <div className="text-base font-semibold">Neil Sims</div>
-                                <div className="font-normal text-gray-500">neil.sims@flowbite.com</div>
-                            </div>
-                        </th>
-                        <td className="px-6 py-4">
-                            Neil
-                        </td>
-                        <td className="px-6 py-4">
-                            Sims
-                        </td>
-                        <td className="px-6 py-4">
-                            Admin
-                        </td>
-                        <td className="px-6 py-4">
-                            <div className="flex items-center">
-                                <div className="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div> Online
-                            </div>
-                        </td>
-                        <td className="px-6 py-4">
-                            {/* <!-- Modal toggle --> */}
-                            <a href="#" type="button" data-modal-target="editUserModal" data-modal-show="editUserModal" className=" font-semibold text-2xl text-blue-600">
-                                <i >
-                                    <PiPencilSimpleLine />
-                                </i>
-                            </a>
-                            <a href="#" type="button" data-modal-target="editUserModal" data-modal-show="editUserModal" className="font-medium text-2xl text-blue-600  hover:underline">
-                            <i>
-                                <PiTrashSimpleLight />
-                            </i>
-                            </a>
-                        </td>
-                    </tr>
+                    </tr> */}
+                    
                 </tbody>
             </table>
             {/* <!-- Edit user modal --> */}
@@ -335,9 +265,13 @@ const Users = () => {
 
         </div>
         {/* Pagination */}
-        <Pagination/>
+        <Pagination
+        totalItems={userList.length} 
+        currentPage={currentPage}
+        itemsPerPage={itemsPerPage}
+        onPageChange={handlePageChange}
+        />
         </>
-
     )
 }
 
