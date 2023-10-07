@@ -7,7 +7,7 @@ import Pagination from '../../../components/Dashboard/Pagination';
 import { Avatar } from '../../../assets';
 import { PlaceHolderPostImg } from '../../../assets';
 import './Posts.scss';
-import Post from '../../../components/Dashboard/Post/Post';
+// import Post from '../../../components/Dashboard/Post/Post';
 
 
 function Index() {

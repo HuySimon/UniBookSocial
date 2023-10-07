@@ -42,7 +42,7 @@ const Users = () => {
 
       // 
       const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
+        setCurrentPage(pageNumber); 
       };
     return (
         <>
