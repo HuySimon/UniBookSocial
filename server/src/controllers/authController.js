@@ -1,7 +1,6 @@
 const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
 const catchAsync = require('../utils/catchAsync');
-const bcrypt = require('bcryptjs')
 const { Op } = require('sequelize')
 const crypto = require('crypto')
 const AppError = require('../utils/appError');
@@ -198,18 +197,22 @@ exports.restrictTo = (...roles) => {
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
 	// 1) Get user from collection
-	const user = await User.scope('withPassword').findById(req.user.id)
-
-	// 2) Check if POSTed current password is correct
-	if (!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
+	const user = await User.scope('withPassword').findByPk(req.user.id)
+	console.log(user)
+	// 2) Check password and passwordConfirm
+	if (req.body.password !== req.body.passwordConfirm) {
+		return next(new AppError('Passwords are not the same!', 400))
+	}
+	// 3) Check if POSTed current password is correct
+	if (!(await user.validatePassword(req.body.passwordCurrent, user.password))) {
 		return next(new AppError('Your current password is wrong.', 401))
 	}
 
-	// 3) If so, update password
+	// 4) If so, update password
 	user.password = req.body.password
 	await user.save()
 	// User.findByIdAndUpdate will NOT work as intended!
 
-	// 4) Log user in, send JWT
+	// 5) Log user in, send JWT
 	createSendToken(user, 200, res)
 });
