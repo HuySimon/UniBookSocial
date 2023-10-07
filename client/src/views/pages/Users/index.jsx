@@ -47,7 +47,7 @@ const Users = () => {
     return (
         <>
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg mg">
-            <div className="flex items-center pb-4 pt-4 bg-white space-x-4">
+            <div className="flex items-center pb-4 pt-4 bg-white space-x-4"> 
                 <div className='ml-2'>
                     <button id="dropdownActionButton" data-dropdown-toggle="dropdownAction" className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5 " type="button">
                         <span className="sr-only">Action button</span>
