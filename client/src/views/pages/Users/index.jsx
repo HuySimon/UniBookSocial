@@ -6,6 +6,20 @@ import Pagination from '../../../components/Dashboard/Pagination';
 import { AvatarUser } from '../../../assets';
 import './Users.scss';
 
+// Dữ liệu mẫu về người dùng
+// const userData = [
+//     { id: 1, name: "Alice", email: "alice@example.com" },
+//     { id: 2, name: "Bob", email: "bob@example.com" },
+//     { id: 3, name: "Charlie", email: "charlie@example.com" },
+//     { id: 4, name: "Simon", email: "Simon@example.com" },
+//     { id: 5, name: "Jack", email: "Jack@example.com" },
+//     { id: 6, name: "Nhien", email: "Nhien@example.com" },
+//     { id: 7, name: "Quang", email: "Quang@example.com" },
+//     { id: 8, name: "Foden", email: "Foden@example.com" },
+//     { id: 9, name: "Messi", email: "Messi@example.com" },
+//     // Thêm nhiều người dùng khác ở đây
+//   ];
+
 const Users = () => {
     const [userList, setUserList] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
