@@ -35,7 +35,9 @@ const About = () => {
 				className='w-full flex flex-col gap-5'>
 				{
 					personalInfor.map((item, index) => (
-						<div className="flex justify-between items-center">
+						<div 
+						key={index}
+						className="flex justify-between items-center">
 							<label htmlFor="name" className='w-1/4 font-medium'>{item.title}</label>
 							<input type="text" className='w-3/4 rounded-md px-3 py-2 text-black' />
 						</div>
@@ -58,15 +60,15 @@ const About = () => {
 				<div className="flex flex-col gap-3 mt-4">
 					<div className="flex justify-between items-center">
 						<label htmlFor="" className='w-1/4 font-medium'>Old Password</label>
-						<input type="password" name="" id="" className='w-3/4 rounded-md px-3 py-2 text-black' />
+						<input type="password" name="old-password" id="old-password" className='w-3/4 rounded-md px-3 py-2 text-black' />
 					</div>
 					<div className="flex justify-between items-center">
 						<label htmlFor="" className='w-1/4 font-medium'>New Password</label>
-						<input type="password" name="" id="" className='w-3/4 rounded-md px-3 py-2 text-black' />
+						<input type="password" name="new-password" id="new-password" className='w-3/4 rounded-md px-3 py-2 text-black' />
 					</div>
 					<div className="flex justify-between items-center">
 						<label htmlFor="" className='w-1/4 font-medium'>Confirm New Password</label>
-						<input type="password" name="" id="" className='w-3/4 rounded-md px-3 py-2 text-black' />
+						<input type="password" name="confirm-new-password" id="confirm-new-password" className='w-3/4 rounded-md px-3 py-2 text-black' />
 					</div>
 				</div>
 				<button
