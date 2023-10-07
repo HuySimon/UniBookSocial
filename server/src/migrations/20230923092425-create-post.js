@@ -37,18 +37,18 @@ module.exports = {
         type: Sequelize.BOOLEAN
       },
       userConfirm: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         references: {
           model: 'Users',
-          key: 'email'
+          key: 'id'
         }
       },
       userPost: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         references: {
           model: 'Users',
-          key: 'email'
+          key: 'id'
         }
       },
       createdAt: {

@@ -1,7 +1,7 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
+const bcrypt = require('bcryptjs')
+
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -11,37 +11,65 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.hasMany(models.Contact, { foreignKey: 'user', as: 'contacts' })
+    }
+
+    validatePassword(candidatePassword, userPassword) {
+      return bcrypt.compareSync(candidatePassword, userPassword);
     }
   }
   User.init({
-    firstName: DataTypes.STRING,
-    lastName: DataTypes.STRING,
-    email: {
+    id: {
       primaryKey: true,
-      type: DataTypes.STRING,
       allowNull: false,
+      type: DataTypes.INTEGER,
+      autoIncrement: true
+    },
+    email: {
+      allowNull: false,
+      type: DataTypes.STRING,
+      unique: true,
       validate: {
         isEmail: {
-          msg: 'Email không hợp lệ!'
-        },
-        notNull: {
-          msg: 'Vui lòng nhập email'
+          msg: 'Please provide a valid email!'
         }
       }
     },
+    firstName: {
+      allowNull: false,
+      type: DataTypes.STRING
+    },
+    lastName: {
+      allowNull: false,
+      type: DataTypes.STRING
+    },
+    password: {
+      allowNull: false,
+      type: DataTypes.STRING,
+    },
+    phoneNumber: {
+      allowNull: false,
+      type: DataTypes.STRING,
+    },
     username: DataTypes.STRING,
     avatar: DataTypes.STRING,
-    coverImage: DataTypes.STRING
+    coverImage: DataTypes.STRING,
+    status: DataTypes.STRING,
+    role: DataTypes.INTEGER,
+    linkFacebook: DataTypes.STRING,
+    linkZalo: DataTypes.STRING,
+    linkInstagram: DataTypes.STRING,
+
   }, {
     hooks: {
-      beforeCreate: function (instance, options) {
-        instance.username = instance.firstName + instance.lastName
+      beforeCreate: async function (instance, options) {
+        instance.username = instance.firstName + ' ' + instance.lastName
         instance.avatar = 'avatarDefault.jpg'
         instance.coverImage = 'coverImageDefault.jpg'
+        instance.password = await bcrypt.hash(instance.password, 12);
+        instance.role = 1
+        instance.status = 'Active'
       }
     },
-
     sequelize,
     modelName: 'User',
   });
