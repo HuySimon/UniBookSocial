@@ -54,6 +54,20 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.deleteMe = catchAsync(async (req, res, next) => {
+  const user = await User.update({ status: 'Disabled' }, {
+    where: { id: req.user.id },
+  });
+  if (!user) {
+    return next(new AppError('No user found with that ID', 404));
+  }
+
+  res.status(204).json({
+    status: 'success',
+    data: null
+  });
+});
+
 exports.createUser = (req, res) => {
   res.status(500).json({
     status: 'error',
