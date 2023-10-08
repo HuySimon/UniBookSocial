@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { LoginImg } from '../../assets'
+import { LoginImg, Logo } from '../../assets'
 import { slideUpLogin } from './animation'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
@@ -15,11 +15,11 @@ import { useAuthContext } from '../../hooks/useAuthContext'
 import Axios from '../../api'
 import { loginValidationSchema } from '../../validations/AuthValidation'
 const Login = () => {
+	document.title = "Login "
 	const [showPassword, setShowPassword] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
 	const navigate = useNavigate()
 	const [state, dispatch] = useAuthContext();
-
 	const { register, handleSubmit, formState: { errors } } = useForm({
 		defaultValues: {
 			email: "",
@@ -33,7 +33,7 @@ const Login = () => {
 			password: data.password
 		}
 		setIsLoading(true)
-		Axios.post('/api/v1/users/login', user, { withCredentials: true }).then(res => {
+		Axios.post('/api/v1/users/login', user).then(res => {
 			if (res.status === 200) {
 				dispatch({ type: "LOGIN", value: res.data.data.user })
 				console.log(res.data.data)
@@ -57,8 +57,11 @@ const Login = () => {
 					animate="animate"
 					exit={"exit"}
 					className="w-full md:flex bg-white shadow-lg rounded-2xl h-[630px] md:mx-16 xl:m-0 max-w-lg md:max-w-7xl overflow-hidden">
-					<div className={`w-full md:w-1/2 xl:w-[40%] py-16 px-8 md:p-16 text-primary-main transition-all duration-1000 relative`}>
-						<p className='  font-bold text-4xl'>Login</p>
+					<div className={`w-full md:w-1/2 xl:w-[40%] py-16 px-8 md:px-16 md:py-12 text-primary-main transition-all duration-1000 relative`}>
+						<Link to={"/"}>
+							<img src={Logo} alt="" className='w-16 h-16 mx-auto' />
+						</Link>
+						<p className='text-center font-bold text-4xl'>Login</p>
 						<form onSubmit={handleSubmit(onSubmit)} className='mt-3'>
 							<div className="flex flex-col mb-6 relative">
 								<label htmlFor="email" className='font-semibold mb-1'>Email</label>
@@ -83,7 +86,7 @@ const Login = () => {
 								}
 								<p className='absolute -bottom-6 text-red-600 text-sm'>{errors.password?.message}</p>
 							</div>
-							<div className="flex justify-between items-center my-6">
+							<div className="flex justify-between items-center my-3">
 								<div className="flex items-center gap-2">
 									<input type="checkbox" name="" id="remember-me" className='w-fit checked:ring-2 ring-offset-2 ring-primary-main' />
 									<label htmlFor="remember-me">Remember me</label>
@@ -94,8 +97,8 @@ const Login = () => {
 								>Forgot Password?</Link>
 							</div>
 							<button
-								type="submit"
-								className='w-full flex justify-center h-[50px] items-center py-3 px-14 font-semibold rounded-lg bg-primary-main border transition-all duration-300 border-primary-main hover:bg-transparent hover:text-primary-main text-white'>
+								type='submit'
+								className='w-full flex justify-center h-[50px] items-center py-3 px-14 font-semibold rounded-lg bg-primary-main text-white'>
 								{
 									isLoading ? <ImSpinner9 className='animate-spin duration-500' /> : "Login"
 								}

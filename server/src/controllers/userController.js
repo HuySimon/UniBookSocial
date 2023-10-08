@@ -1,9 +1,9 @@
-const AppError = require('../utils/appError')
-const catchAsync = require('../utils/catchAsync')
-const factory = require('./handlerFactory')
+const AppError = require("../utils/appError");
+const catchAsync = require("../utils/catchAsync");
+const factory = require("./handlerFactory");
 
-const db = require('../models');
-const User = db.User
+const db = require("../models");
+const User = db.User;
 
 const filterObj = (obj, ...allowedFields) => {
   const newObj = {};
@@ -72,5 +72,5 @@ exports.createUser = factory.createOne(User)
 exports.getAllUsers = factory.getAll(User)
 exports.getUser = factory.getOne(User)
 //Do not update password with this!
-exports.updateUser = factory.updateOne(User)
-exports.deleteUser = factory.deleteOne(User)
+exports.updateUser = factory.updateOne(User);
+exports.deleteUser = factory.deleteOne(User);

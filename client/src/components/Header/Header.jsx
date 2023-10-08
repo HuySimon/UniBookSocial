@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { CiSearch } from 'react-icons/ci'
 import { AiOutlineLogout } from 'react-icons/ai'
 import { PiHeartLight, PiEnvelopeLight, PiListBold, PiHouseLight, PiPlusCircleLight, PiUsersLight, PiNewspaperLight, PiChartBarLight, PiGearLight } from 'react-icons/pi'
@@ -11,10 +11,11 @@ import { Logo, Portrait } from '../../assets'
 import SideBarItem from './SideBarItem'
 import Setting from '../../views/pages/Setting'
 import { useAuthContext } from '../../hooks/useAuthContext'
+import Axios from '../../api/index'
 const Header = () => {
 
 	const [expand, setExpand] = useState(true)
-	const [isVisibleSetting, setIsVisibleSetting] = useState(false)
+	const navigate = useNavigate()
 	const [isVisiblePost, setIsVisiblePost] = useState(false)
 	const [isVisibleNotify, setIsVisibleNotify] = useState(false)
 	const [activeOverlay, setActiveOverlay] = useState(0)
@@ -47,50 +48,17 @@ const Header = () => {
 			handleCreate: () => { setIsVisibleNotify(false) },
 			role: 1,
 		},
-		{
-			icon: PiHeartLight,
-			title: "Notifications",
-			link: window.location.href,
-			handleCreate: () => { setIsVisibleNotify(!isVisibleNotify) },
-			role: 1,
-		},
-		{
-			icon: PiPlusCircleLight,
-			title: "Create",
-			link: window.location.href,
-			handleCreate: () => { setIsVisiblePost(!isVisiblePost) },
-			role: 1,
-		},
-		{
-			icon: PiUsersLight,
-			title: "Users",
-			link: "/users",
-			role: 2,
-		},
-		{
-			icon: PiNewspaperLight,
-			title: "Posts",
-			link: "/posts",
-			role: 2
-		},
-		{
-			icon: PiChartBarLight,
-			title: "Statics",
-			link: "/statics",
-			role: 2
-		},
-		// {
-		// 	icon: PiGearLight,
-		// 	title: "Setting",
-		// 	link: window.location.href,
-		// 	handleCreate: () => {
-		// 		setIsVisibleSetting(!isVisibleSetting)
-		// 	}
-		// }
 	]
 	const logout = () => {
 		dispatch({ type: "LOGOUT" })
-		toast.success("Logout success!")
+		Axios.get('/api/v1/users/logout').then(res => {
+			if (res.status === 200) {
+				toast.success("Log out success")
+			}
+			navigate('/')
+		}).catch(err => {
+			console.log("BE ncc")
+		})
 	}
 	return (
 		<>
@@ -98,11 +66,11 @@ const Header = () => {
 				<div className="relative w-full h-full flex flex-col items-stretch">
 					<div className="navbar-logo h-16 !ml-0 my-4">
 						<Link
-							className='flex justify-start items-center w-full grow-0 shrink-0'
+							className='flex justify-center items-center w-full grow-0 shrink-0'
 							to={"/"}
 						>
-							<img src={Logo} alt="" className='h-full w-full md:h-16 md:w-20' />
-							<span className={`font-bold text-2xl overflow-hidden transition-all ${expand ? "w-44" : "w-0"}`}>SGU School</span>
+							<img src={Logo} alt="" className='w-12 h-14 object-contain' />
+							<span className={`font-bold text-2xl overflow-hidden transition-all ml-2 ${expand ? "w-44" : "w-0"}`}>SGU School</span>
 						</Link>
 					</div>
 					<motion.ul className='flex flex-col justify-start items-stretch'>
@@ -119,16 +87,42 @@ const Header = () => {
 								icon={<item.icon size={30} className='z-10' />}
 							/>
 						))}
-						<SideBarItem
-							index={4}
-							activeOverlay={activeOverlay}
-							setActiveOverlay={setActiveOverlay}
-							expand={expand}
-							title={"Profile"}
-							href={"/profile"}
-							handleCreate={() => setIsVisibleNotify(false)}
-							icon={<img src={Portrait} className='w-[30px] h-[30px] rounded-full object-cover' />}
-						/>
+						{
+							localStorage.getItem("auth") === "true" && localStorage.getItem("user") != "" && (
+								<>
+									<SideBarItem
+										title={"Notification"}
+										href={window.location.href}
+										index={2}
+										activeOverlay={activeOverlay}
+										setActiveOverlay={setActiveOverlay}
+										expand={expand}
+										handleCreate={() => { setIsVisibleNotify(!isVisibleNotify) }}
+										icon={<PiHeartLight size={30} className='z-10' />}
+									/>
+									<SideBarItem
+										title={"Create"}
+										href={window.location.href}
+										index={3}
+										activeOverlay={activeOverlay}
+										setActiveOverlay={setActiveOverlay}
+										expand={expand}
+										handleCreate={() => { setIsVisiblePost(!isVisiblePost) }}
+										icon={<PiPlusCircleLight size={30} className='z-10' />}
+									/>
+									<SideBarItem
+										index={4}
+										activeOverlay={activeOverlay}
+										setActiveOverlay={setActiveOverlay}
+										expand={expand}
+										title={"Profile"}
+										href={"/profile"}
+										handleCreate={() => setIsVisibleNotify(false)}
+										icon={<img src={Portrait} className='w-[30px] h-[30px] rounded-full object-cover' />}
+									/>
+								</>
+							)
+						}
 					</motion.ul>
 					<div className="flex flex-col h-full items-stretch justify-end p-2 md:p-4">
 						{
