@@ -47,53 +47,10 @@ const Header = () => {
 			handleCreate: () => { setIsVisibleNotify(false) },
 			role: 1,
 		},
-		{
-			icon: PiHeartLight,
-			title: "Notifications",
-			link: window.location.href,
-			handleCreate: () => { setIsVisibleNotify(!isVisibleNotify) },
-			role: 1,
-		},
-		{
-			icon: PiPlusCircleLight,
-			title: "Create",
-			link: window.location.href,
-			handleCreate: () => { setIsVisiblePost(!isVisiblePost) },
-			role: 1,
-		},
-		// {
-		// 	icon: PiUsersLight,
-		// 	title: "Users",
-		// 	link: "/users",
-		// 	role: 2,
-		// },
-		// {
-		// 	icon: PiNewspaperLight,
-		// 	title: "Posts",
-		// 	link: "/posts",
-		// 	role: 2
-		// },
-		// {
-		// 	icon: PiChartBarLight,
-		// 	title: "Statics",
-		// 	link: "/statics",
-		// 	role: 2
-		// },
-		// {
-		// 	icon: PiGearLight,
-		// 	title: "Setting",
-		// 	link: window.location.href,
-		// 	handleCreate: () => {
-		// 		setIsVisibleSetting(!isVisibleSetting)
-		// 	}
-		// }
 	]
 	const logout = () => {
 		dispatch({ type: "LOGOUT" })
-		window.location.reload()
-		setTimeout(() => {
-			toast.success("Logout success!")
-		}, 3000);
+		toast.success("Logout success!")
 	}
 	return (
 		<>
@@ -123,17 +80,39 @@ const Header = () => {
 							/>
 						))}
 						{
-							localStorage.getItem("auth") === true && localStorage.getItem("user") != "" && (
-								<SideBarItem
-									index={4}
-									activeOverlay={activeOverlay}
-									setActiveOverlay={setActiveOverlay}
-									expand={expand}
-									title={"Profile"}
-									href={"/profile"}
-									handleCreate={() => setIsVisibleNotify(false)}
-									icon={<img src={Portrait} className='w-[30px] h-[30px] rounded-full object-cover' />}
-								/>
+							localStorage.getItem("auth") === "true" && localStorage.getItem("user") != "" && (
+								<>
+									<SideBarItem
+										title={"Notification"}
+										href={window.location.href}
+										index={2}
+										activeOverlay={activeOverlay}
+										setActiveOverlay={setActiveOverlay}
+										expand={expand}
+										handleCreate={() => { setIsVisibleNotify(!isVisibleNotify) }}
+										icon={<PiHeartLight size={30} className='z-10' />}
+									/>
+									<SideBarItem
+										title={"Create"}
+										href={window.location.href}
+										index={3}
+										activeOverlay={activeOverlay}
+										setActiveOverlay={setActiveOverlay}
+										expand={expand}
+										handleCreate={() => { setIsVisiblePost(!isVisiblePost) }}
+										icon={<PiPlusCircleLight size={30} className='z-10' />}
+									/>
+									<SideBarItem
+										index={4}
+										activeOverlay={activeOverlay}
+										setActiveOverlay={setActiveOverlay}
+										expand={expand}
+										title={"Profile"}
+										href={"/profile"}
+										handleCreate={() => setIsVisibleNotify(false)}
+										icon={<img src={Portrait} className='w-[30px] h-[30px] rounded-full object-cover' />}
+									/>
+								</>
 							)
 						}
 					</motion.ul>
