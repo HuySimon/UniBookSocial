@@ -4,7 +4,7 @@ import { NotifyAppear } from './animation'
 import Curve from './Curve'
 import { HiOutlineBellAlert } from 'react-icons/hi2'
 import { PiWarningLight, PiWarningCircleLight, PiXCircleLight } from 'react-icons/pi'
-const Index = ({ isVisibleNotify, handleNotify, setActiveOverlay }) => {
+const Index = ({ isVisibleNotify, handleNotify }) => {
 
 	const notifyTemplate = [
 		{
