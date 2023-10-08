@@ -1,14 +1,26 @@
 import React, { useState } from 'react'
 import OtpInput from 'react18-input-otp';
 import { motion } from 'framer-motion'
-const ConfirmOTP = ({ title, handlePrevStep }) => {
+import Axios from '../../../api/index'
+import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify'
+import { useAuthContext } from '../../../hooks/useAuthContext';
+const ConfirmOTP = ({ title, handlePrevStep,handleNextStep }) => {
 	const [otp, setOtp] = useState('');
 	const handleChange = (enteredOtp) => {
 		setOtp(enteredOtp);
 	};
-	console.log(otp)
+	const { register, handleSubmit, formState: { errors } } = useForm()
+	const [state, dispatch] = useAuthContext()
+	const onSubmit = (data) => {
+		if(otp === state.resetToken) {
+			handleNextStep()
+		}
+	}
+	console.log(state.resetToken)
 	return (
 		<motion.form
+			onSubmit={handleSubmit(onSubmit)}
 			initial={{
 				x: "50%",
 				opacity: 0
@@ -29,7 +41,7 @@ const ConfirmOTP = ({ title, handlePrevStep }) => {
 					ease: [0.32, 0, 0.67, 0]
 				}
 			}}
-			className="w-1/2 flex flex-col items-center mx-auto">
+			className="w-[60%] flex flex-col items-center mx-auto pb-5">
 			<span className='font-medium text-3xl'>{title}</span>
 			<p className='text-sm text-gray-500 text-center my-3'>We have sent the code verfication to your email j******@gmail.com</p>
 			<OtpInput

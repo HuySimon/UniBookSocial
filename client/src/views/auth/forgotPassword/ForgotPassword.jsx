@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Logo } from '../../../assets'
 import { AiOutlineClose } from 'react-icons/ai'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom'
 import SendEmail from './SendEmail'
 import ConfirmOTP from './ConfirmOTP'
 import ChangePassword from './ChangePassword'
+import { BsArrowLeft } from 'react-icons/bs'
+import { useMultistepForm } from '../../../hooks/useMultiStepForm'
 const ForgotPassword = ({ isVisible, setIsVisible }) => {
 	const [step, setStep] = useState(0)
 	const handleNextStep = () => {
@@ -16,13 +18,16 @@ const ForgotPassword = ({ isVisible, setIsVisible }) => {
 	}
 	const PageDisplay = () => {
 		if (step == 0) {
-			return <SendEmail title={"ForgotPassword"} handleNextStep={handleNextStep} />
+			return <SendEmail title={"Forgot Password"} handleNextStep={handleNextStep} />
 		} else if (step == 1) {
-			return <ConfirmOTP ttile={"Email Verfication Sent"} handlePrevStep={handlePrevStep} />
-		} else {
-			return <ChangePassword />
+			return <ConfirmOTP title={"Email Verfication Sent"} handlePrevStep={handlePrevStep} handleNextStep={handleNextStep} />
+		} else if (step == 2) {
+			return <ChangePassword title={"Change Password"} />
 		}
 	}
+	useEffect(() => {
+		document.title = "Forgot Password"
+	})
 	console.log(step)
 	return (
 		<>
@@ -42,21 +47,32 @@ const ForgotPassword = ({ isVisible, setIsVisible }) => {
 							type: "spring",
 						}
 					}}
-					className="w-[35em] h-[35em] bg-white rounded-md shadow-lg relative">
+					className="w-[35em] h-[38em] bg-white rounded-md shadow-lg relative">
 					<div
 						className="w-full h-full flex flex-col">
 						<div className="w-full h-1/2">
 							<img src={Logo} alt="" className='w-full h-full object-contain' />
 						</div>
-						<AnimatePresence mode='wait'>
-							{PageDisplay()}
-						</AnimatePresence>
+						<div className="pb-5">
+							<AnimatePresence mode='wait'>
+								{PageDisplay()}
+							</AnimatePresence>
+						</div>
 					</div>
 					<Link
 						to={"/login"}
 						className='absolute top-4 right-4 rotate-0 hover:rotate-[360deg] transition-all duration-500'>
 						<AiOutlineClose />
 					</Link>
+					{
+						step === 1 && (
+							<div
+								onClick={handlePrevStep}
+								className="absolute top-4 left-4 cursor-pointer">
+								<BsArrowLeft size={22} />
+							</div>
+						)
+					}
 				</motion.div>
 			</div>
 		</>

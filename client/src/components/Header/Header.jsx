@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { CiSearch } from 'react-icons/ci'
 import { AiOutlineLogout } from 'react-icons/ai'
 import { PiHeartLight, PiEnvelopeLight, PiListBold, PiHouseLight, PiPlusCircleLight, PiUsersLight, PiNewspaperLight, PiChartBarLight, PiGearLight } from 'react-icons/pi'
@@ -19,7 +19,6 @@ const Header = () => {
 	const [isVisibleNotify, setIsVisibleNotify] = useState(false)
 	const [activeOverlay, setActiveOverlay] = useState(0)
 	const [state, dispatch] = useAuthContext()
-	const navigate = useNavigate()
 	useEffect(() => {
 		const checkTabletMode = () => {
 			const tabletWidthThreshold = 768;
@@ -91,8 +90,10 @@ const Header = () => {
 	]
 	const logout = () => {
 		dispatch({ type: "LOGOUT" })
-		navigate('/')
-		toast.success("Logout success!")
+		window.location.reload()
+		setTimeout(() => {
+			toast.success("Logout success!")
+		}, 3000);
 	}
 	return (
 		<>
@@ -122,7 +123,7 @@ const Header = () => {
 							/>
 						))}
 						{
-							localStorage.getItem("auth") === "true" && localStorage.getItem("user") != "" && (
+							localStorage.getItem("auth") === true && localStorage.getItem("user") != "" && (
 								<SideBarItem
 									index={4}
 									activeOverlay={activeOverlay}
