@@ -1,33 +1,36 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
+import { useAuthContext } from '../../../../hooks/useAuthContext'
 const About = () => {
 
+	const currentUser = JSON.parse(localStorage.getItem("user"))
 	const personalInfor = [
 		{
 			title: "Name",
-			type: "text"
+			value: (currentUser.user.firstName + " " + currentUser.user.lastName)
 		},
 		{
-			title: "Phone"
+			title: "Phone",
+			value: currentUser.user.phoneNumber
 		},
 		{
-			title: "Email"
+			title: "Email",
+			value: currentUser.user.email
 		},
 		{
-			title: "Facebook"
+			title: "Facebook",
+			value: (currentUser.user.linkFacebook === null ? "" : currentUser.user.linkFacebook)
 		},
 		{
-			title: "Instagram"
+			title: "Instagram",
+			value: (currentUser.user.linkInstagram === null ? "" : currentUser.user.linkInstagram)
 		},
 		{
-			title: "Zalo"
-		},
-		{
-			title: "Twitter"
+			title: "Zalo",
+			value: (currentUser.user.linkZalo === null ? "" : currentUser.user.linkZalo)
 		}
 	]
 	const { register, handleSubmit, formState: { errors } } = useForm()
-
 	return (
 		<div className='w-full h-full'>
 			<form
@@ -35,11 +38,11 @@ const About = () => {
 				className='w-full flex flex-col gap-5'>
 				{
 					personalInfor.map((item, index) => (
-						<div 
-						key={index}
-						className="flex justify-between items-center">
+						<div
+							key={index}
+							className="flex justify-between items-center">
 							<label htmlFor="name" className='w-1/4 font-medium'>{item.title}</label>
-							<input type="text" className='w-3/4 rounded-md px-3 py-2 text-black' />
+							<input type="text" className='w-3/4 rounded-md px-3 py-2 text-black' value={item.value} />
 						</div>
 					))
 				}
@@ -55,7 +58,7 @@ const About = () => {
 				</button>
 			</form>
 
-			<form action="" className='py-8'>
+			<form className='py-8'>
 				<span className='text-xl'>Change Password</span>
 				<div className="flex flex-col gap-3 mt-4">
 					<div className="flex justify-between items-center">

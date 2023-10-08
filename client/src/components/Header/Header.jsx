@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { CiSearch } from 'react-icons/ci'
 import { AiOutlineLogout } from 'react-icons/ai'
 import { PiHeartLight, PiEnvelopeLight, PiListBold, PiHouseLight, PiPlusCircleLight, PiUsersLight, PiNewspaperLight, PiChartBarLight, PiGearLight } from 'react-icons/pi'
@@ -19,6 +19,7 @@ const Header = () => {
 	const [isVisibleNotify, setIsVisibleNotify] = useState(false)
 	const [activeOverlay, setActiveOverlay] = useState(0)
 	const [state, dispatch] = useAuthContext()
+	const navigate = useNavigate()
 	useEffect(() => {
 		const checkTabletMode = () => {
 			const tabletWidthThreshold = 768;
@@ -61,24 +62,24 @@ const Header = () => {
 			handleCreate: () => { setIsVisiblePost(!isVisiblePost) },
 			role: 1,
 		},
-		{
-			icon: PiUsersLight,
-			title: "Users",
-			link: "/users",
-			role: 2,
-		},
-		{
-			icon: PiNewspaperLight,
-			title: "Posts",
-			link: "/posts",
-			role: 2
-		},
-		{
-			icon: PiChartBarLight,
-			title: "Statics",
-			link: "/statics",
-			role: 2
-		},
+		// {
+		// 	icon: PiUsersLight,
+		// 	title: "Users",
+		// 	link: "/users",
+		// 	role: 2,
+		// },
+		// {
+		// 	icon: PiNewspaperLight,
+		// 	title: "Posts",
+		// 	link: "/posts",
+		// 	role: 2
+		// },
+		// {
+		// 	icon: PiChartBarLight,
+		// 	title: "Statics",
+		// 	link: "/statics",
+		// 	role: 2
+		// },
 		// {
 		// 	icon: PiGearLight,
 		// 	title: "Setting",
@@ -90,6 +91,7 @@ const Header = () => {
 	]
 	const logout = () => {
 		dispatch({ type: "LOGOUT" })
+		navigate('/')
 		toast.success("Logout success!")
 	}
 	return (
@@ -119,16 +121,20 @@ const Header = () => {
 								icon={<item.icon size={30} className='z-10' />}
 							/>
 						))}
-						<SideBarItem
-							index={4}
-							activeOverlay={activeOverlay}
-							setActiveOverlay={setActiveOverlay}
-							expand={expand}
-							title={"Profile"}
-							href={"/profile"}
-							handleCreate={() => setIsVisibleNotify(false)}
-							icon={<img src={Portrait} className='w-[30px] h-[30px] rounded-full object-cover' />}
-						/>
+						{
+							localStorage.getItem("auth") === "true" && localStorage.getItem("user") != "" && (
+								<SideBarItem
+									index={4}
+									activeOverlay={activeOverlay}
+									setActiveOverlay={setActiveOverlay}
+									expand={expand}
+									title={"Profile"}
+									href={"/profile"}
+									handleCreate={() => setIsVisibleNotify(false)}
+									icon={<img src={Portrait} className='w-[30px] h-[30px] rounded-full object-cover' />}
+								/>
+							)
+						}
 					</motion.ul>
 					<div className="flex flex-col h-full items-stretch justify-end p-2 md:p-4">
 						{

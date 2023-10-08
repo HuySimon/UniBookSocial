@@ -111,7 +111,7 @@ const SignUp = () => {
 										size={22} className='absolute top-[55%] right-3 cursor-pointer' />
 								)
 							}
-							<p className='absolute -bottom-5 text-[12px] text-red-600'>{errors.password?.message}</p>
+							<p className='absolute -bottom-5 text-[12px] leading-4 text-red-600'>{errors.password?.message}</p>
 						</div>
 						<div className="flex flex-col relative mb-3">
 							<label htmlFor="confirmPassword" className='font-semibold mb-1'>Confirm Password</label>

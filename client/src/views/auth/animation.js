@@ -1,6 +1,6 @@
 export const slideUpSignUp = {
 	initial: {
-		y: 100,
+		y: 50,
 		opacity: 0
 	},
 	animate: {
@@ -14,7 +14,7 @@ export const slideUpSignUp = {
 		}
 	},
 	exit: {
-		y: 100,
+		y: 50,
 		opacity: 0,
 		transition: {
 			duration: 0.3
