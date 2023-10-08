@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { LoginImg, SignupImg } from '../../assets'
 import { ImSpinner9 } from 'react-icons/im'
@@ -13,7 +13,9 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import Axios from '../../api'
 import { signUpValidationSchema } from '../../validations/AuthValidation'
 const SignUp = () => {
-
+	useEffect(() => {
+		document.title = "Sign Up"
+	})
 	const [showPassword, setShowPassword] = useState(false)
 	const [confirmPassword, setShowConfirmPassword] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
@@ -48,15 +50,15 @@ const SignUp = () => {
 			}
 			setIsLoading(false)
 		}).catch((err) => {
-			if(err.response.status === 500 ){
+			if (err.response.status === 500) {
 				toast.error("Email already in use!!")
-			}else {
+			} else {
 				toast.error("Failed to sign up")
 			}
 			setIsLoading(false)
 		})
 	}
-	
+
 
 	return (
 		<section
@@ -111,7 +113,7 @@ const SignUp = () => {
 										size={22} className='absolute top-[55%] right-3 cursor-pointer' />
 								)
 							}
-							<p className='absolute -bottom-5 text-[12px] text-red-600'>{errors.password?.message}</p>
+							<p className='absolute -bottom-5 text-[12px] leading-4 text-red-600'>{errors.password?.message}</p>
 						</div>
 						<div className="flex flex-col relative mb-3">
 							<label htmlFor="confirmPassword" className='font-semibold mb-1'>Confirm Password</label>

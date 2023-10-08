@@ -15,11 +15,11 @@ import { useAuthContext } from '../../hooks/useAuthContext'
 import Axios from '../../api'
 import { loginValidationSchema } from '../../validations/AuthValidation'
 const Login = () => {
+	document.title = "Login "
 	const [showPassword, setShowPassword] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
 	const navigate = useNavigate()
 	const [state, dispatch] = useAuthContext();
-
 	const { register, handleSubmit, formState: { errors } } = useForm({
 		defaultValues: {
 			email: "",
@@ -83,7 +83,7 @@ const Login = () => {
 								}
 								<p className='absolute -bottom-6 text-red-600 text-sm'>{errors.password?.message}</p>
 							</div>
-							<div className="flex justify-between items-center my-6">
+							<div className="flex justify-between items-center my-3">
 								<div className="flex items-center gap-2">
 									<input type="checkbox" name="" id="remember-me" className='w-fit checked:ring-2 ring-offset-2 ring-primary-main' />
 									<label htmlFor="remember-me">Remember me</label>
@@ -94,8 +94,8 @@ const Login = () => {
 								>Forgot Password?</Link>
 							</div>
 							<button
-								type="submit"
-								className='w-full flex justify-center h-[50px] items-center py-3 px-14 font-semibold rounded-lg bg-primary-main border transition-all duration-300 border-primary-main hover:bg-transparent hover:text-primary-main text-white'>
+								type='submit'
+								className='w-full flex justify-center h-[50px] items-center py-3 px-14 font-semibold rounded-lg bg-primary-main text-white'>
 								{
 									isLoading ? <ImSpinner9 className='animate-spin duration-500' /> : "Login"
 								}

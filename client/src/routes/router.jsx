@@ -14,6 +14,7 @@ import { useAuthContext } from "../hooks/useAuthContext";
 import Users from "../views/pages/Users";
 import Statics from "../views/pages/Statics";
 import Posts from "../views/pages/Posts";
+import DetailPost from "../components/Post/DetailPost";
 const router = createBrowserRouter([
 	{
 		path: "/",
@@ -66,6 +67,10 @@ const router = createBrowserRouter([
 	{
 		path: "/signup",
 		element: <SignUp />
+	},
+	{
+		path: "/detailPost",
+		element: <DetailPost />
 	},
 	{
 		path: "*",
