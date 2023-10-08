@@ -1,6 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
 import Login from "../views/auth/Login";
-import DefaultLayout from "../views/layout/DefaultLayout";
 import Dashboard from "../views/layout/Dashboard";
 import Home from "../views/pages/Home";
 import SignUp from "../views/auth/SignUp";
@@ -16,8 +15,8 @@ import Statics from "../views/pages/Statics";
 import Posts from "../views/pages/Posts";
 const router = createBrowserRouter([
 	{
-		path: "/",
-		element: <DefaultLayout />,
+		path: "/dashboard",
+		element: <Dashboard />,
 		children: [
 			{
 				path: "/",
@@ -30,30 +29,23 @@ const router = createBrowserRouter([
 			{
 				path: "/search",
 				element: <Search />
-			}, 
-			{
+			}, {
 				path: "/create",
 				element: <CreatePost />
 			},
+            {
+				path: "/users",
+				element: <Users />
+			},
+			{
+				path: "/posts",
+				element: <Posts />
+			},
+			{
+				path: "/statics",
+				element: <Statics />
+			},
 		]
-	},
-	{
-		path: "/dashboard",
-		element: <Dashboard />,
-		children: [
-					{
-						path: "/dashboard/users",
-						element: <Users />
-					},
-					{
-						path: "/dashboard/posts",
-						element: <Posts />
-					},
-					{
-						path: "/dashboard/statics",
-						element: <Statics />
-					},
-				]
 	},
 	{
 		path: "/login",

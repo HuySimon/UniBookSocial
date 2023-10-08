@@ -3,30 +3,26 @@ import { createContext, useEffect, useMemo, useReducer } from "react";
 export const AuthContext = createContext();
 
 const initialState = {
-	isAuthorized: false,
-	user: {}
+	isAuthorized: localStorage.getItem("auth"),
+	user: JSON.parse(localStorage.getItem("user"))
 }
 
 const reducer = (state, action) => {
 	switch (action.type) {
 		case "LOGIN":
 			// Save user information and isAuthorized to localStorage
-			localStorage.setItem("authState", JSON.stringify({
+			localStorage.setItem("user", JSON.stringify({
 				user: action.value,
-				isAuthorized: true
 			}));
+			localStorage.setItem("auth", true)
 			return {
 				...state,
-				user: action.value,
-				isAuthorized: true
 			};
 		case "LOGOUT":
-			// Remove user information and isAuthorized from localStorage
-			localStorage.removeItem("authState");
+			localStorage.removeItem("user");
+			localStorage.setItem("auth", false)
 			return {
 				...state,
-				user: {},
-				isAuthorized: false
 			};
 		default:
 			throw new Error(`Unhandled action type: ${action.type}`);
