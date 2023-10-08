@@ -34,7 +34,7 @@ const SendEmail = ({ title, handleNextStep }) => {
 			setIsLoading(false)
 		}).catch(err => {
 			console.log(err.response)
-			toast.error("Failed to send OTP")
+			toast.error("Email don't exist")
 			setIsLoading(false)
 		})
 	}

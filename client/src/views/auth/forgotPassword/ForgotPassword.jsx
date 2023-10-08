@@ -50,8 +50,8 @@ const ForgotPassword = ({ isVisible, setIsVisible }) => {
 					className="w-[35em] h-[38em] bg-white rounded-md shadow-lg relative">
 					<div
 						className="w-full h-full flex flex-col">
-						<div className="w-full h-1/2">
-							<img src={Logo} alt="" className='w-full h-full object-contain' />
+						<div className="w-full h-1/2 flex justify-center items-center">
+							<img src={Logo} alt="" className='w-full h-3/4 object-contain' />
 						</div>
 						<div className="pb-5">
 							<AnimatePresence mode='wait'>

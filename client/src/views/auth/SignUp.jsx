@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { LoginImg, SignupImg } from '../../assets'
+import { LoginImg, Logo, SignupImg } from '../../assets'
 import { ImSpinner9 } from 'react-icons/im'
 import { PiEyeBold, PiEyeClosedBold } from 'react-icons/pi'
 import { motion } from 'framer-motion'
@@ -12,6 +12,7 @@ import { toast } from 'react-toastify'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Axios from '../../api'
 import { signUpValidationSchema } from '../../validations/AuthValidation'
+import { useAuthContext } from '../../hooks/useAuthContext'
 const SignUp = () => {
 	useEffect(() => {
 		document.title = "Sign Up"
@@ -19,6 +20,7 @@ const SignUp = () => {
 	const [showPassword, setShowPassword] = useState(false)
 	const [confirmPassword, setShowConfirmPassword] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
+	const [state,dispatch] = useAuthContext();
 	const navigate = useNavigate()
 
 	const { register, handleSubmit, formState: { errors } } = useForm({
@@ -46,7 +48,8 @@ const SignUp = () => {
 		Axios.post('/api/v1/users/signup', newUser).then(res => {
 			if (res.status === 201) {
 				toast.success("Signup successful!")
-				navigate('/login')
+				dispatch({type: "LOGIN",value:res.data.data.user})
+				navigate('/')
 			}
 			setIsLoading(false)
 		}).catch((err) => {
@@ -69,36 +72,39 @@ const SignUp = () => {
 				animate={"animate"}
 				exit={"exit"}
 				className="w-full md:flex bg-white shadow-lg rounded-2xl max-h-screen md:mx-16 xl:m-0 max-w-lg md:max-w-7xl overflow-hidden">
-				<div className={`w-full md:w-1/2 xl:w-[40%] py-16 px-8 md:p-16 text-primary-main transition-all duration-1000 relative`}>
-					<p className='  font-bold text-4xl'>Sign up</p>
+				<div className={`w-full md:w-1/2 xl:w-[40%] py-14 px-8 md:px-16 md:py-8 text-primary-main transition-all duration-1000 relative`}>
+					<Link to={"/"}>
+						<img src={Logo} alt="" className='w-16 h-16 mx-auto' />
+					</Link>
+					<p className='text-center font-bold text-4xl'>Sign up</p>
 					<form onSubmit={handleSubmit(onSubmit)} className='mt-3'>
 						<div className="flex justify-between items-center gap-5">
-							<div className="flex flex-col mb-6 relative">
+							<div className="flex flex-col mb-5 relative">
 								<label htmlFor="firstName" className='font-semibold mb-1'>First Name</label>
 								<input type="text" {...register("firstName")}
 									className='border border-primary-900 rounded-md text-primary-main placeholder:text-primary-700 placeholder:text-sm px-4 py-2 w-full' placeholder='Enter your first name' />
 								<p className='absolute -bottom-5 text-[12px] text-red-600'>{errors.firstName?.message}</p>
 							</div>
-							<div className="flex flex-col mb-6 relative">
+							<div className="flex flex-col mb-5 relative">
 								<label htmlFor="lastName" className='font-semibold mb-1'>Last Name</label>
 								<input type="text" {...register("lastName")}
 									className='border border-primary-900 rounded-md text-primary-main placeholder:text-primary-700 placeholder:text-sm px-4 py-2 w-full' placeholder='Enter your last name' />
 								<p className='absolute -bottom-5 text-[12px] text-red-600'>{errors.lastName?.message}</p>
 							</div>
 						</div>
-						<div className="flex flex-col mb-6 relative">
+						<div className="flex flex-col mb-5 relative">
 							<label htmlFor="email" className='font-semibold mb-1'>Email</label>
 							<input {...register("email")}
 								className='border border-primary-900 rounded-md text-primary-main placeholder:text-primary-700 placeholder:text-sm px-4 py-2 w-full' placeholder='Enter your email' />
 							<p className='absolute -bottom-5 text-[12px] text-red-600'>{errors.email?.message}</p>
 						</div>
-						<div className="flex flex-col mb-6 relative">
+						<div className="flex flex-col mb-5 relative">
 							<label htmlFor="phoneNumber" className='font-semibold mb-1'>Phone Number</label>
 							<input {...register("phoneNumber")}
 								className='border border-primary-900 rounded-md text-primary-main placeholder:text-primary-700 placeholder:text-sm px-4 py-2 w-full' placeholder='Enter your phone number' />
 							<p className='absolute -bottom-5 text-[12px] text-red-600'>{errors.phoneNumber?.message}</p>
 						</div>
-						<div className="flex flex-col relative mb-6 ">
+						<div className="flex flex-col relative mb-8">
 							<label htmlFor="password" className='font-semibold mb-1'>Password</label>
 							<input type={`${!showPassword ? "password" : "text"}`} {...register("password")}
 								className='border border-primary-900 rounded-md text-primary-main placeholder:text-primary-700 placeholder:text-sm px-4 py-2 w-full' placeholder='Enter your password' />
@@ -113,7 +119,7 @@ const SignUp = () => {
 										size={22} className='absolute top-[55%] right-3 cursor-pointer' />
 								)
 							}
-							<p className='absolute -bottom-5 text-[12px] leading-4 text-red-600'>{errors.password?.message}</p>
+							<p className='absolute -bottom-8 text-[12px] leading-4 text-red-600'>{errors.password?.message}</p>
 						</div>
 						<div className="flex flex-col relative mb-3">
 							<label htmlFor="confirmPassword" className='font-semibold mb-1'>Confirm Password</label>
