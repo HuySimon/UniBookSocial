@@ -33,7 +33,6 @@ router
   )
   .delete(
     authController.protect,
-    authController.restrictTo(1),
     postController.isNotDeliveryPost,
     postController.deletePost
   );
