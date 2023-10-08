@@ -1,11 +1,13 @@
 import { useState } from 'react';
 
+// eslint-disable-next-line react/prop-types
 function Search({ userList, onSearch }) {
     const [searchTerm, setSearchTerm] = useState(''); // Giá trị của ô input
 
     const handleSearch = (event) => {
         const value = event.target.value;
         setSearchTerm(value);
+        // eslint-disable-next-line react/prop-types
         const filteredUsers = userList.filter((user) => user.name.toLowerCase().includes(value.toLowerCase()));
         onSearch(filteredUsers);
     };
