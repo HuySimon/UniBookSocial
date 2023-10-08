@@ -5,6 +5,14 @@ const factory = require('./handlerFactory')
 const db = require('../models');
 const User = db.User
 
+
+
+exports.getMe = (req, res, next) => {
+  req.params.id = req.user.id;
+  next();
+};
+
+
 exports.createUser = (req, res) => {
   res.status(500).json({
     status: 'error',

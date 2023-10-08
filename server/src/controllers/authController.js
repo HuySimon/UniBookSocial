@@ -198,7 +198,6 @@ exports.restrictTo = (...roles) => {
 exports.updatePassword = catchAsync(async (req, res, next) => {
 	// 1) Get user from collection
 	const user = await User.scope('withPassword').findByPk(req.user.id)
-	console.log(user)
 	// 2) Check password and passwordConfirm
 	if (req.body.password !== req.body.passwordConfirm) {
 		return next(new AppError('Passwords are not the same!', 400))
