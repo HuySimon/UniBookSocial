@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Post extends Model {
     /**
@@ -13,19 +11,102 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  Post.init({
-    title: DataTypes.STRING,
-    price: DataTypes.FLOAT,
-    mainImage: DataTypes.STRING,
-    description: DataTypes.TEXT,
-    status: DataTypes.STRING,
-    isNew: DataTypes.BOOLEAN,
-    isGeneralSubject: DataTypes.STRING,
-    userConfirm: DataTypes.STRING,
-    userPost: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'Post',
-  });
+  Post.init(
+    {
+      title: {
+        allowNull: false,
+        type: DataTypes.STRING,
+        validate: {
+          notNull: {
+            msg: "Please provide a valid title!",
+          },
+          notEmpty: {
+            msg: "title mustn't be empty!",
+          },
+        },
+      },
+      price: {
+        allowNull: false,
+        type: DataTypes.FLOAT,
+        validate: {
+          notNull: {
+            msg: "Please provide a valid price!",
+          },
+          notEmpty: {
+            msg: "price mustn't be empty!",
+          },
+        },
+      },
+      mainImage: {
+        allowNull: false,
+        type: DataTypes.STRING,
+        validate: {
+          notNull: {
+            msg: "Please provide a valid mainImage!",
+          },
+          notEmpty: {
+            msg: "mainImage mustn't be empty!",
+          },
+        },
+      },
+      description: {
+        type: DataTypes.TEXT,
+      },
+      status: {
+        type: DataTypes.STRING,
+        validate: {
+          isIn: [["Confirm", "Unconfirm", "Delivery"]],
+        },
+      },
+      isNew: {
+        allowNull: false,
+        type: DataTypes.BOOLEAN,
+        validate: {
+          notNull: {
+            msg: "Please provide a valid isNew!",
+          },
+        },
+      },
+      isGeneralSubject: {
+        allowNull: false,
+        type: DataTypes.BOOLEAN,
+        validate: {
+          notNull: {
+            msg: "Please provide a valid isGeneralSubject!",
+          },
+        },
+      },
+      userConfirm: {
+        type: DataTypes.INTEGER,
+
+        validate: {
+          isNumeric: true,
+        },
+      },
+      userPost: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+        references: {
+          model: "Users",
+          key: "id",
+        },
+        validate: {
+          notNull: {
+            msg: "Please provide a valid userConfirm!",
+          },
+          isNumeric: true,
+        },
+      },
+    },
+    {
+      hooks: {
+        beforeCreate: async function (instance, options) {
+          instance.status = "Unconfirm";
+        },
+      },
+      sequelize,
+      modelName: "Post",
+    }
+  );
   return Post;
 };
