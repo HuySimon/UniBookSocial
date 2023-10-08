@@ -58,11 +58,11 @@ const Header = () => {
 				<div className="relative w-full h-full flex flex-col items-stretch">
 					<div className="navbar-logo h-16 !ml-0 my-4">
 						<Link
-							className='flex justify-start items-center w-full grow-0 shrink-0'
+							className='flex justify-center items-center w-full grow-0 shrink-0'
 							to={"/"}
 						>
-							<img src={Logo} alt="" className='h-full w-full md:h-16 md:w-20' />
-							<span className={`font-bold text-2xl overflow-hidden transition-all ${expand ? "w-44" : "w-0"}`}>SGU School</span>
+							<img src={Logo} alt="" className='w-12 h-14 object-contain' />
+							<span className={`font-bold text-2xl overflow-hidden transition-all ml-2 ${expand ? "w-44" : "w-0"}`}>SGU School</span>
 						</Link>
 					</div>
 					<motion.ul className='flex flex-col justify-start items-stretch'>
