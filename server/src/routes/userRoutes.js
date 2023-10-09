@@ -18,6 +18,7 @@ router.get('/me', userController.getMe, userController.getUser);
 router.patch('/updateMe', userController.updateMe);
 router.delete('/deleteMe', userController.deleteMe);
 
+router.use(authController.restrictTo(2))
 router.route('/')
 	.get(userController.getAllUsers)
 	.post(userController.createUser)
