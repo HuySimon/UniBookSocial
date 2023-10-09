@@ -39,14 +39,12 @@ const Header = () => {
 			title: "Home",
 			link: "/",
 			handleCreate: () => { setIsVisibleNotify(false) },
-			role: 1,
 		},
 		{
 			icon: CiSearch,
 			title: "Search",
 			link: "/search",
 			handleCreate: () => { setIsVisibleNotify(false) },
-			role: 1,
 		},
 	]
 	const logout = () => {
