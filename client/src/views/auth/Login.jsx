@@ -1,19 +1,19 @@
-import { useState } from 'react'
-import { LoginImg, Logo } from '../../assets'
-import { slideUpLogin } from './animation'
-import { Link, useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
-import { PiEyeBold, PiEyeClosedBold } from 'react-icons/pi'
-import { FcGoogle } from 'react-icons/fc'
-import { ImSpinner9 } from 'react-icons/im'
-import { toast } from 'react-toastify'
-import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as Yup from 'yup'
-import ForgotPassword from './forgotPassword/ForgotPassword'
-import { useAuthContext } from '../../hooks/useAuthContext'
-import Axios from '../../api'
-import { loginValidationSchema } from '../../validations/AuthValidation'
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
+import { toast } from 'react-toastify';
+import { useAuthContext } from '../../hooks/useAuthContext';
+import Axios from '../../api';
+import { loginValidationSchema } from '../../validations/AuthValidation';
+import { LoginImg, Logo } from '../../assets';
+import { slideUpLogin } from './animation';
+import { PiEyeBold, PiEyeClosedBold } from 'react-icons/pi';
+import { FcGoogle } from 'react-icons/fc';
+import { ImSpinner9 } from 'react-icons/im';
+import ForgotPassword from './forgotPassword/ForgotPassword';
 const Login = () => {
 	document.title = "Login "
 	const [showPassword, setShowPassword] = useState(false)
@@ -27,25 +27,27 @@ const Login = () => {
 		},
 		resolver: yupResolver(loginValidationSchema),
 	})
-	const onSubmit = (data) => {
+	const onSubmit = async (data) => {
 		const user = {
 			email: data.email,
 			password: data.password
-		}
-		setIsLoading(true)
-		Axios.post('/api/v1/users/login', user).then(res => {
+		};
+		setIsLoading(true);
+		try {
+			const res = await Axios.post('/api/v1/users/login', user);
 			if (res.status === 200) {
-				dispatch({ type: "LOGIN", value: res.data.data.user })
-				console.log(res.data.data)
-				toast.success("Login success!")
-				navigate('/')
+				dispatch({ type: "LOGIN", value: res.data.data.user });
+				console.log(res.data.data);
+				toast.success("Login success!");
+				navigate('/');
 			}
-			setIsLoading(false)
-		}).catch((err) => {
-			toast.error("Incorrect password or email")
-			setIsLoading(false)
-		})
-	}
+		} catch (err) {
+			toast.error("Incorrect password or email");
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
 	console.log(state.user)
 	return (
 		<>
