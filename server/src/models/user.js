@@ -40,7 +40,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     lastName: {
       allowNull: false,
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      validate: {
+        notNull: {
+          msg: 'Please provide a valid lastname!'
+        }
+      }
     },
     password: {
       allowNull: false,
@@ -66,7 +71,9 @@ module.exports = (sequelize, DataTypes) => {
         instance.avatar = 'avatarDefault.jpg'
         instance.coverImage = 'coverImageDefault.jpg'
         instance.password = await bcrypt.hash(instance.password, 12);
-        instance.role = 1
+        if (!instance.role) {
+          instance.role = 1
+        }
         instance.status = 'Active'
       },
       beforeSave: async function (instance, options) {
