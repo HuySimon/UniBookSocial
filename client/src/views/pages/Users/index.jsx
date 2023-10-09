@@ -1,6 +1,8 @@
+/* eslint-disable no-undef */
 import { PiPencilSimpleLine, PiTrashSimpleLight } from 'react-icons/pi';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import api from '../../../api';
 
 import Pagination from '../../../components/Dashboard/Pagination';
 import Search from '../../../components/Dashboard/Search';
@@ -11,16 +13,38 @@ const Users = () => {
     const [userList, setUserList] = useState([]);
     const [filteredUserList, setFilteredUserList] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 5;
+    const itemsPerPage = 10;
+    const searchValue = 'nguoidung';
+    const filterOption = 1;
+
+    // useEffect(() => {
+    //     fetch('https://jsonplaceholder.typicode.com/users')
+    //         .then((response) => response.json())
+    //         .then((result) => setUserList(result))
+    //         .catch((error) => console.log(error));
+
+    //     // Assign initial value to filteredUserList
+    //     setFilteredUserList(userList);
+    // }, []);
 
     useEffect(() => {
-        fetch('https://jsonplaceholder.typicode.com/users')
-            .then((response) => response.json())
-            .then((result) => setUserList(result))
-            .catch((error) => console.log(error));
+        const fetchData = async () => {
+            try {
+                const url = `/api/v1/users?page[number]=1&page[size]=10&filter=or(contains(email,'nguoi'),contains(username,'nguoi'))`;
+                const response = await api.get(url);
+                console.log(response);
+                const data = response.data;
+                console.log(data);
+                // Cập nhật danh sách người dùng từ API bằng cách sử dụng props userList
+                // userList.current = data;
+                // Gọi hàm xử lý tìm kiếm truyền từ props onSearch và truyền danh sách người dùng mới
+                // onSearch(userList.current);
+            } catch (error) {
+                console.log(error);
+            }
+        };
 
-        // Assign initial value to filteredUserList
-        setFilteredUserList(userList);
+        fetchData();
     }, []);
 
     useEffect(() => {
@@ -121,6 +145,9 @@ const Users = () => {
                                 LastName
                             </th>
                             <th scope="col" className="px-6 py-3">
+                                PhoneNumber
+                            </th>
+                            <th scope="col" className="px-6 py-3">
                                 Role
                             </th>
                             <th scope="col" className="px-6 py-3">
@@ -148,6 +175,7 @@ const Users = () => {
                                       </th>
                                       <td className="px-6 py-4">Neil</td>
                                       <td className="px-6 py-4">Sims</td>
+                                      <td className="px-6 py-4">0385322178</td>
                                       <td className="px-6 py-4">Admin</td>
                                       <td className="px-6 py-4">
                                           <div className="flex items-center">
