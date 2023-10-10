@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useLayoutEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { AiOutlineClose } from 'react-icons/ai'
 import { SiPhotobucket } from 'react-icons/si'
@@ -6,14 +6,17 @@ import { Portrait } from '../../assets'
 import { FiUpload } from 'react-icons/fi'
 import * as Yup from 'yup'
 import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Axios from '../../api/index'
 import { toast } from 'react-toastify'
 import { ImSpinner9 } from 'react-icons/im';
-
+import { useAuthContext } from '../../hooks/useAuthContext'
 const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 	const [selectedFile, setSelectedFile] = useState(null);
 	const [isLoading, setIsLoading] = useState(false)
+	const navigate = useNavigate()
+	const [state, dispatch] = useAuthContext()
 	const handleFileChange = (e) => {
 		const file = e.target.files[0];
 		if (file) {
@@ -26,11 +29,13 @@ const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 		}
 	};
 
+	console.log(state.user.user.id)
+
 	const createPostSchema = Yup.object().shape({
 		title: Yup.string().required("Please enter title"),
 		price: Yup.number().required("Please enter price"),
 		mainImage: Yup.mixed().required('Please upload an image')
-			.test('fileSize', 'File size is too large', (value) => {
+			.test('fileSize', 'File size is too large (> 2MB)', (value) => {
 				if (!value) return true; // No file was selected, so skip this test
 				return value.size <= 2 * 1024 * 1024; // 2MB
 			})
@@ -51,8 +56,9 @@ const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 			price: "",
 			mainImage: null,
 			description: "",
-			isNew: false,
-			isGeneralSubject: false,
+			isNew: -1,
+			isGeneralSubject: -1,
+
 		},
 		resolver: yupResolver(createPostSchema)
 	}
@@ -61,23 +67,30 @@ const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 		const post = {
 			title: data.title,
 			price: data.price,
-			mainImage: data.mainImage,
+			mainImage: data.mainImage.name,
 			description: data.description,
 			isNew: data.isNew,
 			isGeneralSubject: data.isGeneralSubject,
 		}
+		console.log(post)
+		setIsLoading(true)
 		try {
 			const res = await Axios.post('/api/v1/posts', post)
-			if (res.status === 200) {
+			if (res.status === 201) {
 				toast.success("Your post have been posted!")
+				handleCreatePost(false)
 			}
+			console.log(res)
+			console.log(res.data)
 		} catch (err) {
-			toast.error(err.response)
+			//Don't use err.response it will cause error 500: Internal Server error
+			//You can write specific message for it 
+			// console.log(err.response.data.message)
+			toast.error(err.response.data.message)
 		} finally {
 			setIsLoading(false)
 		}
 	}
-	console.log(errors)
 	return (
 		<>
 			<motion.div
@@ -108,8 +121,8 @@ const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 					<p className='text-base text-center font-semibold py-2 border-b'>Create new post</p>
 					{
 						isLoading &&
-						<div className="w-full h-full bg-gray-100 flex justify-center items-center z-10">
-							<ImSpinner9 className='animate-spin duration-500 text-primary-main' size={30} />
+						<div className="w-full h-full absolute left-0 top-0 bg-white/80 flex justify-center items-center z-10">
+							<ImSpinner9 className='animate-spin duration-500 text-primary-main' size={50} />
 						</div>
 					}
 					<form
@@ -174,18 +187,18 @@ const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 								<div className="w-full flex flex-col mb-3 relative">
 									<label htmlFor="email" className='mb-1 text-gray-400'>Major:</label>
 									<select {...register("isGeneralSubject")} className='border border-gray-400 px-4 py-2 w-full rounded-md text-sm'>
-										<option disabled selected className=''>Select Major</option>
-										<option value="false">No</option>
-										<option value="true">Yes</option>
+										<option disabled value={"-1"} className=''>Select Major</option>
+										<option value="0">No</option>
+										<option value="1">Yes</option>
 									</select>
 									<p className='text-sm text-red-600 absolute -bottom-5 truncate'>{errors.isGeneralSubject?.message}</p>
 								</div>
 								<div className="w-full flex flex-col mb-3 relative">
 									<label htmlFor="email" className='mb-1 text-gray-400'>Type:</label>
 									<select {...register("isNew")} className='border border-gray-400 px-4 py-2 w-full rounded-md text-sm'>
-										<option disabled selected className=''>Select Type</option>
-										<option value="true">New</option>
-										<option value="false">Old</option>
+										<option disabled value={"-1"}>Select Type</option>
+										<option value="1">New</option>
+										<option value="0">Old</option>
 									</select>
 									<p className='text-sm text-red-600 absolute -bottom-5 truncate'>{errors.isNew?.message}</p>
 								</div>
