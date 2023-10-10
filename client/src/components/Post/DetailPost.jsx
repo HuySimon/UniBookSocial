@@ -4,9 +4,6 @@ import { Avatar, PlaceHolderPostImg } from '../../assets'
 import { BiDotsVerticalRounded } from 'react-icons/bi'
 import { Link } from 'react-router-dom'
 const DetailPost = () => {
-	useEffect(() => {
-
-	}, [])
 
 	return (
 		<div className='flex w-full h-screen'>
@@ -98,9 +95,9 @@ const DetailPost = () => {
 				<button type="submit" className='px-10 py-2 bg-primary-main text-white w-fit rounded-lg hover:shadow !shadow-primary-700 hover:bg-primary-700 transition-all'>Buy</button>
 			</div>
 			<div className=" p-2 flex-[0_0_auto] flex justify-center items-start bg-primary-700">
-				<Link to={"/"}>
+				<button type='button' onClick={() => window.history.back()}>
 					<AiOutlineClose size={22} color='#fff' className='cursor-pointer' />
-				</Link>
+				</button>
 			</div>
 		</div>
 	)
