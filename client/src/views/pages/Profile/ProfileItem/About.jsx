@@ -1,85 +1,161 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useAuthContext } from '../../../../hooks/useAuthContext'
+import { yupResolver } from '@hookform/resolvers/yup'
+import Axios from '../../../../api/index'
+import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
+import ChangePasswordProfile from './AboutComponents/ChangePasswordProfile'
+import { changeInformationSchema } from '../../../../validations/ProfileValidation'
+
+function isObjectEmpty(obj) {
+	return Object.keys(obj).length === 0;
+}
+
 const About = () => {
 
-	const currentUser = JSON.parse(localStorage.getItem("user"))
-	const personalInfor = [
+	const [currentUser, setCurrentUser] = useState({});
+	const [edit, setEdit] = useState(false)
+	const handleEdit = () => {
+		setEdit(!edit)
+	}
+	const navigate = useNavigate()
+	useEffect(() => {
+		Axios.get('/api/v1/users/me').then(res => {
+			setCurrentUser(res.data.data.data)
+		}).catch(err => {
+			toast.error(err.response.message)
+			navigate('/')
+		})
+	}, [])
+
+	const preloadValueUser = {
+		firstName: currentUser.firstName,
+		lastName: currentUser.lastName,
+		email: currentUser.email,
+		phoneNumber: currentUser.phoneNumber,
+		linkFacebook: currentUser.linkFacebook,
+		linkInstagram: currentUser.linkInstagram,
+		linkZalo: currentUser.linkZalo
+	}
+
+	const { register, handleSubmit, trigger, formState: { errors, dirtyFields, isValid }, getValues } = useForm(
 		{
-			title: "Name",
-			value: (currentUser.user.firstName + " " + currentUser.user.lastName)
-		},
-		{
-			title: "Phone",
-			value: currentUser.user.phoneNumber
-		},
-		{
-			title: "Email",
-			value: currentUser.user.email
-		},
-		{
-			title: "Facebook",
-			value: (currentUser.user.linkFacebook === null ? "" : currentUser.user.linkFacebook)
-		},
-		{
-			title: "Instagram",
-			value: (currentUser.user.linkInstagram === null ? "" : currentUser.user.linkInstagram)
-		},
-		{
-			title: "Zalo",
-			value: (currentUser.user.linkZalo === null ? "" : currentUser.user.linkZalo)
+			defaultValues: preloadValueUser,
+			resolver: yupResolver(changeInformationSchema),
+		})
+
+	const handleEditInformation = (data) => {
+		const fieldsToTrack = [
+			'firstName',
+			'lastName',
+			'email',
+			'phoneNumber',
+			'linkFacebook',
+			'linkInstagram',
+			'linkZalo',
+		];
+		const curUser = {}
+		fieldsToTrack.forEach((fieldName) => {
+			if (dirtyFields[fieldName]) {
+				curUser[fieldName] = getValues(fieldName)
+				trigger(fieldName)
+			}
+		})
+		console.log(curUser)
+		if (isObjectEmpty(curUser)) {
+			toast.error("You haven't changed anything")	
+		} else {
+			Axios.patch('/api/v1/users/updateMe', curUser).then(res => {
+				if (res.status === 200) {
+					toast.success("Edit information success!")
+				}
+			}).catch(err => {
+				toast.error(err.response.message)
+				console.log(err.response)
+			})
 		}
-	]
-	const { register, handleSubmit, formState: { errors } } = useForm()
+	}
+
 	return (
 		<div className='w-full h-full'>
 			<form
-				action=""
+				onSubmit={handleSubmit(handleEditInformation)}
 				className='w-full flex flex-col gap-5'>
-				{
-					personalInfor.map((item, index) => (
-						<div
-							key={index}
-							className="flex justify-between items-center">
-							<label htmlFor="name" className='w-1/4 font-medium'>{item.title}</label>
-							<input type="text" className='w-3/4 rounded-md px-3 py-2 text-black' value={item.value} />
-						</div>
-					))
-				}
-				<div className="flex justify-between items-start">
-					<label htmlFor="bio" className='w-1/4 font-medium'>Bio</label>
-					<textarea name="" id="" cols="30" rows="7" className='px-3 py-2 border border-[#a0a0a0] rounded-md w-3/4'></textarea>
+				<div className="flex justify-between items-center relative mb-2">
+					<label htmlFor="name" className='w-1/4 font-medium'>First Name</label>
+					<input type="text"
+						disabled={edit ? false : true}
+						{...register("firstName")}
+						defaultValue={currentUser.firstName}
+						className='w-3/4 rounded-md px-3 py-2 text-black' />
+					<p className='text-[12px] text-red-600 absolute top-[46px] left-1/4'>{errors.firstName?.message}</p>
 				</div>
-
-				<button
-					type="submit"
-					disabled
-					className='w-fit bg-primary-main px-8 py-2 text-white hover:bg-primary-800 cursor-pointer transition-all rounded-md'> Submit
-				</button>
-			</form>
-
-			<form className='py-8'>
-				<span className='text-xl'>Change Password</span>
-				<div className="flex flex-col gap-3 mt-4">
-					<div className="flex justify-between items-center">
-						<label htmlFor="" className='w-1/4 font-medium'>Old Password</label>
-						<input type="password" name="old-password" id="old-password" className='w-3/4 rounded-md px-3 py-2 text-black' />
-					</div>
-					<div className="flex justify-between items-center">
-						<label htmlFor="" className='w-1/4 font-medium'>New Password</label>
-						<input type="password" name="new-password" id="new-password" className='w-3/4 rounded-md px-3 py-2 text-black' />
-					</div>
-					<div className="flex justify-between items-center">
-						<label htmlFor="" className='w-1/4 font-medium'>Confirm New Password</label>
-						<input type="password" name="confirm-new-password" id="confirm-new-password" className='w-3/4 rounded-md px-3 py-2 text-black' />
-					</div>
+				<div className="flex justify-between items-center relative mb-2">
+					<label htmlFor="name" className='w-1/4 font-medium'>Last Name</label>
+					<input type="text"
+						disabled={edit ? false : true}
+						defaultValue={currentUser.lastName}
+						{...register("lastName")} className='w-3/4 rounded-md px-3 py-2 text-black' />
+					<p className='text-[12px] text-red-600 absolute top-[46px] left-1/4'>{errors.lastName?.message}</p>
 				</div>
-				<button
-					type="submit"
-					disabled
-					className='w-fit bg-primary-main px-8 py-2 mt-5 text-white hover:bg-primary-800 cursor-pointer transition-all rounded-md'> Submit
-				</button>
+				<div className="flex justify-between items-center relative mb-2">
+					<label htmlFor="phoneNumber" className='w-1/4 font-medium'>Phone</label>
+					<input type="text"
+						disabled={edit ? false : true}
+						defaultValue={currentUser.phoneNumber}
+						{...register("phoneNumber")} className='w-3/4 rounded-md px-3 py-2 text-black' />
+					<p className='text-[12px] text-red-600 absolute top-[46px] left-1/4'>{errors.phoneNumber?.message}</p>
+				</div>
+				<div className="flex justify-between items-center relative mb-2">
+					<label htmlFor="email" className='w-1/4 font-medium'>Email</label>
+					<input type="text"
+						disabled={edit ? false : true}
+						defaultValue={currentUser.email}
+						{...register("email")} className='w-3/4 rounded-md px-3 py-2 text-black' />
+					<p className='text-[12px] text-red-600 absolute top-[46px] left-1/4'>{errors.email?.message}</p>
+				</div>
+				<div className="flex justify-between items-center relative mb-2">
+					<label htmlFor="linkFacebook" className='w-1/4 font-medium'>Facebook</label>
+					<input type="text"
+						disabled={edit ? false : true}
+						defaultValue={currentUser.linkFacebook}
+						{...register("linkFacebook")} className='w-3/4 rounded-md px-3 py-2 text-black' />
+					<p className='text-[12px] text-red-600 absolute top-[46px] left-1/4'>{errors.linkFacebook?.message}</p>
+				</div>
+				<div className="flex justify-between items-center relative mb-2">
+					<label htmlFor="linkZalo" className='w-1/4 font-medium'>Zalo</label>
+					<input type="text"
+						disabled={edit ? false : true}
+						defaultValue={currentUser.linkZalo}
+						{...register("linkZalo")} className='w-3/4 rounded-md px-3 py-2 text-black' />
+					<p className='text-[12px] text-red-600 absolute top-[46px] left-1/4'>{errors.linkZalo?.message}</p>
+				</div>
+				<div className="flex justify-between items-center relative mb-2">
+					<label htmlFor="linkInstagram" className='w-1/4 font-medium'>Instagram</label>
+					<input type="text"
+						disabled={edit ? false : true}
+						defaultValue={currentUser.linkInstagram}
+						{...register("linkInstagram")} className='w-3/4 rounded-md px-3 py-2 text-black' />
+					<p className='text-[12px] text-red-600 absolute top-[46px] left-1/4'>{errors.linkInstagram?.message}</p>
+				</div>
+				<div className="flex gap-5">
+					<button
+						type='button'
+						onClick={handleEdit}
+						className='w-28 bg-primary-main px-8 py-2 text-white hover:bg-primary-800 cursor-pointer transition-all rounded-md'>
+						{
+							edit ? 'Cancel' : 'Edit'
+						}
+					</button>
+					<button
+						type="submit"
+						disabled={!edit ? true : false}
+						className={`w-28 px-8 py-2 cursor-pointer transition-all rounded-md ${edit ? 'bg-primary-main text-white hover:bg-primary-800 cursor-pointer' : 'bg-gray-200 text-white cursor-not-allowed'}`}> Submit
+					</button>
+				</div>
 			</form>
+			<ChangePasswordProfile />
 		</div>
 	)
 }

@@ -24,7 +24,7 @@ const Post = () => {
 					</button>
 				</div>
 				<div className="w-full h-[30vh] xl:h-[40vh] overflow-hidden rounded-lg border border-gray-500 mt-4">
-					<Link>
+					<Link to={"/detailPost"}>
 						<img src={PlaceHolderPostImg} alt="" className='w-full h-full object-contain' />
 					</Link>
 				</div>

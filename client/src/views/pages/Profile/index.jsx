@@ -1,12 +1,25 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Portrait, SignupImg } from '../../../assets'
 import { IoCallOutline } from 'react-icons/io5'
 import { HiOutlineServer } from 'react-icons/hi'
 import { BsCheck2Circle } from 'react-icons/bs'
 import { MdOutlineRateReview } from 'react-icons/md'
 import { About, HistoryConfirm, HistoryPost, Review } from './ProfileItem'
+import Axios from '../../../api/index'
 const Index = () => {
 
+	const [currentUser, setCurrentUser] = useState({})
+
+	useEffect(() => {
+		document.title = "Profile"
+		Axios.get('/api/v1/users/me').then(res => {
+			setCurrentUser(res.data.data.data)
+			console.log(res.data.data.data)
+		}).catch(err => {
+			toast.error("Can't get user information")
+			navigate('/')
+		})
+	}, [])
 	const [activeButton, setActiveButton] = useState(0)
 	const [activeSection, setActiveSection] = useState(0)
 	const menu = [
@@ -20,7 +33,7 @@ const Index = () => {
 			title: "History Post",
 			layout: <HistoryPost />
 		},
-		{	
+		{
 			icon: BsCheck2Circle,
 			title: "History Confirm",
 			layout: <HistoryConfirm />
@@ -49,13 +62,12 @@ const Index = () => {
 					</div>
 				</div>
 			</div>
-			<div className="flex flex-col text-center mt-16 pb-3">
-				<p className='font-medium text-3xl'>John Doe</p>
-				<p className='text-sm text-[#929292] px-16'>Freelance Desginer and Front-end Developer</p>
+			<div className="flex flex-col text-center mt-16 pb-5">
+				<p className='font-medium text-3xl'>{currentUser.firstName + " " + currentUser.lastName}</p>
 			</div>
-			<div className="pt-4 w-full z-[9]">
+			<div className="pt-4 w-full z-[8]">
 				<div className="h-full flex lg:flex-row flex-col">
-					<div className="w-full lg:w-1/4 flex lg:h-full h-fit flex-row lg:flex-col justify-between lg:justify-start items-center gap-5 lg:border-r border-gray-400 lg:pr-6 lg:mb-0 mb-6">
+					<div className=" w-full lg:w-1/4 flex lg:h-full h-fit flex-row lg:flex-col justify-between lg:justify-start items-center gap-5 lg:border-r border-gray-400 lg:pr-6 lg:mb-0 mb-6">
 						{
 							menu.map((item, index) => (
 								<div

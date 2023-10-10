@@ -98,7 +98,9 @@ const DetailPost = () => {
 				<button type="submit" className='px-10 py-2 bg-primary-main text-white w-fit rounded-lg hover:shadow !shadow-primary-700 hover:bg-primary-700 transition-all'>Buy</button>
 			</div>
 			<div className=" p-2 flex-[0_0_auto] flex justify-center items-start bg-primary-700">
-				<AiOutlineClose size={22} color='#fff' className='cursor-pointer' />
+				<Link to={"/"}>
+					<AiOutlineClose size={22} color='#fff' className='cursor-pointer' />
+				</Link>
 			</div>
 		</div>
 	)

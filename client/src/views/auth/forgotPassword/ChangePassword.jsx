@@ -70,6 +70,10 @@ const ChangePassword = ({ title }) => {
 			<input type="password" {...register("confirmPassword")} className='w-full px-4 py-2 border border-gray-500 text-black rounded-md placeholder:text-sm' placeholder='Confirm New Password' />
 			<p className='text-sm text-gray-500 text-left my-2'>Password must contain at least 8 characters, one uppercase, one number and one special case character.Ex(John123@)</p>
 			<input
+				onClick={() => {
+					toast.error(errors.password?.message)
+					toast.error(errors.confirmPassword?.message)
+				}}
 				type="submit" value="Submit" className='w-full py-3 text-center bg-primary-800 text-sm font-medium hover:bg-primary-700 transition-all text-white rounded-md' />
 		</motion.form>
 	)

@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom';
 import { AiOutlineLogout } from 'react-icons/ai';
 import { PiHeartLight, PiEnvelopeLight, PiListBold, PiHouseLight, PiPlusCircleLight } from 'react-icons/pi';
 import { motion } from 'framer-motion';
+import { useAuthContext } from '../../hooks/useAuthContext';
 
 const SideBarItem = ({ title, href, index, activeOverlay, setActiveOverlay, expand, icon, handleCreate }) => {
+	const [state, dispatch] = useAuthContext()
 	return (
 		<li
 			onClick={() => {
