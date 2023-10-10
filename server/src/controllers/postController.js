@@ -44,7 +44,7 @@ exports.isNotDeliveryPost = catchAsync(async (req, res, next) => {
     return next(
       new AppError("You do not have permission to delete this post!", 403)
     );
-  if (post.status === "Delivery") {
+  if (post.status === "Delivery" || post.status === "Confirm") {
     return next(new AppError("You can not delete this post!", 403));
   }
   next();
