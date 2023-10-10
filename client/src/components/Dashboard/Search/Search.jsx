@@ -4,12 +4,17 @@ import { useState } from 'react';
 function Search({ userList, onSearch }) {
     const [searchTerm, setSearchTerm] = useState(''); // Giá trị của ô input
 
-    const handleSearch = (event) => {
-        const value = event.target.value;
-        setSearchTerm(value);
-        // eslint-disable-next-line react/prop-types
-        const filteredUsers = userList.filter((user) => user.name.toLowerCase().includes(value.toLowerCase()));
-        onSearch(filteredUsers);
+    // const handleSearch = (event) => {
+    //     const value = event.target.value;
+    //     setSearchTerm(value);
+    //     // eslint-disable-next-line react/prop-types
+    //     const filteredUsers = userList.filter((user) => user.name.toLowerCase().includes(value.toLowerCase()));
+    //     onSearch(filteredUsers);
+    // };
+
+    const handleInputChange = (event) => {
+        setSearchTerm(event.target.value);
+        onSearch(event.target.value);
     };
 
     return (
@@ -37,7 +42,7 @@ function Search({ userList, onSearch }) {
                 className="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500  none-outline"
                 value={searchTerm}
                 placeholder="Search for users"
-                onChange={handleSearch}
+                onChange={handleInputChange}
             />
         </div>
     );
