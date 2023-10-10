@@ -1,8 +1,9 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 import { PiPencilSimpleLine, PiTrashSimpleLight } from 'react-icons/pi';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import api from '../../../api';
+import Axios from '../../../api/index';
 
 import Pagination from '../../../components/Dashboard/Pagination';
 import Search from '../../../components/Dashboard/Search';
@@ -11,11 +12,13 @@ import './Users.scss';
 
 const Users = () => {
     const [userList, setUserList] = useState([]);
-    const [filteredUserList, setFilteredUserList] = useState([]);
+    const [filteredUserList, setFilteredUserList] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 10;
-    const searchValue = 'nguoidung';
-    const filterOption = 1;
+    const [itemsPerPage] = useState(10);
+    const [totalItems, setTotalItems] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
+    // const [searchValue, setSearchValue] = useState([]);
+    const [filterValue, setFilterValue] = useState('');
 
     // useEffect(() => {
     //     fetch('https://jsonplaceholder.typicode.com/users')
@@ -27,25 +30,26 @@ const Users = () => {
     //     setFilteredUserList(userList);
     // }, []);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const url = `/api/v1/users?page[number]=1&page[size]=10&filter=or(contains(email,'nguoi'),contains(username,'nguoi'))`;
-                const response = await api.get(url);
-                console.log(response);
-                const data = response.data;
-                console.log(data);
-                // Cập nhật danh sách người dùng từ API bằng cách sử dụng props userList
-                // userList.current = data;
-                // Gọi hàm xử lý tìm kiếm truyền từ props onSearch và truyền danh sách người dùng mới
-                // onSearch(userList.current);
-            } catch (error) {
-                console.log(error);
-            }
-        };
+    const fetchData = async () => {
+        try {
+            // const url = `/api/v1/users?page[number]=1&page[size]=10&filter=or(contains(email,'nguoi'),contains(username,'nguoi'))`;
+            // const url = `/api/v1/users`;
+            const url = `/api/v1/users?page[number]=${currentPage}&page[size]=10`;
+            // const url = `/api/v1/users?page[number]=${currentPage}&page[size]=${itemsPerPage}&filter=or(contains(email,'${searchValue}'),contains(username,'${searchValue}'))`;
+            const response = await Axios.get(url);
+            const data = response.data.data.data;
+            console.log(data);
+            setUserList(data);
+            // setFilteredUserList(userList);
+            // setItemsPerPage(data.length);
 
-        fetchData();
-    }, []);
+            setTotalPages(Math.ceil(data.length / itemsPerPage));
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    console.log(totalPages);
 
     useEffect(() => {
         // When the value of userList changes, update the value of filteredUserList
@@ -57,12 +61,23 @@ const Users = () => {
         setCurrentPage(1);
     };
 
+    // // Hàm xử lý tìm kiếm
+    // const handleSearch = (searchTerm) => {
+    //     // Tìm kiếm trong danh sách người dùng
+    //     const results = userList.filter((user) => user.toLowerCase().includes(searchTerm.toLowerCase()));
+    //     setSearchValue(results);
+    // };
+
+    useEffect(() => {
+        fetchData();
+    }, [currentPage, itemsPerPage]);
+
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
 
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
+    // const startIndex = (currentPage - 1) * itemsPerPage;
+    // const endIndex = startIndex + itemsPerPage;
     return (
         <>
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg mg">
@@ -159,27 +174,28 @@ const Users = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {filteredUserList && filteredUserList.length > 0
-                            ? filteredUserList.slice(startIndex, endIndex).map((user) => (
+                        {userList && userList.length > 0
+                            ? userList.map((user) => (
                                   <tr key={user.id} className="bg-white border-b -800 -700 hover:bg-gray-50 -gray-600">
                                       <td className="px-6 py-4">{user.id}</td>
                                       <th
                                           scope="row"
                                           className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap "
                                       >
-                                          <img className="w-10 h-10 rounded-full" src={AvatarUser} alt="Jese image" />
+                                          <img className="w-10 h-10 rounded-full" src={user.avatar} alt="Jese image" />
                                           <div className="pl-3">
-                                              <div className="text-base font-semibold">{user.name}</div>
+                                              <div className="text-base font-semibold">{user.username}</div>
                                               <div className="font-normal text-gray-500">{user.email}</div>
                                           </div>
                                       </th>
-                                      <td className="px-6 py-4">Neil</td>
-                                      <td className="px-6 py-4">Sims</td>
-                                      <td className="px-6 py-4">0385322178</td>
-                                      <td className="px-6 py-4">Admin</td>
+                                      <td className="px-6 py-4">{user.firstName}</td>
+                                      <td className="px-6 py-4">{user.lastName}</td>
+                                      <td className="px-6 py-4">{user.phoneNumber}</td>
+                                      <td className="px-6 py-4">{user.role}</td>
                                       <td className="px-6 py-4">
                                           <div className="flex items-center">
-                                              <div className="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div> Online
+                                              <div className="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div>{' '}
+                                              {user.status}
                                           </div>
                                       </td>
                                       <td className="px-6 py-4">
@@ -439,9 +455,9 @@ const Users = () => {
             </div>
             {/* Pagination */}
             <Pagination
-                totalItems={filteredUserList.length}
+                totalPages={12}
                 currentPage={currentPage}
-                itemsPerPage={itemsPerPage}
+                // itemsPerPage={itemsPerPage}
                 onPageChange={handlePageChange}
             />
         </>
