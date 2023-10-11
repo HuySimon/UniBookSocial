@@ -1,19 +1,28 @@
-import React, { useEffect, useState, useMemo } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { CiSearch } from 'react-icons/ci'
-import { AiOutlineLogout } from 'react-icons/ai'
-import { PiHeartLight, PiEnvelopeLight, PiListBold, PiHouseLight, PiPlusCircleLight, PiUsersLight, PiNewspaperLight, PiChartBarLight, PiGearLight } from 'react-icons/pi'
-import { AnimatePresence, motion } from 'framer-motion'
-import { toast } from 'react-toastify'
-import CreatePost from '../Post/CreatePost'
-import Notification from '../Notification'
-import { Logo, Portrait } from '../../assets'
-import SideBarItem from './SideBarItem'
-import Setting from '../../views/pages/Setting'
-import { useAuthContext } from '../../hooks/useAuthContext'
-import Axios from '../../api/index'
+import React, { useEffect, useState, useMemo } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { CiSearch } from 'react-icons/ci';
+import { AiOutlineLogout } from 'react-icons/ai';
+import {
+    PiHeartLight,
+    PiEnvelopeLight,
+    PiListBold,
+    PiHouseLight,
+    PiPlusCircleLight,
+    PiUsersLight,
+    PiNewspaperLight,
+    PiChartBarLight,
+    PiGearLight,
+} from 'react-icons/pi';
+import { AnimatePresence, motion } from 'framer-motion';
+import { toast } from 'react-toastify';
+import CreatePost from '../Post/CreatePost';
+import Notification from '../Notification';
+import { Logo, Portrait } from '../../assets';
+import SideBarItem from './SideBarItem';
+import Setting from '../../views/pages/Setting';
+import { useAuthContext } from '../../hooks/useAuthContext';
+import Axios from '../../api/index';
 const Header = () => {
-
 	const [expand, setExpand] = useState(true)
 	const navigate = useNavigate()
 	const [isVisiblePost, setIsVisiblePost] = useState(false)
@@ -152,31 +161,36 @@ const Header = () => {
                                         invisible opacity-20 -translate-x-3 transition-all
                                         group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
                                     `}
-										>
-											Log out
-										</div>
-									)}
-								</div>
-							)
-						}
-					</div>
-				</div>
-			</motion.div>
-			{
-				isVisiblePost && (
-					<CreatePost isVisiblePost={isVisiblePost} handleCreatePost={setIsVisiblePost} setActiveOverlay={setActiveOverlay} />
-				)
-			}
-			<AnimatePresence mode='wait'>
-				{
-					isVisibleNotify && <Notification isVisibleNotify={isVisibleNotify} handleNotify={setIsVisibleNotify} setActiveOverlay={setActiveOverlay} />
-				}
-				{/* {
+                                    >
+                                        Log out
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </motion.div>
+            {isVisiblePost && (
+                <CreatePost
+                    isVisiblePost={isVisiblePost}
+                    handleCreatePost={setIsVisiblePost}
+                    setActiveOverlay={setActiveOverlay}
+                />
+            )}
+            <AnimatePresence mode="wait">
+                {isVisibleNotify && (
+                    <Notification
+                        isVisibleNotify={isVisibleNotify}
+                        handleNotify={setIsVisibleNotify}
+                        setActiveOverlay={setActiveOverlay}
+                    />
+                )}
+                {/* {
 					isVisibleSetting && <Setting />
 				} */}
-			</AnimatePresence>
-		</>
-	)
-}
+            </AnimatePresence>
+        </>
+    );
+};
 
-export default Header
+export default Header;
