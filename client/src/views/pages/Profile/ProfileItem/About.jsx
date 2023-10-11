@@ -20,14 +20,6 @@ const About = () => {
 		setEdit(!edit)
 	}
 	const navigate = useNavigate()
-	useEffect(() => {
-		Axios.get('/api/v1/users/me').then(res => {
-			setCurrentUser(res.data.data.data)
-		}).catch(err => {
-			toast.error(err.response.message)
-			navigate('/')
-		})
-	}, [currentUser])
 
 	const preloadValueUser = {
 		firstName: currentUser.firstName,
@@ -39,12 +31,20 @@ const About = () => {
 		linkZalo: currentUser.linkZalo
 	}
 
-	const { register, handleSubmit, trigger, formState: { errors, dirtyFields, isValid }, getValues } = useForm(
+	const { register, handleSubmit, trigger, reset, formState: { errors, dirtyFields, isValid }, getValues } = useForm(
 		{
 			defaultValues: preloadValueUser,
 			resolver: yupResolver(changeInformationSchema),
 		})
 
+	useEffect(() => {
+		Axios.get('/api/v1/users/me').then(res => {
+			setCurrentUser(res.data.data.data)
+		}).catch(err => {
+			toast.error(err.response.message)
+			navigate('/')
+		})
+	}, [reset])
 	const handleEditInformation = async (data) => {
 		const fieldsToTrack = [
 			'firstName',

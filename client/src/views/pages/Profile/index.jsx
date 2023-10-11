@@ -6,19 +6,25 @@ import { BsCheck2Circle } from 'react-icons/bs'
 import { MdOutlineRateReview } from 'react-icons/md'
 import { About, HistoryConfirm, HistoryPost, Review } from './ProfileItem'
 import Axios from '../../../api/index'
+import { useAuthContext } from '../../../hooks/useAuthContext'
 const Index = () => {
 
 	const [currentUser, setCurrentUser] = useState({})
-
+	const [state, dispatch] = useAuthContext()
 	useEffect(() => {
 		document.title = "Profile"
-		Axios.get('/api/v1/users/me').then(res => {
-			setCurrentUser(res.data.data.data)
-			console.log(res.data.data.data)
-		}).catch(err => {
-			toast.error("Can't get user information")
-			navigate('/')
-		})
+		const getUser = async () => {
+			try {
+				const res = await Axios.get('/api/v1/users/me')
+				setCurrentUser(res.data.data.data)
+				dispatch({ type: "LOGIN", value: res.data.data.data })
+				console.log(res.data.data.data)
+			} catch (err) {
+				toast.error("Can't get user information")
+				navigate('/')
+			}
+		}
+		getUser()
 	}, [])
 	const [activeButton, setActiveButton] = useState(0)
 	const [activeSection, setActiveSection] = useState(0)
@@ -62,6 +68,7 @@ const Index = () => {
 					</div>
 				</div>
 			</div>
+			<p>{state.user.user.firstName + " " + state.user.user.lastName}</p>
 			<div className="flex flex-col text-center mt-16 pb-5">
 				<p className='font-medium text-3xl'>{currentUser.firstName + " " + currentUser.lastName}</p>
 			</div>

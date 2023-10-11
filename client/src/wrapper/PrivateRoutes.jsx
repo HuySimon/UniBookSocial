@@ -10,7 +10,6 @@ const PrivateRoutes = ({ children }) => {
 		toast.warning("You have not logged in!");
 		return <Navigate to="/" />;
 	}
-
 	// Render children directly without returning them as a value
 	return children;
 };

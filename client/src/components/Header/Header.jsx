@@ -49,6 +49,7 @@ const Header = () => {
 	]
 	const logout = () => {
 		dispatch({ type: "LOGOUT" })
+		setIsVisibleNotify(false)
 		Axios.get('/api/v1/users/logout').then(res => {
 			if (res.status === 200) {
 				toast.success("Log out success")

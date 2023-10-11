@@ -15,6 +15,7 @@ import Users from "../views/pages/Users";
 import Statics from "../views/pages/Statics";
 import Posts from "../views/pages/Posts";
 import DetailPost from "../components/Post/DetailPost";
+import EditPost from "../components/Post/EditPost";
 const router = createBrowserRouter([
 	{
 		path: "/",
@@ -31,30 +32,8 @@ const router = createBrowserRouter([
 			{
 				path: "/search",
 				element: <Search />
-			}, 
-			{
-				path: "/create",
-				element: <CreatePost />
 			},
 		]
-	},
-	{
-		path: "/dashboard",
-		element: <Dashboard />,
-		children: [
-					{
-						path: "/dashboard/users",
-						element: <Users />
-					},
-					{
-						path: "/dashboard/posts",
-						element: <Posts />
-					},
-					{
-						path: "/dashboard/statics",
-						element: <Statics />
-					},
-				]
 	},
 	{
 		path: "/login",
@@ -69,7 +48,7 @@ const router = createBrowserRouter([
 		element: <SignUp />
 	},
 	{
-		path: "/detailPost",
+		path: "/detailPost/:id",
 		element: <DetailPost />
 	},
 	{
