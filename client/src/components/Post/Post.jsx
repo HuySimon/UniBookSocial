@@ -1,18 +1,25 @@
 import React, { useState } from 'react'
 import { Avatar, LoginImg } from '../../assets'
 import { BiDotsVerticalRounded, BiTrash } from 'react-icons/bi'
-import { AiOutlineEdit, AiFillCaretRight } from 'react-icons/ai'
+import { AiOutlineEdit, AiFillCaretRight, AiOutlineAlert } from 'react-icons/ai'
 import { PlaceHolderPostImg } from '../../assets'
 import { Link } from 'react-router-dom'
 import EditPost from './EditPost'
+import Modal from '../Modal'
+import { AnimatePresence } from 'framer-motion'
 const Post = ({ post }) => {
 
 	const [isVisibleMenuPost, setIsVisibleMenuPost] = useState(false)
 	const [isVisibleEditPost, setIsVisibleEditPost] = useState(false)
+	const [isVisibleModalDelete, setIsVisibleModalDelete] = useState(false)
 	const handleVisibleMenuPost = () => {
 		setIsVisibleMenuPost(!isVisibleMenuPost)
 	}
 	const menuOption = [
+		{
+			title: "Report",
+			icon: AiOutlineAlert
+		},
 		{
 			title: "Edit Post",
 			icon: AiOutlineEdit,
@@ -20,7 +27,8 @@ const Post = ({ post }) => {
 		},
 		{
 			title: "Delete Post",
-			icon: BiTrash
+			icon: BiTrash,
+			handle: () => { setIsVisibleModalDelete(!isVisibleModalDelete) }
 		}
 	]
 	return (
@@ -47,16 +55,17 @@ const Post = ({ post }) => {
 						</button>
 						{
 							isVisibleMenuPost && (
-								<div className="w-44 h-fit bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] absolute top-14 right-5 rounded-md">
+								<div className="w-44 h-fit bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] absolute top-14 right-5 rounded-md overflow-hidden">
 									<div className="flex flex-col relative">
 										{
 											menuOption.map((item, index) => (
 												<button
+													key={index}
 													type='button'
 													onClick={item.handle}
-													className="flex gap-4 p-2 hover:bg-black/10 transition-all rounded-md z-10">
+													className={`flex gap-4 p-2 hover:bg-black/10 transition-all z-10 ${index != menuOption.length && 'border-b'}`}>
 													<item.icon size={22} />
-													<p>{item.title}</p>
+													<p className='font-medium'>{item.title}</p>
 												</button>
 											))
 										}
@@ -119,6 +128,13 @@ const Post = ({ post }) => {
 					<EditPost postID={post.id} handleEditPost={setIsVisibleEditPost} isVisibleEditPost={isVisibleEditPost} />
 				)
 			}
+			<AnimatePresence mode='wait'>
+				{
+					isVisibleModalDelete && (
+						<Modal postID={post.id} isVisibleModalDelete={isVisibleModalDelete} setIsVisibleModalDelete={setIsVisibleModalDelete} />
+					)
+				}
+			</AnimatePresence>
 		</>
 	)
 }
