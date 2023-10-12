@@ -7,10 +7,13 @@ import { MdOutlineRateReview } from 'react-icons/md'
 import { About, HistoryConfirm, HistoryPost, Review } from './ProfileItem'
 import Axios from '../../../api/index'
 import { useAuthContext } from '../../../hooks/useAuthContext'
+import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
 const Index = () => {
 
 	const [currentUser, setCurrentUser] = useState({})
 	const [state, dispatch] = useAuthContext()
+	const navigate = useNavigate()
 	useEffect(() => {
 		document.title = "Profile"
 		const getUser = async () => {
@@ -21,6 +24,8 @@ const Index = () => {
 				console.log(res.data.data.data)
 			} catch (err) {
 				toast.error("Can't get user information")
+				document.title = "Home"
+				console.log(err)
 				navigate('/')
 			}
 		}
