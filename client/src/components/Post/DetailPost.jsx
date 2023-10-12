@@ -1,11 +1,25 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { AiOutlineClose } from 'react-icons/ai'
 import { Avatar, PlaceHolderPostImg } from '../../assets'
 import { BiDotsVerticalRounded } from 'react-icons/bi'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
+import Axios from '../../api/index'
+import { toast } from 'react-toastify'
 const DetailPost = () => {
-	useEffect(() => {
 
+	const postID = useParams()
+	const [detailPost, setDetailPost] = useState({})
+	console.log(postID)
+	useEffect(() => {
+		Axios.get(`/api/v1/posts/${postID.id}`).then(res => {
+			if (res.status === 200) {
+				setDetailPost(res.data.data.data)
+				// console.log(res)
+			}
+		}).catch(err => {
+			toast.error("Error")
+			console.log(err.response)
+		})
 	}, [])
 
 	return (
@@ -35,7 +49,7 @@ const DetailPost = () => {
 				<table className='flex border border-gray-500 rounded-lg my-4'>
 					<thead className='flex flex-col border-r w-1/2 border-gray-500'>
 						<tr className='border-b p-2 border-gray-500 font-medium text-sm'>
-							<th>Name</th>
+							<th>Title</th>
 						</tr>
 						<tr className='border-b p-2 border-gray-500 font-medium text-sm'>
 							<th>Price</th>
@@ -51,22 +65,23 @@ const DetailPost = () => {
 						</tr>
 					</thead>
 					<tbody className='flex flex-col w-1/2 xl:w-4/5'>
-						<tr className='p-2 text-sm'>
-							<td>John Doe</td>
+						<tr className='p-2 text-sm truncate'>
+							<td>{detailPost.title}</td>
 						</tr>
 						<tr className='p-2 border-t border-gray-500 text-sm'>
-							<td>45000</td>
+							<td>{detailPost.price}</td>
 						</tr>
 						<tr className='p-2 border-t border-gray-500 text-sm'>
-							<td>General Subject</td>
+							<td>{
+								detailPost.isGeneralSubject === false ? "Yes" : "No"
+							}</td>
 						</tr>
 						<tr className='p-2 border-t border-gray-500 text-sm'>
-							<td>Old</td>
+							<td>{detailPost.isNew ? "New" : "Old"}</td>
 						</tr>
 						<tr className='p-2 border-t border-gray-500 text-sm'>
 							<td>
-								Yesterday with @Jack Phat and @My instagram at concert in LA.
-								Was totally fantastic! People were really excited about this one!
+								{detailPost.description}
 							</td>
 						</tr>
 					</tbody>
@@ -98,9 +113,9 @@ const DetailPost = () => {
 				<button type="submit" className='px-10 py-2 bg-primary-main text-white w-fit rounded-lg hover:shadow !shadow-primary-700 hover:bg-primary-700 transition-all'>Buy</button>
 			</div>
 			<div className=" p-2 flex-[0_0_auto] flex justify-center items-start bg-primary-700">
-				<Link to={"/"}>
+				<button type='button'>
 					<AiOutlineClose size={22} color='#fff' className='cursor-pointer' />
-				</Link>
+				</button>
 			</div>
 		</div>
 	)

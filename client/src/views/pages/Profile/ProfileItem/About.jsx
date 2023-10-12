@@ -20,14 +20,6 @@ const About = () => {
 		setEdit(!edit)
 	}
 	const navigate = useNavigate()
-	useEffect(() => {
-		Axios.get('/api/v1/users/me').then(res => {
-			setCurrentUser(res.data.data.data)
-		}).catch(err => {
-			toast.error(err.response.message)
-			navigate('/')
-		})
-	}, [])
 
 	const preloadValueUser = {
 		firstName: currentUser.firstName,
@@ -39,13 +31,21 @@ const About = () => {
 		linkZalo: currentUser.linkZalo
 	}
 
-	const { register, handleSubmit, trigger, formState: { errors, dirtyFields, isValid }, getValues } = useForm(
+	const { register, handleSubmit, trigger, reset, formState: { errors, dirtyFields, isValid }, getValues } = useForm(
 		{
 			defaultValues: preloadValueUser,
 			resolver: yupResolver(changeInformationSchema),
 		})
 
-	const handleEditInformation = (data) => {
+	useEffect(() => {
+		Axios.get('/api/v1/users/me').then(res => {
+			setCurrentUser(res.data.data.data)
+		}).catch(err => {
+			toast.error(err.response.message)
+			navigate('/')
+		})
+	}, [reset])
+	const handleEditInformation = async (data) => {
 		const fieldsToTrack = [
 			'firstName',
 			'lastName',
@@ -55,27 +55,32 @@ const About = () => {
 			'linkInstagram',
 			'linkZalo',
 		];
-		const curUser = {}
+
+		const curUser = {};
+
 		fieldsToTrack.forEach((fieldName) => {
 			if (dirtyFields[fieldName]) {
-				curUser[fieldName] = getValues(fieldName)
-				trigger(fieldName)
+				curUser[fieldName] = getValues(fieldName);
+				trigger(fieldName);
 			}
-		})
-		console.log(curUser)
+		});
 		if (isObjectEmpty(curUser)) {
-			toast.error("You haven't changed anything")	
+			toast.error("You haven't changed anything");
 		} else {
-			Axios.patch('/api/v1/users/updateMe', curUser).then(res => {
-				if (res.status === 200) {
-					toast.success("Edit information success!")
+			try {
+				const response = await Axios.patch('/api/v1/users/updateMe', curUser);
+				if (response.status === 200) {
+					toast.success("Edit information success!");
 				}
-			}).catch(err => {
-				toast.error(err.response.message)
-				console.log(err.response)
-			})
+				// console.log(response);
+				// console.log(response.data);
+			} catch (err) {
+				toast.error(err.response.data.message);
+				// console.error(err.response);
+			}
 		}
 	}
+
 
 	return (
 		<div className='w-full h-full'>

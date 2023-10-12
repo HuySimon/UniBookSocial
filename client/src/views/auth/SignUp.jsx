@@ -20,7 +20,7 @@ const SignUp = () => {
 	const [showPassword, setShowPassword] = useState(false)
 	const [confirmPassword, setShowConfirmPassword] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
-	const [state,dispatch] = useAuthContext();
+	const [state, dispatch] = useAuthContext();
 	const navigate = useNavigate()
 
 	const { register, handleSubmit, formState: { errors } } = useForm({
@@ -35,32 +35,28 @@ const SignUp = () => {
 		resolver: yupResolver(signUpValidationSchema)
 	})
 
-	const onSubmit = (data) => {
+	const onSubmit = async (data) => {
 		const newUser = {
 			email: data.email,
 			firstName: data.firstName,
 			lastName: data.lastName,
 			password: data.password,
 			phoneNumber: data.phoneNumber
-		}
-		setIsLoading(true)
-		console.log(newUser)
-		Axios.post('/api/v1/users/signup', newUser).then(res => {
+		};
+		setIsLoading(true);
+		try {
+			const res = await Axios.post('/api/v1/users/signup', newUser);
 			if (res.status === 201) {
-				toast.success("Signup successful!")
-				dispatch({type: "LOGIN",value:res.data.data.user})
-				navigate('/')
+				toast.success("Signup successful!");
+				dispatch({ type: "LOGIN", value: res.data.data.user });
+				navigate('/');
 			}
-			setIsLoading(false)
-		}).catch((err) => {
-			if (err.response.status === 500) {
-				toast.error("Email already in use!!")
-			} else {
-				toast.error("Failed to sign up")
-			}
-			setIsLoading(false)
-		})
-	}
+		} catch (err) {
+			toast.error(err.response.message)
+		} finally {
+			setIsLoading(false);
+		}
+	};
 
 
 	return (

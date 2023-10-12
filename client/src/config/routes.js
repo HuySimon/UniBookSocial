@@ -1,14 +1,12 @@
 const routes = {
 	//account
 	login: "/login",
-	register: "/register",
-	forgotPassword: "/forgot_password",
+	register: "/signup",
+	forgotPassword: "/forgotpassword",
 	// pages
 	profile: "/profile",
 	home: "/",
 	search: "/search",
-	// dashboard
-	dashboard: "/dashboard",
-	routes: "/routes",
+	detailPost: "/post/:id",
 
 }

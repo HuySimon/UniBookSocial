@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { AiOutlineClose } from 'react-icons/ai'
 import { SiPhotobucket } from 'react-icons/si'
@@ -12,9 +12,10 @@ import Axios from '../../api/index'
 import { toast } from 'react-toastify'
 import { ImSpinner9 } from 'react-icons/im';
 import { useAuthContext } from '../../hooks/useAuthContext'
-import { createPostSchema } from '../../validations/PostValidation'
-const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
+import { createPostSchema, editPostSchema } from '../../validations/PostValidation'
+const EditPost = ({ postID, handleEditPost, isVisibleEditPost }) => {
 	const [selectedFile, setSelectedFile] = useState(null);
+	const [currentPost, setCurrentPost] = useState({})
 	const [isLoading, setIsLoading] = useState(false)
 	const navigate = useNavigate()
 	const [state, dispatch] = useAuthContext()
@@ -27,20 +28,36 @@ const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 			};
 			reader.readAsDataURL(file);
 			setValue("mainImage", file)
+		} else {
+			setValue("mainImage", currentPost.mainImage)
 		}
 	};
 
-	const { register, handleSubmit, formState: { errors }, setValue } = useForm({
+	useEffect(() => {
+		async function getCurrentPost() {
+			try {
+				const res = await Axios.get(`/api/v1/posts/${postID}`)
+				if (res.status === 200) {
+					setCurrentPost(res.data.data.data)
+				}
+			} catch (err) {
+				toast.error(err.response.message)
+			}
+		}
+		getCurrentPost()
+	}, [])
+
+	const { register, handleSubmit, formState: { errors }, setValue, reset } = useForm({
 		defaultValues: {
-			title: "",
-			price: "",
-			mainImage: null,
-			description: "",
-			isNew: -1,
-			isGeneralSubject: -1,
+			title: currentPost.title,
+			price: currentPost.price,
+			mainImage: currentPost.mainImage,
+			description: currentPost.description,
+			isNew: currentPost.isNew,
+			isGeneralSubject: currentPost.isGeneralSubject,
 
 		},
-		resolver: yupResolver(createPostSchema)
+		resolver: yupResolver(editPostSchema)
 	}
 	)
 	const onSubmit = async (data) => {
@@ -55,10 +72,10 @@ const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 		console.log(post)
 		setIsLoading(true)
 		try {
-			const res = await Axios.post('/api/v1/posts', post)
+			const res = await Axios.patch(`/api/v1/posts/${postID}`, post)
 			if (res.status === 201) {
-				toast.success("Your post have been posted!")
-				handleCreatePost(false)
+				toast.success("Edit post success!")
+				handleEditPost(false)
 			}
 			console.log(res)
 			console.log(res.data)
@@ -71,6 +88,7 @@ const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 			setIsLoading(false)
 		}
 	}
+
 	return (
 		<>
 			<motion.div
@@ -98,7 +116,7 @@ const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 				}}
 				className='fixed inset-0 m-auto w-[600px] h-fit max-h-screen bg-white z-20 rounded-lg overflow-hidden'>
 				<div className="w-full h-full flex flex-col">
-					<p className='text-base text-center font-semibold py-2 border-b'>Create new post</p>
+					<p className='text-base text-center font-semibold py-2 border-b'>Edit post</p>
 					{
 						isLoading &&
 						<div className="w-full h-full absolute left-0 top-0 bg-white/80 flex justify-center items-center z-10">
@@ -151,22 +169,21 @@ const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 							<div className="flex justify-between items-center gap-5 mt-3 h-fit mb-3">
 								<div className="w-full flex flex-col mb-3 relative">
 									<label htmlFor="email" className='mb-1 text-gray-400'>Title:</label>
-									<input type="text" {...register("title")}
+									<input type="text" {...register("title")} defaultValue={currentPost.title}
 										className='border border-gray-400 rounded-md placeholder:text-sm text-black px-4 py-2 w-full' placeholder='John Doe' />
 									<p className='text-sm text-red-600 absolute -bottom-5 truncate'>{errors.title?.message}</p>
 								</div>
 								<div className="w-full flex flex-col mb-3 relative">
 									<label htmlFor="email" className='mb-1 text-gray-400'>Price:</label>
-									<input type="text" {...register("price")}
+									<input type="text" {...register("price")} defaultValue={currentPost.price}
 										className='border border-gray-400 rounded-md placeholder:text-sm text-black px-4 py-2 w-full' placeholder='15000' />
 									<p className='text-sm text-red-600 absolute -bottom-5 truncate'>{errors.price?.message}</p>
-
 								</div>
 							</div>
 							<div className="flex justify-between items-center gap-5">
 								<div className="w-full flex flex-col mb-3 relative">
 									<label htmlFor="email" className='mb-1 text-gray-400'>Major:</label>
-									<select {...register("isGeneralSubject")} className='border border-gray-400 px-4 py-2 w-full rounded-md text-sm'>
+									<select {...register("isGeneralSubject")} defaultValue={currentPost.isGeneralSubject} className='border border-gray-400 px-4 py-2 w-full rounded-md text-sm'>
 										<option disabled value={"-1"} className=''>Select Major</option>
 										<option value="0">No</option>
 										<option value="1">Yes</option>
@@ -175,7 +192,7 @@ const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 								</div>
 								<div className="w-full flex flex-col mb-3 relative">
 									<label htmlFor="email" className='mb-1 text-gray-400'>Type:</label>
-									<select {...register("isNew")} className='border border-gray-400 px-4 py-2 w-full rounded-md text-sm'>
+									<select {...register("isNew")} defaultValue={currentPost.isNew} className='border border-gray-400 px-4 py-2 w-full rounded-md text-sm'>
 										<option disabled value={"-1"}>Select Type</option>
 										<option value="1">New</option>
 										<option value="0">Old</option>
@@ -185,29 +202,24 @@ const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 							</div>
 							<div className="flex flex-col relative mb-3">
 								<label htmlFor="description" className='mb-1 text-gray-400'>Description</label>
-								<textarea {...register("description")} cols="20" rows="4" placeholder='Type something' className='px-4 py-2 border border-gray-400 rounded-md'></textarea>
+								<textarea {...register("description")} defaultValue={currentPost.description} cols="20" rows="4" placeholder='Type something' className='px-4 py-2 border border-gray-400 rounded-md'></textarea>
 								<p className='text-sm text-red-600 absolute -bottom-5 truncate'>{errors.description?.message}</p>
 							</div>
 						</div>
 						<div className="px-4 py-2 mb-2">
 							<button type='submit' className={`w-full p-2 bg-primary-900 text-center rounded-lg text-white`}>
-								Publish
+								Save
 							</button>
 						</div>
 					</form>
 				</div>
 			</motion.div>
 			<motion.div
-				onClick={() => {
-					handleCreatePost()
-					setActiveOverlay(0)
-				}}
-				className="fixed w-full h-screen bg-black/50 z-10">
+				className="fixed w-full inset-0 m-auto h-screen bg-black/50 z-10">
 			</motion.div>
 			<AiOutlineClose
 				onClick={() => {
-					handleCreatePost()
-					setActiveOverlay(0)
+					handleEditPost()
 				}}
 				size={22}
 				className='fixed top-4 right-4 text-white cursor-pointer hover:rotate-[360deg] transition-all duration-300 z-20' />
@@ -215,7 +227,7 @@ const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 	)
 }
 
-export default CreatePost
+export default EditPost
 {/* <div className="w-full flex justify-between items-center gap-5 mt-4">
 								<div className="w-full flex flex-col">
 									<span className='block mb-2 text-gray-400'>Core Image:</span>

@@ -1,5 +1,5 @@
 import { createContext, useEffect, useMemo, useReducer } from "react";
-
+import Axios from '../api/index'
 export const AuthContext = createContext();
 
 const initialState = {
