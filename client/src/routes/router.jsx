@@ -20,6 +20,7 @@ const router = createBrowserRouter([
 	{
 		path: "/",
 		element: <DefaultLayout />,
+		errorElement: <NotFound />,
 		children: [
 			{
 				path: "/",
@@ -39,20 +40,45 @@ const router = createBrowserRouter([
 		]
 	},
 	{
+		path: "/dashboard",
+		element: <Dashboard />,
+		children: [
+			{
+				path: "users",
+				element: <Users />
+			},
+			{
+				path: "posts",
+				element: <Posts />
+			},
+			{
+				path: "statics",
+				element: <Statics />
+			},
+		]
+	},
+	{
 		path: "/login",
-		element: <Login />
+		element: <Login />,
+		errorElement: <NotFound />,
+
 	},
 	{
 		path: "/forgotpassword",
-		element: <ForgotPassword />
+		element: <ForgotPassword />,
+		errorElement: <NotFound />,
+
 	},
 	{
 		path: "/signup",
-		element: <SignUp />
+		element: <SignUp />,
+		errorElement: <NotFound />,
+
 	},
 	{
 		path: "/detailPost/:id",
-		element: <DetailPost />
+		element: <DetailPost />,
+		errorElement: <NotFound />,
 	},
 	{
 		path: "*",

@@ -29,8 +29,14 @@ export const changeInformationSchema = Yup.object().shape({
 	firstName: Yup.string().trim(),
 	lastName: Yup.string().trim(),
 	email: Yup.string().trim().email("Invalid Email Format"),
-	phoneNumber: Yup.string(),
-	linkFacebook: Yup.string().trim(),
-	linkInstagram: Yup.string().trim(),
+	phoneNumber: Yup.string().trim(),
+	linkFacebook: Yup.string().trim().matches(
+		/(?:http:\/\/)?(?:www\.)?facebook\.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[\w\-]*\/)*([\w\-]*)/,
+		"Invalid Facebook Link"
+	),
+	linkInstagram: Yup.string().trim().matches(
+		/(?:(?:http|https):\/\/)?(?:www\.)?(?:instagram\.com|instagr\.am)\/([A-Za-z0-9-_\.]+)/im,
+		"Invalid Instagram Link"
+	),
 	linkZalo: Yup.string().trim()
 })
