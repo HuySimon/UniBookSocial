@@ -40,6 +40,24 @@ const router = createBrowserRouter([
 		]
 	},
 	{
+		path: "/dashboard",
+		element: <Dashboard />,
+		children: [
+			{
+				path: "users",
+				element: <Users />
+			},
+			{
+				path: "posts",
+				element: <Posts />
+			},
+			{
+				path: "statics",
+				element: <Statics />
+			},
+		]
+	},
+	{
 		path: "/login",
 		element: <Login />,
 		errorElement: <NotFound />,

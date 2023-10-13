@@ -32,34 +32,10 @@ const HeaderAdmin = () => {
 
 	const iconList = [
 		{
-			icon: PiHouseLight,
-			title: "Home",
-			link: "/",
-			handleCreatePost: () => { setIsVisibleNotify(false) }
-		},
-		{
-			icon: CiSearch,
-			title: "Search",
-			link: "/search",
-			handleCreatePost: () => { setIsVisibleNotify(false) }
-		},
-		{
-			icon: PiHeartLight,
-			title: "Notifications",
-			link: `/`,
-			handleCreatePost: () => { setIsVisibleNotify(!isVisibleNotify) }
-		},
-		{
-			icon: PiPlusCircleLight,
-			title: "Create",
-			handleCreatePost: () => { setIsVisiblePost(!isVisiblePost) }
-		},
-		{
 			icon: PiUsersLight,
 			title: "Users",
 			link: "/dashboard/users",
 			handleCreatePost: () => { setIsVisibleNotify(false) }
-
 		},
 		{
 			icon: PiNewspaperLight,
