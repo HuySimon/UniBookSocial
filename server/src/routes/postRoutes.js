@@ -1,7 +1,7 @@
 const express = require("express");
 const postController = require("../controllers/postController");
 const authController = require("../controllers/authController");
-
+const uploadImgMiddleware = require('../middlewares/uploadImg.middleware')
 const router = express.Router();
 
 router.patch(
@@ -18,6 +18,11 @@ router
   .post(
     authController.protect,
     authController.restrictTo(1),
+    (req, res, next) => {
+      console.log(req.body)
+      next()
+    },
+    uploadImgMiddleware.uploadSingleImg('mainImage'),
     postController.setUserPost,
     postController.createPost
   );

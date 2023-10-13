@@ -1,5 +1,6 @@
 const path = require('path')
 const express = require('express')
+const bodyParser = require('body-parser');
 const cors = require('cors')
 const cookieParser = require('cookie-parser');
 require('dotenv').config()
@@ -13,9 +14,13 @@ app.use(cors({
   methods: ['GET', 'POST', 'PATCH', 'DELETE'],
   credentials: true
 }))
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+app.use('/public', express.static(path.join(__dirname, 'public')));
+// app.use(express.json())
+// app.use(express.urlencoded({ extended: true }))
+// support parsing of application/json type post data
+app.use(bodyParser.json());
+//support parsing of application/x-www-form-urlencoded post data
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser())
 // app.use((req, res, next) => {
 //   console.log(req.cookies)
