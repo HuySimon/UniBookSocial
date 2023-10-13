@@ -9,20 +9,25 @@ const DetailPost = () => {
 
 	const postID = useParams()
 	const [detailPost, setDetailPost] = useState({})
-	console.log(postID)
+	const [userPost, setUserPost] = useState({})
 	useEffect(() => {
-		Axios.get(`/api/v1/posts/${postID.id}`).then(res => {
-			if (res.status === 200) {
-				setDetailPost(res.data.data.data)
-				// console.log(res)
+		const fetchData = async () => {
+			try {
+				const res = await Axios.get(`/api/v1/posts/${postID.id}`)
+				if (res.status === 200) {
+					setDetailPost(res.data.data.data)
+					setUserPost(res.data.data.data.userPostData)
+					// console.log(detailPost)
+					// console.log(res.data.data.data)
+				}
+			} catch (err) {
+				console.log(err)
 			}
-		}).catch(err => {
-			toast.error("Error")
-			console.log(err.response)
-		})
-	}, [])
-
+		}
+		fetchData()
+	}, [postID.id])
 	return (
+
 		<div className='flex w-full h-screen'>
 			<div className="bg-primary-main flex-[2_1_auto] py-20 px-10">
 				<div className="main-img w-full h-[85%]">
@@ -37,7 +42,7 @@ const DetailPost = () => {
 						</div>
 						<div className="flex flex-col justify-start">
 							<span className="name font-medium">
-								John Doe
+								{userPost.username}
 							</span>
 							<p className='text-[10px] leading-4 text-gray-600'>2 seconds ago</p>
 						</div>
@@ -113,7 +118,10 @@ const DetailPost = () => {
 				<button type="submit" className='px-10 py-2 bg-primary-main text-white w-fit rounded-lg hover:shadow !shadow-primary-700 hover:bg-primary-700 transition-all'>Buy</button>
 			</div>
 			<div className=" p-2 flex-[0_0_auto] flex justify-center items-start bg-primary-700">
-				<button type='button'>
+				<button
+					type='button'
+					onClick={() => window.history.back()}
+				>
 					<AiOutlineClose size={22} color='#fff' className='cursor-pointer' />
 				</button>
 			</div>

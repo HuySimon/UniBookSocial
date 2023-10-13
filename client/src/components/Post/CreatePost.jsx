@@ -20,13 +20,13 @@ const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 	const [state, dispatch] = useAuthContext()
 	const handleFileChange = (e) => {
 		const file = e.target.files[0];
+		setValue("mainImage", file)
 		if (file) {
 			const reader = new FileReader();
 			reader.onload = () => {
 				setSelectedFile(reader.result);
 			};
 			reader.readAsDataURL(file);
-			setValue("mainImage", file)
 		}
 	};
 
@@ -44,18 +44,24 @@ const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 	}
 	)
 	const onSubmit = async (data) => {
-		const post = {
-			title: data.title,
-			price: data.price,
-			mainImage: data.mainImage.name,
-			description: data.description,
-			isNew: data.isNew,
-			isGeneralSubject: data.isGeneralSubject,
-		}
-		console.log(post)
+		let formData = new FormData()
+		formData.append('title',data.title)
+		formData.append('price',data.price)
+		formData.append('mainImage',data.mainImage)
+		formData.append('description',data.description)
+		formData.append('price',data.price)
+		formData.append('isNew',data.isNew)
+		formData.append('isGeneralSubject',data.isGeneralSubject)
+		const postData = Object.fromEntries(formData)
 		setIsLoading(true)
+		console.log(postData)
 		try {
-			const res = await Axios.post('/api/v1/posts', post)
+			const config = {
+				headers: {
+					'content-type' : 'multipart/form-data'
+				}
+			}
+			const res = await Axios.post('/api/v1/posts', postData,config)
 			if (res.status === 201) {
 				toast.success("Your post have been posted!")
 				handleCreatePost(false)
@@ -66,7 +72,8 @@ const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 			//Don't use err.response it will cause error 500: Internal Server error
 			//You can write specific message for it 
 			// console.log(err.response.data.message)
-			toast.error(err.response.data.message)
+			toast.error(err.response)
+			console.log(err)
 		} finally {
 			setIsLoading(false)
 		}
@@ -127,7 +134,7 @@ const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 														<p className="mb-2 text-sm text-primary-500 font-medium "><span className="font-medium !text-black">Drag & drop files or</span> browse files</p>
 														<p className="text-xs text-gray-500">JPG, PNG or GIF - Max file size 2MB</p>
 													</div>
-													<input id="dropzone-file" {...register("mainImage")} type="file" className="hidden" onChange={handleFileChange} />
+													<input id="dropzone-file" {...register("mainImage")} type="file" onChange={handleFileChange} />
 												</label>
 												<p className='text-sm text-red-600 absolute left-0 -bottom-5 truncate'>{errors.mainImage?.message}</p>
 											</>

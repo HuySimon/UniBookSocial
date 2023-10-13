@@ -5,36 +5,40 @@ const authController = require("../controllers/authController");
 const router = express.Router();
 
 router.patch(
-  "/:id/updateStatus",
-  authController.protect,
-  authController.restrictTo(1),
-  postController.updateStatus,
-  postController.updatePost
+	"/:id/updateStatus",
+	authController.protect,
+	authController.restrictTo(1),
+	postController.updateStatus,
+	postController.updatePost
 );
 
 router
-  .route("/")
-  .get(postController.getAllPosts)
-  .post(
-    authController.protect,
-    authController.restrictTo(1),
-    postController.setUserPost,
-    postController.createPost
-  );
+	.route("/")
+	.get(postController.getAllPosts)
+	.post(
+		authController.protect,
+		authController.restrictTo(1),
+		(req, res, next) => {
+			console.log(req.body)
+			next()
+		},
+		postController.setUserPost,
+		postController.createPost
+	);
 
 router
-  .route("/:id")
-  .get(postController.getPost)
-  .patch(
-    authController.protect,
-    authController.restrictTo(1),
-    postController.isUserBelongToPost,
-    postController.updatePost
-  )
-  .delete(
-    authController.protect,
-    postController.isNotDeliveryPost,
-    postController.deletePost
-  );
+	.route("/:id")
+	.get(postController.getPost)
+	.patch(
+		authController.protect,
+		authController.restrictTo(1),
+		postController.isUserBelongToPost,
+		postController.updatePost
+	)
+	.delete(
+		authController.protect,
+		postController.isNotDeliveryPost,
+		postController.deletePost
+	);
 
 module.exports = router;

@@ -15,8 +15,8 @@ exports.getAll = Model => catchAsync(async (req, res, next) => {
   });
 })
 
-exports.getOne = Model => catchAsync(async (req, res, next) => {
-  const data = await Model.findByPk(req.params.id);
+exports.getOne = (Model,options) => catchAsync(async (req, res, next) => {
+  const data = await Model.findByPk(req.params.id,options);
   if (!data) {
     return next(new AppError('No data found with that ID', 404));
   }

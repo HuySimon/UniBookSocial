@@ -13,20 +13,6 @@ const Post = ({ post }) => {
 	const [isVisibleMenuPost, setIsVisibleMenuPost] = useState(false)
 	const [isVisibleEditPost, setIsVisibleEditPost] = useState(false)
 	const [isVisibleModalDelete, setIsVisibleModalDelete] = useState(false)
-	const [user, setUser] = useState()
-	useEffect(() => {
-		const fetchUser = async () => {
-			try {
-				const res = await Axios.get(`/api/v1/users/${post.userPost}`)
-				if (res.status === 200) {
-					setUser(res.data.data.data)
-				}
-			} catch (err) {
-				console.log(err)
-			}
-		}
-		fetchUser()
-	}, [])
 
 	const handleVisibleMenuPost = () => {
 		setIsVisibleMenuPost(!isVisibleMenuPost)
@@ -47,7 +33,6 @@ const Post = ({ post }) => {
 			handle: () => { setIsVisibleModalDelete(!isVisibleModalDelete) }
 		}
 	]
-	console.log(user)
 	return (
 		<>
 			<div className='w-full h-fit px-6 py-5 border border-gray-400 shadow-md rounded-lg mb-8'>
@@ -58,10 +43,10 @@ const Post = ({ post }) => {
 								<img src={Avatar} alt="" className='w-full h-full object-cover' />
 							</div>
 							<div className="flex flex-col justify-start">
-								<span className="name font-medium">
-									{/* {userPost.firstName} */}
+								<span className="name text-base font-medium">
+									{post.userPostData.username}
 								</span>
-								<p className='text-[10px] leading-4 text-gray-600'>2 seconds ago</p>
+								<p className='text-sm leading-4 text-gray-600'>2 seconds ago</p>
 							</div>
 						</div>
 						<button

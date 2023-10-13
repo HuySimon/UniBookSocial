@@ -18,6 +18,7 @@ const EditPost = ({ postID, handleEditPost, isVisibleEditPost }) => {
 	const [currentPost, setCurrentPost] = useState({})
 	const [isLoading, setIsLoading] = useState(false)
 	const navigate = useNavigate()
+	const history = useHistory()
 	const [state, dispatch] = useAuthContext()
 	const handleFileChange = (e) => {
 		const file = e.target.files[0];
@@ -39,6 +40,14 @@ const EditPost = ({ postID, handleEditPost, isVisibleEditPost }) => {
 				const res = await Axios.get(`/api/v1/posts/${postID}`)
 				if (res.status === 200) {
 					setCurrentPost(res.data.data.data)
+					reset({
+						title: res.data.data.data.title,
+						price: res.data.data.data.price,
+						mainImage: res.data.data.data.mainImage,
+						description: res.data.data.data.description,
+						isNew: res.data.data.data.isNew,
+						isGeneralSubject: res.data.data.data.isGeneralSubject,
+					});
 				}
 			} catch (err) {
 				toast.error(err.response.message)
@@ -73,12 +82,10 @@ const EditPost = ({ postID, handleEditPost, isVisibleEditPost }) => {
 		setIsLoading(true)
 		try {
 			const res = await Axios.patch(`/api/v1/posts/${postID}`, post)
-			if (res.status === 201) {
+			if (res.status === 200) {
 				toast.success("Edit post success!")
 				handleEditPost(false)
 			}
-			console.log(res)
-			console.log(res.data)
 		} catch (err) {
 			//Don't use err.response it will cause error 500: Internal Server error
 			//You can write specific message for it 
@@ -185,8 +192,8 @@ const EditPost = ({ postID, handleEditPost, isVisibleEditPost }) => {
 									<label htmlFor="email" className='mb-1 text-gray-400'>Major:</label>
 									<select {...register("isGeneralSubject")} defaultValue={currentPost.isGeneralSubject} className='border border-gray-400 px-4 py-2 w-full rounded-md text-sm'>
 										<option disabled value={"-1"} className=''>Select Major</option>
-										<option value="0">No</option>
-										<option value="1">Yes</option>
+										<option value="true">No</option>
+										<option value="false">Yes</option>
 									</select>
 									<p className='text-sm text-red-600 absolute -bottom-5 truncate'>{errors.isGeneralSubject?.message}</p>
 								</div>
@@ -194,8 +201,8 @@ const EditPost = ({ postID, handleEditPost, isVisibleEditPost }) => {
 									<label htmlFor="email" className='mb-1 text-gray-400'>Type:</label>
 									<select {...register("isNew")} defaultValue={currentPost.isNew} className='border border-gray-400 px-4 py-2 w-full rounded-md text-sm'>
 										<option disabled value={"-1"}>Select Type</option>
-										<option value="1">New</option>
-										<option value="0">Old</option>
+										<option value="true">New</option>
+										<option value="false">Old</option>
 									</select>
 									<p className='text-sm text-red-600 absolute -bottom-5 truncate'>{errors.isNew?.message}</p>
 								</div>
