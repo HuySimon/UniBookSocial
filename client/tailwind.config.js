@@ -1,27 +1,35 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-	content: [
-		"./src/**/*.{js,jsx,ts,tsx}",
-	],
-	theme: {
-		extend: {
-			colors: {
-				primary: {
-					50: '#e6f5fc',
-					100: '#b0e1f5',
-					200: '#8ad2f1',
-					300: '#54beea',
-					400: '#33b1e6',
-					500: '#009ee0',
-					600: '#0090cc',
-					700: '#00709f',
-					800: '#00577b',
-					900: '#00425e',
-					main: '#105582'
-				},
-				button: "#76c5f2"
-			}
-		},
-	},
-	plugins: [],
-}
+    content: ['./src/**/*.{js,jsx,ts,tsx}'],
+    theme: {
+        extend: {
+            colors: {
+                primary: {
+                    50: '#e6f5fc',
+                    100: '#b0e1f5',
+                    200: '#8ad2f1',
+                    300: '#54beea',
+                    400: '#33b1e6',
+                    500: '#009ee0',
+                    600: '#0090cc',
+                    700: '#00709f',
+                    800: '#00577b',
+                    900: '#00425e',
+                    main: '#105582',
+                },
+                button: '#76c5f2',
+            },
+            animation: {
+                'slide-down': 'slide-down 0.3s ease-in-out',
+            },
+            keyframes: {
+                'slide-down': {
+                    '0%': { transform: 'translateY(-100%)' },
+                    '100%': { transform: 'translateY(0)' },
+                },
+            },
+        },
+    },
+    variants: {},
+    plugins: [],
+};
