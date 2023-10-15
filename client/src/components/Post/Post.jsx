@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Avatar, LoginImg } from '../../assets'
 import { BiDotsVerticalRounded, BiTrash } from 'react-icons/bi'
 import { AiOutlineEdit, AiFillCaretRight, AiOutlineAlert } from 'react-icons/ai'
@@ -6,12 +6,28 @@ import { PlaceHolderPostImg } from '../../assets'
 import { Link } from 'react-router-dom'
 import EditPost from './EditPost'
 import Modal from '../Modal'
+import Axios from '../../api/index'
 import { AnimatePresence } from 'framer-motion'
 const Post = ({ post }) => {
 
 	const [isVisibleMenuPost, setIsVisibleMenuPost] = useState(false)
 	const [isVisibleEditPost, setIsVisibleEditPost] = useState(false)
 	const [isVisibleModalDelete, setIsVisibleModalDelete] = useState(false)
+	const [user, setUser] = useState()
+	useEffect(() => {
+		const fetchUser = async () => {
+			try {
+				const res = await Axios.get(`/api/v1/users/${post.userPost}`)
+				if (res.status === 200) {
+					setUser(res.data.data.data)
+				}
+			} catch (err) {
+				console.log(err)
+			}
+		}
+		fetchUser()
+	}, [])
+
 	const handleVisibleMenuPost = () => {
 		setIsVisibleMenuPost(!isVisibleMenuPost)
 	}
@@ -31,6 +47,7 @@ const Post = ({ post }) => {
 			handle: () => { setIsVisibleModalDelete(!isVisibleModalDelete) }
 		}
 	]
+	console.log(user)
 	return (
 		<>
 			<div className='w-full h-fit px-6 py-5 border border-gray-400 shadow-md rounded-lg mb-8'>
@@ -42,7 +59,7 @@ const Post = ({ post }) => {
 							</div>
 							<div className="flex flex-col justify-start">
 								<span className="name font-medium">
-									John Doe
+									{/* {userPost.firstName} */}
 								</span>
 								<p className='text-[10px] leading-4 text-gray-600'>2 seconds ago</p>
 							</div>
@@ -77,7 +94,7 @@ const Post = ({ post }) => {
 					</div>
 					<div className="w-full h-[30vh] xl:h-[40vh] overflow-hidden rounded-lg border border-gray-500 mt-4">
 						<Link to={`/detailPost/${post.id}`}>
-							<img src={PlaceHolderPostImg} alt="" className='w-full h-full object-contain' />
+							<img src={`http://127.0.0.1:5000/public/images/${post.mainImage}`} alt="" className='w-full h-full object-contain' />
 						</Link>
 					</div>
 					<table className='flex border border-gray-500 rounded-lg my-4'>

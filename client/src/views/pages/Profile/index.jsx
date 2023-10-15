@@ -73,7 +73,6 @@ const Index = () => {
 					</div>
 				</div>
 			</div>
-			<p>{state.user.user.firstName + " " + state.user.user.lastName}</p>
 			<div className="flex flex-col text-center mt-16 pb-5">
 				<p className='font-medium text-3xl'>{currentUser.firstName + " " + currentUser.lastName}</p>
 			</div>

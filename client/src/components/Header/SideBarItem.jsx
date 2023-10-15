@@ -5,7 +5,7 @@ import { PiHeartLight, PiEnvelopeLight, PiListBold, PiHouseLight, PiPlusCircleLi
 import { motion } from 'framer-motion';
 import { useAuthContext } from '../../hooks/useAuthContext';
 
-const SideBarItem = ({ title, href, index, activeOverlay, setActiveOverlay, expand, icon, handleCreate }) => {
+const SideBarItem = ({ title, href, index, activeOverlay, setActiveOverlay, expand, icon, handleCreate, target }) => {
 	const [state, dispatch] = useAuthContext()
 	return (
 		<li
@@ -16,6 +16,7 @@ const SideBarItem = ({ title, href, index, activeOverlay, setActiveOverlay, expa
 			className='px-2 md:px-4 pb-4 flex items-center font-semibold relative'>
 			<Link
 				to={href}
+				target={target}
 				className={`
                         relative
                         flex items-center w-full h-12 transition-all hover:text-primary-main

@@ -1,17 +1,17 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { CiSearch } from 'react-icons/ci';
-import { AiOutlineLogout } from 'react-icons/ai';
+import { AiOutlineLogout, AiOutlineDashboard } from 'react-icons/ai';
 import {
-    PiHeartLight,
-    PiEnvelopeLight,
-    PiListBold,
-    PiHouseLight,
-    PiPlusCircleLight,
-    PiUsersLight,
-    PiNewspaperLight,
-    PiChartBarLight,
-    PiGearLight,
+	PiHeartLight,
+	PiEnvelopeLight,
+	PiListBold,
+	PiHouseLight,
+	PiPlusCircleLight,
+	PiUsersLight,
+	PiNewspaperLight,
+	PiChartBarLight,
+	PiGearLight,
 } from 'react-icons/pi';
 import { AnimatePresence, motion } from 'framer-motion';
 import { toast } from 'react-toastify';
@@ -29,6 +29,16 @@ const Header = () => {
 	const [isVisibleNotify, setIsVisibleNotify] = useState(false)
 	const [activeOverlay, setActiveOverlay] = useState(0)
 	const [state, dispatch] = useAuthContext()
+	const checkRoleAdmin = () => {
+		if (state.user != null) {
+			if (state.user.user.role === 2) {
+				return true
+			}
+		}
+		else {
+			return false
+		}
+	}
 	useEffect(() => {
 		const checkTabletMode = () => {
 			const tabletWidthThreshold = 768;
@@ -40,7 +50,8 @@ const Header = () => {
 		return () => {
 			window.removeEventListener('resize', checkTabletMode);
 		};
-	}, [isVisibleNotify, isVisiblePost]);
+		checkRoleAdmin()
+	}, [state.user]);
 
 	const iconList = [
 		{
@@ -131,6 +142,20 @@ const Header = () => {
 								</>
 							)
 						}
+						{
+							localStorage.getItem("user") != null && checkRoleAdmin() && (
+								<SideBarItem
+									index={5}
+									activeOverlay={activeOverlay}
+									setActiveOverlay={setActiveOverlay}
+									expand={expand}
+									title={"Dashboard"}
+									href={"/dashboard"}
+									target={"_blank"}
+									icon={<AiOutlineDashboard size={30} className='z-10' />}
+								/>
+							)
+						}
 					</motion.ul>
 					<div className="flex flex-col h-full items-stretch justify-end p-2 md:p-4">
 						{
@@ -161,36 +186,54 @@ const Header = () => {
                                         invisible opacity-20 -translate-x-3 transition-all
                                         group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
                                     `}
-                                    >
-                                        Log out
-                                    </div>
-                                )}
-                            </div>
-                        )}
-                    </div>
-                </div>
-            </motion.div>
-            {isVisiblePost && (
-                <CreatePost
-                    isVisiblePost={isVisiblePost}
-                    handleCreatePost={setIsVisiblePost}
-                    setActiveOverlay={setActiveOverlay}
-                />
-            )}
-            <AnimatePresence mode="wait">
-                {isVisibleNotify && (
-                    <Notification
-                        isVisibleNotify={isVisibleNotify}
-                        handleNotify={setIsVisibleNotify}
-                        setActiveOverlay={setActiveOverlay}
-                    />
-                )}
-                {/* {
+										>
+											Log out
+										</div>
+									)}
+								</div>
+							)}
+					</div>
+				</div>
+			</motion.div>
+			{
+				localStorage.getItem("auth") === "false" && (
+					<div className="fixed top-0 left-[60px] md:hidden w-[88%] h-fit bg-white shadow-lg z-[9]">
+						<div className="flex justify-between items-center p-6 gap-5">
+							<button className='w-full bg-primary-900 rounded-md text-white border border-primary-900 hover:bg-primary-800 transition-all'>
+								<Link to={"/login"} className='w-full h-full block px-6 py-2'>
+									Login
+								</Link>
+							</button>
+							<button className='w-full border border-primary-900 text-primary-900 rounded-md hover:bg-primary-900 hover:text-white transition-all'>
+								<Link to={"/signup"} className='w-full h-full block px-6 py-2'>
+									Sign up
+								</Link>
+							</button>
+						</div>
+					</div>
+				)
+			}
+			{isVisiblePost && (
+				<CreatePost
+					isVisiblePost={isVisiblePost}
+					handleCreatePost={setIsVisiblePost}
+					setActiveOverlay={setActiveOverlay}
+				/>
+			)}
+			<AnimatePresence mode="wait">
+				{isVisibleNotify && (
+					<Notification
+						isVisibleNotify={isVisibleNotify}
+						handleNotify={setIsVisibleNotify}
+						setActiveOverlay={setActiveOverlay}
+					/>
+				)}
+				{/* {
 					isVisibleSetting && <Setting />
 				} */}
-            </AnimatePresence>
-        </>
-    );
+			</AnimatePresence>
+		</>
+	);
 };
 
 export default Header;
