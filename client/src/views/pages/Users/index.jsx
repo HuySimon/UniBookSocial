@@ -38,7 +38,7 @@ const Users = () => {
             // const url = `/api/v1/users?page[number]=${currentPage}&page[size]=${itemsPerPage}&filter=or(contains(email,'${searchValue}'),contains(username,'${searchValue}'))`;
             const response = await Axios.get(url);
             const data = response.data.data.data;
-            console.log(data);
+            console.log(response);
             setUserList(data);
             // setFilteredUserList(userList);
             // setItemsPerPage(data.length);
