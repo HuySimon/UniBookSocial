@@ -17,8 +17,7 @@ const Users = () => {
     const [filteredUserList, setFilteredUserList] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(10);
-    const [totalItems, setTotalItems] = useState(0);
-    const [totalPages, setTotalPages] = useState(0);
+    const [totalPages, setTotalPages] = useState(1);
     // const [searchValue, setSearchValue] = useState([]);
     const [filterValue, setFilterValue] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -41,18 +40,17 @@ const Users = () => {
             // const url = `/api/v1/users?page[number]=${currentPage}&page[size]=${itemsPerPage}&filter=or(contains(email,'${searchValue}'),contains(username,'${searchValue}'))`;
             const response = await Axios.get(url);
             const data = response.data.data.data;
-            console.log(response.data);
+            // console.log(response.data.totalItem);
             setUserList(data);
             // setFilteredUserList(userList);
             // setItemsPerPage(data.length);
 
-            setTotalPages(Math.ceil(data.length / itemsPerPage));
+            const totalItems = response.data.totalItem;
+            setTotalPages(Math.ceil(totalItems / itemsPerPage));
         } catch (error) {
             console.log(error);
         }
     };
-
-    // console.log(totalPages);
 
     useEffect(() => {
         // When the value of userList changes, update the value of filteredUserList
@@ -76,6 +74,11 @@ const Users = () => {
     }, [currentPage, itemsPerPage]);
 
     const handlePageChange = (pageNumber) => {
+        if (pageNumber < 1) {
+            pageNumber = 1;
+        } else if (pageNumber > totalPages) {
+            pageNumber = totalPages;
+        }
         setCurrentPage(pageNumber);
     };
 
@@ -237,7 +240,7 @@ const Users = () => {
             </div>
             {/* Pagination */}
             <Pagination
-                totalPages={12}
+                totalPages={totalPages}
                 currentPage={currentPage}
                 // itemsPerPage={itemsPerPage}
                 onPageChange={handlePageChange}

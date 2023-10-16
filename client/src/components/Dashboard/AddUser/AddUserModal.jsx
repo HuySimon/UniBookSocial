@@ -1,7 +1,72 @@
-import React, { useRef, useEffect } from 'react';
+// eslint-disable-next-line no-unused-vars
+import React, { useState, useRef, useEffect } from 'react';
+import { AiOutlineClose } from 'react-icons/ai';
+import Axios from '../../../api/index';
 
 function AddUserModal({ onClose }) {
     const modalRef = useRef(null);
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+    const [error, setError] = useState('');
+
+    const handleAddUser = () => {
+        if (!name || !email || !phone) {
+            setError('Vui lòng điền đầy đủ thông tin.');
+            return;
+        }
+
+        if (!validateEmail(email)) {
+            setError('Vui lòng nhập một địa chỉ email hợp lệ.');
+            return;
+        }
+
+        if (!validatePhone(phone)) {
+            setError('Vui lòng nhập một số điện thoại hợp lệ.');
+            return;
+        }
+
+        // Tiến hành thêm người dùng vào cơ sở dữ liệu hoặc xử lý logic khác
+        const addUser = async (userData) => {
+            try {
+                const url = `/api/v1/users`;
+                const response = await Axios.post(url, userData);
+                // const data = response.data.data.data;
+                console.log(response);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        const userData = {
+            email: 'trannhatsinh@gmail.com',
+            firstName: 'sinh',
+            lastName: 'Nguyen Van',
+            password: 'Test1234',
+            phoneNumber: '0908141453',
+            role: '1',
+        };
+
+        addUser(userData);
+
+        // Reset các trường và xóa thông báo lỗi
+        setName('');
+        setEmail('');
+        setPhone('');
+        setError('');
+    };
+
+    const validateEmail = (email) => {
+        // Sử dụng biểu thức chính quy để kiểm tra định dạng email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
+    const validatePhone = (phone) => {
+        // Sử dụng biểu thức chính quy để kiểm tra định dạng số điện thoại
+        const phoneRegex = /^\d{10}$/;
+        return phoneRegex.test(phone);
+    };
 
     const handleClickOutside = (event) => {
         if (modalRef.current && !modalRef.current.contains(event.target)) {
@@ -32,30 +97,12 @@ function AddUserModal({ onClose }) {
                 <form action="#" className="relative bg-white rounded-lg shadow">
                     {/* <!-- Modal header --> */}
                     <div className="flex items-start justify-between p-4 border-b rounded-t">
-                        <h3 className="text-xl font-semibold text-gray-900 ">Edit user</h3>
-                        <button
-                            type="button"
+                        <h3 className="text-xl font-semibold text-gray-900">Add user</h3>
+                        <AiOutlineClose
                             onClick={handleCloseClick}
-                            className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center"
-                            data-modal-hide="addtUserModal"
-                        >
-                            <svg
-                                className="w-3 h-3"
-                                aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 14 14"
-                            >
-                                <path
-                                    stroke="currentColor"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                                />
-                            </svg>
-                            <span className="sr-only">Close modal</span>
-                        </button>
+                            size={22}
+                            className="fixed top-4 right-4 text-white cursor-pointer hover:rotate-[360deg] transition-all duration-300 z-20"
+                        />
                     </div>
                     {/* <!-- Modal body --> */}
                     <div className="p-6 space-y-6">
@@ -65,6 +112,8 @@ function AddUserModal({ onClose }) {
                                     First Name
                                 </label>
                                 <input
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
                                     type="text"
                                     name="first-name"
                                     id="first-name"
@@ -91,6 +140,8 @@ function AddUserModal({ onClose }) {
                                     Email
                                 </label>
                                 <input
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
                                     type="email"
                                     name="email"
                                     id="email"
@@ -104,6 +155,8 @@ function AddUserModal({ onClose }) {
                                     Phone Number
                                 </label>
                                 <input
+                                    value={phone}
+                                    onChange={(e) => setPhone(e.target.value)}
                                     type="number"
                                     name="phone-number"
                                     id="phone-number"
@@ -111,6 +164,7 @@ function AddUserModal({ onClose }) {
                                     placeholder="e.g. +(12)3456 789"
                                     required=""
                                 />
+                                <p className="text-sm text-red-600">Please enter title</p>
                             </div>
                             <div className="col-span-6 sm:col-span-3">
                                 <label htmlFor="department" className="block mb-2 text-sm font-medium text-gray-900 ">
@@ -172,7 +226,8 @@ function AddUserModal({ onClose }) {
                     {/* <!-- Modal footer --> */}
                     <div className="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b">
                         <button
-                            type="submit"
+                            onClick={handleAddUser}
+                            type="button"
                             className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                         >
                             Save all
