@@ -5,67 +5,50 @@ import Axios from '../../../api/index';
 
 function AddUserModal({ onClose }) {
     const modalRef = useRef(null);
-    const [name, setName] = useState('');
+
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
-    const [error, setError] = useState('');
+    const [role, setRole] = useState('');
+    const [password, setPassword] = useState('');
 
-    const handleAddUser = () => {
-        if (!name || !email || !phone) {
-            setError('Vui lòng điền đầy đủ thông tin.');
-            return;
-        }
+    const [formData, setFormData] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        role: '',
+        password: '',
+    });
 
-        if (!validateEmail(email)) {
-            setError('Vui lòng nhập một địa chỉ email hợp lệ.');
-            return;
-        }
-
-        if (!validatePhone(phone)) {
-            setError('Vui lòng nhập một số điện thoại hợp lệ.');
-            return;
-        }
-
-        // Tiến hành thêm người dùng vào cơ sở dữ liệu hoặc xử lý logic khác
-        const addUser = async (userData) => {
-            try {
-                const url = `/api/v1/users`;
-                const response = await Axios.post(url, userData);
-                // const data = response.data.data.data;
-                console.log(response);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-
-        const userData = {
-            email: 'trannhatsinh@gmail.com',
-            firstName: 'sinh',
-            lastName: 'Nguyen Van',
-            password: 'Test1234',
-            phoneNumber: '0908141453',
-            role: '1',
-        };
-
-        addUser(userData);
-
-        // Reset các trường và xóa thông báo lỗi
-        setName('');
-        setEmail('');
-        setPhone('');
-        setError('');
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            [name]: value,
+        }));
     };
 
-    const validateEmail = (email) => {
-        // Sử dụng biểu thức chính quy để kiểm tra định dạng email
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
-    };
+    const handleSaveClick = async () => {
+        // const userData = {
+        //     firstName: firstName,
+        //     lastName: lastName,
+        //     email: email,
+        //     phone: phone,
+        //     role: role,
+        //     password: password,
+        // };
 
-    const validatePhone = (phone) => {
-        // Sử dụng biểu thức chính quy để kiểm tra định dạng số điện thoại
-        const phoneRegex = /^\d{10}$/;
-        return phoneRegex.test(phone);
+        try {
+            const url = `/api/v1/users`;
+            const response = await Axios.post(url, formData);
+            // const data = response.data.data.data;
+            console.log(response.data);
+            onClose();
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     const handleClickOutside = (event) => {
@@ -112,8 +95,8 @@ function AddUserModal({ onClose }) {
                                     First Name
                                 </label>
                                 <input
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
+                                    value={formData.firstName}
+                                    onChange={handleChange}
                                     type="text"
                                     name="first-name"
                                     id="first-name"
@@ -127,6 +110,8 @@ function AddUserModal({ onClose }) {
                                     Last Name
                                 </label>
                                 <input
+                                    value={formData.lastName}
+                                    onChange={handleChange}
                                     type="text"
                                     name="last-name"
                                     id="last-name"
@@ -140,8 +125,8 @@ function AddUserModal({ onClose }) {
                                     Email
                                 </label>
                                 <input
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
+                                    value={formData.email}
+                                    onChange={handleChange}
                                     type="email"
                                     name="email"
                                     id="email"
@@ -155,8 +140,8 @@ function AddUserModal({ onClose }) {
                                     Phone Number
                                 </label>
                                 <input
-                                    value={phone}
-                                    onChange={(e) => setPhone(e.target.value)}
+                                    value={formData.phone}
+                                    onChange={handleChange}
                                     type="number"
                                     name="phone-number"
                                     id="phone-number"
@@ -168,54 +153,33 @@ function AddUserModal({ onClose }) {
                             </div>
                             <div className="col-span-6 sm:col-span-3">
                                 <label htmlFor="department" className="block mb-2 text-sm font-medium text-gray-900 ">
-                                    Department
+                                    Role
                                 </label>
-                                <input
-                                    type="text"
-                                    name="department"
-                                    id="department"
-                                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
-                                    placeholder="Development"
-                                    required=""
-                                />
-                            </div>
-                            <div className="col-span-6 sm:col-span-3">
-                                <label htmlFor="company" className="block mb-2 text-sm font-medium text-gray-900 ">
-                                    Company
-                                </label>
-                                <input
-                                    type="number"
-                                    name="company"
-                                    id="company"
-                                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
-                                    placeholder="123456"
-                                    required=""
-                                />
+                                <select
+                                    value={formData.role}
+                                    onChange={handleChange}
+                                    id="roles"
+                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:ring-blue-600 focus:border-blue-600 w-full p-2.5"
+                                >
+                                    <option value>Choose a role</option>
+                                    <option value="1">User</option>
+                                    <option value="2">Admin</option>
+                                    <option value="3">Post management</option>
+                                </select>
                             </div>
                             <div className="col-span-6 sm:col-span-3">
                                 <label
                                     htmlFor="current-password"
                                     className="block mb-2 text-sm font-medium text-gray-900 "
                                 >
-                                    Current Password
+                                    Password
                                 </label>
                                 <input
+                                    value={formData.password}
+                                    onChange={handleChange}
                                     type="password"
                                     name="current-password"
                                     id="current-password"
-                                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
-                                    placeholder="••••••••"
-                                    required=""
-                                />
-                            </div>
-                            <div className="col-span-6 sm:col-span-3">
-                                <label htmlFor="new-password" className="block mb-2 text-sm font-medium text-gray-900 ">
-                                    New Password
-                                </label>
-                                <input
-                                    type="password"
-                                    name="new-password"
-                                    id="new-password"
                                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                                     placeholder="••••••••"
                                     required=""
@@ -226,7 +190,7 @@ function AddUserModal({ onClose }) {
                     {/* <!-- Modal footer --> */}
                     <div className="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b">
                         <button
-                            onClick={handleAddUser}
+                            onClick={handleSaveClick}
                             type="button"
                             className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                         >

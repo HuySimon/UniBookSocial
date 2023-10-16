@@ -19,17 +19,7 @@ module.exports = {
                 },
                 button: '#76c5f2',
             },
-            animation: {
-                'slide-down': 'slide-down 0.3s ease-in-out',
-            },
-            keyframes: {
-                'slide-down': {
-                    '0%': { transform: 'translateY(-100%)' },
-                    '100%': { transform: 'translateY(0)' },
-                },
-            },
         },
     },
-    variants: {},
     plugins: [],
 };
