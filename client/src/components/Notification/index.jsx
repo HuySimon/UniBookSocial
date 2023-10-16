@@ -8,7 +8,7 @@ import { toast } from 'react-toastify'
 import Axios from '../../api/index'
 const Index = ({ isVisibleNotify, handleNotify }) => {
 
-	const [dataNotify,setDataNotify] = useState([])
+	const [dataNotify, setDataNotify] = useState([])
 
 	const notifyTemplate = [
 		{
@@ -35,7 +35,7 @@ const Index = ({ isVisibleNotify, handleNotify }) => {
 		const getNotfiy = async () => {
 			try {
 				const res = await Axios.get('/api/v1/notifications')
-				if(res.status === 200) {
+				if (res.status === 200) {
 					console.log(res.data.data)
 					setDataNotify(res.data.data)
 				}
@@ -66,9 +66,9 @@ const Index = ({ isVisibleNotify, handleNotify }) => {
 					<div className="flex flex-col">
 						{
 							notifyTemplate.map((item, index) => (
-								<div 
-								key={index}
-								className={`w-full flex justify-center items-center border-b py-2`}>
+								<div
+									key={index}
+									className={`w-full flex justify-center items-center border-b py-2`}>
 									<item.icon size={40} color={item.color} className='w-1/4' />
 									<div className={`w-3/4 flex flex-col justify-between`}>
 										<span className='text-lg font-medium'>{item.title}</span>
@@ -81,6 +81,9 @@ const Index = ({ isVisibleNotify, handleNotify }) => {
 				</div>
 				<Curve />
 			</motion.div>
+			<div
+				onClick={() => handleNotify(false)}
+				className="fixed inset-0 m-auto w-screen h-screen bg-transparent"/>
 		</>
 	)
 }

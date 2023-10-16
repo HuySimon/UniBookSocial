@@ -74,7 +74,7 @@ const Index = () => {
 				</div>
 			</div>
 			<div className="flex flex-col text-center mt-16 pb-5">
-				<p className='font-medium text-3xl'>{currentUser.firstName + " " + currentUser.lastName}</p>
+				<p className='font-medium text-3xl'>{currentUser.username}</p>
 			</div>
 			<div className="pt-4 w-full z-[8]">
 				<div className="h-full flex lg:flex-row flex-col">

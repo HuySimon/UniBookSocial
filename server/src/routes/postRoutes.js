@@ -5,11 +5,11 @@ const uploadImgMiddleware = require('../middlewares/uploadImg.middleware')
 const router = express.Router();
 
 router.patch(
-  "/:id/updateStatus",
-  authController.protect,
-  authController.restrictTo(1),
-  postController.updateStatus,
-  postController.updatePost
+	"/:id/updateStatus",
+	authController.protect,
+	authController.restrictTo(1),
+	postController.updateStatus,
+	postController.updatePost
 );
 
 router
@@ -26,20 +26,19 @@ router
     postController.setUserPost,
     postController.createPost
   );
-
 router
-  .route("/:id")
-  .get(postController.getPost)
-  .patch(
-    authController.protect,
-    authController.restrictTo(1),
-    postController.isUserBelongToPost,
-    postController.updatePost
-  )
-  .delete(
-    authController.protect,
-    postController.isNotDeliveryPost,
-    postController.deletePost
-  );
+	.route("/:id")
+	.get(postController.getPost)
+	.patch(
+		authController.protect,
+		authController.restrictTo(1),
+		postController.isUserBelongToPost,
+		postController.updatePost
+	)
+	.delete(
+		authController.protect,
+		postController.isNotDeliveryPost,
+		postController.deletePost
+	);
 
 module.exports = router;

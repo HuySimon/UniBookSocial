@@ -16,15 +16,16 @@ import Statics from "../views/pages/Statics";
 import Posts from "../views/pages/Posts";
 import DetailPost from "../components/Post/DetailPost";
 import EditPost from "../components/Post/EditPost";
+import { AllPostLoader } from "../views/pages/Home";
 const router = createBrowserRouter([
 	{
 		path: "/",
 		element: <DefaultLayout />,
-		errorElement: <NotFound />,
 		children: [
 			{
 				path: "/",
-				element: <Home />
+				element: <Home />,
+				loader: AllPostLoader
 			},
 			{
 				path: "/profile",
