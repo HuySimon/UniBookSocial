@@ -1,23 +1,26 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useState, useRef, useEffect } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
+import { toast } from 'react-toastify';
+
 import Axios from '../../../api/index';
 
-function AddUserModal({ onClose }) {
+// eslint-disable-next-line react/prop-types, no-unused-vars
+function AddUserModal({ onClose, onAddUser }) {
     const modalRef = useRef(null);
 
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [email, setEmail] = useState('');
-    const [phone, setPhone] = useState('');
-    const [role, setRole] = useState('');
-    const [password, setPassword] = useState('');
+    // const [firstName, setFirstName] = useState('');
+    // const [lastName, setLastName] = useState('');
+    // const [email, setEmail] = useState('');
+    // const [phone, setPhone] = useState('');
+    // const [role, setRole] = useState('');
+    // const [password, setPassword] = useState('');
 
     const [formData, setFormData] = useState({
+        email: '',
         firstName: '',
         lastName: '',
-        email: '',
-        phone: '',
+        phoneNumber: '',
         role: '',
         password: '',
     });
@@ -31,23 +34,28 @@ function AddUserModal({ onClose }) {
     };
 
     const handleSaveClick = async () => {
-        // const userData = {
-        //     firstName: firstName,
-        //     lastName: lastName,
-        //     email: email,
-        //     phone: phone,
-        //     role: role,
-        //     password: password,
-        // };
+        const newUser = {
+            email: '',
+            firstName: '',
+            lastName: '',
+            phoneNumber: '',
+            role: '',
+            password: '',
+        };
 
         try {
             const url = `/api/v1/users`;
-            const response = await Axios.post(url, formData);
-            // const data = response.data.data.data;
-            console.log(response.data);
+            const res = await Axios.post(url, formData);
+            // const data = res.data.data.data;
+            console.log(res.data.data.data);
+            onAddUser(newUser);
             onClose();
+            if (res.status === 201) {
+                toast.success('Thêm người dùng thành công!');
+            }
         } catch (error) {
-            console.log(error);
+            console.error(error);
+            toast.error('Thêm người dùng thất bại!');
         }
     };
 
@@ -98,7 +106,7 @@ function AddUserModal({ onClose }) {
                                     value={formData.firstName}
                                     onChange={handleChange}
                                     type="text"
-                                    name="first-name"
+                                    name="firstName"
                                     id="first-name"
                                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                                     placeholder="Bonnie"
@@ -113,7 +121,7 @@ function AddUserModal({ onClose }) {
                                     value={formData.lastName}
                                     onChange={handleChange}
                                     type="text"
-                                    name="last-name"
+                                    name="lastName"
                                     id="last-name"
                                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                                     placeholder="Green"
@@ -140,10 +148,10 @@ function AddUserModal({ onClose }) {
                                     Phone Number
                                 </label>
                                 <input
-                                    value={formData.phone}
+                                    value={formData.phoneNumber}
                                     onChange={handleChange}
                                     type="number"
-                                    name="phone-number"
+                                    name="phoneNumber"
                                     id="phone-number"
                                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                                     placeholder="e.g. +(12)3456 789"
@@ -159,6 +167,7 @@ function AddUserModal({ onClose }) {
                                     value={formData.role}
                                     onChange={handleChange}
                                     id="roles"
+                                    name="role"
                                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:ring-blue-600 focus:border-blue-600 w-full p-2.5"
                                 >
                                     <option value>Choose a role</option>
@@ -168,18 +177,15 @@ function AddUserModal({ onClose }) {
                                 </select>
                             </div>
                             <div className="col-span-6 sm:col-span-3">
-                                <label
-                                    htmlFor="current-password"
-                                    className="block mb-2 text-sm font-medium text-gray-900 "
-                                >
+                                <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 ">
                                     Password
                                 </label>
                                 <input
                                     value={formData.password}
                                     onChange={handleChange}
                                     type="password"
-                                    name="current-password"
-                                    id="current-password"
+                                    name="password"
+                                    id="password"
                                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                                     placeholder="••••••••"
                                     required=""

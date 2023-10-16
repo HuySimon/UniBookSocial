@@ -1,8 +1,9 @@
 import { useState } from 'react';
 
-// eslint-disable-next-line react/prop-types
+// eslint-disable-next-line react/prop-types, no-unused-vars
 function Search({ userList, onSearch }) {
-    const [searchTerm, setSearchTerm] = useState(''); // Giá trị của ô input
+    // const [searchTerm, setSearchTerm] = useState(''); // Giá trị của ô input
+    const [isEmailValid, setIsEmailValid] = useState(true);
 
     // const handleSearch = (event) => {
     //     const value = event.target.value;
@@ -13,7 +14,11 @@ function Search({ userList, onSearch }) {
     // };
 
     const handleInputChange = (event) => {
-        setSearchTerm(event.target.value);
+        // setSearchTerm(event.target.value);
+        const input = event.target.value;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const isValid = emailRegex.test(input);
+        setIsEmailValid(isValid);
         onSearch(event.target.value);
     };
 
@@ -40,8 +45,8 @@ function Search({ userList, onSearch }) {
                 type="text"
                 id="table-search-users"
                 className="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500  none-outline"
-                value={searchTerm}
-                placeholder="Search for users"
+                // value={searchTerm}
+                placeholder="Search for users..."
                 onChange={handleInputChange}
             />
         </div>
