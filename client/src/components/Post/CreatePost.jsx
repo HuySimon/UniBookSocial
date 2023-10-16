@@ -15,6 +15,7 @@ import { useAuthContext } from '../../hooks/useAuthContext'
 import { createPostSchema } from '../../validations/PostValidation'
 const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 	const [selectedFile, setSelectedFile] = useState(null);
+	const [isZoomImage, setIsZoomImage] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
 	const navigate = useNavigate()
 	const [state, dispatch] = useAuthContext()
@@ -45,23 +46,23 @@ const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 	)
 	const onSubmit = async (data) => {
 		let formData = new FormData()
-		formData.append('title',data.title)
-		formData.append('price',data.price)
-		formData.append('mainImage',data.mainImage)
-		formData.append('description',data.description)
-		formData.append('price',data.price)
-		formData.append('isNew',data.isNew)
-		formData.append('isGeneralSubject',data.isGeneralSubject)
+		formData.append('title', data.title)
+		formData.append('price', data.price)
+		formData.append('mainImage', data.mainImage)
+		formData.append('description', data.description)
+		formData.append('price', data.price)
+		formData.append('isNew', data.isNew)
+		formData.append('isGeneralSubject', data.isGeneralSubject)
 		const postData = Object.fromEntries(formData)
 		setIsLoading(true)
 		console.log(postData)
 		try {
 			const config = {
 				headers: {
-					'content-type' : 'multipart/form-data'
+					'content-type': 'multipart/form-data'
 				}
 			}
-			const res = await Axios.post('/api/v1/posts', postData,config)
+			const res = await Axios.post('/api/v1/posts', postData, config)
 			if (res.status === 201) {
 				toast.success("Your post have been posted!")
 				handleCreatePost(false)
@@ -120,7 +121,9 @@ const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 								<div className="w-12 h-12 rounded-full overflow-hidden mr-3">
 									<img src={Portrait} alt="" className='w-full h-full object-cover' />
 								</div>
-								<span>John Doe</span>
+								<span>{
+									state.user.user && state.user.user != null ? state.user.user.username : "John Doe"
+									}</span>
 							</div>
 							<div className="w-full flex flex-col">
 								<span className='block mb-1 text-gray-400'>Core Image:</span>
@@ -134,22 +137,39 @@ const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 														<p className="mb-2 text-sm text-primary-500 font-medium "><span className="font-medium !text-black">Drag & drop files or</span> browse files</p>
 														<p className="text-xs text-gray-500">JPG, PNG or GIF - Max file size 2MB</p>
 													</div>
-													<input id="dropzone-file" {...register("mainImage")} type="file" onChange={handleFileChange} />
+													<input id="dropzone-file" {...register("mainImage")} type="file" className='hidden' onChange={handleFileChange} />
 												</label>
 												<p className='text-sm text-red-600 absolute left-0 -bottom-5 truncate'>{errors.mainImage?.message}</p>
 											</>
 										) : (
 											<>
+											<div className="border-2 border-dashed border-black/10 p-2 rounded-md">
 												<img
 													id="preview-image"
 													src={selectedFile}
 													alt="Preview"
-													className='w-full max-h-[350px] object-contain rounded-md'
+													onClick={() => setIsZoomImage(true)}
+													className='w-full max-h-[300px] object-contain rounded-md '
 												/>
+											</div>
 												<AiOutlineClose
 													onClick={() => setSelectedFile(null)}
 													size={40} className='text-white bg-black p-3 rounded-full absolute top-2 right-2 transition-all hover:bg-black/70' cursor={"pointer"} />
 												<p className='text-sm text-red-600 absolute left-0 -bottom-5 truncate'>{errors.mainImage?.message}</p>
+												{
+													isZoomImage && (
+														<>
+															<div className="fixed inset-0 w-screen h-screen bg-black z-30">
+																<div className="w-full h-full py-[100px] px-[300px]">
+																	<img src={selectedFile} alt="" className='w-full h-full object-contain' />
+																</div>
+																<AiOutlineClose
+																	onClick={() => setIsZoomImage(false)}
+																	className='absolute top-4 right-10 bg-white p-2 rounded-full cursor-pointer hover:bg-white/90 transition-all' size={40} />
+															</div>
+														</>
+													)
+												}
 											</>
 										)
 									}
@@ -197,7 +217,7 @@ const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 							</div>
 						</div>
 						<div className="px-4 py-2 mb-2">
-							<button type='submit' className={`w-full p-2 bg-primary-900 text-center rounded-lg text-white`}>
+							<button type='submit' className={`w-full p-2 bg-primary-900 text-center rounded-lg text-white hover:bg-primary-800 transition-all`}>
 								Publish
 							</button>
 						</div>
@@ -217,7 +237,7 @@ const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 					setActiveOverlay(0)
 				}}
 				size={22}
-				className='fixed top-4 right-4 text-white cursor-pointer hover:rotate-[360deg] transition-all duration-300 z-20' />
+				className='fixed top-4 right-4 text-white cursor-pointer hover:rotate-[360deg] transition-all duration-300 z-[15]' />
 		</>
 	)
 }
