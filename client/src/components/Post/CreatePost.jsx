@@ -1,18 +1,18 @@
-import React, { useLayoutEffect, useState } from 'react'
-import { motion } from 'framer-motion'
-import { AiOutlineClose } from 'react-icons/ai'
-import { SiPhotobucket } from 'react-icons/si'
-import { Portrait } from '../../assets'
-import { FiUpload } from 'react-icons/fi'
-import * as Yup from 'yup'
-import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
-import { yupResolver } from '@hookform/resolvers/yup'
-import Axios from '../../api/index'
-import { toast } from 'react-toastify'
+import React, { useLayoutEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import { AiOutlineClose } from 'react-icons/ai';
+import { SiPhotobucket } from 'react-icons/si';
+import { Portrait } from '../../assets';
+import { FiUpload } from 'react-icons/fi';
+import * as Yup from 'yup';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { yupResolver } from '@hookform/resolvers/yup';
+import Axios from '../../api/index';
+import { toast } from 'react-toastify';
 import { ImSpinner9 } from 'react-icons/im';
-import { useAuthContext } from '../../hooks/useAuthContext'
-import { createPostSchema } from '../../validations/PostValidation'
+import { useAuthContext } from '../../hooks/useAuthContext';
+import { createPostSchema } from '../../validations/PostValidation';
 const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 	const [selectedFile, setSelectedFile] = useState(null);
 	const [isZoomImage, setIsZoomImage] = useState(false)
@@ -31,15 +31,19 @@ const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 		}
 	};
 
-	const { register, handleSubmit, formState: { errors }, setValue } = useForm({
-		defaultValues: {
-			title: "",
-			price: "",
-			mainImage: null,
-			description: "",
-			isNew: -1,
-			isGeneralSubject: -1,
-
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        setValue,
+    } = useForm({
+        defaultValues: {
+            title: '',
+            price: '',
+            mainImage: null,
+            description: '',
+            isNew: -1,
+            isGeneralSubject: -1,
 		},
 		resolver: yupResolver(createPostSchema)
 	}
@@ -244,6 +248,9 @@ const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 
 export default CreatePost
 {/* <div className="w-full flex justify-between items-center gap-5 mt-4">
+export default CreatePost;
+{
+    /* <div className="w-full flex justify-between items-center gap-5 mt-4">
 								<div className="w-full flex flex-col">
 									<span className='block mb-2 text-gray-400'>Core Image:</span>
 									<div className="flex items-center justify-center w-full">
@@ -270,4 +277,5 @@ export default CreatePost
 										</label>
 									</div>
 								</div>
-							</div> */}
+							</div> */
+}

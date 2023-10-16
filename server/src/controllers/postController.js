@@ -5,6 +5,7 @@ const AppError = require("../utils/appError");
 const db = require("../models");
 const { post } = require("../routes/postRoutes");
 const Post = db.Post;
+const User = db.User
 
 exports.setUserPost = (req, res, next) => {
 	req.body.userPost = req.user.id;
@@ -54,5 +55,6 @@ const postOptions = { include: 'userPostData' }
 exports.createPost = factory.createOne(Post);
 exports.getAllPosts = factory.getAll(Post);
 exports.updatePost = factory.updateOne(Post);
-exports.getPost = factory.getOne(Post, postOptions);
+const optionGetPost = { include: [User, 'userPost'] }
+exports.getPost = factory.getOne(Post, optionGetPost);
 exports.deletePost = factory.deleteOne(Post);

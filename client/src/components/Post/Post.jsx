@@ -79,7 +79,7 @@ const Post = ({ post }) => {
 					</div>
 					<div className="w-full h-[30vh] xl:h-[40vh] overflow-hidden rounded-lg border border-gray-500 mt-4">
 						<Link to={`/detailPost/${post.id}`}>
-							<img src={PlaceHolderPostImg} alt="" className='w-full h-full object-contain' />
+							<img src={`http://127.0.0.1:5000/public/images/${post.mainImage}`} alt="" className='w-full h-full object-contain' />
 						</Link>
 					</div>
 					<table className='flex border border-gray-500 rounded-lg my-4'>
