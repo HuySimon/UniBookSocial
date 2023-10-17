@@ -15,10 +15,10 @@ function Search({ userList, onSearch }) {
 
     const handleInputChange = (event) => {
         // setSearchTerm(event.target.value);
-        const input = event.target.value;
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const isValid = emailRegex.test(input);
-        setIsEmailValid(isValid);
+        // const input = event.target.value;
+        // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        // const isValid = emailRegex.test(input);
+        // setIsEmailValid(isValid);
         onSearch(event.target.value);
     };
 

@@ -7,7 +7,7 @@ function Filter({ onFilter }) {
     const handleOptionClick = (option) => {
         setSelectedOption(option);
         setIsDropdownOpen(false);
-        // onFilter(option);
+        onFilter(option);
     };
 
     const toggleDropdown = () => {
@@ -62,18 +62,18 @@ function Filter({ onFilter }) {
                             <a
                                 href="#"
                                 className="block px-4 py-2 hover:bg-gray-100"
-                                onClick={() => handleOptionClick('Admin')}
+                                onClick={() => handleOptionClick('User')}
                             >
-                                Admin
+                                User
                             </a>
                         </li>
                         <li>
                             <a
                                 href="#"
                                 className="block px-4 py-2 hover:bg-gray-100"
-                                onClick={() => handleOptionClick('User')}
+                                onClick={() => handleOptionClick('Admin')}
                             >
-                                User
+                                Admin
                             </a>
                         </li>
                         <li>
