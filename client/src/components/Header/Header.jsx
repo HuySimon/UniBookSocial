@@ -40,6 +40,7 @@ const Header = () => {
 		}
 	}
 	useEffect(() => {
+		checkRoleAdmin()
 		const checkTabletMode = () => {
 			const tabletWidthThreshold = 768;
 			const inTabletMode = window.innerWidth >= tabletWidthThreshold;
@@ -50,7 +51,6 @@ const Header = () => {
 		return () => {
 			window.removeEventListener('resize', checkTabletMode);
 		};
-		checkRoleAdmin()
 	}, [state.user]);
 
 	const iconList = [

@@ -16,13 +16,11 @@ exports.getAll = (Model) =>
       },
     });
   });
-
-exports.getOne = (Model) =>
-  catchAsync(async (req, res, next) => {
-    const data = await Model.findByPk(req.params.id);
-    if (!data) {
-      return next(new AppError("No data found with that ID", 404));
-    }
+exports.getOne = (Model,options) => catchAsync(async (req, res, next) => {
+  const data = await Model.findByPk(req.params.id,options);
+  if (!data) {
+    return next(new AppError('No data found with that ID', 404));
+  }
     res.status(200).json({
       status: "success",
       data: {
