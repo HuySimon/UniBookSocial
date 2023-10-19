@@ -35,14 +35,12 @@ const router = createBrowserRouter([
 				path: "/search",
 				element: <Search />
 			},
-			{
-				path: "/profile/:id"
-			}
 		]
 	},
 	{
 		path: "/dashboard",
 		element: <Dashboard />,
+		errorElement: <NotFound />,
 		children: [
 			{
 				path: "users",

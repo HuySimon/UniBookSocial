@@ -57,7 +57,7 @@ const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 		formData.append('price', data.price)
 		formData.append('isNew', data.isNew)
 		formData.append('isGeneralSubject', data.isGeneralSubject)
-		const postData = Object.fromEntries(formData)
+		let postData = Object.fromEntries(formData)
 		setIsLoading(true)
 		console.log(postData)
 		try {

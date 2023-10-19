@@ -7,6 +7,7 @@ import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import ChangePasswordProfile from './AboutComponents/ChangePasswordProfile'
 import { changeInformationSchema } from '../../../../validations/ProfileValidation'
+import { getCurrentUser } from '../../../../api/APIUser'
 
 function isObjectEmpty(obj) {
 	return Object.keys(obj).length === 0;
@@ -45,6 +46,7 @@ const About = () => {
 			navigate('/')
 		})
 	}, [reset])
+
 	const handleEditInformation = async (data) => {
 		const fieldsToTrack = [
 			'firstName',

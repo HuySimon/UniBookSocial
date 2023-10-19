@@ -13,7 +13,6 @@ const Post = ({ post }) => {
 	const [isVisibleMenuPost, setIsVisibleMenuPost] = useState(false)
 	const [isVisibleEditPost, setIsVisibleEditPost] = useState(false)
 	const [isVisibleModalDelete, setIsVisibleModalDelete] = useState(false)
-
 	const handleVisibleMenuPost = () => {
 		setIsVisibleMenuPost(!isVisibleMenuPost)
 	}
@@ -33,6 +32,7 @@ const Post = ({ post }) => {
 			handle: () => { setIsVisibleModalDelete(!isVisibleModalDelete) }
 		}
 	]
+	console.log(post)
 	return (
 		<>
 			<div className='w-full h-fit px-6 py-5 border border-gray-400 shadow-md rounded-lg mb-8'>
@@ -77,9 +77,9 @@ const Post = ({ post }) => {
 							)
 						}
 					</div>
-					<div className="w-full h-[30vh] xl:h-[40vh] overflow-hidden rounded-lg border border-gray-500 mt-4">
+					<div className="w-full h-[30vh] xl:h-[40vh] overflow-hidden rounded-lg border border-gray-500 mt-4 p-2">
 						<Link to={`/detailPost/${post.id}`}>
-							<img src={`http://127.0.0.1:5000/public/images/${post.mainImage}`} alt="" className='w-full h-full object-contain' />
+							<img src={`http://127.0.0.1:5000/public/images/${post.mainImage}`} alt="" className='w-full h-full object-cover rounded-md object-center' />
 						</Link>
 					</div>
 					<table className='flex border border-gray-500 rounded-lg my-4'>
@@ -127,7 +127,7 @@ const Post = ({ post }) => {
 			</div>
 			{
 				isVisibleEditPost && (
-					<EditPost postID={post.id} handleEditPost={setIsVisibleEditPost} isVisibleEditPost={isVisibleEditPost} />
+					<EditPost post={post} handleEditPost={setIsVisibleEditPost} isVisibleEditPost={isVisibleEditPost} />
 				)
 			}
 			<AnimatePresence mode='wait'>

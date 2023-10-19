@@ -15,9 +15,9 @@ const DetailPost = () => {
 			try {
 				const res = await Axios.get(`/api/v1/posts/${postID.id}`)
 				if (res.status === 200) {
-					setDetailPost(res.data.data.data)
-					setUserPost(res.data.data.data.userPostData)
-					// console.log(detailPost)
+					// setDetailPost(res.data.data.data)
+					// setUserPost(res.data.data.data.userPostData)
+					console.log(res.data)
 					// console.log(res.data.data.data)
 				}
 			} catch (err) {
@@ -25,7 +25,7 @@ const DetailPost = () => {
 			}
 		}
 		fetchData()
-	}, [postID.id])
+	}, [])
 	return (
 
 		<div className='flex w-full h-screen'>
@@ -51,71 +51,78 @@ const DetailPost = () => {
 						<BiDotsVerticalRounded size={22} />
 					</button>
 				</div>
-				<table className='flex border border-gray-500 rounded-lg my-4'>
-					<thead className='flex flex-col border-r w-1/2 border-gray-500'>
-						<tr className='border-b p-2 border-gray-500 font-medium text-sm'>
-							<th>Title</th>
-						</tr>
-						<tr className='border-b p-2 border-gray-500 font-medium text-sm'>
-							<th>Price</th>
-						</tr>
-						<tr className='border-b p-2 border-gray-500 font-medium text-sm'>
-							<th>Major</th>
-						</tr>
-						<tr className='border-b p-2 border-gray-500 font-medium text-sm'>
-							<th>Type</th>
-						</tr>
-						<tr className='p-2 font-medium text-sm'>
-							<th>Description</th>
-						</tr>
-					</thead>
-					<tbody className='flex flex-col w-1/2 xl:w-4/5'>
-						<tr className='p-2 text-sm truncate'>
-							<td>{detailPost.title}</td>
-						</tr>
-						<tr className='p-2 border-t border-gray-500 text-sm'>
-							<td>{detailPost.price}</td>
-						</tr>
-						<tr className='p-2 border-t border-gray-500 text-sm'>
-							<td>{
-								detailPost.isGeneralSubject === false ? "Yes" : "No"
-							}</td>
-						</tr>
-						<tr className='p-2 border-t border-gray-500 text-sm'>
-							<td>{detailPost.isNew ? "New" : "Old"}</td>
-						</tr>
-						<tr className='p-2 border-t border-gray-500 text-sm'>
-							<td>
-								{detailPost.description}
-							</td>
-						</tr>
-					</tbody>
-				</table>
-				<table className='flex border border-gray-500 rounded-lg my-4'>
-					<thead className='flex flex-col border-r w-1/2 border-gray-500'>
-						<tr className='border-b p-2 border-gray-500 font-medium text-sm'>
-							<th>Name</th>
-						</tr>
-						<tr className='border-b p-2 border-gray-500 font-medium text-sm'>
-							<th>Price</th>
-						</tr>
-						<tr className='p-2 font-medium text-sm'>
-							<th>Major</th>
-						</tr>
-					</thead>
-					<tbody className='flex flex-col w-1/2 xl:w-4/5'>
-						<tr className='p-2 text-sm'>
-							<td>John Doe</td>
-						</tr>
-						<tr className='p-2 border-t border-gray-500 text-sm'>
-							<td>45000</td>
-						</tr>
-						<tr className='p-2 border-t border-gray-500 text-sm'>
-							<td>General Subject</td>
-						</tr>
-					</tbody>
-				</table>
-				<button type="submit" className='px-10 py-2 bg-primary-main text-white w-fit rounded-lg hover:shadow !shadow-primary-700 hover:bg-primary-700 transition-all'>Buy</button>
+				<div className="h-full flex flex-col justify-between">
+					<div className="flex flex-col">
+						<table className='flex border border-gray-500 rounded-lg my-4'>
+							<thead className='flex flex-col border-r w-1/2 border-gray-500'>
+								<tr className='border-b p-2 border-gray-500 font-medium text-sm'>
+									<th>Title</th>
+								</tr>
+								<tr className='border-b p-2 border-gray-500 font-medium text-sm'>
+									<th>Price</th>
+								</tr>
+								<tr className='border-b p-2 border-gray-500 font-medium text-sm'>
+									<th>Major</th>
+								</tr>
+								<tr className='border-b p-2 border-gray-500 font-medium text-sm'>
+									<th>Type</th>
+								</tr>
+								<tr className='p-2 font-medium text-sm'>
+									<th>Description</th>
+								</tr>
+							</thead>
+							<tbody className='flex flex-col w-1/2 xl:w-4/5'>
+								<tr className='p-2 text-sm truncate'>
+									<td>{detailPost.title}</td>
+								</tr>
+								<tr className='p-2 border-t border-gray-500 text-sm'>
+									<td>{detailPost.price}</td>
+								</tr>
+								<tr className='p-2 border-t border-gray-500 text-sm'>
+									<td>{
+										detailPost.isGeneralSubject === false ? "Yes" : "No"
+									}</td>
+								</tr>
+								<tr className='p-2 border-t border-gray-500 text-sm'>
+									<td>{detailPost.isNew ? "New" : "Old"}</td>
+								</tr>
+								<tr className='p-2 border-t border-gray-500 text-sm'>
+									<td>
+										{detailPost.description}
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<table className='flex border border-gray-500 rounded-lg my-4'>
+							<thead className='flex flex-col border-r w-1/2 border-gray-500'>
+								<tr className='border-b p-2 border-gray-500 font-medium text-sm'>
+									<th>Name</th>
+								</tr>
+								<tr className='border-b p-2 border-gray-500 font-medium text-sm'>
+									<th>Price</th>
+								</tr>
+								<tr className='p-2 font-medium text-sm'>
+									<th>Major</th>
+								</tr>
+							</thead>
+							<tbody className='flex flex-col w-1/2 xl:w-4/5'>
+								<tr className='p-2 text-sm'>
+									<td>John Doe</td>
+								</tr>
+								<tr className='p-2 border-t border-gray-500 text-sm'>
+									<td>45000</td>
+								</tr>
+								<tr className='p-2 border-t border-gray-500 text-sm'>
+									<td>General Subject</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div className="flex flex-col gap-3">
+						<p className='text-sm text-gray-500'>Status: <span>Unconfirm</span></p>
+						<button type="submit" className='px-10 py-2 bg-primary-main text-white w-fit rounded-lg hover:shadow !shadow-primary-700 hover:bg-primary-700 transition-all'>Buy</button>
+					</div>
+				</div>
 			</div>
 			<div className=" p-2 flex-[0_0_auto] flex justify-center items-start bg-primary-700">
 				<button
