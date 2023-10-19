@@ -10,28 +10,61 @@ const DetailPost = () => {
 	const postID = useParams()
 	const [detailPost, setDetailPost] = useState({})
 	const [userPost, setUserPost] = useState({})
+	const [timeAgo, setTimeAgo] = useState('');
+	console.log(postID.id)
 	useEffect(() => {
+		const calculateTimeAgo = () => {
+			const now = new Date();
+			const created = new Date(detailPost.createdAt);
+			const timeDifference = now - created;
+			const seconds = Math.floor(timeDifference / 1000);
+
+			if (seconds < 60) {
+				setTimeAgo(`${seconds} seconds ago`);
+			} else if (seconds < 3600) {
+				const minutes = Math.floor(seconds / 60);
+				setTimeAgo(`${minutes} minutes ago`);
+			} else if (seconds < 86400) {
+				const hours = Math.floor(seconds / 3600);
+				setTimeAgo(`${hours} hours ago`);
+			} else {
+				const days = Math.floor(seconds / 86400);
+				setTimeAgo(`${days} days ago`);
+			}
+		};
 		const fetchData = async () => {
 			try {
 				const res = await Axios.get(`/api/v1/posts/${postID.id}`)
 				if (res.status === 200) {
-					// setDetailPost(res.data.data.data)
-					// setUserPost(res.data.data.data.userPostData)
-					console.log(res.data)
+					setDetailPost(res.data.data.data)
+					setUserPost(res.data.data.data.userPostData)
 					// console.log(res.data.data.data)
 				}
 			} catch (err) {
 				console.log(err)
 			}
 		}
+		calculateTimeAgo()
 		fetchData()
-	}, [])
+	}, [detailPost.createdAt])
+
+	const confirmAPI = async () => {
+		try {
+			const res = await Axios.patch(`/api/v1/posts/${detailPost.id}/updateStatus`)
+			if (res.status === 200) {
+				console.log(res.data)
+			}
+		} catch (err) {
+			console.log(err)
+		}
+	}
+
 	return (
 
 		<div className='flex w-full h-screen'>
-			<div className="bg-primary-main flex-[2_1_auto] py-20 px-10">
-				<div className="main-img w-full h-[85%]">
-					<img src={PlaceHolderPostImg} alt="" className='w-full h-full object-contain object-center rounded-md' />
+			<div className="bg-black flex-[2_1_auto] py-20 mx-auto">
+				<div className="main-img w-full h-full">
+					<img src={`http://127.0.0.1:5000/public/images/${detailPost.mainImage}`} alt="" className='w-full h-full object-contain object-center rounded-md' />
 				</div>
 			</div>
 			<div className="w-full flex flex-col bg-white flex-1 p-5">
@@ -44,7 +77,7 @@ const DetailPost = () => {
 							<span className="name font-medium">
 								{userPost.username}
 							</span>
-							<p className='text-[10px] leading-4 text-gray-600'>2 seconds ago</p>
+							<p className='text-[10px] leading-4 text-gray-600'>{timeAgo}</p>
 						</div>
 					</div>
 					<button className='w-10 h-10 hover:bg-gray-100 transition-all rounded-full flex justify-center items-center'>
@@ -124,14 +157,13 @@ const DetailPost = () => {
 					</div>
 				</div>
 			</div>
-			<div className=" p-2 flex-[0_0_auto] flex justify-center items-start bg-primary-700">
-				<button
-					type='button'
-					onClick={() => window.history.back()}
-				>
-					<AiOutlineClose size={22} color='#fff' className='cursor-pointer' />
-				</button>
-			</div>
+			<button
+				type='button'
+				onClick={() => window.history.back()}
+				className='w-10 h-10 absolute mx-auto top-5 left-5'
+			>
+				<AiOutlineClose size={30} color='#000' className='cursor-pointer w-12 h-12 p-3 bg-white rounded-full' />
+			</button>
 		</div>
 	)
 }

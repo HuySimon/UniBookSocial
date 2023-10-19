@@ -3,7 +3,7 @@ import { Portrait, SignupImg } from '../../../assets'
 import { IoCallOutline } from 'react-icons/io5'
 import { HiOutlineServer } from 'react-icons/hi'
 import { BsCheck2Circle } from 'react-icons/bs'
-import { MdOutlineRateReview } from 'react-icons/md'
+import { MdOutlineRateReview, MdPhotoCamera } from 'react-icons/md'
 import { About, HistoryConfirm, HistoryPost, Review } from './ProfileItem'
 import Axios from '../../../api/index'
 import { useAuthContext } from '../../../hooks/useAuthContext'
@@ -68,12 +68,13 @@ const Index = () => {
 					<img src={SignupImg} alt="" className='w-full h-full object-cover object-top' />
 				</div>
 				<div className="w-full flex justify-end items-center relative top-80">
-					<div className="w-32 h-32 rounded-full overflow-hidden mx-auto">
-						<img src={Portrait} alt="" className='w-full h-full object-cover object-top' />
+					<div className="w-36 h-36 mx-auto relative">
+						<img src={`http://127.0.0.1:5000/public/images/users/${currentUser.avatar}`} alt="" className='w-full h-full rounded-full object-cover object-center' />
+						<MdPhotoCamera size={40} className='absolute top-3/4 right-0 z-10 bg-gray-300 text-black p-2 rounded-full' />
 					</div>
 				</div>
 			</div>
-			<div className="flex flex-col text-center mt-16 pb-5">
+			<div className="flex flex-col text-center mt-[68px] pb-5">
 				<p className='font-medium text-3xl'>{currentUser.username}</p>
 			</div>
 			<div className="pt-4 w-full z-[8]">

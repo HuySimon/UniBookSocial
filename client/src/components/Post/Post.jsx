@@ -13,6 +13,7 @@ const Post = ({ post }) => {
 	const [isVisibleMenuPost, setIsVisibleMenuPost] = useState(false)
 	const [isVisibleEditPost, setIsVisibleEditPost] = useState(false)
 	const [isVisibleModalDelete, setIsVisibleModalDelete] = useState(false)
+	const [timeAgo, setTimeAgo] = useState('');
 	const handleVisibleMenuPost = () => {
 		setIsVisibleMenuPost(!isVisibleMenuPost)
 	}
@@ -32,6 +33,28 @@ const Post = ({ post }) => {
 			handle: () => { setIsVisibleModalDelete(!isVisibleModalDelete) }
 		}
 	]
+	useEffect(() => {
+		const calculateTimeAgo = () => {
+			const now = new Date();
+			const created = new Date(post.createdAt);
+			const timeDifference = now - created;
+			const seconds = Math.floor(timeDifference / 1000);
+
+			if (seconds < 60) {
+				setTimeAgo(`${seconds} seconds ago`);
+			} else if (seconds < 3600) {
+				const minutes = Math.floor(seconds / 60);
+				setTimeAgo(`${minutes} minutes ago`);
+			} else if (seconds < 86400) {
+				const hours = Math.floor(seconds / 3600);
+				setTimeAgo(`${hours} hours ago`);
+			} else {
+				const days = Math.floor(seconds / 86400);
+				setTimeAgo(`${days} days ago`);
+			}
+		};
+		calculateTimeAgo()
+	}, [post.createdAt]);
 	console.log(post)
 	return (
 		<>
@@ -40,13 +63,15 @@ const Post = ({ post }) => {
 					<div className="w-full flex justify-between items-center relative">
 						<div className="flex gap-3">
 							<div className="w-14 h-14 rounded-full overflow-hidden">
-								<img src={Avatar} alt="" className='w-full h-full object-cover' />
+								<Link to={`/profile/${post.userPostData.id}`}>
+									<img src={`http://127.0.0.1:5000/public/images/users/${post.userPostData.avatar}`} alt="" className='w-full h-full object-cover' />
+								</Link>
 							</div>
 							<div className="flex flex-col justify-start">
 								<span className="name text-base font-medium">
 									{post.userPostData.username}
 								</span>
-								<p className='text-sm leading-4 text-gray-600'>2 seconds ago</p>
+								<p className='text-sm leading-4 text-gray-600'>{timeAgo}</p>
 							</div>
 						</div>
 						<button
