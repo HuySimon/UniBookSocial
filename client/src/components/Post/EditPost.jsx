@@ -13,15 +13,15 @@ import { toast } from 'react-toastify'
 import { ImSpinner9 } from 'react-icons/im';
 import { useAuthContext } from '../../hooks/useAuthContext'
 import { createPostSchema, editPostSchema } from '../../validations/PostValidation'
-const EditPost = ({ postID, handleEditPost, isVisibleEditPost }) => {
-	const [selectedFile, setSelectedFile] = useState(null);
-	const [currentPost, setCurrentPost] = useState({})
+const EditPost = ({ post, handleEditPost, isVisibleEditPost }) => {
+	const [selectedFile, setSelectedFile] = useState(`http://127.0.0.1:5000/public/images/${post.mainImage}`);
 	const [isLoading, setIsLoading] = useState(false)
+	const [isZoomImage, setIsZoomImage] = useState(false)
 	const navigate = useNavigate()
-	const history = useHistory()
 	const [state, dispatch] = useAuthContext()
 	const handleFileChange = (e) => {
 		const file = e.target.files[0];
+		console.log(file)
 		if (file) {
 			const reader = new FileReader();
 			reader.onload = () => {
@@ -29,62 +29,40 @@ const EditPost = ({ postID, handleEditPost, isVisibleEditPost }) => {
 			};
 			reader.readAsDataURL(file);
 			setValue("mainImage", file)
-		} else {
-			setValue("mainImage", currentPost.mainImage)
 		}
 	};
 
-	useEffect(() => {
-		async function getCurrentPost() {
-			try {
-				const res = await Axios.get(`/api/v1/posts/${postID}`)
-				if (res.status === 200) {
-					setCurrentPost(res.data.data.data)
-					reset({
-						title: res.data.data.data.title,
-						price: res.data.data.data.price,
-						mainImage: res.data.data.data.mainImage,
-						description: res.data.data.data.description,
-						isNew: res.data.data.data.isNew,
-						isGeneralSubject: res.data.data.data.isGeneralSubject,
-					});
-				}
-			} catch (err) {
-				toast.error(err.response.message)
-			}
-		}
-		getCurrentPost()
-	}, [])
-
 	const { register, handleSubmit, formState: { errors }, setValue, reset } = useForm({
 		defaultValues: {
-			title: currentPost.title,
-			price: currentPost.price,
-			mainImage: currentPost.mainImage,
-			description: currentPost.description,
-			isNew: currentPost.isNew,
-			isGeneralSubject: currentPost.isGeneralSubject,
+			title: post.title,
+			price: post.price,
+			mainImage: post.mainImage,
+			description: post.description,
+			isNew: post.isNew,
+			isGeneralSubject: post.isGeneralSubject,
 
 		},
 		resolver: yupResolver(editPostSchema)
 	}
 	)
 	const onSubmit = async (data) => {
-		const post = {
-			title: data.title,
-			price: data.price,
-			mainImage: data.mainImage.name,
-			description: data.description,
-			isNew: data.isNew,
-			isGeneralSubject: data.isGeneralSubject,
-		}
+		let formData = new FormData()
+		formData.append('title', data.title)
+		formData.append('price', data.price)
+		formData.append('mainImage', data.mainImage)
+		formData.append('description', data.description)
+		formData.append('price', data.price)
+		formData.append('isNew', data.isNew)
+		formData.append('isGeneralSubject', data.isGeneralSubject)
+		const postData = Object.fromEntries(formData)
 		console.log(post)
 		setIsLoading(true)
 		try {
-			const res = await Axios.patch(`/api/v1/posts/${postID}`, post)
+			const res = await Axios.patch(`/api/v1/posts/${post.id}`, postData)
 			if (res.status === 200) {
 				toast.success("Edit post success!")
 				handleEditPost(false)
+				console.log(res.data)
 			}
 		} catch (err) {
 			//Don't use err.response it will cause error 500: Internal Server error
@@ -95,7 +73,6 @@ const EditPost = ({ postID, handleEditPost, isVisibleEditPost }) => {
 			setIsLoading(false)
 		}
 	}
-
 	return (
 		<>
 			<motion.div
@@ -138,7 +115,7 @@ const EditPost = ({ postID, handleEditPost, isVisibleEditPost }) => {
 								<div className="w-12 h-12 rounded-full overflow-hidden mr-3">
 									<img src={Portrait} alt="" className='w-full h-full object-cover' />
 								</div>
-								<span>John Doe</span>
+								<span>{post.userPostData.username}</span>
 							</div>
 							<div className="w-full flex flex-col">
 								<span className='block mb-1 text-gray-400'>Core Image:</span>
@@ -158,16 +135,33 @@ const EditPost = ({ postID, handleEditPost, isVisibleEditPost }) => {
 											</>
 										) : (
 											<>
-												<img
-													id="preview-image"
-													src={selectedFile}
-													alt="Preview"
-													className='w-full max-h-[350px] object-contain rounded-md'
-												/>
+												<div className="w-full border-2 border-dashed border-black/10 p-2 rounded-md">
+													<img
+														id="preview-image"
+														src={selectedFile}
+														onClick={() => setIsZoomImage(true)}
+														alt="Preview"
+														className='w-full max-h-[250px] object-cover object-center rounded-md cursor-pointer'
+													/>
+												</div>
 												<AiOutlineClose
 													onClick={() => setSelectedFile(null)}
-													size={40} className='text-white bg-black p-3 rounded-full absolute top-2 right-2 transition-all hover:bg-black/70' cursor={"pointer"} />
+													size={40} className='text-white bg-black p-3 rounded-full absolute top-2 right-2 transition-all hover:bg-gray-800' cursor={"pointer"} />
 												<p className='text-sm text-red-600 absolute left-0 -bottom-5 truncate'>{errors.mainImage?.message}</p>
+												{
+													isZoomImage && (
+														<>
+															<div className="fixed inset-0 w-screen h-screen bg-black z-30">
+																<div className="w-full h-full py-[100px] px-[300px]">
+																	<img src={selectedFile} alt="" className='w-full h-full object-contain' />
+																</div>
+																<AiOutlineClose
+																	onClick={() => setIsZoomImage(false)}
+																	className='absolute top-4 right-10 bg-white p-2 rounded-full cursor-pointer hover:bg-white/90 transition-all' size={40} />
+															</div>
+														</>
+													)
+												}
 											</>
 										)
 									}
@@ -176,13 +170,13 @@ const EditPost = ({ postID, handleEditPost, isVisibleEditPost }) => {
 							<div className="flex justify-between items-center gap-5 mt-3 h-fit mb-3">
 								<div className="w-full flex flex-col mb-3 relative">
 									<label htmlFor="email" className='mb-1 text-gray-400'>Title:</label>
-									<input type="text" {...register("title")} defaultValue={currentPost.title}
+									<input type="text" {...register("title")} defaultValue={post.title}
 										className='border border-gray-400 rounded-md placeholder:text-sm text-black px-4 py-2 w-full' placeholder='John Doe' />
 									<p className='text-sm text-red-600 absolute -bottom-5 truncate'>{errors.title?.message}</p>
 								</div>
 								<div className="w-full flex flex-col mb-3 relative">
 									<label htmlFor="email" className='mb-1 text-gray-400'>Price:</label>
-									<input type="text" {...register("price")} defaultValue={currentPost.price}
+									<input type="text" {...register("price")} defaultValue={post.price}
 										className='border border-gray-400 rounded-md placeholder:text-sm text-black px-4 py-2 w-full' placeholder='15000' />
 									<p className='text-sm text-red-600 absolute -bottom-5 truncate'>{errors.price?.message}</p>
 								</div>
@@ -190,7 +184,7 @@ const EditPost = ({ postID, handleEditPost, isVisibleEditPost }) => {
 							<div className="flex justify-between items-center gap-5">
 								<div className="w-full flex flex-col mb-3 relative">
 									<label htmlFor="email" className='mb-1 text-gray-400'>Major:</label>
-									<select {...register("isGeneralSubject")} defaultValue={currentPost.isGeneralSubject} className='border border-gray-400 px-4 py-2 w-full rounded-md text-sm'>
+									<select {...register("isGeneralSubject")} defaultValue={post.isGeneralSubject} className='border border-gray-400 px-4 py-2 w-full rounded-md text-sm'>
 										<option disabled value={"-1"} className=''>Select Major</option>
 										<option value="true">No</option>
 										<option value="false">Yes</option>
@@ -199,7 +193,7 @@ const EditPost = ({ postID, handleEditPost, isVisibleEditPost }) => {
 								</div>
 								<div className="w-full flex flex-col mb-3 relative">
 									<label htmlFor="email" className='mb-1 text-gray-400'>Type:</label>
-									<select {...register("isNew")} defaultValue={currentPost.isNew} className='border border-gray-400 px-4 py-2 w-full rounded-md text-sm'>
+									<select {...register("isNew")} defaultValue={post.isNew} className='border border-gray-400 px-4 py-2 w-full rounded-md text-sm'>
 										<option disabled value={"-1"}>Select Type</option>
 										<option value="true">New</option>
 										<option value="false">Old</option>
@@ -209,7 +203,7 @@ const EditPost = ({ postID, handleEditPost, isVisibleEditPost }) => {
 							</div>
 							<div className="flex flex-col relative mb-3">
 								<label htmlFor="description" className='mb-1 text-gray-400'>Description</label>
-								<textarea {...register("description")} defaultValue={currentPost.description} cols="20" rows="4" placeholder='Type something' className='px-4 py-2 border border-gray-400 rounded-md'></textarea>
+								<textarea {...register("description")} defaultValue={post.description} cols="20" rows="4" placeholder='Type something' className='px-4 py-2 border border-gray-400 rounded-md'></textarea>
 								<p className='text-sm text-red-600 absolute -bottom-5 truncate'>{errors.description?.message}</p>
 							</div>
 						</div>
@@ -229,37 +223,9 @@ const EditPost = ({ postID, handleEditPost, isVisibleEditPost }) => {
 					handleEditPost()
 				}}
 				size={22}
-				className='fixed top-4 right-4 text-white cursor-pointer hover:rotate-[360deg] transition-all duration-300 z-20' />
+				className='fixed top-4 right-4 text-white cursor-pointer hover:rotate-[360deg] transition-all duration-300 z-10' />
 		</>
 	)
 }
 
 export default EditPost
-{/* <div className="w-full flex justify-between items-center gap-5 mt-4">
-								<div className="w-full flex flex-col">
-									<span className='block mb-2 text-gray-400'>Core Image:</span>
-									<div className="flex items-center justify-center w-full">
-										<label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-36 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer">
-											<div className="flex flex-col items-center justify-center pt-5 pb-6">
-												<FiUpload size={45} className='text-[#6e6d74] p-3 mb-2 bg-[#F8F8F8] rounded-lg' />
-												<p className="mb-2 text-sm text-primary-500 font-medium "><span className="font-medium !text-black">Drag & drop files or</span> browse files</p>
-												<p className="text-xs text-gray-500 ">JPG, PNG or GIF - Max file size 2MB</p>
-											</div>
-											<input id="dropzone-file" type="file" className="hidden" />
-										</label>
-									</div>
-								</div>
-								<div className="w-full flex flex-col">
-									<span className='block mb-2 text-gray-400'>Sub Image:</span>
-									<div className="flex items-center justify-center w-full">
-										<label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-36 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer">
-											<div className="flex flex-col items-center justify-center pt-5 pb-6">
-												<FiUpload size={45} className='text-[#6e6d74] p-3 mb-2 bg-[#F8F8F8] rounded-lg' />
-												<p className="mb-2 text-sm text-primary-500 font-medium "><span className="font-medium !text-black">Drag & drop files or</span> browse files</p>
-												<p className="text-xs text-gray-500 ">JPG, PNG or GIF - Max file size 2MB</p>
-											</div>
-											<input id="dropzone-file" type="file" className="hidden" />
-										</label>
-									</div>
-								</div>
-							</div> */}

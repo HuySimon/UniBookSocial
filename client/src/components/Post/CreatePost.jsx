@@ -57,7 +57,7 @@ const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 		formData.append('price', data.price)
 		formData.append('isNew', data.isNew)
 		formData.append('isGeneralSubject', data.isGeneralSubject)
-		const postData = Object.fromEntries(formData)
+		let postData = Object.fromEntries(formData)
 		setIsLoading(true)
 		console.log(postData)
 		try {
@@ -147,13 +147,14 @@ const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 											</>
 										) : (
 											<>
-											<div className="border-2 border-dashed border-black/10 p-2 rounded-md">
+											<div className="w-full border-2 border-dashed border-black/10 p-2 rounded-md">
 												<img
 													id="preview-image"
 													src={selectedFile}
 													alt="Preview"
 													onClick={() => setIsZoomImage(true)}
-													className='w-full max-h-[300px] object-contain rounded-md '
+													title='You can click to see the full size of image'
+													className='w-full h-[250px] max-h-[25vh] object-cover object-center rounded-md cursor-pointer'
 												/>
 											</div>
 												<AiOutlineClose

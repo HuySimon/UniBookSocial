@@ -135,9 +135,9 @@ const Header = () => {
 										setActiveOverlay={setActiveOverlay}
 										expand={expand}
 										title={"Profile"}
-										href={"/profile"}
+										href={`/profile/${state.user.user.id}`}
 										handleCreate={() => setIsVisibleNotify(false)}
-										icon={<img src={Portrait} className='w-[30px] h-[30px] rounded-full object-cover' />}
+										icon={<img src={`http://127.0.0.1:5000/public/images/users/${state.user.user.avatar}`} className='w-[30px] h-[30px] rounded-full object-cover' />}
 									/>
 								</>
 							)

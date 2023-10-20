@@ -3,7 +3,7 @@ import * as Yup from 'yup'
 export const createPostSchema = Yup.object().shape({
 	title: Yup.string().required("Please enter title"),
 	price: Yup.number().typeError("Price must be a number").positive("Must be a positive value").required("Please enter price"),
-	mainImage: Yup.mixed().required('Please upload an image')
+	mainImage: Yup.mixed().typeError("Please choose an image").required('Please upload an image')
 		.test('fileSize', 'File size is too large (> 2MB)', (value) => {
 			if (!value) return true; // No file was selected, so skip this test
 			return value.size <= 2 * 1024 * 1024; // 2MB
