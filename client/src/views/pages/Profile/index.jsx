@@ -84,7 +84,7 @@ const Index = () => {
 						<img src={`http://127.0.0.1:5000/public/images/users/${currentUser.avatar}`} alt="" className='w-full h-full rounded-full object-cover object-center' />
 						<label htmlFor="imageFIle" className='absolute top-3/4 right-0 z-10 overflow-hidden cursor-pointer'>
 							<input type="file" name="" id="imageFIle" className='hidden absolute w-full h-full' />
-							<MdPhotoCamera size={40} className=' bg-gray-300 text-black p-2 rounded-full hover:bg-gray-400 transition-all hover:text-white/70' />
+							<MdPhotoCamera size={40} className=' bg-gray-300 text-black p-2 rounded-full hover:bg-gray-400 transition-all hover:text-white' />
 						</label>
 					</div>
 				</div>
