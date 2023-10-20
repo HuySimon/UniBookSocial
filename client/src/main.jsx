@@ -8,10 +8,13 @@ import Login from './views/auth/Login'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import { AuthProvider } from './context/AuthProvider'
+import { SearchProvider } from './context/SearchProvider'
 ReactDOM.createRoot(document.getElementById('root')).render(
 	<>
 		<AuthProvider>
-			<RouterProvider router={router} />
+			<SearchProvider>
+				<RouterProvider router={router} />
+			</SearchProvider>
 		</AuthProvider>
 		<ToastContainer
 			position="top-right"

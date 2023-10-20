@@ -5,19 +5,29 @@ import SearchPost from '../../../components/Post/SearchPost';
 import { useForm } from 'react-hook-form';
 import Axios from '../../../api/index'
 import { ImSpinner9 } from 'react-icons/im';
+import { useSearchContext } from '../../../hooks/useSearch';
 const Index = () => {
 
 	const [searchPost, setSearchPost] = useState([])
 	const [isLoading, setIsLoading] = useState(false)
-	const { register, handleSubmit, formState: { errors } } = useForm()
+
+	const { searchValue, searchResults, updateSearch } = useSearchContext()
+
+	const handleSearch = (event) => {
+		updateSearch(event.target.value);
+	}
+
+	const { register, handleSubmit, reset, formState: { errors } } = useForm()
 	const onSubmit = async (data) => {
 		setIsLoading(true)
 		try {
 			const res = await Axios.get(`/api/v1/posts?filter=contains(title,'${data.query}')'`)
 			if (res.status === 200) {
-				console.log(res.data.data.data)
+				// console.log(res.data.data.data)
 				setSearchPost(res.data.data.data)
 				setIsLoading(false)
+				updateSearch(data.query, res.data.data.data)
+				// reset()
 			}
 		} catch (err) {
 			console.log(err)
@@ -35,6 +45,7 @@ const Index = () => {
 					<div className="flex justify-between items-center border border-gray-400 rounded-md px-3 py-2 mt-3">
 						<input
 							type="text"
+							defaultValue={searchValue}
 							{...register("query")}
 							className="w-full border-none focus:outline-none text-black"
 							placeholder="Type something"
@@ -101,7 +112,7 @@ const Index = () => {
 					) : (
 						<div className="w-full mt-5 grid grid-cols-[repeat(2,minmax(0,3fr))] xl:grid-cols-[repeat(4,minmax(0,3fr))] 2xl:grid-cols-[repeat(6,minmax(0,3fr))] gap-2 gap-y-5">
 							{
-								searchPost.map((post, index) => (
+								searchResults.map((post, index) => (
 									<SearchPost key={index} post={post} />
 								)
 								)
