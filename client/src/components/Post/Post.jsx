@@ -55,7 +55,6 @@ const Post = ({ post }) => {
 		};
 		calculateTimeAgo()
 	}, [post.createdAt]);
-	console.log(post)
 	return (
 		<>
 			<div className='w-full h-fit px-6 py-5 border border-gray-400 shadow-md rounded-lg mb-8'>

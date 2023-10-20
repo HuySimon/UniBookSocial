@@ -18,10 +18,11 @@ const HistoryPost = () => {
 
 	return (
 		<div className='flex flex-col gap-5'>
+			History Post
+			{/* <Post />
 			<Post />
 			<Post />
-			<Post />
-			<Post />
+			<Post /> */}
 		</div>
 	)
 }

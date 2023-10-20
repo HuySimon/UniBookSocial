@@ -17,6 +17,7 @@ import Posts from "../views/pages/Posts";
 import DetailPost from "../components/Post/DetailPost";
 import EditPost from "../components/Post/EditPost";
 import { AllPostLoader } from "../views/pages/Home";
+import { About, HistoryConfirm, HistoryPost, Review } from "../views/pages/Profile/ProfileItem";
 const router = createBrowserRouter([
 	{
 		path: "/",
@@ -29,7 +30,25 @@ const router = createBrowserRouter([
 			},
 			{
 				path: "/profile/:id",
-				element: <Profile />
+				element: <Profile />,
+				children: [
+					{
+						index: true,
+						element: <About />
+					},
+					{
+						path: "historyPost",
+						element: <HistoryPost />
+					},
+					{
+						path: "historyConfirm",
+						element: <HistoryConfirm />
+					},
+					{
+						path: "review",
+						element: <Review />
+					}
+				]
 			},
 			{
 				path: "/search",
