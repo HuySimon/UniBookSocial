@@ -1,24 +1,30 @@
-const multer = require('multer')
+const multer = require('multer');
+const path = require('path');
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'public/images')
+    cb(null, req.pathSave);
   },
   filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-    cb(null, file.name + '-' + uniqueSuffix)
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + path.extname(file.originalname));
   }
-})
+});
 
-const upload = multer({ storage: storage })
+const upload = multer({ storage: storage });
 
-exports.uploadSingleImg = (nameImageFile) => {
-  return (req, res, next) => {
-    upload.single(nameImageFile)
-    console.log(req.body)
-    req.body[`${nameImageFile}`] = req.file.filename
+exports.uploadSingleImg = (nameImageFile, pathSave) => (req, res, next) => {
+  req.pathSave = pathSave;
 
-    next()
-  }
-}
+  // Use upload.single() middleware with the correct function signature
+  upload.single(nameImageFile)(req, res, function (err) {
+    if (err) {
+      // Handle any potential errors
+      return next(err);
+    }
 
+    // Continue processing the request after the file upload is complete
+    req.body[`${nameImageFile}`] = req.file.filename;
+    next();
+  });
+};
