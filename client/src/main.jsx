@@ -9,11 +9,14 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import { AuthProvider } from './context/AuthProvider'
 import { SearchProvider } from './context/SearchProvider'
+import { HeaderProvider } from './context/HeaderProvider'
 ReactDOM.createRoot(document.getElementById('root')).render(
 	<>
 		<AuthProvider>
 			<SearchProvider>
-				<RouterProvider router={router} />
+				<HeaderProvider>
+					<RouterProvider router={router} />
+				</HeaderProvider>
 			</SearchProvider>
 		</AuthProvider>
 		<ToastContainer

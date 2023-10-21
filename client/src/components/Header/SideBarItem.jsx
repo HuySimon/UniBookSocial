@@ -4,13 +4,15 @@ import { AiOutlineLogout } from 'react-icons/ai';
 import { PiHeartLight, PiEnvelopeLight, PiListBold, PiHouseLight, PiPlusCircleLight } from 'react-icons/pi';
 import { motion } from 'framer-motion';
 import { useAuthContext } from '../../hooks/useAuthContext';
+import { useHeaderContext } from '../../hooks/useHeaderContext';
 
 const SideBarItem = ({ title, href, index, activeOverlay, setActiveOverlay, expand, icon, handleCreate, target }) => {
 	const [state, dispatch] = useAuthContext()
+	const { stateHeader, dispatchHeader } = useHeaderContext()
 	return (
 		<li
 			onClick={() => {
-				setActiveOverlay(index);
+				setActiveOverlay(title);
 				handleCreate();
 			}}
 			className='px-2 md:px-4 pb-4 flex items-center font-semibold relative'>
@@ -22,12 +24,12 @@ const SideBarItem = ({ title, href, index, activeOverlay, setActiveOverlay, expa
                         flex items-center w-full h-12 transition-all hover:text-primary-main
                         pl-2 py-3 group
                         hover:bg-black/10 rounded-md
-                        ${activeOverlay === index ? "text-primary-main" : "text-black"}
+                        ${stateHeader.activeButton === title ? "text-primary-main" : "text-black"}
                     `}
 			>
 				{icon}
 				<span className={`ml-2 overflow-hidden z-10 ${expand ? "w-44" : "w-0"}`}>{title}</span>
-				{activeOverlay === index && (
+				{stateHeader.activeButton === title && (
 					<motion.div
 						layoutId='overlay-button'
 						className="absolute -left-4 w-1 h-3/4 bg-primary-main rounded-lg">

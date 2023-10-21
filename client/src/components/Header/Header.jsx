@@ -23,14 +23,16 @@ import Setting from '../../views/pages/Setting';
 import { useAuthContext } from '../../hooks/useAuthContext';
 import Axios from '../../api/index';
 import { useSearchContext } from '../../hooks/useSearch';
+import { useHeaderContext } from '../../hooks/useHeaderContext';
 const Header = () => {
 	const [expand, setExpand] = useState(true)
 	const navigate = useNavigate()
 	const [isVisiblePost, setIsVisiblePost] = useState(false)
 	const [isVisibleNotify, setIsVisibleNotify] = useState(false)
-	const [activeOverlay, setActiveOverlay] = useState(0)
+	const [activeOverlay, setActiveOverlay] = useState('')
 	const [state, dispatch] = useAuthContext()
 	const { clearSearch } = useSearchContext()
+	const { stateHeader, dispatchHeader } = useHeaderContext()
 	const checkRoleAdmin = () => {
 		if (state.user != null) {
 			if (state.user.user.role === 2) {
@@ -41,6 +43,10 @@ const Header = () => {
 			return false
 		}
 	}
+	const handleButtonClick = (buttonName) => {
+		dispatchHeader({ type: "SET_ACTIVE_BUTTON", payload: buttonName });
+	};
+	console.log(stateHeader	)
 	useEffect(() => {
 		checkRoleAdmin()
 		const checkTabletMode = () => {
@@ -60,13 +66,13 @@ const Header = () => {
 			icon: PiHouseLight,
 			title: "Home",
 			link: "/",
-			handleCreate: () => { setIsVisibleNotify(false), clearSearch() },
+			handleCreate: () => { setIsVisibleNotify(false), clearSearch(),handleButtonClick("Home") },
 		},
 		{
 			icon: CiSearch,
 			title: "Search",
 			link: "/search",
-			handleCreate: () => { setIsVisibleNotify(false) },
+			handleCreate: () => { setIsVisibleNotify(false),handleButtonClick("Search") },
 		},
 	]
 	const logout = () => {
@@ -118,7 +124,7 @@ const Header = () => {
 										activeOverlay={activeOverlay}
 										setActiveOverlay={setActiveOverlay}
 										expand={expand}
-										handleCreate={() => { setIsVisibleNotify(!isVisibleNotify) }}
+										handleCreate={() => { setIsVisibleNotify(!isVisibleNotify),handleButtonClick(!isVisibleNotify ? "Notification" : "Home") }}
 										icon={<PiHeartLight size={30} className='z-10' />}
 									/>
 									<SideBarItem
@@ -128,7 +134,7 @@ const Header = () => {
 										activeOverlay={activeOverlay}
 										setActiveOverlay={setActiveOverlay}
 										expand={expand}
-										handleCreate={() => { setIsVisiblePost(!isVisiblePost) }}
+										handleCreate={() => { setIsVisiblePost(!isVisiblePost)}}
 										icon={<PiPlusCircleLight size={30} className='z-10' />}
 									/>
 									<SideBarItem
@@ -138,7 +144,7 @@ const Header = () => {
 										expand={expand}
 										title={"Profile"}
 										href={`/profile/${state.user.user.id}`}
-										handleCreate={() => { setIsVisibleNotify(false), clearSearch() }}
+										handleCreate={() => { setIsVisibleNotify(false), clearSearch(),handleButtonClick("Profile") }}
 										icon={<img src={`http://127.0.0.1:5000/public/images/users/${state.user.user.avatar}`} className='w-[30px] h-[30px] rounded-full object-cover' />}
 									/>
 								</>

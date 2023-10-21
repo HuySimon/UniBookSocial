@@ -6,10 +6,10 @@ import { useForm } from 'react-hook-form';
 import Axios from '../../../api/index'
 import { ImSpinner9 } from 'react-icons/im';
 import { useSearchContext } from '../../../hooks/useSearch';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { FaRegFaceSadTear } from 'react-icons/fa6'
 import { NoResultFound } from '../../../assets';
 import { Outlet } from 'react-router-dom';
+import { toast } from 'react-toastify'
 const Index = () => {
 
 	const [searchPost, setSearchPost] = useState([])
@@ -24,20 +24,20 @@ const Index = () => {
 			isGeneralSubject: searchValues.isGeneralSubject,
 			minPrice: searchValues.minPrice,
 			maxPrice: searchValues.maxPrice,
-		},
+		}
 	})
 	const onSubmit = async (data) => {
 		setIsLoading(true)
 		console.log(data)
 		try {
-			let url = "/api/v1/posts?filter=equals(status,'Unconfirm')"
-			let result = url.substring(0, 21)
+			let url = "/api/v1/posts?filter="
+			let result = url
 			if (data.query != "") {
 				var queryUrl = `contains(title,'${data.query}')`
 				url = result + "and(" + url.substring(21, url.length) + "," + queryUrl + ")"
 			}
 			if (data.isGeneralSubject != -1) {
-				var isGeneralSubjectquery = `equals(isNew,'${data.isGeneralSubject}')`
+				var isGeneralSubjectquery = `equals(isGeneralSubject,'${data.isGeneralSubject}')`
 				url = result + "and(" + url.substring(21, url.length) + "," + isGeneralSubjectquery + ")"
 			}
 			if (data.isNew != -1) {
@@ -45,12 +45,20 @@ const Index = () => {
 				url = result + "and(" + url.substring(21, url.length) + "," + isNewquery + ")"
 			}
 			if (data.minPrice != '') {
-				var minPricequery = `greaterOrEqual(price,'${data.minPrice}')`
-				url = result + "and(" + url.substring(21, url.length) + "," + minPricequery + ")"
+				if (/^[+]?\d+([.]\d+)?$/.test(data.minPrice)) {
+					var minPricequery = `greaterOrEqual(price,'${data.minPrice}')`
+					url = result + "and(" + url.substring(21, url.length) + "," + minPricequery + ")"
+				} else {
+					toast.error("Please provide an valid number")
+				}
 			}
 			if (data.maxPrice != '') {
-				var maxPricequery = `lessOrEqual(price,'${data.maxPrice}')`
-				url = result + "and(" + url.substring(21, url.length) + "," + maxPricequery + ")"
+				if (/^[+]?\d+([.]\d+)?$/.test(data.maxPrice)) {
+					var maxPricequery = `lessOrEqual(price,'${data.maxPrice}')`
+					url = result + "and(" + url.substring(21, url.length) + "," + maxPricequery + ")"
+				} else {
+					toast.error("Please provide an valid number")
+				}
 			}
 			console.log(url)
 			const res = await Axios.get(url)
@@ -67,7 +75,7 @@ const Index = () => {
 
 	useEffect(() => {
 		document.title = "Search"
-	},[])
+	}, [])
 
 	return (
 		<div className="w-full h-full px-10 py-6">
@@ -134,7 +142,6 @@ const Index = () => {
 										{...register("minPrice")}
 										defaultValue={searchValues.minPrice}
 										tabIndex={4} type="number" className="text-black px-3 py-2 rounded-md w-40 lg:w-full" />
-									<p className='text-red-500 text-sm absolute'>{errors.minPrice?.message}</p>
 									<span> - </span>
 									<input
 										{...register("maxPrice")}

@@ -119,7 +119,7 @@ const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
                         <div className="p-4">
                             <div className="flex mb-3">
                                 <div className="w-12 h-12 rounded-full overflow-hidden mr-3">
-                                    <img src={Portrait} alt="" className="w-full h-full object-cover" />
+                                    <img src={`http://127.0.0.1:5000/public/images/users/${state.user.user.avatar}`} alt="" className="w-full h-full object-cover" />
                                 </div>
                                 <span>
                                     {state.user.user && state.user.user != null ? state.user.user.username : 'John Doe'}
