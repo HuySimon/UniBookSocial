@@ -5,7 +5,13 @@ export const SearchContext = createContext();
 
 export const SearchProvider = ({ children }) => {
 
-	const [searchValue, setSearchValue] = useState('');
+	const [searchValues, setSearchValues] = useState({
+		query: '',
+		isNew: -1,
+		isGeneralSubject: -1,
+		minPrice: '',
+		maxPrice: '',
+	});
 	const [searchResults, setSearchResults] = useState([]);
 
 	// Load data from localStorage when the component mounts.
@@ -14,7 +20,7 @@ export const SearchProvider = ({ children }) => {
 		const storedSearchResults = localStorage.getItem('searchResults');
 
 		if (storedSearchValue) {
-			setSearchValue(storedSearchValue);
+			setSearchValues(storedSearchValue);
 		}
 
 		if (storedSearchResults) {
@@ -22,28 +28,38 @@ export const SearchProvider = ({ children }) => {
 		}
 	}, []);
 
-	const updateSearch = (value,data) => {
-		setSearchValue(value);
-		// Implement your search logic here and update searchResults.
-		// For this example, we'll set it to an empty array.
+	const updateSearch = (newSearchValue, data) => {
+		const updatedSearchValue = { ...searchValues, ...newSearchValue };
+		setSearchValues(updatedSearchValue);
 		setSearchResults(data);
+	};
+	const clearSearch = () => {
+		setSearchValues({
+			query: '',
+			isNew: -1,
+			isGeneralSubject: -1,
+			minPrice: '',
+			maxPrice: '',
+		});
+		setSearchResults([]);
 	};
 	// Memoize the context value and derived values for better performance.
 	const memoizedSearchResults = useMemo(() => searchResults, [searchResults]);
 	const memoizedContextValue = useMemo(
 		() => ({
-			searchValue,
+			searchValues,
 			searchResults: memoizedSearchResults,
 			updateSearch,
+			clearSearch
 		}),
-		[searchValue, memoizedSearchResults, updateSearch]
+		[searchValues, memoizedSearchResults, updateSearch, clearSearch]
 	);
 
 	// Save data to localStorage whenever searchValue or searchResults change.
 	useEffect(() => {
-		localStorage.setItem('searchValue', searchValue);
+		localStorage.setItem('searchValue', JSON.stringify(searchValues));
 		localStorage.setItem('searchResults', JSON.stringify(searchResults));
-	}, [searchValue, searchResults]);
+	}, [searchValues, searchResults]);
 
 	return (
 		<SearchContext.Provider value={memoizedContextValue}>

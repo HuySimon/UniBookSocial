@@ -22,6 +22,7 @@ import SideBarItem from './SideBarItem';
 import Setting from '../../views/pages/Setting';
 import { useAuthContext } from '../../hooks/useAuthContext';
 import Axios from '../../api/index';
+import { useSearchContext } from '../../hooks/useSearch';
 const Header = () => {
 	const [expand, setExpand] = useState(true)
 	const navigate = useNavigate()
@@ -29,6 +30,7 @@ const Header = () => {
 	const [isVisibleNotify, setIsVisibleNotify] = useState(false)
 	const [activeOverlay, setActiveOverlay] = useState(0)
 	const [state, dispatch] = useAuthContext()
+	const { clearSearch } = useSearchContext()
 	const checkRoleAdmin = () => {
 		if (state.user != null) {
 			if (state.user.user.role === 2) {
@@ -58,7 +60,7 @@ const Header = () => {
 			icon: PiHouseLight,
 			title: "Home",
 			link: "/",
-			handleCreate: () => { setIsVisibleNotify(false) },
+			handleCreate: () => { setIsVisibleNotify(false), clearSearch() },
 		},
 		{
 			icon: CiSearch,
@@ -136,7 +138,7 @@ const Header = () => {
 										expand={expand}
 										title={"Profile"}
 										href={`/profile/${state.user.user.id}`}
-										handleCreate={() => setIsVisibleNotify(false)}
+										handleCreate={() => { setIsVisibleNotify(false), clearSearch() }}
 										icon={<img src={`http://127.0.0.1:5000/public/images/users/${state.user.user.avatar}`} className='w-[30px] h-[30px] rounded-full object-cover' />}
 									/>
 								</>

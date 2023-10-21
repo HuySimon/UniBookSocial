@@ -160,9 +160,9 @@ const DetailPost = () => {
 				<button
 					type='button'
 					onClick={() => window.history.back()}
-					className='w-10 h-10 absolute mx-auto top-5 left-5'
+					className='w-10 h-10 absolute mx-auto top-5 left-5 cursor-pointer'
 				>
-					<AiOutlineClose size={30} color='#000' className='cursor-pointer w-12 h-12 p-3 bg-white rounded-full' />
+					<AiOutlineClose size={30} color='#000' className='w-12 h-12 p-3 bg-white rounded-full' />
 				</button>
 			</div>
 		</>
