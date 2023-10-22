@@ -7,4 +7,5 @@ import PlaceHolderPostImg from './placeholder.jpg'
 import AvatarUser from './avataruser.jpg'
 import NoResultFound from './noResultFound.png'
 import InitSearchImage from './initSearch.png'
-export { NoResultFound, LoginImg, Logo, Portrait, SignupImg, Avatar, PlaceHolderPostImg, AvatarUser, InitSearchImage }
+import NoPostYet from './NoPostYet.png'
+export { NoPostYet, NoResultFound, LoginImg, Logo, Portrait, SignupImg, Avatar, PlaceHolderPostImg, AvatarUser, InitSearchImage }

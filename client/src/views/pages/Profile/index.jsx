@@ -22,7 +22,7 @@ const Index = () => {
 				const res = await Axios.get('/api/v1/users/me')
 				setCurrentUser(res.data.data.data)
 				dispatch({ type: "LOGIN", value: res.data.data.data })
-				console.log(res.data.data.data)
+				// console.log(res.data.data.data)
 			} catch (err) {
 				toast.error("Can't get user information")
 				document.title = "Home"
@@ -30,19 +30,9 @@ const Index = () => {
 				navigate('/')
 			}
 		}
-		const Test = async () => {
-			try {
-				const res = await Axios.get('/api/v1/users/5')
-				console.log(res.data)
-
-			} catch (err) {
-				console.log(err.response)
-			}
-		}
-		Test()
 		getUser()
 	}, [])
-	const [activeButton, setActiveButton] = useState(0)
+	const [activeButton, setActiveButton] = useState(JSON.parse(localStorage.getItem("activeButtonProfile")))
 	const menu = [
 		{
 			id: 0,
@@ -71,6 +61,7 @@ const Index = () => {
 	]
 	const handleButton = (id) => {
 		setActiveButton(id)
+		localStorage.setItem("activeButtonProfile",id)
 	}
 
 	return (

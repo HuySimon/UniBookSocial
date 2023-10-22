@@ -16,7 +16,7 @@ const Index = () => {
 	const [isLoading, setIsLoading] = useState(false)
 	const { searchValues, searchResults, updateSearch } = useSearchContext()
 
-	const { register, handleSubmit, reset, formState: { errors, isSubmitted } } = useForm({
+	const { register, handleSubmit, reset, formState: { errors, isSubmitted,isDirty,isValid } } = useForm({
 		mode: 'onChange',
 		defaultValues: {
 			query: searchValues.query,
@@ -30,42 +30,45 @@ const Index = () => {
 		setIsLoading(true)
 		console.log(data)
 		try {
-			let url = "/api/v1/posts?filter="
-			let result = url
-			if (data.query != "") {
-				var queryUrl = `contains(title,'${data.query}')`
-				url = result + "and(" + url.substring(21, url.length) + "," + queryUrl + ")"
-			}
-			if (data.isGeneralSubject != -1) {
-				var isGeneralSubjectquery = `equals(isGeneralSubject,'${data.isGeneralSubject}')`
-				url = result + "and(" + url.substring(21, url.length) + "," + isGeneralSubjectquery + ")"
-			}
-			if (data.isNew != -1) {
-				var isNewquery = `equals(isNew,'${data.isNew}')`
-				url = result + "and(" + url.substring(21, url.length) + "," + isNewquery + ")"
-			}
-			if (data.minPrice != '') {
-				if (/^[+]?\d+([.]\d+)?$/.test(data.minPrice)) {
-					var minPricequery = `greaterOrEqual(price,'${data.minPrice}')`
-					url = result + "and(" + url.substring(21, url.length) + "," + minPricequery + ")"
-				} else {
-					toast.error("Please provide an valid number")
+			let url = "/api/v1/posts?filter=equals(status,'Unconfirm')"
+			let result = url.substring(0,21)
+			if(isDirty) {
+				if (data.query != "") {
+					var queryUrl = `contains(title,'${data.query}')`
+					url = result + "and(" + url.substring(21, url.length) + "," + queryUrl + ")"
 				}
-			}
-			if (data.maxPrice != '') {
-				if (/^[+]?\d+([.]\d+)?$/.test(data.maxPrice)) {
-					var maxPricequery = `lessOrEqual(price,'${data.maxPrice}')`
-					url = result + "and(" + url.substring(21, url.length) + "," + maxPricequery + ")"
-				} else {
-					toast.error("Please provide an valid number")
+				if (data.isGeneralSubject != -1) {
+					var isGeneralSubjectquery = `equals(isGeneralSubject,'${data.isGeneralSubject}')`
+					url = result + "and(" + url.substring(21, url.length) + "," + isGeneralSubjectquery + ")"
 				}
-			}
-			console.log(url)
-			const res = await Axios.get(url)
-			if (res.status === 200) {
-				setSearchPost(res.data.data.data)
-				setIsLoading(false)
-				updateSearch(data, res.data.data.data)
+				if (data.isNew != -1) {
+					var isNewquery = `equals(isNew,'${data.isNew}')`
+					url = result + "and(" + url.substring(21, url.length) + "," + isNewquery + ")"
+	
+				}
+				if (data.minPrice != '') {
+					if (/^[+]?\d+([.]\d+)?$/.test(data.minPrice)) {
+						var minPricequery = `greaterOrEqual(price,'${data.minPrice}')`
+						url = result + "and(" + url.substring(21, url.length) + "," + minPricequery + ")"
+					} else {
+						toast.error("Please provide an valid number")
+					}
+				}
+				if (data.maxPrice != '') {
+					if (/^[+]?\d+([.]\d+)?$/.test(data.maxPrice)) {
+						var maxPricequery = `lessOrEqual(price,'${data.maxPrice}')`
+						url = result + "and(" + url.substring(21, url.length) + "," + maxPricequery + ")"
+					} else {
+						toast.error("Please provide an valid number")
+					}
+				}
+				console.log(url)
+				const res = await Axios.get(url)
+				if (res.status === 200) {
+					setSearchPost(res.data.data.data)
+					setIsLoading(false)
+					updateSearch(data, res.data.data.data)
+				}
 			}
 		} catch (err) {
 			console.log(err)
@@ -104,8 +107,8 @@ const Index = () => {
 									</label>
 									<select
 										tabIndex={2}
-										{...register("isNew")}
-										defaultValue={searchValues.isNew}
+										{...register("isGeneralSubject")}
+										defaultValue={searchValues.isGeneralSubject}
 										className="w-40 border border-gray-400 px-3 py-2 appearance-none rounded-md"
 									>
 										<option value={'-1'}>
@@ -122,8 +125,8 @@ const Index = () => {
 									</label>
 									<select
 										tabIndex={3}
-										{...register("isGeneralSubject")}
-										defaultValue={searchValues.isGeneralSubject}
+										{...register("isNew")}
+										defaultValue={searchValues.isNew}
 										className="w-40 border border-gray-400 px-3 py-2 appearance-none rounded-md"
 									>
 										<option value={'-1'}>
@@ -152,8 +155,9 @@ const Index = () => {
 						</div>
 						<button
 							type="submit"
+							disabled={!isDirty || !isValid}
 							// className='hidden'
-							className='bg-primary-600 w-fit mb-3 px-8 py-3 rounded-md text-white font-normal shadow cursor-pointer'
+							className={`w-fit mb-3 px-8 py-3 rounded-md font-normal shadow cursor-pointer ${!isDirty ? "bg-gray-600 text-white" : "bg-primary-600 text-white"}`}
 						>Search</button>
 					</div>
 				</form>

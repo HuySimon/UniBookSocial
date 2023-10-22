@@ -19,7 +19,7 @@ const reducer = (state, action) => {
 				...state,
 			};
 		case "LOGOUT":
-			localStorage.removeItem("user");
+			localStorage.setItem("user",JSON.stringify({}));
 			localStorage.setItem("auth", false)
 			return {
 				...state,

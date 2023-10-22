@@ -33,22 +33,10 @@ const Header = () => {
 	const [state, dispatch] = useAuthContext()
 	const { clearSearch } = useSearchContext()
 	const { stateHeader, dispatchHeader } = useHeaderContext()
-	const checkRoleAdmin = () => {
-		if (state.user != null) {
-			if (state.user.user.role === 2) {
-				return true
-			}
-		}
-		else {
-			return false
-		}
-	}
 	const handleButtonClick = (buttonName) => {
 		dispatchHeader({ type: "SET_ACTIVE_BUTTON", payload: buttonName });
 	};
-	console.log(stateHeader	)
 	useEffect(() => {
-		checkRoleAdmin()
 		const checkTabletMode = () => {
 			const tabletWidthThreshold = 768;
 			const inTabletMode = window.innerWidth >= tabletWidthThreshold;
@@ -81,6 +69,7 @@ const Header = () => {
 		Axios.get('/api/v1/users/logout').then(res => {
 			if (res.status === 200) {
 				toast.success("Log out success")
+
 			}
 			navigate('/')
 		}).catch(err => {
@@ -143,25 +132,11 @@ const Header = () => {
 										setActiveOverlay={setActiveOverlay}
 										expand={expand}
 										title={"Profile"}
-										href={`/profile/${state.user.user.id}`}
+										href={`/profile/${JSON.parse(localStorage.getItem("user")).user.id}`}
 										handleCreate={() => { setIsVisibleNotify(false), clearSearch(),handleButtonClick("Profile") }}
 										icon={<img src={`http://127.0.0.1:5000/public/images/users/${state.user.user.avatar}`} className='w-[30px] h-[30px] rounded-full object-cover' />}
 									/>
 								</>
-							)
-						}
-						{
-							localStorage.getItem("user") != null && checkRoleAdmin() && (
-								<SideBarItem
-									index={5}
-									activeOverlay={activeOverlay}
-									setActiveOverlay={setActiveOverlay}
-									expand={expand}
-									title={"Dashboard"}
-									href={"/dashboard"}
-									target={"_blank"}
-									icon={<AiOutlineDashboard size={30} className='z-10' />}
-								/>
 							)
 						}
 					</motion.ul>
@@ -182,7 +157,7 @@ const Header = () => {
 								</div>
 							) : (
 								<div
-									onClick={() => logout()}
+									onClick={() => {logout(),handleButtonClick("Home")}}
 									className="group flex items-center justify-center md:justify-normal text-xl transition-all hover:bg-black/10 hover:text-primary-main p-2 rounded-lg cursor-pointer">
 									<AiOutlineLogout size={30} />
 									<span className={`ml-2 overflow-hidden ${expand ? "w-44" : "w-0 hidden"}`}>Log out</span>
