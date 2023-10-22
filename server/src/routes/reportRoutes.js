@@ -8,11 +8,6 @@ const router = express.Router();
 router.route('/')
   .post(authController.protect,
     authController.restrictTo(RoleEnum.USER),
-    reportController.setUserReport,
-    (req, res, next) => {
-      console.log(req.user)
-      next()
-    },
     reportController.createReport)
 
 module.exports = router

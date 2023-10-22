@@ -4,10 +4,41 @@ const factory = require('./handlerFactory')
 
 const db = require('../models');
 const Report = db.Report
+const Post = db.Post
+const Notification = db.Notification
 
-exports.setUserReport = (req, res, next) => {
+exports.createReport = catchAsync(async (req, res, next) => {
+  //update status post
+  const post = await Post.findByPk(req.body.post);
+
+  if (!post) return next(new AppError('No post found with that ID', 400))
+
+  if (post.status != 'Unconfirm') {
+    return next(new AppError('Unconfirmed posts can only be reported', 400))
+  }
+  post.status = 'Violation'
+  await post.save();
+
+  //create report notification
+  await Notification.create({
+    isSeen: false,
+    userSend: req.user.id,
+    userReceive: post.userPost,
+    typeNoti: 'CheckPost',
+    post: req.body.post
+  })
+
+  //set user report
   req.body.user = req.user.id
-  next();
-}
 
-exports.createReport = factory.createOne(Report)
+  //create report
+  const report = await Report.create(req.body);
+
+
+  res.status(201).json({
+    status: "success",
+    data: {
+      data: report,
+    },
+  });
+})
