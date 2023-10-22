@@ -9,10 +9,12 @@ import Modal from '../Modal';
 import Axios from '../../api/index';
 import { AnimatePresence } from 'framer-motion';
 import { useAuthContext } from '../../hooks/useAuthContext';
+import Report from '../Report'
 const Post = ({ post }) => {
-	const [isVisibleMenuPost, setIsVisibleMenuPost] = useState(false);
-	const [isVisibleEditPost, setIsVisibleEditPost] = useState(false);
-	const [isVisibleModalDelete, setIsVisibleModalDelete] = useState(false);
+	const [isVisibleMenuPost, setIsVisibleMenuPost] = useState(false)
+	const [isVisibleReport, setIsVisibleReport] = useState(false)
+	const [isVisibleEditPost, setIsVisibleEditPost] = useState(false)
+	const [isVisibleModalDelete, setIsVisibleModalDelete] = useState(false)
 	const [timeAgo, setTimeAgo] = useState('');
 	const [state, dispatch] = useAuthContext()
 	const handleVisibleMenuPost = () => {
@@ -22,6 +24,9 @@ const Post = ({ post }) => {
 		{
 			title: 'Report',
 			icon: AiOutlineAlert,
+			handle: () => {
+				setIsVisibleReport(!isVisibleReport)
+			}
 		},
 		{
 			title: 'Edit Post',
@@ -178,6 +183,11 @@ const Post = ({ post }) => {
 						setIsVisibleModalDelete={setIsVisibleModalDelete}
 					/>
 				)}
+				{
+					isVisibleReport && (
+						<Report post={post} setIsVisibleReport={setIsVisibleReport} />
+					)
+				}
 			</AnimatePresence>
 		</>
 	);
