@@ -18,6 +18,7 @@ import DetailPost from "../components/Post/DetailPost";
 import EditPost from "../components/Post/EditPost";
 import { AllPostLoader } from "../views/pages/Home";
 import { About, HistoryConfirm, HistoryPost, Review } from "../views/pages/Profile/ProfileItem";
+import InitPage from "../views/pages/Search/InitPage";
 const router = createBrowserRouter([
 	{
 		path: "/",
@@ -52,7 +53,13 @@ const router = createBrowserRouter([
 			},
 			{
 				path: "/search",
-				element: <Search />
+				element: <Search />,
+				children: [
+					{
+						index: true,
+						element: <InitPage />
+					}
+				]
 			},
 		]
 	},
