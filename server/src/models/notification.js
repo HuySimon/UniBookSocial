@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     isSeen: DataTypes.BOOLEAN,
     typeNoti: DataTypes.STRING,
     content: DataTypes.TEXT,
+    post: DataTypes.INTEGER,
     userSend: DataTypes.STRING,
     userReceive: DataTypes.STRING
   }, {
