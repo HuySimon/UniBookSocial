@@ -18,16 +18,15 @@ router.get("/me", userController.getMe, userController.getUser);
 router.patch("/updateMe", userController.updateMe);
 router.delete("/deleteMe", userController.deleteMe);
 
-router.use(authController.restrictTo(2))
 router
   .route("/")
-  .get(userController.getAllUsers)
-  .post(userController.createUser);
+  .get(authController.restrictTo(2), userController.getAllUsers)
+  .post(authController.restrictTo(2), userController.createUser);
 
 router
   .route("/:id")
   .get(userController.getUser)
-  .patch(userController.updateUser)
-  .delete(userController.deleteUser);
+  .patch(authController.restrictTo(2), userController.updateUser)
+  .delete(authController.restrictTo(2), userController.deleteUser);
 
 module.exports = router;

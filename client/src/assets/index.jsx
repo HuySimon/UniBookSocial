@@ -5,4 +5,6 @@ import SignupImg from './signupImg.png'
 import Avatar from './avatar.png'
 import PlaceHolderPostImg from './placeholder.jpg'
 import AvatarUser from './avataruser.jpg'
-export { LoginImg, Logo, Portrait, SignupImg, Avatar, PlaceHolderPostImg , AvatarUser}
+import NoResultFound from './noResultFound.png'
+import InitSearchImage from './initSearch.png'
+export { NoResultFound, LoginImg, Logo, Portrait, SignupImg, Avatar, PlaceHolderPostImg, AvatarUser, InitSearchImage }

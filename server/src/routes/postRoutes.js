@@ -13,19 +13,15 @@ router.patch(
 );
 
 router
-  .route("/")
-  .get(postController.getAllPosts)
-  .post(
-    authController.protect,
-    authController.restrictTo(1),
-    (req, res, next) => {
-      console.log(req.body)
-      next()
-    },
-    uploadImgMiddleware.uploadSingleImg('mainImage'),
-    postController.setUserPost,
-    postController.createPost
-  );
+	.route("/")
+	.get(postController.getAllPosts)
+	.post(
+		authController.protect,
+		authController.restrictTo(1),
+		uploadImgMiddleware.uploadSingleImg('mainImage', 'public/images/posts'),
+		postController.setUserPost,
+		postController.createPost
+	);
 router
 	.route("/:id")
 	.get(postController.getPost)

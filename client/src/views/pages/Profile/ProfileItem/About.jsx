@@ -4,9 +4,10 @@ import { useAuthContext } from '../../../../hooks/useAuthContext'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Axios from '../../../../api/index'
 import { toast } from 'react-toastify'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import ChangePasswordProfile from './AboutComponents/ChangePasswordProfile'
 import { changeInformationSchema } from '../../../../validations/ProfileValidation'
+import { getCurrentUser } from '../../../../api/APIUser'
 
 function isObjectEmpty(obj) {
 	return Object.keys(obj).length === 0;
@@ -15,6 +16,7 @@ function isObjectEmpty(obj) {
 const About = () => {
 
 	const [currentUser, setCurrentUser] = useState({});
+	const userID = useParams()
 	const [edit, setEdit] = useState(false)
 	const handleEdit = () => {
 		setEdit(!edit)
@@ -38,6 +40,15 @@ const About = () => {
 		})
 
 	useEffect(() => {
+		// const getUser = async () => {
+		// 	try {
+		// 		const res = await Axios.get(`/api/v1/users/${userID.id}`)
+		// 		console.log(res.data.data.data)
+		// 	} catch (err) {
+		// 		console.log(err)
+		// 	}
+		// }
+		// getUser()
 		Axios.get('/api/v1/users/me').then(res => {
 			setCurrentUser(res.data.data.data)
 		}).catch(err => {
@@ -45,6 +56,7 @@ const About = () => {
 			navigate('/')
 		})
 	}, [reset])
+
 	const handleEditInformation = async (data) => {
 		const fieldsToTrack = [
 			'firstName',
