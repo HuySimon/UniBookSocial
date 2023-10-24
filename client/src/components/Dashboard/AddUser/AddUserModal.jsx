@@ -7,6 +7,7 @@ import Axios from '../../../api/index';
 
 // eslint-disable-next-line react/prop-types, no-unused-vars
 function AddUserModal({ onClose, onAddUser }) {
+    const [formErrors, setFormErrors] = useState({});
     const modalRef = useRef(null);
 
     // const [firstName, setFirstName] = useState('');
@@ -33,29 +34,69 @@ function AddUserModal({ onClose, onAddUser }) {
         }));
     };
 
-    const handleSaveClick = async () => {
-        const newUser = {
-            email: '',
-            firstName: '',
-            lastName: '',
-            phoneNumber: '',
-            role: '',
-            password: '',
-        };
+    const validateForm = () => {
+        let errors = {};
+        if (!formData.firstName) {
+            errors.firstName = 'First Name is required';
+        }
+        if (!formData.lastName) {
+            errors.lastName = 'Last Name is required';
+        }
 
-        try {
-            const url = `/api/v1/users`;
-            const res = await Axios.post(url, formData);
-            // const data = res.data.data.data;
-            console.log(res.data.data.data);
-            onAddUser(newUser);
-            onClose();
-            if (res.status === 201) {
-                toast.success('Thêm người dùng thành công!');
+        const regex = /\S+@\S+\.\S+/;
+
+        if (!formData.email) {
+            errors.email = 'Email is required';
+        } else if (!regex.test(formData.email)) {
+            errors.email = 'Please enter a valid email address';
+        }
+
+        const phoneRegrex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+        if (!formData.phoneNumber) {
+            errors.phoneNumber = 'Phone Number is required';
+        } else if (!phoneRegrex.test(formData.phoneNumber)) {
+            errors.phoneNumber = 'Please enter a valid phone number';
+        }
+        if (!formData.role) {
+            errors.role = 'Role is required';
+        }
+
+        const passwordRegex = /^.{6,}$/;
+        if (!formData.password) {
+            errors.password = 'Password is required';
+        } else if (!passwordRegex.test(formData.password)) {
+            errors.password = 'Please enter a minimum of 6 characters';
+        }
+
+        setFormErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
+
+    const handleSaveClick = async () => {
+        if (validateForm()) {
+            const newUser = {
+                email: '',
+                firstName: '',
+                lastName: '',
+                phoneNumber: '',
+                role: '',
+                password: '',
+            };
+
+            try {
+                const url = `/api/v1/users`;
+                const res = await Axios.post(url, formData);
+                // const data = res.data.data.data;
+                console.log(res.data.data.data);
+                onAddUser(newUser);
+                onClose();
+                if (res.status === 201) {
+                    toast.success('Thêm người dùng thành công!');
+                }
+            } catch (error) {
+                console.error(error);
+                toast.error('Thêm người dùng thất bại!');
             }
-        } catch (error) {
-            console.error(error);
-            toast.error('Thêm người dùng thất bại!');
         }
     };
 
@@ -63,10 +104,6 @@ function AddUserModal({ onClose, onAddUser }) {
         if (modalRef.current && !modalRef.current.contains(event.target)) {
             onClose();
         }
-    };
-
-    const handleCloseClick = () => {
-        onClose();
     };
 
     useEffect(() => {
@@ -90,7 +127,7 @@ function AddUserModal({ onClose, onAddUser }) {
                     <div className="flex items-start justify-between p-4 border-b rounded-t">
                         <h3 className="text-xl font-semibold text-gray-900">Add user</h3>
                         <AiOutlineClose
-                            onClick={handleCloseClick}
+                            onClick={() => onClose()}
                             size={22}
                             className="fixed top-4 right-4 text-white cursor-pointer hover:rotate-[360deg] transition-all duration-300 z-20"
                         />
@@ -112,6 +149,7 @@ function AddUserModal({ onClose, onAddUser }) {
                                     placeholder="Bonnie"
                                     required=""
                                 />
+                                {formErrors.firstName && <p className="text-sm text-red-600">{formErrors.firstName}</p>}
                             </div>
                             <div className="col-span-6 sm:col-span-3">
                                 <label htmlFor="last-name" className="block mb-2 text-sm font-medium text-gray-900 ">
@@ -127,6 +165,7 @@ function AddUserModal({ onClose, onAddUser }) {
                                     placeholder="Green"
                                     required=""
                                 />
+                                {formErrors.lastName && <p className="text-sm text-red-500">{formErrors.lastName}</p>}
                             </div>
                             <div className="col-span-6 sm:col-span-3">
                                 <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">
@@ -142,6 +181,7 @@ function AddUserModal({ onClose, onAddUser }) {
                                     placeholder="example@company.com"
                                     required=""
                                 />
+                                {formErrors.email && <p className="text-sm text-red-500">{formErrors.email}</p>}
                             </div>
                             <div className="col-span-6 sm:col-span-3">
                                 <label htmlFor="phone-number" className="block mb-2 text-sm font-medium text-gray-900 ">
@@ -157,7 +197,9 @@ function AddUserModal({ onClose, onAddUser }) {
                                     placeholder="e.g. +(12)3456 789"
                                     required=""
                                 />
-                                <p className="text-sm text-red-600">Please enter title</p>
+                                {formErrors.phoneNumber && (
+                                    <p className="text-sm text-red-500">{formErrors.phoneNumber}</p>
+                                )}
                             </div>
                             <div className="col-span-6 sm:col-span-3">
                                 <label htmlFor="department" className="block mb-2 text-sm font-medium text-gray-900 ">
@@ -175,6 +217,7 @@ function AddUserModal({ onClose, onAddUser }) {
                                     <option value="2">Admin</option>
                                     <option value="3">Post management</option>
                                 </select>
+                                {formErrors.role && <p className="text-sm text-red-500">{formErrors.role}</p>}
                             </div>
                             <div className="col-span-6 sm:col-span-3">
                                 <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 ">
@@ -190,6 +233,7 @@ function AddUserModal({ onClose, onAddUser }) {
                                     placeholder="••••••••"
                                     required=""
                                 />
+                                {formErrors.password && <p className="text-sm text-red-500">{formErrors.password}</p>}
                             </div>
                         </div>
                     </div>
