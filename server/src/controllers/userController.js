@@ -69,8 +69,20 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
 });
 
 exports.createUser = factory.createOne(User)
-exports.getAllUsers = factory.getAll(User)
+exports.getAllUsers = catchAsync
 exports.getUser = factory.getOne(User)
 //Do not update password with this!
 exports.updateUser = factory.updateOne(User);
-exports.deleteUser = factory.deleteOne(User);
+exports.deleteUser = catchAsync(async (req, res, next) => {
+  const user = await User.update({ status: 'Disabled' }, {
+    where: { id: req.user.id },
+  });
+  if (!user) {
+    return next(new AppError('No user found with that ID', 404));
+  }
+
+  res.status(204).json({
+    status: 'success',
+    data: null
+  });
+})
