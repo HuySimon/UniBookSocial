@@ -1,5 +1,7 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useState } from 'react';
 
+// eslint-disable-next-line react/prop-types
 function Filter({ onFilter }) {
     const [selectedOption, setSelectedOption] = useState('All');
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
