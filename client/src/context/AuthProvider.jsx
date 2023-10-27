@@ -31,7 +31,7 @@ const reducer = (state, action) => {
 
 export const AuthProvider = ({ children }) => {
 	const [state, dispatch] = useReducer(reducer, initialState)
-
+	console.log('context render')
 	const value = useMemo(() => ({ state, dispatch }), [state, dispatch])
 
 	return (

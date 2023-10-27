@@ -54,13 +54,13 @@ const Header = () => {
 			icon: PiHouseLight,
 			title: "Home",
 			link: "/",
-			handleCreate: () => { setIsVisibleNotify(false), clearSearch(),handleButtonClick("Home") },
+			handleCreate: () => { setIsVisibleNotify(false), clearSearch(), handleButtonClick("Home") },
 		},
 		{
 			icon: CiSearch,
 			title: "Search",
 			link: "/search",
-			handleCreate: () => { setIsVisibleNotify(false),handleButtonClick("Search") },
+			handleCreate: () => { setIsVisibleNotify(false), handleButtonClick("Search") },
 		},
 	]
 	const logout = () => {
@@ -113,7 +113,7 @@ const Header = () => {
 										activeOverlay={activeOverlay}
 										setActiveOverlay={setActiveOverlay}
 										expand={expand}
-										handleCreate={() => { setIsVisibleNotify(!isVisibleNotify),handleButtonClick(!isVisibleNotify ? "Notification" : "Home") }}
+										handleCreate={() => { setIsVisibleNotify(!isVisibleNotify), handleButtonClick(!isVisibleNotify ? "Notification" : "Home") }}
 										icon={<PiHeartLight size={30} className='z-10' />}
 									/>
 									<SideBarItem
@@ -123,7 +123,7 @@ const Header = () => {
 										activeOverlay={activeOverlay}
 										setActiveOverlay={setActiveOverlay}
 										expand={expand}
-										handleCreate={() => { setIsVisiblePost(!isVisiblePost)}}
+										handleCreate={() => { setIsVisiblePost(!isVisiblePost) }}
 										icon={<PiPlusCircleLight size={30} className='z-10' />}
 									/>
 									<SideBarItem
@@ -133,8 +133,8 @@ const Header = () => {
 										expand={expand}
 										title={"Profile"}
 										href={`/profile/${JSON.parse(localStorage.getItem("user")).user.id}`}
-										handleCreate={() => { setIsVisibleNotify(false), clearSearch(),handleButtonClick("Profile") }}
-										icon={<img src={`http://127.0.0.1:5000/public/images/users/${state.user.user.avatar}`} className='w-[30px] h-[30px] rounded-full object-cover' />}
+										handleCreate={() => { setIsVisibleNotify(false), clearSearch(), handleButtonClick("Profile") }}
+										icon={<img src={`http://127.0.0.1:5000/public/images/users/${JSON.parse(localStorage.getItem("user")).user.avatar}`} className='w-[30px] h-[30px] rounded-full object-cover' />}
 									/>
 								</>
 							)
@@ -157,7 +157,7 @@ const Header = () => {
 								</div>
 							) : (
 								<div
-									onClick={() => {logout(),handleButtonClick("Home")}}
+									onClick={() => { logout(), handleButtonClick("Home") }}
 									className="group flex items-center justify-center md:justify-normal text-xl transition-all hover:bg-black/10 hover:text-primary-main p-2 rounded-lg cursor-pointer">
 									<AiOutlineLogout size={30} />
 									<span className={`ml-2 overflow-hidden ${expand ? "w-44" : "w-0 hidden"}`}>Log out</span>

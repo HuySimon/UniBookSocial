@@ -22,13 +22,6 @@ const Post = ({ post }) => {
 	};
 	const menuOption = [
 		{
-			title: 'Report',
-			icon: AiOutlineAlert,
-			handle: () => {
-				setIsVisibleReport(!isVisibleReport)
-			}
-		},
-		{
 			title: 'Edit Post',
 			icon: AiOutlineEdit,
 			handle: () => {
@@ -99,18 +92,30 @@ const Post = ({ post }) => {
 						{isVisibleMenuPost && (
 							<div className="w-44 h-fit bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] absolute top-14 right-5 rounded-md overflow-hidden">
 								<div className="flex flex-col relative">
-									{menuOption.map((item, index) => (
-										<button
-											key={index}
-											type="button"
-											onClick={item.handle}
-											className={`flex gap-4 p-2 hover:bg-black/10 transition-all z-10 ${index != menuOption.length && 'border-b'
-												}`}
-										>
-											<item.icon size={22} />
-											<p className="font-medium">{item.title}</p>
-										</button>
-									))}
+									<button
+										type="button"
+										onClick={() => { setIsVisibleReport(!isVisibleReport) }}
+										className={`flex gap-4 p-2 hover:bg-black/10 transition-all z-10 border-b`}>
+										<AiOutlineAlert size={22} />
+										<p className="font-medium">Report</p>
+									</button>
+									{
+										post.userPost === JSON.parse(localStorage.getItem("user")).user.id && localStorage.getItem("user") && (
+											menuOption.map((item, index) => (
+												<button
+													key={index}
+													type="button"
+													onClick={item.handle}
+													className={`flex gap-4 p-2 hover:bg-black/10 transition-all z-10 ${index != menuOption.length && 'border-b'
+														}`}
+												>
+													<item.icon size={22} />
+													<p className="font-medium">{item.title}</p>
+												</button>
+											))
+
+										)
+									}
 									<AiFillCaretRight
 										className="absolute rotate-[180deg] -right-2 -top-[14px] text-white"
 										size={30}
