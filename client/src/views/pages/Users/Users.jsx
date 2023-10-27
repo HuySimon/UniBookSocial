@@ -53,7 +53,7 @@ const Users = () => {
                 url += ``;
             }
 
-            console.log(filterValue != '' && searchTerm != '');
+            // console.log(filterValue != '' && searchTerm != '');
 
             if (filterValue != '' && searchTerm != '') {
                 url += `&filter=and(contains(username,'${searchTerm}'),equals(role,'${filterValue}'))`;

@@ -11,7 +11,7 @@ import Axios from '../../../api/index';
 import Search from '../../../components/Dashboard/Search';
 // import Post from '../../../components/Dashboard/Post/Post';
 
-function Index() {
+function Posts() {
     const [postList, setPostList] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
@@ -190,7 +190,11 @@ function Index() {
                                         <th className="border-b p-2 border-gray-500 font-medium text-sm">Price</th>
                                         <th className="border-b p-2 border-gray-500 font-medium text-sm">Major</th>
                                         <th className="border-b p-2 border-gray-500 font-medium text-sm">Type</th>
-                                        <th className="p-2 font-medium text-sm">Description</th>
+                                        <th className="border-b p-2 border-gray-500 font-medium text-sm">
+                                            Description
+                                        </th>
+                                        <th className="border-b p-2 border-gray-500 font-medium text-sm">Email</th>
+                                        <th className="p-2 font-medium text-sm">Content Reports</th>
                                     </thead>
                                     <tbody className="flex flex-col w-1/2 xl:w-4/5">
                                         <td className="p-2 text-sm">{post.title}</td>
@@ -198,6 +202,10 @@ function Index() {
                                         <td className="p-2 border-t border-gray-500 text-sm">General Subject</td>
                                         <td className="p-2 border-t border-gray-500 text-sm">Old</td>
                                         <td className="p-2 border-t border-gray-500 text-sm">{post.description}</td>
+                                        <td className="p-2 border-t border-gray-500 text-sm">
+                                            anhhuy2452003@gmail.com
+                                        </td>
+                                        <td className="p-2 border-t border-gray-500 text-sm">Hình ảnh nhạy cảm</td>
                                     </tbody>
                                 </table>
                                 <div className="flex justify-end">
@@ -346,4 +354,4 @@ function Index() {
     );
 }
 
-export default Index;
+export default Posts;
