@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Notification extends Model {
     /**
@@ -13,16 +11,59 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  Notification.init({
-    isSeen: DataTypes.BOOLEAN,
-    typeNoti: DataTypes.STRING,
-    content: DataTypes.TEXT,
-    post: DataTypes.INTEGER,
-    userSend: DataTypes.STRING,
-    userReceive: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'Notification',
-  });
+  Notification.init(
+    {
+      isSeen: {
+        allowNull: false,
+        type: DataTypes.BOOLEAN,
+        validate: {
+          notNull: {
+            msg: "Please provide a valid isSeen!",
+          },
+        },
+      },
+      typeNoti: {
+        type: DataTypes.STRING,
+        validate: {
+          isIn: [["Confirm", "Unconfirm", "CheckPost", "Violation"]],
+        },
+      },
+      content: DataTypes.TEXT,
+      post: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+        validate: {
+          isNumeric: true,
+          notNull: {
+            msg: "Please provide a valid post!",
+          },
+        },
+      },
+      userSend: {
+        allowNull: false,
+        isNumeric: true,
+        type: DataTypes.INTEGER,
+        validate: {
+          notNull: {
+            msg: "Please provide a valid userSend!",
+          },
+        },
+      },
+      userReceive: {
+        allowNull: false,
+        isNumeric: true,
+        type: DataTypes.INTEGER,
+        validate: {
+          notNull: {
+            msg: "Please provide a valid userReceive!",
+          },
+        },
+      },
+    },
+    {
+      sequelize,
+      modelName: "Notification",
+    }
+  );
   return Notification;
 };
