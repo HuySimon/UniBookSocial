@@ -9,6 +9,7 @@ import { PlaceHolderPostImg } from '../../../assets';
 import './Posts.scss';
 import Axios from '../../../api/index';
 import Search from '../../../components/Dashboard/Search';
+import ModalMessage from '../../../components/Dashboard/ModalMessage/ModalMessage';
 // import Post from '../../../components/Dashboard/Post/Post';
 
 function Posts() {
@@ -17,6 +18,16 @@ function Posts() {
     const [totalPages, setTotalPages] = useState(0);
     const [itemsPerPage] = useState(2);
     const [searchTerm, setSearchTerm] = useState('');
+    const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const handleCheckboxChange = () => {
+        setIsCheckboxChecked(!isCheckboxChecked);
+    };
+
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
 
     const fetchData = async () => {
         try {
@@ -210,7 +221,12 @@ function Posts() {
                                 </table>
                                 <div className="flex justify-end">
                                     <label className="checkbox">
-                                        <input type="checkbox" id="checkbox-eins" />
+                                        <input
+                                            checked={isCheckboxChecked}
+                                            onChange={handleCheckboxChange}
+                                            type="checkbox"
+                                            id="checkbox-eins"
+                                        />
                                         <div className="checkbox__indicator"></div>
                                     </label>
                                     <Link
@@ -350,6 +366,8 @@ function Posts() {
             </div>
             {/* Pagination */}
             <Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={handlePageChange} />
+            {/* Modal Popup Message */}
+            {isModalOpen && <ModalMessage />}
         </div>
     );
 }
