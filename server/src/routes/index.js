@@ -4,6 +4,7 @@ const postRouter = require("./postRoutes");
 const roleRouter = require("./roleRoutes");
 const reportRouter = require("./reportRoutes");
 const reviewRouter = require("./reviewRouters");
+const notificationRouter = require("./notificationRouters");
 
 const initRoutes = (app) => {
   app.use("/api/v1/users", userRouter);
@@ -11,6 +12,7 @@ const initRoutes = (app) => {
   app.use("/api/v1/roles", roleRouter);
   app.use("/api/v1/reports", reportRouter);
   app.use("/api/v1/reviews", reviewRouter);
+  app.use("/api/v1/notifications", notificationRouter);
 
   // app.all('*', (req, res, next) => {
   //   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
