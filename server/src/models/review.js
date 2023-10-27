@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Review extends Model {
     /**
@@ -13,14 +11,55 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  Review.init({
-    numStars: DataTypes.INTEGER,
-    content: DataTypes.STRING,
-    user: DataTypes.STRING,
-    post: DataTypes.INTEGER
-  }, {
-    sequelize,
-    modelName: 'Review',
-  });
+  Review.init(
+    {
+      numStars: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+        validate: {
+          isNumeric: true,
+          notNull: {
+            msg: "Please provide a valid numStarts!",
+          },
+          notEmpty: {
+            msg: "numStarts mustn't be empty!",
+          },
+        },
+      },
+      content: {
+        type: DataTypes.TEXT,
+      },
+      user: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+        validate: {
+          isNumeric: true,
+          notNull: {
+            msg: "Please provide a valid user!",
+          },
+          notEmpty: {
+            msg: "user mustn't be empty!",
+          },
+        },
+      },
+      post: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+        validate: {
+          isNumeric: true,
+          notNull: {
+            msg: "Please provide a valid post!",
+          },
+          notEmpty: {
+            msg: "post mustn't be empty!",
+          },
+        },
+      },
+    },
+    {
+      sequelize,
+      modelName: "Review",
+    }
+  );
   return Review;
 };
