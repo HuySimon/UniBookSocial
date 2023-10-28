@@ -1,22 +1,50 @@
-function ModalMessage() {
+// eslint-disable-next-line no-unused-vars
+import React, { useState, useRef, useEffect } from 'react';
+import { AiOutlineClose } from 'react-icons/ai';
+
+// eslint-disable-next-line react/prop-types
+function ModalMessage({ postID, isOpen, onClose, messageId }) {
+    const modalRef = useRef(null);
+
+    const handleClickOutside = (event) => {
+        if (modalRef.current && !modalRef.current.contains(event.target)) {
+            onClose(postID, false);
+        }
+    };
+    // const handleClickOutside = (event) => {
+    //     if (modalRef.current && !modalRef.current.contains(event.target)) {
+    //         onClose(messageId, false);
+    //     }
+    // };
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
     return (
         <div
-            id="addUserModal"
+            id={postID}
             tabIndex="-1"
             aria-hidden="true"
+            // className={`fixed top-0 left-0 right-0 z-50 items-center justify-center flex w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 max-h-full bg-opacity-50 bg-black ${
+            //     isOpen ? '' : 'hidden '
+            // }`}
             className="fixed top-0 left-0 right-0 z-50 items-center justify-center flex w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 max-h-full bg-opacity-50 bg-black"
         >
-            <div className="relative w-full max-w-2xl max-h-full">
+            <div id={postID} ref={modalRef} className="relative w-full max-w-2xl max-h-full">
                 {/* <!-- Modal content --> */}
                 <form action="#" className="relative bg-white rounded-lg shadow">
                     {/* <!-- Modal header --> */}
                     <div className="flex items-start justify-between p-4 border-b rounded-t">
                         <h3 className="text-xl font-semibold text-gray-900">Notice of violation</h3>
-                        {/* <AiOutlineClose
-                        onClick={() => onClose()}
-                        size={22}
-                        className="fixed top-4 right-4 text-white cursor-pointer hover:rotate-[360deg] transition-all duration-300 z-20"
-                    /> */}
+                        <AiOutlineClose
+                            onClick={() => onClose(postID, false)}
+                            size={22}
+                            className="fixed top-4 right-4 text-white cursor-pointer hover:rotate-[360deg] transition-all duration-300 z-20"
+                        />
                     </div>
                     {/* <!-- Modal body --> */}
                     <div className="p-6 space-y-6">

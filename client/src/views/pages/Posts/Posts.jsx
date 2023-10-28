@@ -9,7 +9,7 @@ import { PlaceHolderPostImg } from '../../../assets';
 import './Posts.scss';
 import Axios from '../../../api/index';
 import Search from '../../../components/Dashboard/Search';
-import ModalMessage from '../../../components/Dashboard/ModalMessage/ModalMessage';
+import ModalMessage from '../../../components/Dashboard/ModalMessage';
 // import Post from '../../../components/Dashboard/Post/Post';
 
 function Posts() {
@@ -18,16 +18,8 @@ function Posts() {
     const [totalPages, setTotalPages] = useState(0);
     const [itemsPerPage] = useState(2);
     const [searchTerm, setSearchTerm] = useState('');
-    const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
-    const handleCheckboxChange = () => {
-        setIsCheckboxChecked(!isCheckboxChecked);
-    };
-
-    const openModal = () => {
-        setIsModalOpen(true);
-    };
+    const [checkboxStates, setCheckboxStates] = useState([]);
+    const [selectedModalId, setSelectedModalId] = useState(null);
 
     const fetchData = async () => {
         try {
@@ -66,7 +58,11 @@ function Posts() {
             // const url = `/api/v1/users?page[number]=${currentPage}&page[size]=${itemsPerPage}&filter=or(contains(username,'${searchValue}'),equals(role,'${filterValue}'))`
             const response = await Axios.get(url);
             const data = response.data.data.data;
-            console.log(response);
+            const initialCheckboxStates = data.map((post) => ({
+                id: post.id,
+                checked: false,
+            }));
+            setCheckboxStates(initialCheckboxStates);
             setPostList(data);
 
             const totalItems = response.data.totalItem;
@@ -102,6 +98,25 @@ function Posts() {
     //
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
+    };
+
+    // Handle Close Modal
+    const handleModalClose = (postId) => {
+        setCheckboxStates((prevState) =>
+            prevState.map((checkbox) => (checkbox.id === postId ? { ...checkbox, checked: false } : checkbox)),
+        );
+        if (postId === selectedModalId) {
+            setSelectedModalId(null);
+        }
+    };
+
+    // Handle Checkbox
+    const handleCheckboxChange = (postId) => {
+        const checked = checkboxStates.find((checkbox) => checkbox.id === postId)?.checked || false;
+        setCheckboxStates((prevState) =>
+            prevState.map((checkbox) => (checkbox.id === postId ? { ...checkbox, checked: !checked } : checkbox)),
+        );
+        setSelectedModalId(postId);
     };
 
     return (
@@ -222,10 +237,13 @@ function Posts() {
                                 <div className="flex justify-end">
                                     <label className="checkbox">
                                         <input
-                                            checked={isCheckboxChecked}
-                                            onChange={handleCheckboxChange}
+                                            checked={
+                                                checkboxStates.find((checkbox) => checkbox.id === post.id)?.checked ||
+                                                false
+                                            }
+                                            onChange={() => handleCheckboxChange(post.id)}
                                             type="checkbox"
-                                            id="checkbox-eins"
+                                            id={post.id}
                                         />
                                         <div className="checkbox__indicator"></div>
                                     </label>
@@ -245,7 +263,7 @@ function Posts() {
                         </div>
                     ))
                 ) : (
-                    <tr key="1" className="bg-white border-b -800 -700 hover:bg-gray-50">
+                    <tr id="NotFound" className="bg-white border-b -800 -700 hover:bg-gray-50">
                         <td className="px-6 py-4">This post could not be found</td>
                     </tr>
                 )}
@@ -367,7 +385,9 @@ function Posts() {
             {/* Pagination */}
             <Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={handlePageChange} />
             {/* Modal Popup Message */}
-            {isModalOpen && <ModalMessage />}
+            {selectedModalId && (
+                <ModalMessage postId={selectedModalId} onClose={() => handleModalClose(selectedModalId)} />
+            )}
         </div>
     );
 }
