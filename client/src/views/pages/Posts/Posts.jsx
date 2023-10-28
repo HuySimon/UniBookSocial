@@ -27,7 +27,7 @@ function Posts() {
             // const isValid = emailRegex.test(searchTerm);
             // setIsEmailValid(isValid);
 
-            let url = `/api/v1/posts?page[number]=${currentPage}&page[size]=2`;
+            let url = `/api/v1/posts?include=userPostData,reportData&page[number]=${currentPage}&page[size]=2`;
 
             // if (searchTerm && isEmailValid === true) {
             //     url += `&filter=or(contains(email,'${searchTerm}'))`;
@@ -229,7 +229,7 @@ function Posts() {
                                         <td className="p-2 border-t border-gray-500 text-sm">Old</td>
                                         <td className="p-2 border-t border-gray-500 text-sm">{post.description}</td>
                                         <td className="p-2 border-t border-gray-500 text-sm">
-                                            anhhuy2452003@gmail.com
+                                            {post.userPostData.email}
                                         </td>
                                         <td className="p-2 border-t border-gray-500 text-sm">Hình ảnh nhạy cảm</td>
                                     </tbody>
