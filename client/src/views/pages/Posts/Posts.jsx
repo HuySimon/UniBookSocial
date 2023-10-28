@@ -18,6 +18,7 @@ function Posts() {
     const [totalPages, setTotalPages] = useState(0);
     const [itemsPerPage] = useState(2);
     const [searchTerm, setSearchTerm] = useState('');
+    const [isEmailValid, setIsEmailValid] = useState(true);
     const [checkboxStates, setCheckboxStates] = useState([]);
     const [selectedModalId, setSelectedModalId] = useState(null);
 
@@ -34,10 +35,13 @@ function Posts() {
             // } else if (searchTerm && isEmailValid === false) {
             //     url += `&filter=or(contains(username,'${searchTerm}'))`;
             // }
-            if (searchTerm) {
+            if (searchTerm && isEmailValid === true) {
+                url += `&filter=or(contains(title,'${searchTerm}'))`;
+            } else if (searchTerm && isEmailValid === false) {
                 url += `&filter=or(contains(title,'${searchTerm}'))`;
             }
 
+            //  url += `&filter=or(contains(title,'${searchTerm}'))`;
             // if (filterValue != 'All' && filterValue != '') {
             //     url += `&filter=or(equals(role,'${filterValue}'))`;
             // } else {

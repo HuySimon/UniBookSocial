@@ -35,10 +35,6 @@ const Users = () => {
 
     const fetchData = async () => {
         try {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            const isValid = emailRegex.test(searchTerm);
-            setIsEmailValid(isValid);
-
             let url = `/api/v1/users?page[number]=${currentPage}&page[size]=10`;
 
             if (searchTerm && isEmailValid === true) {
@@ -157,7 +153,7 @@ const Users = () => {
             setIsEditModalOpen(false);
             if (res.status === 200) {
                 Swal.fire({
-                    title: 'Chỉnh sửa thành công!',
+                    title: 'Edited Successfully!',
                     icon: 'success',
                     confirmButtonText: 'OK',
                 });
@@ -165,7 +161,7 @@ const Users = () => {
             fetchData();
         } catch (error) {
             Swal.fire({
-                title: 'Lỗi',
+                title: 'Error',
                 text: error.message,
                 icon: 'error',
                 confirmButtonText: 'OK',
