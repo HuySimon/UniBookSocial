@@ -9,32 +9,35 @@ import { PlaceHolderPostImg } from '../../../assets';
 import './Posts.scss';
 import Axios from '../../../api/index';
 import Search from '../../../components/Dashboard/Search';
+import ModalMessage from '../../../components/Dashboard/ModalMessage';
 // import Post from '../../../components/Dashboard/Post/Post';
 
-function Index() {
+function Posts() {
     const [postList, setPostList] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [itemsPerPage] = useState(2);
     const [searchTerm, setSearchTerm] = useState('');
+    const [isEmailValid, setIsEmailValid] = useState(true);
+    const [checkboxStates, setCheckboxStates] = useState([]);
+    const [selectedModalId, setSelectedModalId] = useState(null);
 
     const fetchData = async () => {
         try {
-            // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            // const isValid = emailRegex.test(searchTerm);
-            // setIsEmailValid(isValid);
-
-            let url = `/api/v1/posts?page[number]=${currentPage}&page[size]=2`;
+            let url = `/api/v1/posts?include=userPostData,reportData&page[number]=${currentPage}&page[size]=2`;
 
             // if (searchTerm && isEmailValid === true) {
             //     url += `&filter=or(contains(email,'${searchTerm}'))`;
             // } else if (searchTerm && isEmailValid === false) {
             //     url += `&filter=or(contains(username,'${searchTerm}'))`;
             // }
-            if (searchTerm) {
+            if (searchTerm && isEmailValid === true) {
+                url += `&filter=or(contains(title,'${searchTerm}'))`;
+            } else if (searchTerm && isEmailValid === false) {
                 url += `&filter=or(contains(title,'${searchTerm}'))`;
             }
 
+            //  url += `&filter=or(contains(title,'${searchTerm}'))`;
             // if (filterValue != 'All' && filterValue != '') {
             //     url += `&filter=or(equals(role,'${filterValue}'))`;
             // } else {
@@ -55,7 +58,11 @@ function Index() {
             // const url = `/api/v1/users?page[number]=${currentPage}&page[size]=${itemsPerPage}&filter=or(contains(username,'${searchValue}'),equals(role,'${filterValue}'))`
             const response = await Axios.get(url);
             const data = response.data.data.data;
-            console.log(response);
+            const initialCheckboxStates = data.map((post) => ({
+                id: post.id,
+                checked: false,
+            }));
+            setCheckboxStates(initialCheckboxStates);
             setPostList(data);
 
             const totalItems = response.data.totalItem;
@@ -80,6 +87,10 @@ function Index() {
     const handleSearch = (value) => {
         setSearchTerm(value);
         setCurrentPage(1);
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const isValid = emailRegex.test(value);
+        setIsEmailValid(isValid);
     };
 
     // eslint-disable-next-line no-unused-vars
@@ -91,6 +102,25 @@ function Index() {
     //
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
+    };
+
+    // Handle Close Modal
+    const handleModalClose = (postId) => {
+        setCheckboxStates((prevState) =>
+            prevState.map((checkbox) => (checkbox.id === postId ? { ...checkbox, checked: false } : checkbox)),
+        );
+        if (postId === selectedModalId) {
+            setSelectedModalId(null);
+        }
+    };
+
+    // Handle Checkbox
+    const handleCheckboxChange = (postId) => {
+        const checked = checkboxStates.find((checkbox) => checkbox.id === postId)?.checked || false;
+        setCheckboxStates((prevState) =>
+            prevState.map((checkbox) => (checkbox.id === postId ? { ...checkbox, checked: !checked } : checkbox)),
+        );
+        setSelectedModalId(postId);
     };
 
     return (
@@ -190,7 +220,11 @@ function Index() {
                                         <th className="border-b p-2 border-gray-500 font-medium text-sm">Price</th>
                                         <th className="border-b p-2 border-gray-500 font-medium text-sm">Major</th>
                                         <th className="border-b p-2 border-gray-500 font-medium text-sm">Type</th>
-                                        <th className="p-2 font-medium text-sm">Description</th>
+                                        <th className="border-b p-2 border-gray-500 font-medium text-sm">
+                                            Description
+                                        </th>
+                                        <th className="border-b p-2 border-gray-500 font-medium text-sm">Email</th>
+                                        <th className="p-2 font-medium text-sm">Content Reports</th>
                                     </thead>
                                     <tbody className="flex flex-col w-1/2 xl:w-4/5">
                                         <td className="p-2 text-sm">{post.title}</td>
@@ -198,11 +232,23 @@ function Index() {
                                         <td className="p-2 border-t border-gray-500 text-sm">General Subject</td>
                                         <td className="p-2 border-t border-gray-500 text-sm">Old</td>
                                         <td className="p-2 border-t border-gray-500 text-sm">{post.description}</td>
+                                        <td className="p-2 border-t border-gray-500 text-sm">
+                                            {post.userPostData.email}
+                                        </td>
+                                        <td className="p-2 border-t border-gray-500 text-sm">Hình ảnh nhạy cảm</td>
                                     </tbody>
                                 </table>
                                 <div className="flex justify-end">
                                     <label className="checkbox">
-                                        <input type="checkbox" id="checkbox-eins" />
+                                        <input
+                                            checked={
+                                                checkboxStates.find((checkbox) => checkbox.id === post.id)?.checked ||
+                                                false
+                                            }
+                                            onChange={() => handleCheckboxChange(post.id)}
+                                            type="checkbox"
+                                            id={post.id}
+                                        />
                                         <div className="checkbox__indicator"></div>
                                     </label>
                                     <Link
@@ -221,7 +267,7 @@ function Index() {
                         </div>
                     ))
                 ) : (
-                    <tr key="1" className="bg-white border-b -800 -700 hover:bg-gray-50">
+                    <tr id="NotFound" className="bg-white border-b -800 -700 hover:bg-gray-50">
                         <td className="px-6 py-4">This post could not be found</td>
                     </tr>
                 )}
@@ -342,8 +388,12 @@ function Index() {
             </div>
             {/* Pagination */}
             <Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={handlePageChange} />
+            {/* Modal Popup Message */}
+            {selectedModalId && (
+                <ModalMessage postId={selectedModalId} onClose={() => handleModalClose(selectedModalId)} />
+            )}
         </div>
     );
 }
 
-export default Index;
+export default Posts;

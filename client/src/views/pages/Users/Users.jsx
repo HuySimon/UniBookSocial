@@ -35,10 +35,6 @@ const Users = () => {
 
     const fetchData = async () => {
         try {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            const isValid = emailRegex.test(searchTerm);
-            setIsEmailValid(isValid);
-
             let url = `/api/v1/users?page[number]=${currentPage}&page[size]=10`;
 
             if (searchTerm && isEmailValid === true) {
@@ -53,7 +49,7 @@ const Users = () => {
                 url += ``;
             }
 
-            console.log(filterValue != '' && searchTerm != '');
+            // console.log(filterValue != '' && searchTerm != '');
 
             if (filterValue != '' && searchTerm != '') {
                 url += `&filter=and(contains(username,'${searchTerm}'),equals(role,'${filterValue}'))`;
@@ -157,7 +153,7 @@ const Users = () => {
             setIsEditModalOpen(false);
             if (res.status === 200) {
                 Swal.fire({
-                    title: 'Chỉnh sửa thành công!',
+                    title: 'Edited Successfully!',
                     icon: 'success',
                     confirmButtonText: 'OK',
                 });
@@ -165,7 +161,7 @@ const Users = () => {
             fetchData();
         } catch (error) {
             Swal.fire({
-                title: 'Lỗi',
+                title: 'Error',
                 text: error.message,
                 icon: 'error',
                 confirmButtonText: 'OK',
@@ -186,7 +182,8 @@ const Users = () => {
         // Ví dụ: Hiển thị thông báo lỗi, ghi log lỗi, vv.
     };
 
-    const openCarProfileModal = async (userId) => {
+    // Handle Open Card Profile
+    const openCardProfileModal = async (userId) => {
         // Gọi API để lấy thông tin user dựa vào userId
         // Ví dụ:
         try {
@@ -257,7 +254,7 @@ const Users = () => {
                                             className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap"
                                         >
                                             <img
-                                                onClick={() => openCarProfileModal(user.id)}
+                                                onClick={() => openCardProfileModal(user.id)}
                                                 className="w-10 h-10 rounded-full cursor-pointer"
                                                 src={user.avatar}
                                                 alt="Jese image"
