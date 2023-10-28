@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 
 // eslint-disable-next-line react/prop-types
-function Filter({ onFilter }) {
+function FilterPost({ onFilter }) {
     const [selectedOption, setSelectedOption] = useState('All');
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -99,4 +99,4 @@ function Filter({ onFilter }) {
     );
 }
 
-export default Filter;
+export default FilterPost;
