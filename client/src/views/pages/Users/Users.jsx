@@ -182,7 +182,8 @@ const Users = () => {
         // Ví dụ: Hiển thị thông báo lỗi, ghi log lỗi, vv.
     };
 
-    const openCarProfileModal = async (userId) => {
+    // Handle Open Card Profile
+    const openCardProfileModal = async (userId) => {
         // Gọi API để lấy thông tin user dựa vào userId
         // Ví dụ:
         try {
@@ -253,7 +254,7 @@ const Users = () => {
                                             className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap"
                                         >
                                             <img
-                                                onClick={() => openCarProfileModal(user.id)}
+                                                onClick={() => openCardProfileModal(user.id)}
                                                 className="w-10 h-10 rounded-full cursor-pointer"
                                                 src={user.avatar}
                                                 alt="Jese image"

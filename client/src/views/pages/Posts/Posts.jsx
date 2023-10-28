@@ -24,10 +24,6 @@ function Posts() {
 
     const fetchData = async () => {
         try {
-            // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            // const isValid = emailRegex.test(searchTerm);
-            // setIsEmailValid(isValid);
-
             let url = `/api/v1/posts?include=userPostData,reportData&page[number]=${currentPage}&page[size]=2`;
 
             // if (searchTerm && isEmailValid === true) {
@@ -91,6 +87,10 @@ function Posts() {
     const handleSearch = (value) => {
         setSearchTerm(value);
         setCurrentPage(1);
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const isValid = emailRegex.test(value);
+        setIsEmailValid(isValid);
     };
 
     // eslint-disable-next-line no-unused-vars
