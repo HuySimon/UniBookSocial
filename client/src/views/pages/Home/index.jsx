@@ -3,23 +3,27 @@ import Axios from '../../../api/index';
 import Post from '../../../components/Post/Post';
 import BriefProfile from '../Profile/BriefProfile';
 import { ImSpinner9 } from 'react-icons/im';
-import { ScrollRestoration, useLoaderData } from 'react-router-dom';
+import { ScrollRestoration, useLoaderData, useNavigate } from 'react-router-dom';
 
 const Index = () => {
-	const posts = useLoaderData();
-
+	const posts = useLoaderData()
+	const [allPosts, setAllPosts] = useState([])
+	useEffect(() => {
+		setAllPosts(posts.data)
+	}, [allPosts])
+	console.log(allPosts)
 	return (
 		<>
 			<div className="p-[25px] lg:px-[150px] xl:px-[250px] mx-auto lg:flex justify-center items-start gap-5">
-					<div className="post-list flex-1">
-						{posts.data.map((post) => (
-							<Post key={post.id} post={post} />
-						))}
-					</div>
-					<BriefProfile />
-			<ScrollRestoration getKey={location => {
-				return location.pathname
-			}}/>
+				<div className="post-list flex-1">
+					{allPosts.map((post) => (
+						<Post key={post.id} post={post} />
+					))}
+				</div>
+				<BriefProfile />
+				<ScrollRestoration getKey={location => {
+					return location.pathname
+				}} />
 			</div>
 		</>
 	);

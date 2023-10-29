@@ -15,6 +15,7 @@ const Post = ({ post }) => {
 	const [isVisibleReport, setIsVisibleReport] = useState(false)
 	const [isVisibleEditPost, setIsVisibleEditPost] = useState(false)
 	const [isVisibleModalDelete, setIsVisibleModalDelete] = useState(false)
+    const [selectedFile, setSelectedFile] = useState(null);
 	const [timeAgo, setTimeAgo] = useState('');
 	const [state, dispatch] = useAuthContext()
 	const handleVisibleMenuPost = () => {

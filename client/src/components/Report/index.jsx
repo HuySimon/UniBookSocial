@@ -6,6 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { toast } from 'react-toastify'
 import { ReportSchema } from '../../validations/ReportValidation'
 import { ImSpinner9 } from 'react-icons/im'
+import { AiOutlineClose } from 'react-icons/ai'
 const Index = ({ post, setIsVisibleReport }) => {
 	const [isLoading, setIsLoading] = useState(false)
 	const { register, handleSubmit, formState: { errors } } = useForm({
@@ -48,8 +49,12 @@ const Index = ({ post, setIsVisibleReport }) => {
 				}}
 				className="w-[50vh] h-[50vh] fixed inset-0 m-auto z-[11]">
 				<div className='flex flex-col bg-white rounded-md'>
-
-					<p className="text-base text-center font-semibold py-2 border-b">Report</p>
+					<div className="w-full relative border-b">
+						<p className="text-base text-center font-semibold py-2">Report</p>
+						<AiOutlineClose
+							onClick={() => { setIsVisibleReport(false) }}
+							className='absolute top-[30%] right-3 cursor-pointer' size={20} />
+					</div>
 					{
 						isLoading && (
 							<div className="w-full h-[286px] fixed top-[41px] bg-white/70 rounded-b-md">
@@ -57,9 +62,22 @@ const Index = ({ post, setIsVisibleReport }) => {
 							</div>
 						)
 					}
+					<div className="w-full px-3 pt-3">
+						<div className="border border-gray-300 rounded-md p-3">
+							<div className="flex gap-3">
+								<img src={`http://127.0.0.1:5000/public/images/posts/${post.mainImage}`}
+									alt="" className='w-28 h-28 rounded-md' title='Hello' />
+								<div className="flex flex-col gap-1">
+									<p className='text-lg'>{post.title}</p>
+									<span className='text-sm'>₫ {post.price}</span>
+									<p className='text-sm text-gray-500'>{post.description}</p>
+								</div>
+							</div>
+						</div>
+					</div>
 					<form
 						onSubmit={handleSubmit(onSubmit)}
-						className='mt-2 p-3'
+						className='p-3'
 					>
 						<textarea
 							{...register("content")}
