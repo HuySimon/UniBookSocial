@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
 		static associate(models) {
 			// define association here
 			Post.belongsTo(models.User, { targetKey: 'id', foreignKey: 'userPost', as: 'userPostData' })
+			Post.hasOne(models.Report, { foreignKey: 'post', as: 'reportData' })
 		}
 	}
 	Post.init(
