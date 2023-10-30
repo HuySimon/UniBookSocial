@@ -63,7 +63,7 @@ const DetailPost = () => {
 		<>
 			<div className='flex w-full h-screen'>
 				<div className="bg-black flex-[3] py-20 mx-auto">
-					<div className="main-img w-full h-full">
+					<div className="main-img w-full h-full px-10">
 						<img src={`http://127.0.0.1:5000/public/images/posts/${detailPost.mainImage}`} alt="" className='w-full h-full object-contain object-center rounded-md' />
 					</div>
 				</div>

@@ -10,14 +10,16 @@ import Axios from '../../api/index';
 import { AnimatePresence } from 'framer-motion';
 import { useAuthContext } from '../../hooks/useAuthContext';
 import Report from '../Report'
+import { usePostContext } from '../../hooks/usePostContext';
 const Post = ({ post }) => {
 	const [isVisibleMenuPost, setIsVisibleMenuPost] = useState(false)
 	const [isVisibleReport, setIsVisibleReport] = useState(false)
 	const [isVisibleEditPost, setIsVisibleEditPost] = useState(false)
 	const [isVisibleModalDelete, setIsVisibleModalDelete] = useState(false)
-    const [selectedFile, setSelectedFile] = useState(null);
+	const [selectedFile, setSelectedFile] = useState(null);
 	const [timeAgo, setTimeAgo] = useState('');
 	const [state, dispatch] = useAuthContext()
+	const [statePost, dispatchPost] = usePostContext()
 	const handleVisibleMenuPost = () => {
 		setIsVisibleMenuPost(!isVisibleMenuPost);
 	};
@@ -58,7 +60,7 @@ const Post = ({ post }) => {
 			}
 		};
 		calculateTimeAgo();
-	}, [post.createdAt]);
+	}, [statePost.isLoading, post.createdAt]);
 	return (
 		<>
 			<div className="w-full h-fit px-6 py-5 border border-gray-400 shadow-md rounded-lg mb-8">
