@@ -40,6 +40,8 @@ const Login = () => {
 				// console.log(res.data.data);
 				toast.success("Login success!");
 				navigate('/');
+				localStorage.setItem("activeButtonProfile", 0)
+				localStorage.setItem("activeButton", "Home")
 			}
 		} catch (err) {
 			toast.error("Incorrect password or email");

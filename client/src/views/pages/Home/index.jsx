@@ -5,16 +5,15 @@ import BriefProfile from '../Profile/BriefProfile';
 import { ImSpinner9 } from 'react-icons/im';
 import { ScrollRestoration, useLoaderData, useNavigate } from 'react-router-dom';
 import { usePostContext } from '../../../hooks/usePostContext'
-
 const Index = () => {
 	const [state, dispatch] = usePostContext()
-	const [isLoading,setIsLoading] = useState(state.isLoading)
+	const [isLoading, setIsLoading] = useState(state.isLoading)
 	useEffect(() => {
 		setIsLoading(state.isLoading)
 	}, [state.isLoading])
 	return (
 		<>
-			<div className="p-[25px] lg:px-[150px] xl:px-[250px] mx-auto lg:flex justify-center items-start gap-5">
+			<div className="p-[25px] lg:px-[150px] xl:px-[250px] 2xl:px-[400px] mx-auto lg:flex justify-center items-start gap-5">
 				{
 					state.isLoading ? (
 						<div className="w-full h-screen flex justify-center items-center">
@@ -27,7 +26,6 @@ const Index = () => {
 									<Post key={post.id} post={post} />
 								))}
 							</div>
-							<BriefProfile />
 						</>
 					)
 				}

@@ -5,7 +5,8 @@ export const PostsContext = createContext()
 const initialState = {
 	posts: null,
 	isLoading: false,
-	createPost: null
+	createPost: null,
+	confirmPost: null,
 }
 const url = "/api/v1/posts?filter=equals(status,'Unconfirm')&include=userPostData&sort=-createdAt"
 const reducer = (state, action) => {
@@ -17,7 +18,7 @@ const reducer = (state, action) => {
 				isLoading: false
 			}
 			break;
-		case "UPDATE_DATA":
+		case "CREATE_ONE_POST":
 			// Merge createPost into the posts array
 			const updatedPosts = [...state.posts, action.value];
 			return {
@@ -25,6 +26,14 @@ const reducer = (state, action) => {
 				posts: updatedPosts,
 				isLoading: false
 			};
+		case "EDIT_POST":
+			break;
+		case "CONFIRM_POST":
+			return {
+				...state,
+				confirmPost: action.value,
+			}
+			break;
 		case "SET_LOADING":
 			return {
 				...state,
@@ -48,7 +57,14 @@ export const PostProvider = ({ children }) => {
 		try {
 			const res = await Axios.get(url);
 			if (res.status === 200) {
-				dispatch({ type: "GET_DATA", value: res.data.data.data });
+				let sortedData = res.data.data.data
+				sortedData.sort((a, b) =>
+					Date.parse(b.createdAt) - Date.parse(a.createdAt)
+					// const aDate = new Date(a.createdAt)
+					// const bDate = new Date(b.createdAt)
+					// return bDate - aDate
+				)
+				dispatch({ type: "GET_DATA", value: sortedData });
 			}
 		} catch (err) {
 			dispatch({ type: "API_ERROR" });

@@ -108,7 +108,7 @@ const Index = () => {
 												transition-all duration-300 lg:text-left text-center 
 												${activeButton === 3 ? 'bg-primary-main text-white shadow-md !shadow-primary-700 ' : ''}`}>
 										<BsCheck2Circle size={26} className='lg:block hidden' />
-										<span className='inline-block lg:ml-3 text-base lg:font-medium'>History Post</span>
+										<span className='inline-block lg:ml-3 text-base lg:font-medium'>History Confirm</span>
 									</Link>
 									<Link
 										to={`/profile/${currentUser.id}/review`}

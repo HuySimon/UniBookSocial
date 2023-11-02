@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Avatar, LoginImg } from '../../assets';
 import { BiDotsVerticalRounded, BiTrash } from 'react-icons/bi';
 import { AiOutlineEdit, AiFillCaretRight, AiOutlineAlert } from 'react-icons/ai';
@@ -11,6 +11,7 @@ import { AnimatePresence } from 'framer-motion';
 import { useAuthContext } from '../../hooks/useAuthContext';
 import Report from '../Report'
 import { usePostContext } from '../../hooks/usePostContext';
+import { toast } from 'react-toastify';
 const Post = ({ post }) => {
 	const [isVisibleMenuPost, setIsVisibleMenuPost] = useState(false)
 	const [isVisibleReport, setIsVisibleReport] = useState(false)
@@ -18,6 +19,7 @@ const Post = ({ post }) => {
 	const [isVisibleModalDelete, setIsVisibleModalDelete] = useState(false)
 	const [selectedFile, setSelectedFile] = useState(null);
 	const [timeAgo, setTimeAgo] = useState('');
+	const toastId = useRef(null)
 	const [state, dispatch] = useAuthContext()
 	const [statePost, dispatchPost] = usePostContext()
 	const handleVisibleMenuPost = () => {
@@ -61,6 +63,34 @@ const Post = ({ post }) => {
 		};
 		calculateTimeAgo();
 	}, [statePost.isLoading, post.createdAt]);
+	const confirmAction = async () => {
+		toastId.current = toast.loading("Please wait ....")
+		try {
+			const res = await Axios.patch(`/api/v1/posts/${post.id}/updateStatus`)
+			if (res.status === 200) {
+				console.log(res)
+				// dispatchPost({ type: "CONFIRM_POST",value: post })
+				toast.update(toastId.current, {
+					render: "Confirm Success!",
+					type: "success",
+					isLoading: false,
+					autoClose: 5000,
+					className: 'animated rotateY',
+					closeOnClick: true,
+				})
+			}
+		} catch (err) {
+			toast.update(toastId.current, {
+				render: "Confirm Fail!",
+				type: "error",
+				isLoading: false,
+				autoClose: 5000,
+				className: 'animated',
+				closeOnClick: true,
+			})
+			console.log(err)
+		}
+	}
 	return (
 		<>
 			<div className="w-full h-fit px-6 py-5 border border-gray-400 shadow-md rounded-lg mb-8">
@@ -174,6 +204,8 @@ const Post = ({ post }) => {
 					</table>
 					<button
 						type="submit"
+						ref={toastId}
+						onClick={() => confirmAction()}
 						className="px-10 py-2 bg-primary-main text-white w-fit rounded-lg hover:shadow !shadow-primary-700 hover:bg-primary-700 transition-all"
 					>
 						Buy

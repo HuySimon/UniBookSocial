@@ -71,12 +71,12 @@ const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 			if (res.status === 201) {
 				toast.success('Your post have been posted!');
 				// window.location.reload()
-				dispatchPost({ type: "UPDATE_DATA", value: res.data.data.data })
+				dispatchPost({ type: "CREATE_ONE_POST", value: res.data.data.data })
 				handleCreatePost(false);
 				console.log(res.data.data.data)
 			}
-			console.log(res);
-			console.log(res.data.data.data);
+			// console.log(res);
+			// console.log(res.data.data.data);
 		} catch (err) {
 			//Don't use err.response it will cause error 500: Internal Server error
 			//You can write specific message for it
