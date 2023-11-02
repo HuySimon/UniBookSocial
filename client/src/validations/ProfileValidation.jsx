@@ -40,3 +40,17 @@ export const changeInformationSchema = Yup.object().shape({
 	),
 	linkZalo: Yup.string().trim()
 })
+
+export const updateAvatarSchema = Yup.object().shape({
+	image: Yup.mixed().typeError("Please choose an image").required('Please upload an image')
+		.test('fileSize', 'File size is too large (> 2MB)', (value) => {
+			if (!value) return true; // No file was selected, so skip this test
+			return value.size <= 2 * 1024 * 1024; // 2MB
+		})
+		.test('fileType', 'Invalid file type', (value) => {
+			if (!value) return true; // No file was selected, so skip this test
+			const allowedExtensions = ['jpg', 'jpeg', 'png'];
+			const fileType = value.type.split('/').pop();
+			return allowedExtensions.includes(fileType);
+		}),
+})

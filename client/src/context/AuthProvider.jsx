@@ -19,7 +19,7 @@ const reducer = (state, action) => {
 				...state,
 			};
 		case "LOGOUT":
-			localStorage.removeItem("user");
+			localStorage.setItem("user",JSON.stringify({}));
 			localStorage.setItem("auth", false)
 			return {
 				...state,
@@ -31,7 +31,7 @@ const reducer = (state, action) => {
 
 export const AuthProvider = ({ children }) => {
 	const [state, dispatch] = useReducer(reducer, initialState)
-
+	console.log('context render')
 	const value = useMemo(() => ({ state, dispatch }), [state, dispatch])
 
 	return (
