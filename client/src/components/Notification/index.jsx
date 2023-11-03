@@ -11,28 +11,16 @@ import {
 import { toast } from 'react-toastify';
 import Axios from '../../api/index';
 import { useAuthContext } from '../../hooks/useAuthContext';
+import { useNotificationContext } from '../../hooks/useNotificationContext';
 
 const Index = ({ isVisibleNotify, handleNotify }) => {
 	const [dataNotify, setDataNotify] = useState(null);
 	const [state, dispatch] = useAuthContext();
+	const [stateNotify,dispatchNotify] = useNotificationContext()
 	const { isAuthorized, user } = state;
-	const isLoading = !!dataNotify;
-
-	const getNotify = useCallback(async () => {
-		try {
-			const res = await Axios.get('/api/v1/notifications');
-			if (res.status === 200) {
-				setDataNotify(res.data.data.data);
-			}
-		} catch (err) {
-			toast.error(err);
-		}
-	}, []);
-
 	useEffect(() => {
-		getNotify();
-	}, [getNotify, isLoading]);
-	// console.log(result)
+		setDataNotify(stateNotify.notifications)
+	})
 	return (
 		<>
 			<motion.div
