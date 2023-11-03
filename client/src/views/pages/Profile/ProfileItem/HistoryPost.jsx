@@ -4,6 +4,7 @@ import Axios from '../../../../api/index'
 import { useAuthContext } from '../../../../hooks/useAuthContext'
 import { ImSpinner9 } from 'react-icons/im'
 import { NoPostYet } from '../../../../assets'
+import ProfilePost from '../../../../components/Post/ProfilePost'
 const HistoryPost = () => {
 
 	const [state, dispatch] = useAuthContext()
@@ -44,7 +45,7 @@ const HistoryPost = () => {
 						</div>
 					) : (
 						userPosts.map((post, index) => (
-							<Post post={post} />
+							<ProfilePost key={index} post={post} />
 						))
 					)
 				}

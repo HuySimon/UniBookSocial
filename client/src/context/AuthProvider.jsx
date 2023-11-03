@@ -6,7 +6,7 @@ const initialState = {
 	isAuthorized: localStorage.getItem("auth"),
 	user: JSON.parse(localStorage.getItem("user")),
 }
-
+const url = '/api/v1/users/me'
 const reducer = (state, action) => {
 	switch (action.type) {
 		case "LOGIN":
@@ -17,9 +17,10 @@ const reducer = (state, action) => {
 			localStorage.setItem("auth", true)
 			return {
 				...state,
+				user: JSON.parse(localStorage.getItem("user"))
 			};
 		case "LOGOUT":
-			localStorage.setItem("user",JSON.stringify({}));
+			localStorage.setItem("user", JSON.stringify({}));
 			localStorage.setItem("auth", false)
 			return {
 				...state,
@@ -33,6 +34,7 @@ export const AuthProvider = ({ children }) => {
 	const [state, dispatch] = useReducer(reducer, initialState)
 	console.log('context render')
 	const value = useMemo(() => ({ state, dispatch }), [state, dispatch])
+
 
 	return (
 		<AuthContext.Provider value={value}>

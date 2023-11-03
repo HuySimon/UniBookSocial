@@ -216,14 +216,14 @@ const EditPost = ({ post, handleEditPost, isVisibleEditPost }) => {
 				</div>
 			</motion.div>
 			<motion.div
-				className="fixed w-full inset-0 m-auto h-screen bg-black/50 z-10">
+				className="fixed w-[calc(100%+250px)] top-0 left-0 h-screen bg-black/50 z-[11]">
 			</motion.div>
 			<AiOutlineClose
 				onClick={() => {
 					handleEditPost()
 				}}
 				size={22}
-				className='fixed top-4 right-4 text-white cursor-pointer hover:rotate-[360deg] transition-all duration-300 z-10' />
+				className='fixed top-4 right-4 text-white cursor-pointer hover:rotate-[360deg] transition-all duration-300 z-30' />
 		</>
 	)
 }

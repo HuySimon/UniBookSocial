@@ -40,7 +40,7 @@ const Index = ({ isVisibleNotify, handleNotify }) => {
 				initial="initial"
 				animate={isVisibleNotify && 'open'}
 				exit="close"
-				className='h-screen fixed top-0 left-[250px] shadow-[4px_0_24px_rgba(0,0,0,0.15)] border-r border-gray-300 z-[9]'>
+				className='h-screen fixed top-0 left-[250px] shadow-[4px_0_24px_rgba(0,0,0,0.15)] border-r border-gray-300 z-[1]'>
 				<div className="w-[350px] h-full bg-white">
 					<div className="py-5 border-b">
 						<div className="flex flex-col">
