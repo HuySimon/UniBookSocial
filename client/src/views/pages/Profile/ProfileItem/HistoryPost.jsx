@@ -5,9 +5,11 @@ import { useAuthContext } from '../../../../hooks/useAuthContext'
 import { ImSpinner9 } from 'react-icons/im'
 import { NoPostYet } from '../../../../assets'
 import ProfilePost from '../../../../components/Post/ProfilePost'
+import { usePostContext } from '../../../../hooks/usePostContext'
 const HistoryPost = () => {
 
 	const [state, dispatch] = useAuthContext()
+	const [statePost, dispatchPost] = usePostContext()
 	const [userPosts, setUserPosts] = useState([])
 	const [isLoading, setIsLoading] = useState(false)
 	useEffect(() => {
@@ -26,7 +28,7 @@ const HistoryPost = () => {
 			}
 		}
 		fetchUserPost()
-	}, [state.user])
+	}, [state.user,statePost])
 	return (
 		userPosts.length === 0 ? (
 			<div className="w-full h-[80vh]">

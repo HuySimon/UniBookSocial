@@ -13,12 +13,14 @@ import { toast } from 'react-toastify'
 import { ImSpinner9 } from 'react-icons/im';
 import { useAuthContext } from '../../hooks/useAuthContext'
 import { createPostSchema, editPostSchema } from '../../validations/PostValidation'
+import { usePostContext } from '../../hooks/usePostContext'
 const EditPost = ({ post, handleEditPost, isVisibleEditPost }) => {
 	const [selectedFile, setSelectedFile] = useState(`http://127.0.0.1:5000/public/images/posts/${post.mainImage}`);
 	const [isLoading, setIsLoading] = useState(false)
 	const [isZoomImage, setIsZoomImage] = useState(false)
 	const navigate = useNavigate()
 	const [state, dispatch] = useAuthContext()
+	const [statePost, dispatchPost] = usePostContext()
 	const handleFileChange = (e) => {
 		const file = e.target.files[0];
 		console.log(file)
@@ -57,10 +59,12 @@ const EditPost = ({ post, handleEditPost, isVisibleEditPost }) => {
 		const postData = Object.fromEntries(formData)
 		console.log(post)
 		setIsLoading(true)
+		dispatchPost({type: "EDIT_POST"})
 		try {
 			const res = await Axios.patch(`/api/v1/posts/${post.id}`, postData)
 			if (res.status === 200) {
 				toast.success("Edit post success!")
+				dispatchPost({type: "EDIT_POST_LOADING"})
 				handleEditPost(false)
 				console.log(res.data)
 			}
@@ -71,6 +75,7 @@ const EditPost = ({ post, handleEditPost, isVisibleEditPost }) => {
 			toast.error(err.response.data.message)
 		} finally {
 			setIsLoading(false)
+			dispatchPost({type: "API_ERROR"})
 		}
 	}
 	return (

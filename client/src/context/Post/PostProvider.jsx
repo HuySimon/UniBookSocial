@@ -7,6 +7,7 @@ const initialState = {
 	isLoading: false,
 	createPost: null,
 	confirmPost: null,
+	isLoadingEdit: false,
 }
 const url = "/api/v1/posts?filter=equals(status,'Unconfirm')&include=userPostData&sort=-createdAt"
 const reducer = (state, action) => {
@@ -27,6 +28,16 @@ const reducer = (state, action) => {
 				isLoading: false
 			};
 		case "EDIT_POST":
+			return {
+				...state,
+				isLoadingEdit: true
+			}
+			break;
+		case "EDIT_POST_LOADING":
+			return {
+				...state,
+				isLoadingEdit: false
+			}
 			break;
 		case "CONFIRM_POST":
 			return {
