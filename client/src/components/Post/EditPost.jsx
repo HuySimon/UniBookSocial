@@ -14,7 +14,7 @@ import { ImSpinner9 } from 'react-icons/im';
 import { useAuthContext } from '../../hooks/useAuthContext'
 import { createPostSchema, editPostSchema } from '../../validations/PostValidation'
 const EditPost = ({ post, handleEditPost, isVisibleEditPost }) => {
-	const [selectedFile, setSelectedFile] = useState(`http://127.0.0.1:5000/public/images/${post.mainImage}`);
+	const [selectedFile, setSelectedFile] = useState(`http://127.0.0.1:5000/public/images/posts/${post.mainImage}`);
 	const [isLoading, setIsLoading] = useState(false)
 	const [isZoomImage, setIsZoomImage] = useState(false)
 	const navigate = useNavigate()

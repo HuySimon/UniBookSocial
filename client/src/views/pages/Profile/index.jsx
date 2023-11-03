@@ -8,13 +8,28 @@ import { About, HistoryConfirm, HistoryPost, Review } from './ProfileItem'
 import Axios from '../../../api/index'
 import { useAuthContext } from '../../../hooks/useAuthContext'
 import { toast } from 'react-toastify'
-import { Link, Outlet, useNavigate } from 'react-router-dom'
+import { Link, Outlet, useNavigate, useParams } from 'react-router-dom'
+import UpdateAvatar from '../../../components/Avatar/UpdateAvatar'
 const Index = () => {
 
 	const [currentUser, setCurrentUser] = useState({})
 	const [selectedFile, setSelectedFile] = useState(null)
 	const [state, dispatch] = useAuthContext()
+	const profileId = useParams()
 	const navigate = useNavigate()
+	const getUser = async () => {
+		try {
+			const res = await Axios.get(`/api/v1/users/me`)
+			setCurrentUser(res.data.data.data)
+			dispatch({ type: "LOGIN", value: res.data.data.data })
+			// console.log(res.data.data.data)
+		} catch (err) {
+			toast.error("Can't get user information")
+			document.title = "Home"
+			console.log(err)
+			navigate('/')
+		}
+	}
 	useEffect(() => {
 		document.title = "Profile"
 		const getUser = async () => {
@@ -42,48 +57,45 @@ const Index = () => {
 		// Test()
 		getUser()
 	}, [])
-	const [activeButton, setActiveButton] = useState(0)
+	const [activeButton, setActiveButton] = useState(JSON.parse(localStorage.getItem("activeButtonProfile")))
 	const menu = [
 		{
-			id: 0,
 			icon: IoCallOutline,
 			title: "About",
 			href: "",
 		},
 		{
-			id: 1,
 			icon: HiOutlineServer,
 			title: "History Post",
 			href: "historyPost",
 		},
-		{
-			id: 2,
-			icon: BsCheck2Circle,
-			title: "History Confirm",
-			href: "historyConfirm",
-		},
-		{
-			id: 3,
-			icon: MdOutlineRateReview,
-			title: "Reivew",
-			href: "review",
-		}
 	]
 	const handleButton = (id) => {
 		setActiveButton(id)
+		localStorage.setItem("activeButtonProfile", id)
 	}
-
+	const handleFileChange = (e) => {
+		const file = e.target.files[0];
+		if (file) {
+			const reader = new FileReader();
+			reader.onload = () => {
+				setSelectedFile(reader.result);
+			};
+			reader.readAsDataURL(file);
+		}
+	};
+	// console.log(selectedFile)
 	return (
 		<div className='w-full flex flex-col px-[25px] lg:px-[150px] xl:px-[250px] mx-auto'>
 			<div className="w-full flex flex-col h-[400px] relative z-[8]">
-				<div className="coverImage w-full h-full absolute inset-0 ">
+				<div className="w-full h-full absolute inset-0 ">
 					<img src={SignupImg} alt="" className='w-full h-full object-cover object-top' />
 				</div>
 				<div className="w-full flex justify-end items-center relative top-80">
 					<div className="w-36 h-36 mx-auto relative">
 						<img src={`http://127.0.0.1:5000/public/images/users/${currentUser.avatar}`} alt="" className='w-full h-full rounded-full object-cover object-center' />
-						<label htmlFor="imageFIle" className='absolute top-3/4 right-0 z-10 overflow-hidden cursor-pointer'>
-							<input type="file" name="" id="imageFIle" className='hidden absolute w-full h-full' />
+						<label htmlFor="imageFile" className='absolute top-3/4 right-0 z-10 overflow-hidden cursor-pointer'>
+							<input type="file" name="" id="imageFile" className='hidden absolute w-full h-full' onChange={handleFileChange} accept="image/*" />
 							<MdPhotoCamera size={40} className=' bg-gray-300 text-black p-2 rounded-full hover:bg-gray-400 transition-all hover:text-white' />
 						</label>
 					</div>
@@ -94,7 +106,7 @@ const Index = () => {
 			</div>
 			<div className="pt-4 w-full z-[8]">
 				<div className="h-full flex lg:flex-row flex-col">
-					<div className=" w-full lg:w-1/4 flex lg:h-full h-fit flex-row lg:flex-col justify-between lg:justify-start items-center gap-5 lg:border-r border-gray-400 lg:pr-6 lg:mb-0 mb-6">
+					<div className=" w-full lg:w-1/4 flex lg:h-full h-fit flex-row lg:flex-col justify-between lg:justify-start items-center gap-5 lg:pr-6 lg:mb-0 mb-6">
 						{
 							menu.map((item, index) => (
 								<Link
@@ -109,12 +121,39 @@ const Index = () => {
 								</Link>
 							))
 						}
+						{
+							JSON.parse(localStorage.getItem("user")).user.id == profileId.id && (
+								<>
+									<Link
+										to={`/profile/${currentUser.id}/historyConfirm`}
+										onClick={() => handleButton(3)}
+										className={`w-full lg:flex items-center text-[#929292] relative cursor-pointer mb-1 p-3 rounded-md 
+												transition-all duration-300 lg:text-left text-center 
+												${activeButton === 3 ? 'bg-primary-main text-white shadow-md !shadow-primary-700 ' : ''}`}>
+										<BsCheck2Circle size={26} className='lg:block hidden' />
+										<span className='inline-block lg:ml-3 text-base lg:font-medium'>History Confirm</span>
+									</Link>
+									<Link
+										to={`/profile/${currentUser.id}/review`}
+										onClick={() => handleButton(4)}
+										className={`w-full lg:flex items-center text-[#929292] relative cursor-pointer mb-1 p-3 rounded-md 
+												transition-all duration-300 lg:text-left text-center 
+												${activeButton === 4 ? 'bg-primary-main text-white shadow-md !shadow-primary-700 ' : ''}`}>
+										<MdOutlineRateReview size={26} className='lg:block hidden' />
+										<span className='inline-block lg:ml-3 text-base lg:font-medium'>Review</span>
+									</Link>
+								</>
+							)
+						}
 					</div>
-					<div className="w-full lg:w-3/4 lg:pl-6">
+					<div className="w-full lg:w-3/4 lg:pl-6 lg:border-l border-gray-400">
 						<Outlet />
 					</div>
 				</div>
 			</div>
+			{
+				selectedFile != null && <UpdateAvatar file={selectedFile} setSelectedFile={setSelectedFile} />
+			}
 		</div>
 	)
 }
