@@ -57,7 +57,7 @@ module.exports = (sequelize, DataTypes) => {
 			status: {
 				type: DataTypes.STRING,
 				validate: {
-					isIn: [["Confirm", "Unconfirm", "Delivery", 'Violation']],
+					isIn: [["Confirm", "Unconfirmed", "Delivery", 'Violation','CheckPost']],
 				},
 			},
 			isNew: {
