@@ -40,15 +40,6 @@ const About = () => {
 		})
 
 	useEffect(() => {
-		// const getUser = async () => {
-		// 	try {
-		// 		const res = await Axios.get(`/api/v1/users/${userID.id}`)
-		// 		console.log(res.data.data.data)
-		// 	} catch (err) {
-		// 		console.log(err)
-		// 	}
-		// }
-		// getUser()
 		Axios.get('/api/v1/users/me').then(res => {
 			setCurrentUser(res.data.data.data)
 		}).catch(err => {
