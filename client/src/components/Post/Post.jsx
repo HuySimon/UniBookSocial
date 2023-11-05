@@ -23,22 +23,6 @@ const Post = ({ post }) => {
 	const handleVisibleMenuPost = () => {
 		setIsVisibleMenuPost(!isVisibleMenuPost);
 	};
-	const menuOption = [
-		{
-			title: 'Edit Post',
-			icon: AiOutlineEdit,
-			handle: () => {
-				setIsVisibleEditPost(!isVisibleEditPost);
-			},
-		},
-		{
-			title: 'Delete Post',
-			icon: BiTrash,
-			handle: () => {
-				setIsVisibleModalDelete(!isVisibleModalDelete);
-			},
-		},
-	];
 	useEffect(() => {
 		const calculateTimeAgo = () => {
 			const now = new Date();
@@ -61,39 +45,6 @@ const Post = ({ post }) => {
 		};
 		calculateTimeAgo();
 	}, [statePost.isLoading, post.createdAt]);
-	console.log(state)
-	const confirmAction = async () => {
-		if (Object.entries(state.user).length === 0) {
-			toast.warning("Please log in to buy")
-		} else {
-			toastId.current = toast.loading("Please wait ....")
-			try {
-				const res = await Axios.patch(`/api/v1/posts/${post.id}/status`)
-				if (res.status === 200) {
-					console.log(res)
-					// dispatchPost({ type: "CONFIRM_POST",value: post })
-					toast.update(toastId.current, {
-						render: "Confirm Success!",
-						type: "success",
-						isLoading: false,
-						autoClose: 5000,
-						className: 'animated rotateY',
-						closeOnClick: true,
-					})
-				}
-			} catch (err) {
-				toast.update(toastId.current, {
-					render: "Confirm Fail!",
-					type: "error",
-					isLoading: false,
-					autoClose: 5000,
-					className: 'animated',
-					closeOnClick: true,
-				})
-				console.log(err)
-			}
-		}
-	}
 	return (
 		<>
 			<div className="w-full h-fit px-6 py-5 border border-gray-400 shadow-md rounded-lg mb-8">
@@ -188,14 +139,6 @@ const Post = ({ post }) => {
 							</tr>
 						</tbody>
 					</table>
-					<button
-						type="submit"
-						ref={toastId}
-						onClick={() => confirmAction()}
-						className="px-10 py-2 bg-primary-main text-white w-fit rounded-lg hover:shadow !shadow-primary-700 hover:bg-primary-700 transition-all"
-					>
-						Buy
-					</button>
 				</div>
 			</div>
 			<AnimatePresence mode="wait">
