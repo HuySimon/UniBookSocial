@@ -19,7 +19,7 @@ const HistoryPost = () => {
 				const res = await Axios.get(`/api/v1/posts?filter=equals(userPost,'${JSON.parse(localStorage.getItem("user")).user.id}')&include=userPostData&sort=-createdAt`)
 				if (res.status === 200) {
 					setUserPosts(res.data.data.data)
-					console.log(res.data.data.data)
+					// console.log(res.data.data.data)
 					setIsLoading(false)
 				}
 			} catch (err) {

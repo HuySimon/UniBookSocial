@@ -61,32 +61,37 @@ const Post = ({ post }) => {
 		};
 		calculateTimeAgo();
 	}, [statePost.isLoading, post.createdAt]);
+	console.log(state)
 	const confirmAction = async () => {
-		toastId.current = toast.loading("Please wait ....")
-		try {
-			const res = await Axios.patch(`/api/v1/posts/${post.id}/updateStatus`)
-			if (res.status === 200) {
-				console.log(res)
-				// dispatchPost({ type: "CONFIRM_POST",value: post })
+		if (Object.entries(state.user).length === 0) {
+			toast.warning("Please log in to buy")
+		} else {
+			toastId.current = toast.loading("Please wait ....")
+			try {
+				const res = await Axios.patch(`/api/v1/posts/${post.id}/status`)
+				if (res.status === 200) {
+					console.log(res)
+					// dispatchPost({ type: "CONFIRM_POST",value: post })
+					toast.update(toastId.current, {
+						render: "Confirm Success!",
+						type: "success",
+						isLoading: false,
+						autoClose: 5000,
+						className: 'animated rotateY',
+						closeOnClick: true,
+					})
+				}
+			} catch (err) {
 				toast.update(toastId.current, {
-					render: "Confirm Success!",
-					type: "success",
+					render: "Confirm Fail!",
+					type: "error",
 					isLoading: false,
 					autoClose: 5000,
-					className: 'animated rotateY',
+					className: 'animated',
 					closeOnClick: true,
 				})
+				console.log(err)
 			}
-		} catch (err) {
-			toast.update(toastId.current, {
-				render: "Confirm Fail!",
-				type: "error",
-				isLoading: false,
-				autoClose: 5000,
-				className: 'animated',
-				closeOnClick: true,
-			})
-			console.log(err)
 		}
 	}
 	return (
