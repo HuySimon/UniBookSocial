@@ -16,7 +16,7 @@ const headerReducer = (state, action) => {
 export const HeaderProvider = ({ children }) => {
 	// Initialize state using useReducer
 	const [stateHeader, dispatchHeader] = useReducer(headerReducer, {
-		activeButton: null,
+		activeButton: "Home",
 	});
 
 	// Load the active button state from local storage on component mount

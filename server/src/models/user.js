@@ -14,7 +14,9 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     validatePassword(candidatePassword, userPassword) {
-      return bcrypt.compareSync(candidatePassword, userPassword);
+      const res = bcrypt.compareSync(candidatePassword, userPassword)
+      console.log(res)
+      return res;
     }
   }
   User.init({
@@ -70,7 +72,8 @@ module.exports = (sequelize, DataTypes) => {
         instance.username = instance.firstName + ' ' + instance.lastName
         instance.avatar = 'avatarDefault.jpg'
         instance.coverImage = 'coverImageDefault.jpg'
-        instance.password = await bcrypt.hash(instance.password, 12);
+        // instance.password = await bcrypt.hash(instance.password, 12);
+        // console.log(instance.password)
         if (!instance.role) {
           instance.role = 1
         }
@@ -79,6 +82,8 @@ module.exports = (sequelize, DataTypes) => {
       beforeSave: async function (instance, options) {
         if (instance.changed('password')) {
           instance.password = await bcrypt.hash(instance.password, 12);
+          console.log(instance.password)
+
         }
       }
     },

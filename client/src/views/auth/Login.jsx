@@ -37,9 +37,11 @@ const Login = () => {
 			const res = await Axios.post('/api/v1/users/login', user);
 			if (res.status === 200) {
 				dispatch({ type: "LOGIN", value: res.data.data.user });
-				console.log(res.data.data);
+				// console.log(res.data.data);
 				toast.success("Login success!");
 				navigate('/');
+				localStorage.setItem("activeButtonProfile", 0)
+				localStorage.setItem("activeButton", "Home")
 			}
 		} catch (err) {
 			toast.error("Incorrect password or email");
@@ -48,7 +50,7 @@ const Login = () => {
 		}
 	};
 
-	console.log(state.user)
+	// console.log(state.user)
 	return (
 		<>
 			<section
