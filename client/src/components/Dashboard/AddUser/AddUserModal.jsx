@@ -10,13 +10,6 @@ function AddUserModal({ onClose, onAddUser }) {
     const [formErrors, setFormErrors] = useState({});
     const modalRef = useRef(null);
 
-    // const [firstName, setFirstName] = useState('');
-    // const [lastName, setLastName] = useState('');
-    // const [email, setEmail] = useState('');
-    // const [phone, setPhone] = useState('');
-    // const [role, setRole] = useState('');
-    // const [password, setPassword] = useState('');
-
     const [formData, setFormData] = useState({
         email: '',
         firstName: '',
@@ -118,7 +111,7 @@ function AddUserModal({ onClose, onAddUser }) {
             id="addUserModal"
             tabIndex="-1"
             aria-hidden="true"
-            className="fixed top-0 left-0 right-0 z-50 items-center justify-center flex w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 max-h-full bg-opacity-50 bg-black"
+            className="fixed top-0 left-0 right-0 z-50 items-center justify-center flex w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 max-h-full bg-opacity-50 bg-black h-webkit-fill-available"
         >
             <div ref={modalRef} className="relative w-full max-w-2xl max-h-full">
                 {/* <!-- Modal content --> */}

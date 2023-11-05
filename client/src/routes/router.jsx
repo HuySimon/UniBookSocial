@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import Login from '../views/auth/Login';
 import DefaultLayout from '../views/layout/DefaultLayout';
 import Dashboard from '../views/layout/Dashboard';
+import HomeAdmin from '../views/pages/HomeAdmin/HomeAdmin';
 import Home from '../views/pages/Home';
 import SignUp from '../views/auth/SignUp';
 import Profile from '../views/pages/Profile';
@@ -66,8 +67,11 @@ const router = createBrowserRouter([
     {
         path: '/dashboard',
         element: <Dashboard />,
-        errorElement: <NotFound />,
         children: [
+            {
+                path: '/dashboard',
+                element: <HomeAdmin />,
+            },
             {
                 path: 'users',
                 element: <Users />,

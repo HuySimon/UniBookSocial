@@ -32,11 +32,11 @@ function ModalMessage({ postID, isOpen, onClose, messageId }) {
             // className={`fixed top-0 left-0 right-0 z-50 items-center justify-center flex w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 max-h-full bg-opacity-50 bg-black ${
             //     isOpen ? '' : 'hidden '
             // }`}
-            className="fixed top-0 left-0 right-0 z-50 items-center justify-center flex w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 max-h-full bg-opacity-50 bg-black"
+            className="fixed top-0 left-0 right-0 z-50 items-center justify-center flex w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 max-h-full bg-opacity-50 bg-black h-webkit-fill-available"
         >
             <div id={postID} ref={modalRef} className="relative w-full max-w-2xl max-h-full">
                 {/* <!-- Modal content --> */}
-                <form action="#" className="relative bg-white rounded-lg shadow">
+                <form id={postID} action="#" className="relative bg-white rounded-lg shadow">
                     {/* <!-- Modal header --> */}
                     <div className="flex items-start justify-between p-4 border-b rounded-t">
                         <h3 className="text-xl font-semibold text-gray-900">Notice of violation</h3>

@@ -21,6 +21,7 @@ function Posts() {
     const [isEmailValid, setIsEmailValid] = useState(true);
     const [checkboxStates, setCheckboxStates] = useState([]);
     const [selectedModalId, setSelectedModalId] = useState(null);
+    const [activeIcon, setActiveIcon] = useState(null);
 
     const fetchData = async () => {
         try {
@@ -105,22 +106,35 @@ function Posts() {
     };
 
     // Handle Close Modal
+    // const handleModalClose = (postId) => {
+    //     setCheckboxStates((prevState) =>
+    //         prevState.map((checkbox) => (checkbox.id === postId ? { ...checkbox, checked: false } : checkbox)),
+    //     );
+    //     if (postId === selectedModalId) {
+    //         setSelectedModalId(null);
+    //     }
+    // };
+
+    // Handle Checkbox
+    // const handleCheckboxChange = (postId) => {
+    //     const checked = checkboxStates.find((checkbox) => checkbox.id === postId)?.checked || false;
+    //     setCheckboxStates((prevState) =>
+    //         prevState.map((checkbox) => (checkbox.id === postId ? { ...checkbox, checked: !checked } : checkbox)),
+    //     );
+    //     setSelectedModalId(postId);
+    // };
+
     const handleModalClose = (postId) => {
-        setCheckboxStates((prevState) =>
-            prevState.map((checkbox) => (checkbox.id === postId ? { ...checkbox, checked: false } : checkbox)),
-        );
+        setActiveIcon(null);
         if (postId === selectedModalId) {
             setSelectedModalId(null);
         }
     };
 
-    // Handle Checkbox
-    const handleCheckboxChange = (postId) => {
-        const checked = checkboxStates.find((checkbox) => checkbox.id === postId)?.checked || false;
-        setCheckboxStates((prevState) =>
-            prevState.map((checkbox) => (checkbox.id === postId ? { ...checkbox, checked: !checked } : checkbox)),
-        );
+    const handleDeleteActive = (postId) => {
+        console.log(postId);
         setSelectedModalId(postId);
+        setActiveIcon(postId);
     };
 
     return (
@@ -252,11 +266,15 @@ function Posts() {
                                         <div className="checkbox__indicator"></div>
                                     </label>
                                     <Link
+                                        onClick={() => handleDeleteActive(post.id)}
                                         to="#"
                                         type="button"
                                         data-modal-target="deleteUserModal"
                                         data-modal-show="deleteUserModal"
-                                        className="font-medium text-2xl color"
+                                        // className="font-medium text-2xl color"
+                                        className={`font-medium text-2xl color${
+                                            activeIcon === post.id ? ' active' : ''
+                                        }`}
                                     >
                                         <i>
                                             <PiTrashSimpleLight />
