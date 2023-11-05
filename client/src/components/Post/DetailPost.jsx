@@ -5,13 +5,13 @@ import { useParams } from 'react-router-dom'
 import Axios from '../../api/index'
 import { toast } from 'react-toastify'
 import { useAuthContext } from '../../hooks/useAuthContext'
-import { usePostContext } from '../../hooks/usePostContext'
-
+import { AnimatePresence } from 'framer-motion'
+import Review from '../Review/Review'
 const DetailPost = () => {
 	const postID = useParams()
 	const [state, dispatch] = useAuthContext()
-	const [statePost, dispatchPost] = usePostContext()
 	const [detailPost, setDetailPost] = useState({})
+	const [isVisibleReviewForm, setIsVisibleReviewForm] = useState(false)
 	const [userPost, setUserPost] = useState({})
 	const [timeAgo, setTimeAgo] = useState('')
 	const toastId = useRef(null)
@@ -186,7 +186,8 @@ const DetailPost = () => {
 									<button
 										type="submit"
 										ref={toastId}
-										onClick={() => confirmAction("Confirm","Confirm success!")}
+										onClick={() => setIsVisibleReviewForm(true)}
+										// onClick={() => confirmAction("Confirm", "Confirm success!")}
 										className="w-36 px-6 py-3 bg-primary-main text-white rounded-lg hover:shadow !shadow-primary-700 hover:bg-primary-700 transition-all">
 										Buy
 									</button>
@@ -195,14 +196,14 @@ const DetailPost = () => {
 										<button
 											type="submit"
 											ref={toastId}
-											onClick={() => confirmAction("Delivery","Delivery success!Let's review it now")}
+											onClick={() => confirmAction("Delivery", "Delivery success!Let's review it now")}
 											className="w-36 px-6 py-3 bg-primary-main text-white rounded-lg hover:shadow !shadow-primary-700 hover:bg-primary-700 transition-all">
 											Received
 										</button>
 										<button
 											type="submit"
 											ref={toastId}
-											onClick={() => confirmAction("Unconfirmed","Unconfirm success")}
+											onClick={() => confirmAction("Unconfirmed", "Unconfirm success")}
 											className="w-36 px-6 py-3 bg-transparent border border-primary-main text-primary-main rounded-lg hover:shadow transition-all">
 											Cancel Order
 										</button>
@@ -228,6 +229,13 @@ const DetailPost = () => {
 					<AiOutlineClose size={30} color='#000' className='w-12 h-12 p-3 bg-white rounded-full' />
 				</button>
 			</div>
+			<AnimatePresence mode='wait'>
+				{
+					isVisibleReviewForm && (
+						<Review setIsVisibleReviewForm={setIsVisibleReviewForm} isVisibleReviewForm={isVisibleReviewForm} id={detailPost.id} />
+					)
+				}
+			</AnimatePresence>
 		</>
 	)
 }
