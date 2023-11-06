@@ -53,7 +53,7 @@ exports.updateStatus = catchAsync(async (req, res, next) => {
 				req.body.userConfirm = null;
 			}
 			break;
-		case "Delivery":
+		case "Delivered":
 			if (post.userConfirm !== req.user.id)
 				return next(new AppError("You are't user Confirm!", 403));
 			if (post.status !== "Confirm")
