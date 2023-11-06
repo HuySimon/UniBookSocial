@@ -30,7 +30,7 @@ const Index = () => {
 		setIsLoading(true)
 		console.log(data)
 		try {
-			let url = "/api/v1/posts?filter=equals(status,'Unconfirm')"
+			let url = "/api/v1/posts?filter=equals(status,'Unconfirmed')"
 			let result = url.substring(0,21)
 			if(isDirty) {
 				if (data.query != "") {
@@ -44,7 +44,6 @@ const Index = () => {
 				if (data.isNew != -1) {
 					var isNewquery = `equals(isNew,'${data.isNew}')`
 					url = result + "and(" + url.substring(21, url.length) + "," + isNewquery + ")"
-	
 				}
 				if (data.minPrice != '') {
 					if (/^[+]?\d+([.]\d+)?$/.test(data.minPrice)) {

@@ -103,7 +103,7 @@ module.exports = (sequelize, DataTypes) => {
 		{
 			hooks: {
 				beforeCreate: async function (instance, options) {
-					instance.status = "Unconfirm";
+					instance.status = "Unconfirmed";
 				},
 			},
 			sequelize,
