@@ -35,6 +35,7 @@ const Header = () => {
 	const { stateHeader, dispatchHeader } = useHeaderContext()
 	const handleButtonClick = (buttonName) => {
 		dispatchHeader({ type: "SET_ACTIVE_BUTTON", payload: buttonName });
+		localStorage.setItem("activeButtonProfile",0)
 	};
 	useEffect(() => {
 		const checkTabletMode = () => {
@@ -78,7 +79,7 @@ const Header = () => {
 	}
 	return (
 		<>
-			<motion.div className={`fixed top-0 ${expand ? "w-[251px]" : "w-16 duration-[800ms]"} h-full bg-white border-r border-gray-300 transition-all z-10`}>
+			<motion.div className={`fixed top-0 ${expand ? "w-[251px]" : "w-16 duration-[800ms]"} h-full bg-white border-r border-gray-300 transition-all z-[2]`}>
 				<div className="relative w-full h-full flex flex-col items-stretch">
 					<div className="navbar-logo h-16 !ml-0 my-4">
 						<Link
@@ -211,9 +212,6 @@ const Header = () => {
 						setActiveOverlay={setActiveOverlay}
 					/>
 				)}
-				{/* {
-					isVisibleSetting && <Setting />
-				} */}
 			</AnimatePresence>
 		</>
 	);

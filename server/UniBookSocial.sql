@@ -105,14 +105,14 @@ CREATE TABLE `posts` (
 
 INSERT INTO `posts` (`id`, `title`, `price`, `mainImage`, `description`, `status`, `isNew`, `isGeneralSubject`, `userConfirm`, `userPost`, `createdAt`, `updatedAt`) VALUES
 (1, 'Kinh tế chính trị', 15000, 'mainImage.png', 'Tài liệu tham khảo', 'Confirm', 1, 0, 2, 5, '2023-09-25 02:02:24', '2023-09-25 02:02:24'),
-(2, 'Chủ nghĩa xã hội khoa học', 30000, 'mainImage.png', 'Tài liệu tham khảo', 'Unconfirm', 1, 0, NULL, 20, '2023-09-25 02:02:24', '2023-09-25 02:02:24'),
+(2, 'Chủ nghĩa xã hội khoa học', 30000, 'mainImage.png', 'Tài liệu tham khảo', 'Unconfirmed', 1, 0, NULL, 20, '2023-09-25 02:02:24', '2023-09-25 02:02:24'),
 (3, 'Kỹ thuật lập trình', 20000, 'mainImage.png', 'Tài liệu tham khảo', 'Delivery', 1, 1, 17, 6, '2023-09-25 02:02:24', '2023-09-25 02:02:24'),
 (4, 'GDQP và AN I', 10000, 'mainImage.png', 'Tài liệu học tập', 'Confirm', 1, 0, 10, 7, '2023-09-25 02:02:24', '2023-09-25 02:02:24'),
-(5, 'Triết học Mac-Lenin', 25000, 'mainImage.png', 'Tài liệu tham khảo', 'Unconfirm', 0, 0, NULL, 15, '2023-09-25 02:02:24', '2023-09-25 02:02:24'),
+(5, 'Triết học Mac-Lenin', 25000, 'mainImage.png', 'Tài liệu tham khảo', 'Unconfirmed', 0, 0, NULL, 15, '2023-09-25 02:02:24', '2023-09-25 02:02:24'),
 (6, 'Kinh tế vĩ mô', 20000, 'mainImage.png', 'Tài liệu tham khảo', 'Delivery', 1, 1, 12, 3, '2023-09-25 02:02:24', '2023-09-25 02:02:24'),
-(8, 'Tư tưởng Hồ Chí Minh', 15000, 'mainImage.png', 'Tài liệu tham khảo', 'Unconfirm', 0, 0, NULL, 9, '2023-09-25 02:02:24', '2023-09-25 02:02:24'),
+(8, 'Tư tưởng Hồ Chí Minh', 15000, 'mainImage.png', 'Tài liệu tham khảo', 'Unconfirmed', 0, 0, NULL, 9, '2023-09-25 02:02:24', '2023-09-25 02:02:24'),
 (9, 'Kinh tế lượng', 15000, 'mainImage.png', 'Tài liệu tham khảo', 'Confirm', 0, 1, 4, 19, '2023-09-25 02:02:24', '2023-09-25 02:02:24'),
-(10, 'Lịch sử Đảng cộng sản Việt Nam', 35000, 'mainImage.png', 'Tài liệu tham khảo', 'Unconfirm', 1, 0, NULL, 11, '2023-09-25 02:02:24', '2023-09-25 02:02:24');
+(10, 'Lịch sử Đảng cộng sản Việt Nam', 35000, 'mainImage.png', 'Tài liệu tham khảo', 'Unconfirmed', 1, 0, NULL, 11, '2023-09-25 02:02:24', '2023-09-25 02:02:24');
 
 -- --------------------------------------------------------
 
