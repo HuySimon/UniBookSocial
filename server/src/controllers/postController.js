@@ -54,7 +54,7 @@ exports.updateStatus = catchAsync(async (req, res, next) => {
 			}
 			break;
 		case "Delivery":
-			if (post.userConfirm === req.user.id)
+			if (post.userConfirm !== req.user.id)
 				return next(new AppError("You are't user Confirm!", 403));
 			if (post.status !== "Confirm")
 				return next(new AppError("You can only delivery when the post is confirm", 400));
