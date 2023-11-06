@@ -11,28 +11,16 @@ import {
 import { toast } from 'react-toastify';
 import Axios from '../../api/index';
 import { useAuthContext } from '../../hooks/useAuthContext';
+import { useNotificationContext } from '../../hooks/useNotificationContext';
 
 const Index = ({ isVisibleNotify, handleNotify }) => {
 	const [dataNotify, setDataNotify] = useState(null);
 	const [state, dispatch] = useAuthContext();
+	const [stateNotify,dispatchNotify] = useNotificationContext()
 	const { isAuthorized, user } = state;
-	const isLoading = !!dataNotify;
-
-	const getNotify = useCallback(async () => {
-		try {
-			const res = await Axios.get('/api/v1/notifications');
-			if (res.status === 200) {
-				setDataNotify(res.data.data.data);
-			}
-		} catch (err) {
-			toast.error(err);
-		}
-	}, []);
-
 	useEffect(() => {
-		getNotify();
-	}, [getNotify, isLoading]);
-	// console.log(result)
+		setDataNotify(stateNotify.notifications)
+	})
 	return (
 		<>
 			<motion.div
@@ -40,7 +28,7 @@ const Index = ({ isVisibleNotify, handleNotify }) => {
 				initial="initial"
 				animate={isVisibleNotify && 'open'}
 				exit="close"
-				className='h-screen fixed top-0 left-[250px] shadow-[4px_0_24px_rgba(0,0,0,0.15)] border-r border-gray-300 z-[9]'>
+				className='h-screen fixed top-0 left-[250px] shadow-[4px_0_24px_rgba(0,0,0,0.15)] border-r border-gray-300 z-[1]'>
 				<div className="w-[350px] h-full bg-white">
 					<div className="py-5 border-b">
 						<div className="flex flex-col">

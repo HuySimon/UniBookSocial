@@ -19,7 +19,7 @@ const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 	const [isZoomImage, setIsZoomImage] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const navigate = useNavigate();
-	const [state, dispatch] = useAuthContext();
+	const [state,dispatch] = useAuthContext()
 	const [statePost, dispatchPost] = usePostContext()
 	const handleFileChange = (e) => {
 		const file = e.target.files[0];
@@ -32,7 +32,6 @@ const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 			reader.readAsDataURL(file);
 		}
 	};
-
 	const {
 		register,
 		handleSubmit,
@@ -70,13 +69,10 @@ const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 			const res = await Axios.post('/api/v1/posts', formData, config);
 			if (res.status === 201) {
 				toast.success('Your post have been posted!');
-				// window.location.reload()
 				dispatchPost({ type: "CREATE_ONE_POST", value: res.data.data.data })
 				handleCreatePost(false);
 				console.log(res.data.data.data)
 			}
-			// console.log(res);
-			// console.log(res.data.data.data);
 		} catch (err) {
 			//Don't use err.response it will cause error 500: Internal Server error
 			//You can write specific message for it
@@ -88,6 +84,7 @@ const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 			setIsLoading(false);
 		}
 	};
+	console.log(state)
 	return (
 		<>
 			<motion.div
@@ -326,36 +323,3 @@ const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 };
 
 export default CreatePost;
-{
-	/* <div className="w-full flex justify-between items-center gap-5 mt-4">
-export default CreatePost;
-{
-	/* <div className="w-full flex justify-between items-center gap-5 mt-4">
-								<div className="w-full flex flex-col">
-									<span className='block mb-2 text-gray-400'>Core Image:</span>
-									<div className="flex items-center justify-center w-full">
-										<label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-36 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer">
-											<div className="flex flex-col items-center justify-center pt-5 pb-6">
-												<FiUpload size={45} className='text-[#6e6d74] p-3 mb-2 bg-[#F8F8F8] rounded-lg' />
-												<p className="mb-2 text-sm text-primary-500 font-medium "><span className="font-medium !text-black">Drag & drop files or</span> browse files</p>
-												<p className="text-xs text-gray-500 ">JPG, PNG or GIF - Max file size 2MB</p>
-											</div>
-											<input id="dropzone-file" type="file" className="hidden" />
-										</label>
-									</div>
-								</div>
-								<div className="w-full flex flex-col">
-									<span className='block mb-2 text-gray-400'>Sub Image:</span>
-									<div className="flex items-center justify-center w-full">
-										<label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-36 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer">
-											<div className="flex flex-col items-center justify-center pt-5 pb-6">
-												<FiUpload size={45} className='text-[#6e6d74] p-3 mb-2 bg-[#F8F8F8] rounded-lg' />
-												<p className="mb-2 text-sm text-primary-500 font-medium "><span className="font-medium !text-black">Drag & drop files or</span> browse files</p>
-												<p className="text-xs text-gray-500 ">JPG, PNG or GIF - Max file size 2MB</p>
-											</div>
-											<input id="dropzone-file" type="file" className="hidden" />
-										</label>
-									</div>
-								</div>
-							</div> */
-}

@@ -6,9 +6,9 @@ const initialState = {
 	posts: null,
 	isLoading: false,
 	createPost: null,
-	confirmPost: null,
+	isLoadingEdit: false,
 }
-const url = "/api/v1/posts?filter=equals(status,'Unconfirm')&include=userPostData&sort=-createdAt"
+const url = "/api/v1/posts?filter=equals(status,'Unconfirmed')&include=userPostData&sort=-createdAt"
 const reducer = (state, action) => {
 	switch (action.type) {
 		case "GET_DATA":
@@ -27,17 +27,21 @@ const reducer = (state, action) => {
 				isLoading: false
 			};
 		case "EDIT_POST":
-			break;
-		case "CONFIRM_POST":
 			return {
 				...state,
-				confirmPost: action.value,
+				isLoadingEdit: true
 			}
 			break;
-		case "SET_LOADING":
+		case "EDIT_POST_LOADING":
 			return {
 				...state,
-				isLoading: true
+				isLoadingEdit: false
+			}
+			break;
+		case "SET_LOADING_ALL_POST":
+			return {
+				...state,
+				isLoading: action.value
 			}
 		case "API_ERROR":
 			return {
@@ -53,16 +57,13 @@ const reducer = (state, action) => {
 
 export const PostProvider = ({ children }) => {
 	const getPosts = async (url) => {
-		dispatch({ type: "SET_LOADING" });
+		dispatch({ type: "SET_LOADING_ALL_POST", value: true });
 		try {
 			const res = await Axios.get(url);
 			if (res.status === 200) {
 				let sortedData = res.data.data.data
 				sortedData.sort((a, b) =>
 					Date.parse(b.createdAt) - Date.parse(a.createdAt)
-					// const aDate = new Date(a.createdAt)
-					// const bDate = new Date(b.createdAt)
-					// return bDate - aDate
 				)
 				dispatch({ type: "GET_DATA", value: sortedData });
 			}
