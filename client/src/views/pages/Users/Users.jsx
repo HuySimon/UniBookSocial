@@ -3,7 +3,6 @@
 import { PiPencilSimpleLine, PiTrashSimpleLight } from 'react-icons/pi';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 
 import Axios from '../../../api/index';

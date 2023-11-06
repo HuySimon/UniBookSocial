@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { BiDotsVerticalRounded } from 'react-icons/bi';
 import { PiTrashSimpleLight } from 'react-icons/pi';
+import { toast } from 'react-toastify';
 
 import Pagination from '../../../components/Dashboard/Pagination';
 import { Avatar } from '../../../assets';
@@ -27,6 +28,8 @@ function Posts() {
         try {
             let url = `/api/v1/posts?include=userPostData,reportData&page[number]=${currentPage}&page[size]=2`;
 
+            // &filter=equals(status,CheckPost)
+            // -------------
             // if (searchTerm && isEmailValid === true) {
             //     url += `&filter=or(contains(email,'${searchTerm}'))`;
             // } else if (searchTerm && isEmailValid === false) {
@@ -123,6 +126,22 @@ function Posts() {
     //     );
     //     setSelectedModalId(postId);
     // };
+
+    const handleCheckboxChange = async (postId, updatedStatus) => {
+        try {
+            const checked = checkboxStates.find((checkbox) => checkbox.id === postId)?.checked || false;
+            setCheckboxStates((prevState) =>
+                prevState.map((checkbox) => (checkbox.id === postId ? { ...checkbox, checked: !checked } : checkbox)),
+            );
+            const res = await Axios.patch(`/api/v1/users/${postId}`, updatedStatus);
+            if (res.status === 200) {
+                toast.success('Xác nhận bài đăng không vi phạm thành công!');
+            }
+            fetchData();
+        } catch (error) {
+            toast.error('Failed!');
+        }
+    };
 
     const handleModalClose = (postId) => {
         setActiveIcon(null);
