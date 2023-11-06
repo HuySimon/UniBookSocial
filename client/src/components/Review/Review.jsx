@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { AiOutlineClose, AiOutlineStar } from 'react-icons/ai'
 import { motion } from 'framer-motion'
 import Axios from '../../api/index'
-import { useForm, Controller } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import StarRating from '../RatingStar/RatingStar'
 const Review = ({ isVisibleReviewForm, setIsVisibleReviewForm, id }) => {
@@ -24,8 +24,10 @@ const Review = ({ isVisibleReviewForm, setIsVisibleReviewForm, id }) => {
 				content: data.content,
 				post: id
 			}
+			console.log(dataSend)
 			const res = await Axios.post(`/api/v1/reviews`, dataSend)
-			if (res.status === 200) {
+			console.log(res)
+			if (res.status === 201) {
 				toast.success("Thank you for your review !")
 				setIsVisibleReviewForm(false)
 				console.log(res)
@@ -44,7 +46,7 @@ const Review = ({ isVisibleReviewForm, setIsVisibleReviewForm, id }) => {
 				animate={{
 					scaleY: 1,
 					transition: {
-						duration: 0.25,
+						duration: 0.2,
 						ease: "easeIn"
 					}
 				}}
@@ -64,7 +66,6 @@ const Review = ({ isVisibleReviewForm, setIsVisibleReviewForm, id }) => {
 							</div>
 							<span className='w-full inline-block border-b border-gray-400 text-lg pb-2'>Description</span>
 							<textarea {...register("content")} className='w-full h-[200px] focus:outline-none p-2 resize-none' placeholder='Share your thoughs on the product'></textarea>
-
 						</div>
 						<div className="flex gap-2 justify-end mt-3">
 							<button type="button"

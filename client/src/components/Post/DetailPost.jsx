@@ -53,57 +53,35 @@ const DetailPost = () => {
 		if (Object.entries(state.user).length === 0) {
 			toast.warning("Please log in to buy")
 		} else {
-			// toastId.current = toast.loading("Please wait ....")
-			let data = {}
-			switch (status) {
-				case "Confirm":
-					data = {
-						status: "Confirm"
-					}
-					break;
-				case "Delivery":
-					data = {
-						status: "Delivery",
-						user: {
-							id: state.user.user.id
-						}
-					}
-					break;
-				case "Unconfirmed":
-					data = {
-						status: "Unconfirmed"
-					}
-					break;
-				default:
-					break;
+			toastId.current = toast.loading("Please wait ....")
+			const data = {
+				status: status
 			}
-			console.log(data)
-			// try {
-			// 	const res = await Axios.patch(`/api/v1/posts/${detailPost.id}/status`, data)
-			// 	if (res.status === 200) {
-			// 		console.log(res)
-			// 		// dispatchPost({ type: "CONFIRM_POST", value: res.data.data.data })
-			// 		setDetailPost(res.data.data.data)
-			// 		toast.update(toastId.current, {
-			// 			render: message,
-			// 			type: "success",
-			// 			isLoading: false,
-			// 			autoClose: 5000,
-			// 			className: 'animated rotateY',
-			// 			closeOnClick: true,
-			// 		})
-			// 	}
-			// } catch (err) {
-			// 	console.log(err)
-			// 	toast.update(toastId.current, {
-			// 		render: "Confirm Fail",
-			// 		type: "error",
-			// 		isLoading: false,
-			// 		autoClose: 5000,
-			// 		className: 'animated',
-			// 		closeOnClick: true,
-			// 	})
-			// }
+			try {
+				const res = await Axios.patch(`/api/v1/posts/${detailPost.id}/status`, data)
+				if (res.status === 200) {
+					console.log(res)
+					setDetailPost(res.data.data.data)
+					toast.update(toastId.current, {
+						render: message,
+						type: "success",
+						isLoading: false,
+						autoClose: 5000,
+						className: 'animated rotateY',
+						closeOnClick: true,
+					})
+				}
+			} catch (err) {
+				console.log(err)
+				toast.update(toastId.current, {
+					render: "Confirm Fail",
+					type: "error",
+					isLoading: false,
+					autoClose: 5000,
+					className: 'animated',
+					closeOnClick: true,
+				})
+			}
 		}
 	}
 	return (
@@ -207,7 +185,7 @@ const DetailPost = () => {
 									<button
 										type="submit"
 										ref={toastId}
-										onClick={() => confirmAction("Delivery", "Confirm success!")}
+										onClick={() => confirmAction("Confirm", "Confirm success!")}
 										className="w-28 xl:w-36 px-4 xl:px-6 py-3 bg-primary-main text-white rounded-lg hover:shadow !shadow-primary-700 hover:bg-primary-700 transition-all">
 										Buy
 									</button>
@@ -216,7 +194,7 @@ const DetailPost = () => {
 										<button
 											type="submit"
 											ref={toastId}
-											onClick={() => confirmAction("Delivery", "Delivery success!Let's review it now")}
+											onClick={() => confirmAction("Delivered", "Delivery success!Let's review it now")}
 											className="w-28 xl:w-36 px-4 xl:px-6 py-3 bg-primary-main text-white rounded-lg hover:shadow !shadow-primary-700 hover:bg-primary-700 transition-all">
 											Received
 										</button>
