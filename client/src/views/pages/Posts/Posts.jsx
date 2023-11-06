@@ -151,7 +151,6 @@ function Posts() {
     };
 
     const handleDeleteActive = (postId) => {
-        console.log(postId);
         setSelectedModalId(postId);
         setActiveIcon(postId);
     };

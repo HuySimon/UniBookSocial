@@ -9,7 +9,7 @@ import NoResultFound from './noResultFound.png';
 import InitSearchImage from './initSearch.png';
 import NoPostYet from './NoPostYet.png';
 import SGU1 from './dhsg_1.jpg';
-import SGU2 from './dhsg_3.jpg';
+import SGU3 from './dhsg_3.jpg';
 export {
     NoPostYet,
     NoResultFound,
@@ -22,5 +22,5 @@ export {
     AvatarUser,
     InitSearchImage,
     SGU1,
-    SGU2,
+    SGU3,
 };

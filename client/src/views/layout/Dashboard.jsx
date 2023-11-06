@@ -4,7 +4,7 @@ import HeaderAdmin from '../../components/Dashboard/HeaderAdmin';
 import { Outlet } from 'react-router-dom';
 import './Dashboard.css';
 
-const Dashboard = ({ children }) => {
+const Dashboard = () => {
     useEffect(() => {
         document.title = 'Admin';
     }, []);

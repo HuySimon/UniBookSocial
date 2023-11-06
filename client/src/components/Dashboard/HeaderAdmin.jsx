@@ -11,6 +11,7 @@ import {
     PiUsersLight,
     PiNewspaperLight,
     PiChartBarLight,
+    PiRocketLaunchLight,
 } from 'react-icons/pi';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -40,7 +41,7 @@ const HeaderAdmin = () => {
 
     const iconList = [
         {
-            icon: PiUsersLight,
+            icon: PiRocketLaunchLight,
             title: 'Dashboard',
             link: '/dashboard',
             handleCreatePost: () => {
