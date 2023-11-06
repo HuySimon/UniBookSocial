@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { BiDotsVerticalRounded } from 'react-icons/bi';
 import { PiTrashSimpleLight } from 'react-icons/pi';
+import { toast } from 'react-toastify';
 
 import Pagination from '../../../components/Dashboard/Pagination';
 import { Avatar } from '../../../assets';
@@ -21,11 +22,14 @@ function Posts() {
     const [isEmailValid, setIsEmailValid] = useState(true);
     const [checkboxStates, setCheckboxStates] = useState([]);
     const [selectedModalId, setSelectedModalId] = useState(null);
+    const [activeIcon, setActiveIcon] = useState(null);
 
     const fetchData = async () => {
         try {
             let url = `/api/v1/posts?include=userPostData,reportData&page[number]=${currentPage}&page[size]=2`;
 
+            // &filter=equals(status,CheckPost)
+            // -------------
             // if (searchTerm && isEmailValid === true) {
             //     url += `&filter=or(contains(email,'${searchTerm}'))`;
             // } else if (searchTerm && isEmailValid === false) {
@@ -105,22 +109,50 @@ function Posts() {
     };
 
     // Handle Close Modal
+    // const handleModalClose = (postId) => {
+    //     setCheckboxStates((prevState) =>
+    //         prevState.map((checkbox) => (checkbox.id === postId ? { ...checkbox, checked: false } : checkbox)),
+    //     );
+    //     if (postId === selectedModalId) {
+    //         setSelectedModalId(null);
+    //     }
+    // };
+
+    // Handle Checkbox
+    // const handleCheckboxChange = (postId) => {
+    //     const checked = checkboxStates.find((checkbox) => checkbox.id === postId)?.checked || false;
+    //     setCheckboxStates((prevState) =>
+    //         prevState.map((checkbox) => (checkbox.id === postId ? { ...checkbox, checked: !checked } : checkbox)),
+    //     );
+    //     setSelectedModalId(postId);
+    // };
+
+    const handleCheckboxChange = async (postId, updatedStatus) => {
+        try {
+            const checked = checkboxStates.find((checkbox) => checkbox.id === postId)?.checked || false;
+            setCheckboxStates((prevState) =>
+                prevState.map((checkbox) => (checkbox.id === postId ? { ...checkbox, checked: !checked } : checkbox)),
+            );
+            const res = await Axios.patch(`/api/v1/users/${postId}`, updatedStatus);
+            if (res.status === 200) {
+                toast.success('Xác nhận bài đăng không vi phạm thành công!');
+            }
+            fetchData();
+        } catch (error) {
+            toast.error('Failed!');
+        }
+    };
+
     const handleModalClose = (postId) => {
-        setCheckboxStates((prevState) =>
-            prevState.map((checkbox) => (checkbox.id === postId ? { ...checkbox, checked: false } : checkbox)),
-        );
+        setActiveIcon(null);
         if (postId === selectedModalId) {
             setSelectedModalId(null);
         }
     };
 
-    // Handle Checkbox
-    const handleCheckboxChange = (postId) => {
-        const checked = checkboxStates.find((checkbox) => checkbox.id === postId)?.checked || false;
-        setCheckboxStates((prevState) =>
-            prevState.map((checkbox) => (checkbox.id === postId ? { ...checkbox, checked: !checked } : checkbox)),
-        );
+    const handleDeleteActive = (postId) => {
         setSelectedModalId(postId);
+        setActiveIcon(postId);
     };
 
     return (
@@ -252,11 +284,15 @@ function Posts() {
                                         <div className="checkbox__indicator"></div>
                                     </label>
                                     <Link
+                                        onClick={() => handleDeleteActive(post.id)}
                                         to="#"
                                         type="button"
                                         data-modal-target="deleteUserModal"
                                         data-modal-show="deleteUserModal"
-                                        className="font-medium text-2xl color"
+                                        // className="font-medium text-2xl color"
+                                        className={`font-medium text-2xl color${
+                                            activeIcon === post.id ? ' active' : ''
+                                        }`}
                                     >
                                         <i>
                                             <PiTrashSimpleLight />
