@@ -12,17 +12,33 @@ import { useAuthContext } from '../../hooks/useAuthContext';
 import Report from '../Report'
 import { usePostContext } from '../../hooks/usePostContext';
 import { toast } from 'react-toastify';
-const Post = ({ post }) => {
+const ProfilePost = ({ post }) => {
 	const [isVisibleMenuPost, setIsVisibleMenuPost] = useState(false)
-	const [isVisibleReport, setIsVisibleReport] = useState(false)
+	const [isVisibleEditPost, setIsVisibleEditPost] = useState(false)
+	const [isVisibleModalDelete, setIsVisibleModalDelete] = useState(false)
 	const [selectedFile, setSelectedFile] = useState(null);
 	const [timeAgo, setTimeAgo] = useState('');
-	const toastId = useRef(null)
 	const [state, dispatch] = useAuthContext()
 	const [statePost, dispatchPost] = usePostContext()
 	const handleVisibleMenuPost = () => {
 		setIsVisibleMenuPost(!isVisibleMenuPost);
 	};
+	const menuOption = [
+		{
+			title: 'Edit Post',
+			icon: AiOutlineEdit,
+			handle: () => {
+				setIsVisibleEditPost(!isVisibleEditPost);
+			},
+		},
+		{
+			title: 'Delete Post',
+			icon: BiTrash,
+			handle: () => {
+				setIsVisibleModalDelete(!isVisibleModalDelete);
+			},
+		},
+	];
 	useEffect(() => {
 		const calculateTimeAgo = () => {
 			const now = new Date();
@@ -79,13 +95,20 @@ const Post = ({ post }) => {
 						{isVisibleMenuPost && (
 							<div className="w-44 h-fit bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] absolute top-14 right-5 rounded-md overflow-hidden">
 								<div className="flex flex-col relative">
-									<button
-										type="button"
-										onClick={() => { setIsVisibleReport(!isVisibleReport) }}
-										className={`flex gap-4 p-2 hover:bg-black/10 transition-all z-10 border-b`}>
-										<AiOutlineAlert size={22} />
-										<p className="font-medium">Report</p>
-									</button>
+									{
+										menuOption.map((item, index) => (
+											<button
+												key={index}
+												type="button"
+												onClick={item.handle}
+												className={`flex gap-4 p-2 hover:bg-black/10 transition-all z-10 ${index != menuOption.length && 'border-b'
+													}`}
+											>
+												<item.icon size={22} />
+												<p className="font-medium">{item.title}</p>
+											</button>
+										))
+									}
 									<AiFillCaretRight
 										className="absolute rotate-[180deg] -right-2 -top-[14px] text-white"
 										size={30}
@@ -141,15 +164,20 @@ const Post = ({ post }) => {
 					</table>
 				</div>
 			</div>
+			{isVisibleEditPost && (
+				<EditPost post={post} handleEditPost={setIsVisibleEditPost} isVisibleEditPost={isVisibleEditPost} />
+			)}
 			<AnimatePresence mode="wait">
-				{
-					isVisibleReport && (
-						<Report post={post} setIsVisibleReport={setIsVisibleReport} />
-					)
-				}
+				{isVisibleModalDelete && (
+					<Modal
+						postID={post.id}
+						isVisibleModalDelete={isVisibleModalDelete}
+						setIsVisibleModalDelete={setIsVisibleModalDelete}
+					/>
+				)}
 			</AnimatePresence>
 		</>
 	);
 };
 
-export default Post;
+export default ProfilePost;

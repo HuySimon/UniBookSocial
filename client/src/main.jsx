@@ -11,15 +11,18 @@ import { AuthProvider } from './context/AuthProvider'
 import { SearchProvider } from './context/SearchProvider'
 import { HeaderProvider } from './context/HeaderProvider'
 import { PostProvider } from './context/Post/PostProvider'
+import { NotificationProvider } from './context/Notifcation/NotificationProvider.jsx'
 ReactDOM.createRoot(document.getElementById('root')).render(
 	<>
 		<AuthProvider>
 			<PostProvider>
-				<SearchProvider>
-					<HeaderProvider>
-						<RouterProvider router={router} />
-					</HeaderProvider>
-				</SearchProvider>
+				<NotificationProvider>
+					<SearchProvider>
+						<HeaderProvider>
+							<RouterProvider router={router} />
+						</HeaderProvider>
+					</SearchProvider>
+				</NotificationProvider>
 			</PostProvider>
 		</AuthProvider>
 		<ToastContainer

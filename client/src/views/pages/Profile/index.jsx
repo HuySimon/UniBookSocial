@@ -32,29 +32,6 @@ const Index = () => {
 	}
 	useEffect(() => {
 		document.title = "Profile"
-		const getUser = async () => {
-			try {
-				const res = await Axios.get('/api/v1/users/me')
-				setCurrentUser(res.data.data.data)
-				dispatch({ type: "LOGIN", value: res.data.data.data })
-				// console.log(res.data.data.data)
-			} catch (err) {
-				toast.error("Can't get user information")
-				document.title = "Home"
-				console.log(err)
-				navigate('/')
-			}
-		}
-		// const Test = async () => {
-		// 	try {
-		// 		const res = await Axios.get('/api/v1/users/5')
-		// 		console.log(res.data)
-
-		// 	} catch (err) {
-		// 		console.log(err.response)
-		// 	}
-		// }
-		// Test()
 		getUser()
 	}, [])
 	const [activeButton, setActiveButton] = useState(JSON.parse(localStorage.getItem("activeButtonProfile")))
@@ -87,7 +64,7 @@ const Index = () => {
 	// console.log(selectedFile)
 	return (
 		<div className='w-full flex flex-col px-[25px] lg:px-[150px] xl:px-[250px] mx-auto'>
-			<div className="w-full flex flex-col h-[400px] relative z-[8]">
+			<div className="w-full flex flex-col h-[400px] relative -z-10">
 				<div className="w-full h-full absolute inset-0 ">
 					<img src={SignupImg} alt="" className='w-full h-full object-cover object-top' />
 				</div>
@@ -104,7 +81,7 @@ const Index = () => {
 			<div className="flex flex-col text-center mt-[68px] pb-5">
 				<p className='font-medium text-3xl'>{currentUser.username}</p>
 			</div>
-			<div className="pt-4 w-full z-[8]">
+			<div className="pt-4 w-full z-[2]">
 				<div className="h-full flex lg:flex-row flex-col">
 					<div className=" w-full lg:w-1/4 flex lg:h-full h-fit flex-row lg:flex-col justify-between lg:justify-start items-center gap-5 lg:pr-6 lg:mb-0 mb-6">
 						{
