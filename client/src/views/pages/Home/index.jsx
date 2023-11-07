@@ -40,7 +40,6 @@ export const AllPostLoader = async () => {
 	try {
 		// const response = await Axios.get("/api/v1/posts?filter=and(and(and(equals(status,'Unconfirm'),equals(isGeneralSubject,'0')),contains(title,'t')),equals(isNew,'0'))&include=userPostData&sort=-createdAt");
 		const response = await Axios.get("/api/v1/posts?filter=equals(status,'Unconfirm')&include=userPostData&sort=-createdAt");
-
 		// /api/v1/posts?filter=and(equals(status,'Unconfirm'),contains(title,'t'),)&include=userPostData&sort=-createdAt
 		//greaterOrEqual
 		//lessOrEqual

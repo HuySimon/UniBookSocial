@@ -13,7 +13,7 @@ const reducer = (state, action) => {
 		case "GET_DATA":
 			return {
 				...state,
-				notifications: action.value,
+				reviews: action.value,
 				isLoading: false
 			}
 			break;

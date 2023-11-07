@@ -80,11 +80,11 @@ const Index = () => {
 	}, [])
 
 	return (
-		<div className="w-full h-full px-10 py-6">
+		<div className="w-full h-full px-10 py-6	">
 			<div className="w-full h-full flex flex-col">
 				<form
 					onSubmit={handleSubmit(onSubmit)}
-					className="z-[8]">
+					className="">
 					<span className="text-4xl">Search</span>
 					<div className="flex justify-between items-center border border-gray-400 rounded-md px-3 py-2 mt-3">
 						<input

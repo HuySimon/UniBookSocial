@@ -19,9 +19,9 @@ const Index = () => {
 	const navigate = useNavigate()
 	const getUser = async () => {
 		try {
-			const res = await Axios.get(`/api/v1/users/me`)
+			const res = await Axios.get(`/api/v1/users/${profileId.id}`)
 			setCurrentUser(res.data.data.data)
-			dispatch({ type: "LOGIN", value: res.data.data.data })
+			// dispatch({ type: "LOGIN", value: res.data.data.data })
 			// console.log(res.data.data.data)
 		} catch (err) {
 			toast.error("Can't get user information")
@@ -33,7 +33,7 @@ const Index = () => {
 	useEffect(() => {
 		document.title = "Profile"
 		getUser()
-	}, [])
+	}, [profileId.id])
 	const [activeButton, setActiveButton] = useState(JSON.parse(localStorage.getItem("activeButtonProfile")))
 	const menu = [
 		{
@@ -71,10 +71,15 @@ const Index = () => {
 				<div className="w-full flex justify-end items-center relative top-80">
 					<div className="w-36 h-36 mx-auto relative">
 						<img src={`http://127.0.0.1:5000/public/images/users/${currentUser.avatar}`} alt="" className='w-full h-full rounded-full object-cover object-center' />
-						<label htmlFor="imageFile" className='absolute top-3/4 right-0 z-10 overflow-hidden cursor-pointer'>
-							<input type="file" name="" id="imageFile" className='hidden absolute w-full h-full' onChange={handleFileChange} accept="image/*" />
-							<MdPhotoCamera size={40} className=' bg-gray-300 text-black p-2 rounded-full hover:bg-gray-400 transition-all hover:text-white' />
-						</label>
+
+						{
+							(Object.entries(state.user).length) > 0 && (state.user.user.id === currentUser.id) && (
+								<label htmlFor="imageFile" className='absolute top-3/4 right-0 z-10 overflow-hidden cursor-pointer'>
+									<input type="file" name="" id="imageFile" className='hidden absolute w-full h-full' onChange={handleFileChange} accept="image/*" />
+									<MdPhotoCamera size={40} className=' bg-gray-300 text-black p-2 rounded-full hover:bg-gray-400 transition-all hover:text-white' />
+								</label>
+							)
+						}
 					</div>
 				</div>
 			</div>
@@ -99,7 +104,7 @@ const Index = () => {
 							))
 						}
 						{
-							JSON.parse(localStorage.getItem("user")).user.id == profileId.id && (
+							(Object.entries(state.user).length > 0 && (state.user.user.id === currentUser.id) && (
 								<>
 									<Link
 										to={`/profile/${currentUser.id}/historyConfirm`}
@@ -120,7 +125,7 @@ const Index = () => {
 										<span className='inline-block lg:ml-3 text-base lg:font-medium'>Review</span>
 									</Link>
 								</>
-							)
+							))
 						}
 					</div>
 					<div className="w-full lg:w-3/4 lg:pl-6 lg:border-l border-gray-400">
@@ -131,7 +136,7 @@ const Index = () => {
 			{
 				selectedFile != null && <UpdateAvatar file={selectedFile} setSelectedFile={setSelectedFile} />
 			}
-		</div>
+		</div >
 	)
 }
 

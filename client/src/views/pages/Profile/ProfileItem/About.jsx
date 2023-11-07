@@ -7,7 +7,6 @@ import { toast } from 'react-toastify'
 import { useNavigate, useParams } from 'react-router-dom'
 import ChangePasswordProfile from './AboutComponents/ChangePasswordProfile'
 import { changeInformationSchema } from '../../../../validations/ProfileValidation'
-import { getCurrentUser } from '../../../../api/APIUser'
 
 function isObjectEmpty(obj) {
 	return Object.keys(obj).length === 0;
@@ -17,6 +16,7 @@ const About = () => {
 
 	const [currentUser, setCurrentUser] = useState({});
 	const userID = useParams()
+	const [state, dispatch] = useAuthContext()
 	const [edit, setEdit] = useState(false)
 	const handleEdit = () => {
 		setEdit(!edit)
@@ -40,13 +40,13 @@ const About = () => {
 		})
 
 	useEffect(() => {
-		Axios.get('/api/v1/users/me').then(res => {
+		Axios.get(`/api/v1/users/${userID.id}`).then(res => {
 			setCurrentUser(res.data.data.data)
 		}).catch(err => {
 			toast.error(err.response.message)
 			navigate('/')
 		})
-	}, [reset])
+	}, [userID.id])
 
 	const handleEditInformation = async (data) => {
 		const fieldsToTrack = [
@@ -75,8 +75,6 @@ const About = () => {
 				if (response.status === 200) {
 					toast.success("Edit information success!");
 				}
-				// console.log(response);
-				// console.log(response.data);
 			} catch (err) {
 				toast.error(err.response.data.message);
 				// console.error(err.response);
@@ -89,7 +87,7 @@ const About = () => {
 		<div className='w-full h-full'>
 			<form
 				onSubmit={handleSubmit(handleEditInformation)}
-				className='w-full flex flex-col gap-5'>
+				className='w-full flex flex-col gap-5 mb-2'>
 				<div className="flex justify-between items-center relative mb-2">
 					<label htmlFor="name" className='w-1/4 font-medium'>First Name</label>
 					<input type="text"
@@ -147,23 +145,33 @@ const About = () => {
 						{...register("linkInstagram")} className='w-3/4 rounded-md px-3 py-2 text-black' />
 					<p className='text-[12px] text-red-600 absolute top-[46px] left-1/4'>{errors.linkInstagram?.message}</p>
 				</div>
-				<div className="flex gap-5">
-					<button
-						type='button'
-						onClick={handleEdit}
-						className='w-28 bg-primary-main px-8 py-2 text-white hover:bg-primary-800 cursor-pointer transition-all rounded-md'>
-						{
-							edit ? 'Cancel' : 'Edit'
-						}
-					</button>
-					<button
-						type="submit"
-						disabled={!edit ? true : false}
-						className={`w-28 px-8 py-2 cursor-pointer transition-all rounded-md ${edit ? 'bg-primary-main text-white hover:bg-primary-800 cursor-pointer' : 'bg-gray-200 text-white cursor-not-allowed'}`}> Submit
-					</button>
-				</div>
+				{
+					(Object.entries(state.user).length > 0 && (state.user.user.id === currentUser.id) && (
+						<div className="flex gap-5">
+							<button
+								type='button'
+								onClick={handleEdit}
+								className='w-28 bg-primary-main px-8 py-2 text-white hover:bg-primary-800 cursor-pointer transition-all rounded-md'>
+								{
+									edit ? 'Cancel' : 'Edit'
+								}
+							</button>
+							<button
+								type="submit"
+								disabled={!edit ? true : false}
+								className={`w-28 px-8 py-2 cursor-pointer transition-all rounded-md ${edit ? 'bg-primary-main text-white hover:bg-primary-800 cursor-pointer' : 'bg-gray-200 text-white cursor-not-allowed'}`}> Submit
+							</button>
+						</div>
+					))
+				}
 			</form>
-			<ChangePasswordProfile />
+			{
+				(Object.entries(state.user).length) > 0 && (state.user.user.id === currentUser.id) && (
+					<>
+						<ChangePasswordProfile />
+					</>
+				)
+			}
 		</div>
 	)
 }
