@@ -2,6 +2,7 @@ const express = require("express");
 const postController = require("../controllers/postController");
 const authController = require("../controllers/authController");
 const uploadImgMiddleware = require("../middlewares/uploadImg.middleware");
+const { RoleEnum } = require('../enums/role.enum')
 const router = express.Router();
 
 router.get(
@@ -11,7 +12,7 @@ router.get(
 router.patch(
   "/:id/status",
   authController.protect,
-  authController.restrictTo(1),
+  authController.restrictTo(RoleEnum.USER, RoleEnum.MANAGER),
   postController.updateStatus,
   postController.updatePost
 );
