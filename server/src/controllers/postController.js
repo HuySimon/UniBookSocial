@@ -2,11 +2,33 @@ const factory = require("./handlerFactory");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const db = require("../models");
+const { Op, fn, col, date } = require("sequelize");
 const { post } = require("../routes/postRoutes");
 const notificationController = require("../controllers/notificationController");
 const Post = db.Post;
 const User = db.User;
 const Notification = db.Notification;
+
+exports.statistics = catchAsync(async (req, res, next) => {
+
+	const posts = await Post.findAll({
+		attributes: [
+			[fn('date_format', col('updatedAt'), '%Y-%m-%d'), 'date_col_formed'],
+			[fn('COUNT', col('id')), 'count'],
+		],
+		where: {
+			status: req.params.status,
+			updatedAt: {
+				[Op.between]: [new Date(req.params.dayStart), new Date(req.params.dayEnd)]
+			}
+		},
+		group: [fn('date_format', col('updatedAt'), '%Y-%m-%d'), 'date_col_formed'],
+	})
+	res.status(200).json({
+		status: 'success',
+		posts
+	})
+})
 
 exports.setUserPost = (req, res, next) => {
 	req.body.userPost = req.user.id;

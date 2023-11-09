@@ -4,6 +4,10 @@ const authController = require("../controllers/authController");
 const uploadImgMiddleware = require("../middlewares/uploadImg.middleware");
 const router = express.Router();
 
+router.get(
+  '/statistics/:status/dayStart/:dayStart/dayEnd/:dayEnd',
+  postController.statistics)
+
 router.patch(
   "/:id/status",
   authController.protect,
