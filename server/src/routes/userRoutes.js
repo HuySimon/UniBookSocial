@@ -1,30 +1,34 @@
-const express = require("express");
-const userController = require("../controllers/userController");
-const authController = require("../controllers/authController");
+const express = require('express');
+const userController = require('../controllers/userController');
+const authController = require('../controllers/authController');
+const uploadImgMiddleware = require('../middlewares/uploadImg.middleware');
 
 const router = express.Router();
 
-router.post("/signup", authController.signup);
-router.post("/login", authController.login);
-router.get("/logout", authController.logout);
+router.post('/signup', authController.signup);
+router.post('/login', authController.login);
+router.get('/logout', authController.logout);
 
-router.post("/forgotPassword", authController.forgotPassword);
-router.patch("/resetPassword/:token", authController.resetPassword);
+router.post('/forgotPassword', authController.forgotPassword);
+router.patch('/resetPassword/:token', authController.resetPassword);
 
 router.use(authController.protect)
 
-router.patch("/updateMyPassword", authController.updatePassword);
-router.get("/me", userController.getMe, userController.getUser);
-router.patch("/updateMe", userController.updateMe);
-router.delete("/deleteMe", userController.deleteMe);
+router.patch('/updateMyPassword', authController.updatePassword);
+router.get('/me', userController.getMe, userController.getUser);
+router.patch(
+  '/updateMe',
+  uploadImgMiddleware.uploadSingleImg('mainImage', 'public/images/users'),
+  userController.updateMe);
+router.delete('/deleteMe', userController.deleteMe);
 
 router
-  .route("/")
+  .route('/')
   .get(authController.restrictTo(2), userController.getAllUsers)
   .post(authController.restrictTo(2), userController.createUser);
 
 router
-  .route("/:id")
+  .route('/:id')
   .get(userController.getUser)
   .patch(authController.restrictTo(2), userController.updateUser)
   .delete(authController.restrictTo(2), userController.deleteUser);
