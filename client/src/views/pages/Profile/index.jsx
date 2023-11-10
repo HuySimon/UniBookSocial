@@ -33,7 +33,7 @@ const Index = () => {
 	useEffect(() => {
 		document.title = "Profile"
 		getUser()
-	}, [profileId.id])
+	}, [profileId.id,selectedFile])
 	const [activeButton, setActiveButton] = useState(JSON.parse(localStorage.getItem("activeButtonProfile")))
 	const menu = [
 		{
@@ -140,3 +140,13 @@ const Index = () => {
 }
 
 export default Index
+export const AllReviewLoader = async () => {
+	try {
+		const response = await Axios.get("/api/v1/reviews");
+
+		return response.data.data;
+	} catch (error) {
+		console.error('Error fetching data:', error);
+		throw error;
+	}
+};

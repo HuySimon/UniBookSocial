@@ -127,7 +127,7 @@ const Header = () => {
 										title={"Profile"}
 										href={`/profile/${JSON.parse(localStorage.getItem("user")).user.id}`}
 										handleCreate={() => { setIsVisibleNotify(false), clearSearch(), handleButtonClick("Profile") }}
-										icon={<img src={`http://127.0.0.1:5000/public/images/users/${JSON.parse(localStorage.getItem("user")).user.avatar}`} className='w-[30px] h-[30px] rounded-full object-cover' />}
+										icon={<img src={`http://127.0.0.1:5000/public/images/users/${state.user.user.avatar}`} className='w-[30px] h-[30px] rounded-full object-cover' />}
 									/>
 								</>
 							)

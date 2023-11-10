@@ -5,7 +5,7 @@ import Dashboard from '../views/layout/Dashboard';
 import HomeAdmin from '../views/pages/HomeAdmin/HomeAdmin';
 import Home from '../views/pages/Home';
 import SignUp from '../views/auth/SignUp';
-import Profile from '../views/pages/Profile';
+import Profile, { AllReviewLoader } from '../views/pages/Profile';
 import NotFound from '../views/pages/PageNotFound';
 import ForgotPassword from '../views/auth/forgotPassword/ForgotPassword';
 import Search from '../views/pages/Search';
@@ -30,6 +30,7 @@ const router = createBrowserRouter([
             {
                 path: '/profile/:id',
                 element: <Profile />,
+				loader: AllReviewLoader,
                 children: [
                     {
                         index: true,
