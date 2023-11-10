@@ -2,32 +2,38 @@ import React, { useEffect, useState } from 'react'
 import { RiSearch2Line } from 'react-icons/ri'
 import { AiFillStar, AiOutlineGlobal } from 'react-icons/ai'
 import { Avatar } from '../../../../assets'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { useReviewContext } from '../../../../hooks/useReviewContext'
 import Axios from '../../../../api/index'
+import ReviewPost from './ReviewComponents/ReviewPost'
 const Review = () => {
 
 	const [state, dispatch] = useReviewContext()
-	const [userReviews, setUserReviews] = useState(null)
 	const [reviews, setReviews] = useState([])
-	const getReviews = async () => {
+	const [isLoading, setIsLoading] = useState(false)
+	const userID = useParams()
+	const getPostReview = async () => {
 		try {
-			let array = []
-			state.reviews.map(async (review) => {
-				const res = await Axios.get(`/api/v1/users/${review.user}`)
-				if (res.status === 200) {
-					// console.log(res.data.data.data)
-					array.push(res.data.data.data)
-				}
-			})
-			setUserReviews(array)
-			setReviews(state.reviews)
+			setIsLoading(true)
+			const res = await Axios.get(`/api/v1/posts?filter=equals(userPost,'${userID.id}')&include=reviewData.userReviewData`)
+			if (res.status === 200) {
+				console.log(res.data.data.data)
+				setReviews(res.data.data.data)
+				setIsLoading(false)
+			}
 		} catch (err) {
+			setIsLoading(false)
 			console.log(err)
 		}
 	}
+	const checkExistData = () => {
+		reviews.map((review, _) => {
+			return Boolean(review.reviewData != null)
+		})
+	}
+	console.log(checkExistData())
 	useEffect(() => {
-		getReviews()
+		getPostReview()
 	}, [])
 	return (
 		<div className='flex flex-col gap-3 lg:mt-0 mt-[66px]'>
@@ -35,38 +41,51 @@ const Review = () => {
 				<RiSearch2Line size={28} className='text-gray-400' />
 				<input type="text" name="" id="" className='border-none w-full focus:outline-none text-black placeholder:text-sm' placeholder='You can search by anything....' />
 			</div>
-			{
+			{/* {
 				reviews.map((review, index) => (
-					<div
-						key={index}
-						className="w-full flex flex-col gap-3 border border-gray-400 p-5 rounded-sm">
-						<div className="w-full flex flex-row justify-between items-center">
-							<div className="flex gap-3 items-center">
-								<div className="w-14 h-14 rounded-full overflow-hidden">
-									<img src={Avatar} alt="" className='w-full h-full object-cover' />
-								</div>
-								<div className="flex flex-col items-start">
-									<span className="name font-medium text-lg">
-										John Doe
-										{/* {userReviews[index].username} */}
-									</span>
-									<div className='flex justify-start'>
-										{
-											Array(review.numStars).fill(null).map((_, index) => (
-												<AiFillStar key={index} className='text-yellow-500' size={14} />
-											))
-										}
+					<ReviewPost review={review} userReview={review.reviewData} />
+				))
+			} */}
+			{
+				reviews.length != 0 ? (
+					reviews.map((review, index) => (
+						(review.reviewData != null) &&
+						<div
+							key={index}
+							className="w-full flex flex-col gap-3 border border-gray-400 p-5 rounded-sm" >
+							<div className="w-full flex flex-row justify-between items-center">
+								<div className="flex gap-3 items-center">
+									<div className="w-14 h-14 rounded-full overflow-hidden">
+										<img
+											src={`http://127.0.0.1:5000/public/images/users/${review.reviewData.userReviewData.avatar}`}
+											alt="" className='w-full h-full object-cover' />
+									</div>
+									<div className="flex flex-col items-start">
+										<span className="name font-medium text-lg">
+											{review.reviewData.userReviewData.username}
+										</span>
+										<div className='flex justify-start'>
+											{
+												Array(review.reviewData.numStars).fill(null).map((_, index) => (
+													<AiFillStar key={index} className='text-yellow-500' size={14} />
+												))
+											}
+										</div>
 									</div>
 								</div>
 							</div>
+							<div className="flex p-2 border border-gray-400 rounded-sm">
+								<p>{review.reviewData.content}</p>
+							</div>
 						</div>
-						<div className="flex p-2 border border-gray-400 rounded-sm">
-							<p>{review.content}</p>
-						</div>
+					))
+				) : (
+					<div className="w-full h-screen flex justify-center items-center">
+						<p className='text-6xl text-gray-500 font-mono'>Nothing in here</p>
 					</div>
-				))
+				)
 			}
-		</div>
+		</div >
 	)
 }
 

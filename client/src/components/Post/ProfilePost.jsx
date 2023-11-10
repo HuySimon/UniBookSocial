@@ -71,7 +71,7 @@ const ProfilePost = ({ post }) => {
 								<Link to={`/profile/${post.userPostData.id}`}>
 									<img
 										src={`http://127.0.0.1:5000/public/images/users/${post.userPostData.avatar}`}
-										alt=""
+										alt="user avatar"
 										className="w-full h-full object-cover"
 									/>
 								</Link>
