@@ -10,13 +10,14 @@ import { FaRegFaceSadTear } from 'react-icons/fa6'
 import { NoResultFound } from '../../../assets';
 import { Outlet } from 'react-router-dom';
 import { toast } from 'react-toastify'
+import { usePostContext } from '../../../hooks/usePostContext';
 const Index = () => {
 
 	const [searchPost, setSearchPost] = useState([])
 	const [isLoading, setIsLoading] = useState(false)
 	const { searchValues, searchResults, updateSearch } = useSearchContext()
 
-	const { register, handleSubmit, reset, formState: { errors, isSubmitted,isDirty,isValid } } = useForm({
+	const { register, handleSubmit, formState: { errors, isDirty, isValid } } = useForm({
 		mode: 'onChange',
 		defaultValues: {
 			query: searchValues.query,
@@ -31,8 +32,8 @@ const Index = () => {
 		console.log(data)
 		try {
 			let url = "/api/v1/posts?filter=equals(status,'Unconfirmed')"
-			let result = url.substring(0,21)
-			if(isDirty) {
+			let result = url.substring(0, 21)
+			if (isDirty) {
 				if (data.query != "") {
 					var queryUrl = `contains(title,'${data.query}')`
 					url = result + "and(" + url.substring(21, url.length) + "," + queryUrl + ")"
@@ -74,9 +75,20 @@ const Index = () => {
 			setIsLoading(false)
 		}
 	}
-
+	const getPost = async () => {
+		try {
+			const res = await Axios.get(`/api/v1/posts?filter=equals(status,'Unconfirmed')&sort=-createdAt`)
+			if (res.status === 200) {
+				console.log(res.data.data.data)
+				setSearchPost(res.data.data.data)
+			}
+		} catch (err) {
+			console.log(err)
+		}
+	}
 	useEffect(() => {
 		document.title = "Search"
+		getPost()
 	}, [])
 
 	return (
@@ -111,7 +123,7 @@ const Index = () => {
 										className="w-40 border border-gray-400 px-3 py-2 appearance-none rounded-md"
 									>
 										<option value={'-1'}>
-											Select Type
+											All
 										</option>
 										<option value="0">No</option>
 										<option value="1">Yes</option>
@@ -129,7 +141,7 @@ const Index = () => {
 										className="w-40 border border-gray-400 px-3 py-2 appearance-none rounded-md"
 									>
 										<option value={'-1'}>
-											Select Type
+											All
 										</option>
 										<option value="1">New</option>
 										<option value="0">Old</option>
@@ -162,6 +174,23 @@ const Index = () => {
 				</form>
 				<div className="w-full h-full">
 					{
+						searchPost.length === 0 ? (
+							<div className="w-full h-fit flex flex-col justify-center items-center">
+								<img src={NoResultFound} alt="" className='w-[45vh] h-[45vh]' />
+								<p className='font-medium text-xl text-black/90 mb-2 tracking-wide'>No Result Found</p>
+								<p className='text-gray-400 text-sm'>Try adjusting your search terms or filters</p>
+							</div>
+						) : (
+							<div className="w-full mt-5 grid grid-cols-[repeat(2,minmax(0,3fr))] xl:grid-cols-[repeat(4,minmax(0,3fr))] 2xl:grid-cols-[repeat(6,minmax(0,3fr))] gap-2 gap-y-5">
+								{
+									searchPost.map((post, index) => (
+										<SearchPost key={index} post={post} />
+									))
+								}
+							</div>
+						)
+					}
+					{/* {
 						isSubmitted || searchResults.length != 0 ? (
 							isLoading ? (
 								<div className="w-full h-full flex justify-center items-center">
@@ -185,8 +214,7 @@ const Index = () => {
 						) : (
 							<Outlet />
 						)
-					}
-
+					} */}
 				</div>
 			</div>
 		</div>

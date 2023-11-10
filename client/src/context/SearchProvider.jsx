@@ -29,7 +29,11 @@ export const SearchProvider = ({ children }) => {
 	}, []);
 
 	const updateSearch = (newSearchValue, data) => {
-		const updatedSearchValue = { ...searchValues, ...newSearchValue };
+		if (newSearchValue != null) {
+			const updatedSearchValue = { ...searchValues, ...newSearchValue };
+		}else {
+			const updatedSearchValue = { ...searchValues };
+		}
 		setSearchValues(updatedSearchValue);
 		setSearchResults(data);
 	};

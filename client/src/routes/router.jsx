@@ -53,12 +53,12 @@ const router = createBrowserRouter([
             {
                 path: '/search',
                 element: <Search />,
-                children: [
-                    {
-                        index: true,
-                        element: <InitPage />,
-                    },
-                ],
+                // children: [
+                //     {
+                //         index: true,
+                //         element: <InitPage />,
+                //     },
+                // ],
             },
         ],
     },
