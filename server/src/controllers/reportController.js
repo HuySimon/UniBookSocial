@@ -13,12 +13,12 @@ exports.createReport = catchAsync(async (req, res, next) => {
 
   if (!post) return next(new AppError('No post found with that ID', 400))
 
-  if (post.status != 'Unconfirm') {
+  if (post.status != 'Unconfirmed') {
     return next(new AppError('Unconfirmed posts can only be reported', 400))
   }
   post.status = 'Violation'
   await post.save();
-
+  
   //create report notification
   await Notification.create({
     isSeen: false,

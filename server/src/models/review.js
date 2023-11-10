@@ -8,9 +8,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
-	  Review.belongsTo(models.Post, { targetKey: 'id', foreignKey: 'post', as: 'userPostData' })
-
+      Review.belongsTo(models.User, { targetKey: 'id', foreignKey: 'user', as: 'userReviewData' })
     }
   }
   Review.init(

@@ -7,34 +7,28 @@ import Swal from 'sweetalert2';
 import Axios from '../../../api/index';
 
 // eslint-disable-next-line react/prop-types
-const Delete = ({ userId, apiUrl, onDeleteSuccess, onDeleteError }) => {
+const Delete = ({ userId, apiUrl, onDeleteSuccess }) => {
     const onDeleteUser = async (userId) => {
         try {
             const res = await Axios.delete(`${apiUrl}/${userId}`);
 
-            if (res.status === 200) {
-                const data = res.data;
-                if (data.success) {
-                    onDeleteSuccess(userId);
-                    Swal.fire({
-                        title: 'Xóa thành công!',
-                        icon: 'success',
-                        confirmButtonText: 'OK',
-                    });
-                } else {
-                    onDeleteError(data.error);
-                    Swal.fire({
-                        title: 'Xóa người dùng thất bại',
-                        text: data.error,
-                        icon: 'error',
-                        confirmButtonText: 'OK',
-                    });
-                }
+            if (res && +res.status === 204) {
+                // onDeleteSuccess(userId);
+                Swal.fire({
+                    title: 'Xóa thành công!',
+                    icon: 'success',
+                    confirmButtonText: 'OK',
+                });
+                onDeleteSuccess(userId);
             } else {
+                Swal.fire({
+                    title: 'Xóa người dùng thất bại',
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                });
                 throw new Error('Error deleting user');
             }
         } catch (error) {
-            onDeleteError(error);
             Swal.fire({
                 title: 'Lỗi',
                 text: error.message,

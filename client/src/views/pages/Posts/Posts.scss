@@ -14,47 +14,51 @@ $checkbox-check-color: #739600;
     cursor: pointer;
 
     input {
-      display: none;
+        display: none;
     }
 
     &__indicator {
-      position: absolute;
-      top: 2px;
-      left: 0;
-      height: 20px;
-      width: 20px;
-      background: white;
-      border: 2px solid $input-border-color;
-      border-radius: 1px;
-	    transition: 125ms ease-out;
+        position: absolute;
+        top: 2px;
+        left: 0;
+        height: 20px;
+        width: 20px;
+        background: white;
+        border: 2px solid $input-border-color;
+        border-radius: 1px;
+        transition: 125ms ease-out;
 
         &:after {
-          content: '';
-          position: absolute;
-          left: 1px;
-          top: 9px;
-          width: 7px;
-          height: 13px;
-          transform: scaleX(-1) rotate(135deg);
-	        transform-origin: left top;
-	        border-right: 3px solid white;
-	        border-top: 3px solid white;
-          display: none;
+            content: '';
+            position: absolute;
+            left: 1px;
+            top: 9px;
+            width: 7px;
+            height: 13px;
+            transform: scaleX(-1) rotate(135deg);
+            transform-origin: left top;
+            border-right: 3px solid white;
+            border-top: 3px solid white;
+            display: none;
         }
     }
 
     input:checked ~ .checkbox__indicator {
-      background: white;
+        background: white;
     }
 
     input:checked ~ .checkbox__indicator:after {
-      animation: check 125ms;
-	    border-top: 3px solid $checkbox-check-color;
-	    border-right: 3px solid $checkbox-check-color;
-      display: block;
+        animation: check 125ms;
+        border-top: 3px solid $checkbox-check-color;
+        border-right: 3px solid $checkbox-check-color;
+        display: block;
     }
 }
 
 .color {
-  color: #c6c6c6;
+    color: #c6c6c6;
+}
+
+.active {
+    color: red;
 }

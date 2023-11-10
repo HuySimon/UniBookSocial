@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react'
-import Header from '../../components/Header/Header'
-import { Outlet } from 'react-router-dom'
+// eslint-disable-next-line no-unused-vars
+import React, { useEffect } from 'react';
+import Header from '../../components/Header/Header';
+import { Outlet } from 'react-router-dom';
 
 const DefaultLayout = ({ children }) => {
 	useEffect(() => {
@@ -18,4 +19,4 @@ const DefaultLayout = ({ children }) => {
 	)
 }
 
-export default DefaultLayout
+export default DefaultLayout;
