@@ -18,7 +18,7 @@ router.patch('/updateMyPassword', authController.updatePassword);
 router.get('/me', userController.getMe, userController.getUser);
 router.patch(
   '/updateMe',
-  uploadImgMiddleware.uploadSingleImg('mainImage', 'public/images/users'),
+  uploadImgMiddleware.uploadSingleImg('avatar', 'public/images/users'),
   userController.updateMe);
 router.delete('/deleteMe', userController.deleteMe);
 

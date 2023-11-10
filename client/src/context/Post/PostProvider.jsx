@@ -7,6 +7,7 @@ const initialState = {
 	isLoading: false,
 	createPost: null,
 	isLoadingEdit: false,
+	isLoadingHistoryConfirm: false,
 }
 const url = "/api/v1/posts?filter=equals(status,'Unconfirmed')&include=userPostData&sort=-createdAt"
 const reducer = (state, action) => {
@@ -36,6 +37,12 @@ const reducer = (state, action) => {
 			return {
 				...state,
 				isLoadingEdit: false
+			}
+			break;
+		case "LOADING_HISTORY_POST":
+			return {
+				...state,
+				isLoadingHistoryConfirm: action.value
 			}
 			break;
 		case "SET_LOADING_ALL_POST":

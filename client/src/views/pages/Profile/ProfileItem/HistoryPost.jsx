@@ -6,27 +6,29 @@ import { ImSpinner9 } from 'react-icons/im'
 import { NoPostYet } from '../../../../assets'
 import ProfilePost from '../../../../components/Post/ProfilePost'
 import { usePostContext } from '../../../../hooks/usePostContext'
+import { useParams } from 'react-router-dom'
 const HistoryPost = () => {
 
 	const [state, dispatch] = useAuthContext()
 	const [statePost, dispatchPost] = usePostContext()
 	const [userPosts, setUserPosts] = useState([])
+	const userID = useParams()
 	const [isLoading, setIsLoading] = useState(false)
-	useEffect(() => {
-		const fetchUserPost = async () => {
-			setIsLoading(true)
-			try {
-				const res = await Axios.get(`/api/v1/posts?filter=equals(userPost,'${JSON.parse(localStorage.getItem("user")).user.id}')&include=userPostData&sort=-createdAt`)
-				if (res.status === 200) {
-					setUserPosts(res.data.data.data)
-					// console.log(res.data.data.data)
-					setIsLoading(false)
-				}
-			} catch (err) {
-				console.log(err)
+	const fetchUserPost = async () => {
+		setIsLoading(true)
+		try {
+			const res = await Axios.get(`/api/v1/posts?filter=equals(userPost,'${userID.id}')&include=userPostData&sort=-createdAt`)
+			if (res.status === 200) {
+				setUserPosts(res.data.data.data)
+				// console.log(res.data.data.data)
 				setIsLoading(false)
 			}
+		} catch (err) {
+			console.log(err)
+			setIsLoading(false)
 		}
+	}
+	useEffect(() => {
 		fetchUserPost()
 	}, [state.user,statePost])
 	return (

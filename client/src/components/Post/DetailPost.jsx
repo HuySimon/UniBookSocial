@@ -61,7 +61,6 @@ const DetailPost = () => {
 				const res = await Axios.patch(`/api/v1/posts/${detailPost.id}/status`, data)
 				if (res.status === 200) {
 					console.log(res)
-					// dispatchPost({ type: "CONFIRM_POST", value: res.data.data.data })
 					setDetailPost(res.data.data.data)
 					toast.update(toastId.current, {
 						render: message,
@@ -88,7 +87,7 @@ const DetailPost = () => {
 	return (
 		<>
 			<div className='flex w-full h-screen'>
-				<div className="bg-black flex-[3] py-20 mx-auto">
+				<div className="bg-black/90 flex-[3] py-20 mx-auto">
 					<div className="main-img w-full h-full px-10">
 						<img src={`http://127.0.0.1:5000/public/images/posts/${detailPost.mainImage}`} alt="Product Image" className='w-full h-full object-contain object-center rounded-md' />
 					</div>
@@ -112,7 +111,7 @@ const DetailPost = () => {
 					</div>
 					<div className="h-full flex flex-col justify-between">
 						<div className="flex flex-col">
-							<table className='flex border border-gray-500 rounded-lg my-4'>
+							<table className='flex border border-gray-500 rounded-md my-4'>
 								<thead className='flex flex-col border-r w-1/2 border-gray-500'>
 									<tr className='border-b p-2 border-gray-500 font-medium text-sm'>
 										<th>Title</th>
@@ -130,8 +129,8 @@ const DetailPost = () => {
 										<th>Description</th>
 									</tr>
 								</thead>
-								<tbody className='flex flex-col w-1/2 xl:w-4/5'>
-									<tr className='p-2 text-sm truncate'>
+								<tbody className='flex flex-col w-4/5'>
+									<tr className='p-2 text-sm break-words'>
 										<td>{detailPost.title}</td>
 									</tr>
 									<tr className='p-2 border-t border-gray-500 text-sm'>
@@ -152,7 +151,7 @@ const DetailPost = () => {
 									</tr>
 								</tbody>
 							</table>
-							<table className='flex border border-gray-500 rounded-lg my-4'>
+							<table className='flex border border-gray-500 rounded-md my-4'>
 								<thead className='flex flex-col border-r w-1/2 border-gray-500'>
 									<tr className='border-b p-2 border-gray-500 font-medium text-sm'>
 										<th>Name</th>
@@ -164,11 +163,11 @@ const DetailPost = () => {
 										<th>Contact</th>
 									</tr>
 								</thead>
-								<tbody className='flex flex-col w-1/2 xl:w-4/5'>
+								<tbody className='flex flex-col w-4/5'>
 									<tr className='p-2 text-sm'>
 										<td>{userPost.username}</td>
 									</tr>
-									<tr className='p-2 border-t border-gray-500 text-sm'>
+									<tr className='p-2 border-t border-gray-500 text-sm break-words w-full'>
 										<td>{userPost.email}</td>
 									</tr>
 									<tr className='p-2 border-t border-gray-500 text-sm'>
@@ -186,9 +185,8 @@ const DetailPost = () => {
 									<button
 										type="submit"
 										ref={toastId}
-										onClick={() => setIsVisibleReviewForm(true)}
-										// onClick={() => confirmAction("Confirm", "Confirm success!")}
-										className="w-36 px-6 py-3 bg-primary-main text-white rounded-lg hover:shadow !shadow-primary-700 hover:bg-primary-700 transition-all">
+										onClick={() => confirmAction("Confirm", "Confirm success!")}
+										className="w-28 xl:w-36 px-4 xl:px-6 py-3 bg-primary-main text-white rounded-lg hover:shadow !shadow-primary-700 hover:bg-primary-700 transition-all">
 										Buy
 									</button>
 								) : detailPost.status === "Confirm" ? (
@@ -196,15 +194,15 @@ const DetailPost = () => {
 										<button
 											type="submit"
 											ref={toastId}
-											onClick={() => confirmAction("Delivery", "Delivery success!Let's review it now")}
-											className="w-36 px-6 py-3 bg-primary-main text-white rounded-lg hover:shadow !shadow-primary-700 hover:bg-primary-700 transition-all">
+											onClick={() => confirmAction("Delivered", "Delivery success!Let's review it now")}
+											className="w-28 xl:w-36 px-4 xl:px-6 py-3 bg-primary-main text-white rounded-lg hover:shadow !shadow-primary-700 hover:bg-primary-700 transition-all">
 											Received
 										</button>
 										<button
 											type="submit"
 											ref={toastId}
 											onClick={() => confirmAction("Unconfirmed", "Unconfirm success")}
-											className="w-36 px-6 py-3 bg-transparent border border-primary-main text-primary-main rounded-lg hover:shadow transition-all">
+											className="w-28 xl:w-36 px-4 xl:px-6 py-3 bg-transparent border border-primary-main text-primary-main rounded-lg hover:shadow transition-all">
 											Cancel Order
 										</button>
 									</div>
@@ -212,8 +210,8 @@ const DetailPost = () => {
 									<button
 										type="submit"
 										ref={toastId}
-										// onClick={() => confirmAction("Review")}
-										className="w-36 px-6 py-3 bg-primary-main text-white rounded-lg hover:shadow !shadow-primary-700 hover:bg-primary-700 transition-all">
+										onClick={() => setIsVisibleReviewForm(true)}
+										className="w-28 xl:w-36 px-4 xl:px-6 py-3 bg-primary-main text-white rounded-lg hover:shadow !shadow-primary-700 hover:bg-primary-700 transition-all">
 										Review
 									</button>
 								)

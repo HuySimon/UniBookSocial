@@ -4,22 +4,15 @@ import { CiSearch } from 'react-icons/ci';
 import { AiOutlineLogout, AiOutlineDashboard } from 'react-icons/ai';
 import {
 	PiHeartLight,
-	PiEnvelopeLight,
-	PiListBold,
 	PiHouseLight,
 	PiPlusCircleLight,
-	PiUsersLight,
-	PiNewspaperLight,
-	PiChartBarLight,
-	PiGearLight,
 } from 'react-icons/pi';
 import { AnimatePresence, motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import CreatePost from '../Post/CreatePost';
 import Notification from '../Notification';
-import { Logo, Portrait } from '../../assets';
+import { Logo } from '../../assets';
 import SideBarItem from './SideBarItem';
-import Setting from '../../views/pages/Setting';
 import { useAuthContext } from '../../hooks/useAuthContext';
 import Axios from '../../api/index';
 import { useSearchContext } from '../../hooks/useSearch';
@@ -35,7 +28,7 @@ const Header = () => {
 	const { stateHeader, dispatchHeader } = useHeaderContext()
 	const handleButtonClick = (buttonName) => {
 		dispatchHeader({ type: "SET_ACTIVE_BUTTON", payload: buttonName });
-		localStorage.setItem("activeButtonProfile",0)
+		localStorage.setItem("activeButtonProfile", 0)
 	};
 	useEffect(() => {
 		const checkTabletMode = () => {
@@ -48,8 +41,8 @@ const Header = () => {
 		return () => {
 			window.removeEventListener('resize', checkTabletMode);
 		};
-	}, [state.user]);
-
+	}, [state.user, state.isLoading]);
+	console.log(state.isLoading)
 	const iconList = [
 		{
 			icon: PiHouseLight,
@@ -70,7 +63,6 @@ const Header = () => {
 		Axios.get('/api/v1/users/logout').then(res => {
 			if (res.status === 200) {
 				toast.success("Log out success")
-
 			}
 			navigate('/')
 		}).catch(err => {
@@ -135,9 +127,23 @@ const Header = () => {
 										title={"Profile"}
 										href={`/profile/${JSON.parse(localStorage.getItem("user")).user.id}`}
 										handleCreate={() => { setIsVisibleNotify(false), clearSearch(), handleButtonClick("Profile") }}
-										icon={<img src={`http://127.0.0.1:5000/public/images/users/${JSON.parse(localStorage.getItem("user")).user.avatar}`} className='w-[30px] h-[30px] rounded-full object-cover' />}
+										icon={<img src={`http://127.0.0.1:5000/public/images/users/${state.user.user.avatar}`} className='w-[30px] h-[30px] rounded-full object-cover' />}
 									/>
 								</>
+							)
+						}
+						{
+							Object.entries(state.user).length > 0 && (state.user.user.role === 2) && state.isAuthorized === true && (
+								<SideBarItem
+									index={5}
+									activeOverlay={activeOverlay}
+									setActiveOverlay={setActiveOverlay}
+									expand={expand}
+									title={"Dashboard"}
+									href={`/dashboard`}
+									handleCreate={() => { setIsVisibleNotify(false), clearSearch(), handleButtonClick("Dashboard") }}
+									icon={<AiOutlineDashboard size={30} className='' />}
+								/>
 							)
 						}
 					</motion.ul>

@@ -5,18 +5,15 @@ import Dashboard from '../views/layout/Dashboard';
 import HomeAdmin from '../views/pages/HomeAdmin/HomeAdmin';
 import Home from '../views/pages/Home';
 import SignUp from '../views/auth/SignUp';
-import Profile from '../views/pages/Profile';
+import Profile, { AllReviewLoader } from '../views/pages/Profile';
 import NotFound from '../views/pages/PageNotFound';
 import ForgotPassword from '../views/auth/forgotPassword/ForgotPassword';
 import Search from '../views/pages/Search';
-import CreatePost from '../components/Post/CreatePost';
 import PrivateRoutes from '../wrapper/PrivateRoutes';
-import { useAuthContext } from '../hooks/useAuthContext';
 import Users from '../views/pages/Users/Users';
 import Statics from '../views/pages/Statics';
 import Posts from '../views/pages/Posts/Posts';
 import DetailPost from '../components/Post/DetailPost';
-import EditPost from '../components/Post/EditPost';
 import { AllPostLoader } from '../views/pages/Home';
 import { About, HistoryConfirm, HistoryPost, Review } from '../views/pages/Profile/ProfileItem';
 import InitPage from '../views/pages/Search/InitPage';
@@ -33,6 +30,7 @@ const router = createBrowserRouter([
             {
                 path: '/profile/:id',
                 element: <Profile />,
+				loader: AllReviewLoader,
                 children: [
                     {
                         index: true,

@@ -30,7 +30,7 @@ const Index = () => {
 		setIsLoading(true)
 		console.log(data)
 		try {
-			let url = "/api/v1/posts?filter=equals(status,'Unconfirm')"
+			let url = "/api/v1/posts?filter=equals(status,'Unconfirmed')"
 			let result = url.substring(0,21)
 			if(isDirty) {
 				if (data.query != "") {
@@ -44,7 +44,6 @@ const Index = () => {
 				if (data.isNew != -1) {
 					var isNewquery = `equals(isNew,'${data.isNew}')`
 					url = result + "and(" + url.substring(21, url.length) + "," + isNewquery + ")"
-	
 				}
 				if (data.minPrice != '') {
 					if (/^[+]?\d+([.]\d+)?$/.test(data.minPrice)) {
@@ -81,11 +80,11 @@ const Index = () => {
 	}, [])
 
 	return (
-		<div className="w-full h-full px-10 py-6">
+		<div className="w-full h-full px-10 py-6	">
 			<div className="w-full h-full flex flex-col">
 				<form
 					onSubmit={handleSubmit(onSubmit)}
-					className="z-[8]">
+					className="">
 					<span className="text-4xl">Search</span>
 					<div className="flex justify-between items-center border border-gray-400 rounded-md px-3 py-2 mt-3">
 						<input

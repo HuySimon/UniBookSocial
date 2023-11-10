@@ -20,7 +20,7 @@ const SearchPost = ({ post }) => {
 				<p className='font-medium'>{post.title}</p>
 				<div className="flex justify-between items-center">
 					<div className="flex flex-col text-sm">
-						<p>New: <span>{post.isNew === false ? "No" : "Yes"}</span></p>
+						<p>New: <span>{post.isNew === false ? "Old" : "New"}</span></p>
 						<p>General Subject: <span>{post.isGeneralSubject === false ? "No" : "Yes"}</span></p>
 					</div>
 					<span className='text-xl text-primary-900 font-medium'>₫{post.price}</span>
