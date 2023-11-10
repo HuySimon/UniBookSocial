@@ -67,6 +67,7 @@ const About = () => {
 				trigger(fieldName);
 			}
 		});
+		console.log(curUser)
 		if (isObjectEmpty(curUser)) {
 			toast.error("You haven't changed anything");
 		} else {
@@ -76,6 +77,7 @@ const About = () => {
 					toast.success("Edit information success!");
 				}
 			} catch (err) {
+				console.log(err)
 				toast.error(err.response.data.message);
 				// console.error(err.response);
 			}

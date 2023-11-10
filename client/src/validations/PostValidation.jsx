@@ -22,7 +22,7 @@ export const createPostSchema = Yup.object().shape({
 export const editPostSchema = Yup.object().shape({
 	title: Yup.string(),
 	price: Yup.number().typeError("Price must be a number").positive("Must be a positive value"),
-	mainImage: Yup.mixed(),
+	mainImage: Yup.mixed().typeError("Please choose an image").required('Please upload an image'),
 	description: Yup.string(),
 	isNew: Yup.boolean().typeError("Please choose one"),
 	isGeneralSubject: Yup.boolean().typeError("Please choose one")

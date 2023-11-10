@@ -23,8 +23,8 @@ const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 	const [statePost, dispatchPost] = usePostContext()
 	const handleFileChange = (e) => {
 		const file = e.target.files[0];
-		setValue('mainImage', file);
 		if (file) {
+			setValue('mainImage', file);
 			const reader = new FileReader();
 			reader.onload = () => {
 				setSelectedFile(reader.result);
@@ -174,7 +174,7 @@ const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 													alt="Preview"
 													onClick={() => setIsZoomImage(true)}
 													title="You can click to see the full size of image"
-													className="w-full h-[250px] max-h-[25vh] object-cover object-center rounded-md cursor-pointer"
+													className="w-full h-[250px] max-h-[20vh] object-cover object-center rounded-md cursor-pointer"
 												/>
 											</div>
 											<AiOutlineClose

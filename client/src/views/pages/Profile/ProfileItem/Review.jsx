@@ -27,8 +27,8 @@ const Review = () => {
 		}
 	}
 	const checkExistData = () => {
-		reviews.map((review, _) => {
-			return Boolean(review.reviewData != null)
+		return reviews.some((review) => {
+			return review.reviewData != null
 		})
 	}
 	console.log(checkExistData())
@@ -37,17 +37,13 @@ const Review = () => {
 	}, [])
 	return (
 		<div className='flex flex-col gap-3 lg:mt-0 mt-[66px]'>
-			<div className="flex gap-3 items-center w-full border border-gray-400 p-2 rounded-sm">
-				<RiSearch2Line size={28} className='text-gray-400' />
-				<input type="text" name="" id="" className='border-none w-full focus:outline-none text-black placeholder:text-sm' placeholder='You can search by anything....' />
-			</div>
 			{/* {
 				reviews.map((review, index) => (
 					<ReviewPost review={review} userReview={review.reviewData} />
 				))
 			} */}
 			{
-				reviews.length != 0 ? (
+				Boolean(checkExistData()) === true && reviews.length != 0 ? (
 					reviews.map((review, index) => (
 						(review.reviewData != null) &&
 						<div
