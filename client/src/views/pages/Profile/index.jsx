@@ -64,14 +64,13 @@ const Index = () => {
 	// console.log(selectedFile)
 	return (
 		<div className='w-full flex flex-col px-[25px] lg:px-[150px] xl:px-[250px] mx-auto'>
-			<div className="w-full flex flex-col h-[400px] relative -z-10">
+			<div className="w-full flex flex-col h-[400px] relative">
 				<div className="w-full h-full absolute inset-0 ">
 					<img src={SignupImg} alt="" className='w-full h-full object-cover object-top' />
 				</div>
 				<div className="w-full flex justify-end items-center relative top-80">
 					<div className="w-36 h-36 mx-auto relative">
 						<img src={`http://127.0.0.1:5000/public/images/users/${currentUser.avatar}`} alt="" className='w-full h-full rounded-full object-cover object-center' />
-
 						{
 							(Object.entries(state.user).length) > 0 && (state.user.user.id === currentUser.id) && (
 								<label htmlFor="imageFile" className='absolute top-3/4 right-0 z-10 overflow-hidden cursor-pointer'>
@@ -86,7 +85,7 @@ const Index = () => {
 			<div className="flex flex-col text-center mt-[68px] pb-5">
 				<p className='font-medium text-3xl'>{currentUser.username}</p>
 			</div>
-			<div className="pt-4 w-full z-[2]">
+			<div className="pt-4 w-full">
 				<div className="h-full flex lg:flex-row flex-col">
 					<div className=" w-full lg:w-1/4 flex lg:h-full h-fit flex-row lg:flex-col justify-between lg:justify-start items-center gap-5 lg:pr-6 lg:mb-0 mb-6">
 						{

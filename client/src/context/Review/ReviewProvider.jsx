@@ -5,7 +5,9 @@ export const ReviewContext = createContext()
 const initialState = {
 	reviews: null,
 	isLoading: false,
-	singleReview: null
+	singleReview: null,
+	isEditReviewLoading: false,
+	isAddReviewLoading: false,
 }
 const url = "/api/v1/reviews"
 const reducer = (state, action) => {
@@ -15,6 +17,23 @@ const reducer = (state, action) => {
 				...state,
 				reviews: action.value,
 				isLoading: false
+			}
+			break;
+		case "ADD_REVIEW":
+			return {
+				...state,
+				isAddReviewLoading: action.value
+			}
+		case "EDIT_REVIEW":
+			return {
+				...state,
+				isEditReviewLoading: false
+			}
+			break;
+		case "SET_LOADING_EDIT":
+			return {
+				...state,
+				isEditReviewLoading: true
 			}
 			break;
 		case "SET_LOADING":

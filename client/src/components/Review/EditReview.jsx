@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { AiOutlineClose, AiOutlineStar } from 'react-icons/ai'
 import { motion } from 'framer-motion'
 import Axios from '../../api/index'
@@ -6,19 +6,27 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import StarRating from '../RatingStar/RatingStar'
 import { useReviewContext } from '../../hooks/useReviewContext'
-const Review = ({ isVisibleReviewForm, setIsVisibleReviewForm, id }) => {
-	const [rating, setRating] = useState(0)
+const EditReview = ({ isVisibleEditReviewForm, setIsVisibleEditReviewForm, id }) => {
 	const [state, dispatch] = useReviewContext()
+	const checkExistReview = () => {
+		const result = state.reviews.find((review) => {
+			return review.post === id;
+		});
+		return result;
+	}
+	const result = checkExistReview()
+	const [rating, setRating] = useState(result.numStars)
 	const { register, handleSubmit, formState: { errors } } = useForm({
 		defaultValues: {
-			numStars: 0,
-			content: ""
+			numStars: result.numStars,
+			content: result.content
 		},
 		mode: "onChange"
 	})
 	const handleRating = (rate) => {
 		setRating(rate)
 	}
+
 	const onSubmit = async (data) => {
 		try {
 			const dataSend = {
@@ -26,22 +34,24 @@ const Review = ({ isVisibleReviewForm, setIsVisibleReviewForm, id }) => {
 				content: data.content,
 				post: id
 			}
-			dispatch({ type: "ADD_REVIEW", value: true })
+			dispatch({type: "SET_LOADING_EDIT"})
 			console.log(dataSend)
-			const res = await Axios.post(`/api/v1/reviews`, dataSend)
+			const res = await Axios.patch(`/api/v1/reviews/${result.id}`, dataSend)
 			console.log(res)
-			if (res.status === 201) {
-				toast.success("Thank you for your review !")
-			dispatch({ type: "ADD_REVIEW", value: false })
-				setIsVisibleReviewForm(false)
+			if (res.status === 200) {
+				dispatch({type: "EDIT_REVIEW"})
+				toast.success("Edit success!")
+				setIsVisibleEditReviewForm(false)
 				console.log(res)
 			}
 		} catch (err) {
-			dispatch({ type: "ADD_REVIEW", value: false })
 			toast.error(err.response.message)
 			console.log(err)
 		}
 	}
+	useEffect(() => {
+		checkExistReview()
+	},[state.isEditReviewLoading])
 	return (
 		<>
 			<motion.div
@@ -51,7 +61,7 @@ const Review = ({ isVisibleReviewForm, setIsVisibleReviewForm, id }) => {
 				animate={{
 					scaleY: 1,
 					transition: {
-						duration: 0.2,
+						duration: 0.3,
 						ease: "easeIn",
 						type: "spring"
 					}
@@ -60,7 +70,7 @@ const Review = ({ isVisibleReviewForm, setIsVisibleReviewForm, id }) => {
 				<div className="w-full flex flex-col p-4">
 					<div className="flex justify-between items-center mb-3">
 						<p className='text-3xl font-medium'>Order Delivered</p>
-						<AiOutlineClose size={22} onClick={() => { setIsVisibleReviewForm(false) }} className='cursor-pointer' />
+						<AiOutlineClose size={22} onClick={() => { setIsVisibleEditReviewForm(false) }} className='cursor-pointer' />
 					</div>
 					<form
 						onSubmit={handleSubmit(onSubmit)}
@@ -75,7 +85,7 @@ const Review = ({ isVisibleReviewForm, setIsVisibleReviewForm, id }) => {
 						</div>
 						<div className="flex gap-2 justify-end mt-3">
 							<button type="button"
-								onClick={() => { setIsVisibleReviewForm(false) }}
+								onClick={() => { setIsVisibleEditReviewForm(false) }}
 								className='w-28 px-5 py-3 text-primary-main font-medium hover:bg-gray-100 transition-all rounded-md cursor-pointer'>Cancel</button>
 							<button
 								type="submit"
@@ -91,4 +101,4 @@ const Review = ({ isVisibleReviewForm, setIsVisibleReviewForm, id }) => {
 	)
 }
 
-export default Review
+export default EditReview

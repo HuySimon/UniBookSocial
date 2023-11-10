@@ -1,16 +1,24 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { PiUserCircleLight } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 import { useAuthContext } from '../../../../../hooks/useAuthContext'
+import { useReviewContext } from '../../../../../hooks/useReviewContext'
 import { toast } from 'react-toastify'
 import { AnimatePresence } from 'framer-motion'
 import Review from '../../../../../components/Review/Review'
-
+import EditReview from '../../../../../components/Review/EditReview'
+import Axios from '../../../../../api/index'
+import { usePostContext } from '../../../../../hooks/usePostContext'
 const ConfirmPost = ({ post }) => {
 
 	const [state, dispatch] = useAuthContext()
+	const [stateReview, dispatchReview] = useReviewContext()
+	const [statePost, dispatchPost] = usePostContext()
+	const [postData, setPostData] = useState(post)
 	const [userPost, setUserPost] = useState(post.userPostData)
 	const [isVisibleReviewForm, setIsVisibleReviewForm] = useState(false)
+	const [isVisibleEditReviewForm, setIsVisibleEditReviewForm] = useState(false)
+
 	const toastId = useRef(null)
 
 	const confirmAction = async (status, message) => {
@@ -18,14 +26,16 @@ const ConfirmPost = ({ post }) => {
 			toast.warning("Please log in to buy")
 		} else {
 			toastId.current = toast.loading("Please wait ....")
+			setTimeout(() => {
+				dispatchPost({ type: "LOADING_HISTORY_POST", value: true })
+			}, 2000);
 			const data = {
 				status: status
 			}
 			try {
-				const res = await Axios.patch(`/api/v1/posts/${post.id}/status`, data)
+				const res = await Axios.patch(`/api/v1/posts/${postData.id}/status`, data)
 				if (res.status === 200) {
 					console.log(res)
-					setDetailPost(res.data.data.data)
 					toast.update(toastId.current, {
 						render: message,
 						type: "success",
@@ -34,6 +44,9 @@ const ConfirmPost = ({ post }) => {
 						className: 'animated rotateY',
 						closeOnClick: true,
 					})
+					setTimeout(() => {
+						dispatchPost({ type: "LOADING_HISTORY_POST", value: false })
+					}, 2000);
 				}
 			} catch (err) {
 				console.log(err)
@@ -45,10 +58,30 @@ const ConfirmPost = ({ post }) => {
 					className: 'animated',
 					closeOnClick: true,
 				})
+				dispatchPost({ type: "LOADING_HISTORY_POST", value: false })
 			}
 		}
 	}
-
+	const deleteReview = async (id) => {
+		try {
+			const res = await Axios.delete(`/api/v1/reviews/${id}`)
+			if(res.status === 200) {
+				toast.success("Delete Review Success")
+			}
+		} catch (err) {
+			console.log(err)
+		}
+	}
+	const checkExistReview = () => {
+		const result = stateReview.reviews.find((review) => {
+			return review.post === postData.id;
+		});
+		return Boolean(result);
+	};
+	let result = checkExistReview()
+	useEffect(() => {
+		checkExistReview()
+	}, [postData.status, stateReview.isLoading,stateReview.isAddReviewLoading])
 	return (
 		<>
 			<div className="w-full flex flex-col gap-3 border border-gray-400 p-5 rounded-sm">
@@ -67,32 +100,41 @@ const ConfirmPost = ({ post }) => {
 							<span className='inline-block ml-1'>View Profile</span>
 						</Link>
 					</div>
-					<span className="status uppercase text-base font-semibold !leading-7 text-primary-900">{post.status}</span>
+					<div className="flex items-center gap-2">
+						<span className="status uppercase text-base font-semibold !leading-7 text-primary-900">{post.status}</span>
+						{
+							result === true && (
+								<button className='p-2 bg-red-400 rounded-sm text-sm text-white hover:bg-red-500 transition-all'>
+									Delete Review
+								</button>
+							)
+						}
+					</div>
 				</div>
 				<div className="my-1">
 					<div className="w-full flex justify-between items-center border-y border-gray-400">
 						<div className="flex lg:flex-[4] py-4">
 							<div className="w-32 h-32 max-w-[128px]">
-								<img src={`http://127.0.0.1:5000/public/images/posts/${post.mainImage}`} alt="" className='w-full h-full object-cover' />
+								<img src={`http://127.0.0.1:5000/public/images/posts/${postData.mainImage}`} alt="" className='w-full h-full object-cover' />
 							</div>
 							<div className="lg:w-fit w-1/2 flex flex-col gap-1 text-sm ml-3">
-								<p className='text-base	font-medium tracking-wide'>{post.title}</p>
-								<p><span className='font-semibold'>General Subject:</span> {post.isGeneralSubject === 0 ? "Yes" : "No"} </p>
-								<p><span className='font-semibold'>New:</span> {post.isNew === 0 ? "Old" : "New"} </p>
+								<p className='text-base	font-medium tracking-wide'>{postData.title}</p>
+								<p><span className='font-semibold'>General Subject:</span> {postData.isGeneralSubject === 0 ? "Yes" : "No"} </p>
+								<p><span className='font-semibold'>New:</span> {postData.isNew === 0 ? "Old" : "New"} </p>
 							</div>
 						</div>
 						<div className="flex-1 text-right">
-							<span className='text-primary-main font-medium'>₫{post.price}</span>
+							<span className='text-primary-main font-medium'>₫{postData.price}</span>
 						</div>
 					</div>
 					<div className="flex justify-end items-center p-5">
-						<p>Order Total: <span className='text-2xl text-primary-main'>₫{post.price}</span></p>
+						<p>Order Total: <span className='text-2xl text-primary-main'>₫{postData.price}</span></p>
 					</div>
 					<div className="w-full flex justify-end gap-3">
 						{
 							Object.entries(state.user).length > 0 && (userPost.id === state.user.user.id) ? (
 								<span className='text-gray-400 text-base'>You own this post!</span>
-							) : post.status === "Unconfirmed" ? (
+							) : postData.status === "Unconfirmed" ? (
 								<button
 									type="submit"
 									ref={toastId}
@@ -100,7 +142,7 @@ const ConfirmPost = ({ post }) => {
 									className="w-28 xl:w-36 px-4 xl:px-6 py-3 bg-primary-main text-white rounded-md hover:shadow !shadow-primary-700 hover:bg-primary-700 transition-all">
 									Buy
 								</button>
-							) : post.status === "Confirm" ? (
+							) : postData.status === "Confirm" ? (
 								<div className="flex justify-start gap-5 items-center">
 									<button
 										type="submit"
@@ -117,7 +159,7 @@ const ConfirmPost = ({ post }) => {
 										Cancel Order
 									</button>
 								</div>
-							) : (
+							) : (postData.status === "Delivered" && result === false) ? (
 								<button
 									type="submit"
 									ref={toastId}
@@ -125,6 +167,13 @@ const ConfirmPost = ({ post }) => {
 									className="w-28 xl:w-36 px-4 xl:px-6 py-3 bg-primary-main text-white rounded-md hover:shadow !shadow-primary-700 hover:bg-primary-700 transition-all">
 									Review
 								</button>
+							) : result === true && (
+								<p>
+									<i className=" text-gray-500">Thank you for your review. </i>
+									<i
+										onClick={() => setIsVisibleEditReviewForm(true)}
+										className='hover:underline hover:text-primary-main transition-all cursor-pointer text-gray-500'>Click here to edit review</i>
+								</p>
 							)
 						}
 					</div>
@@ -133,7 +182,12 @@ const ConfirmPost = ({ post }) => {
 			<AnimatePresence mode='wait'>
 				{
 					isVisibleReviewForm && (
-						<Review setIsVisibleReviewForm={setIsVisibleReviewForm} isVisibleReviewForm={isVisibleReviewForm} id={post.id} />
+						<Review setIsVisibleReviewForm={setIsVisibleReviewForm} isVisibleReviewForm={isVisibleReviewForm} id={postData.id} />
+					)
+				}
+				{
+					isVisibleEditReviewForm && (
+						<EditReview setIsVisibleEditReviewForm={setIsVisibleEditReviewForm} isVisibleEditReviewForm={isVisibleEditReviewForm} id={postData.id} />
 					)
 				}
 			</AnimatePresence>

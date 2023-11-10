@@ -7,10 +7,13 @@ import Axios from '../../../../api/index'
 import ConfirmPost from './HistoryConfirmComponents/ConfirmPost'
 import { useAuthContext } from '../../../../hooks/useAuthContext'
 import { useForm } from 'react-hook-form'
+import { useReviewContext } from '../../../../hooks/useReviewContext'
+import { usePostContext } from '../../../../hooks/usePostContext'
 const HistoryConfirm = () => {
 	const menu = ["All", "Confirm", "Delivered"]
 	const [isLoading, setIsLoading] = useState(false)
 	const [state, dispatch] = useAuthContext()
+	const [statePost,dispatchPost] = usePostContext()
 	const [activeButton, setActiveButton] = useState(0)
 	const [data, setData] = useState([])
 	const curUser = state.user.user
@@ -19,22 +22,15 @@ const HistoryConfirm = () => {
 			query: ""
 		}
 	})
-	const onSubmit = async (data) => {
-		try {
-
-		} catch (err) {
-
-		}
-	}
 	const fetchConfirmPost = async () => {
 		setIsLoading(true)
-		let url = `/api/v1/posts?filter=equals(userConfirm,'${curUser.id}')&include=userPostData`
+		let url = `/api/v1/posts?filter=equals(userConfirm,'${curUser.id}')&include=userPostData&sort=-updatedAt`
 		if (activeButton === 0) {
-			url = `/api/v1/posts?filter=equals(userConfirm,'${curUser.id}')&include=userPostData`
+			url = `/api/v1/posts?filter=equals(userConfirm,'${curUser.id}')&include=userPostData&sort=-updatedAt`
 		} else if (activeButton === 1) {
-			url = `/api/v1/posts?filter=and(equals(status,'Confirm'),equals(userConfirm,'${curUser.id}'))&include=userPostData`
+			url = `/api/v1/posts?filter=and(equals(status,'Confirm'),equals(userConfirm,'${curUser.id}'))&include=userPostData&sort=-updatedAt`
 		} else {
-			url = `/api/v1/posts?filter=and(equals(status,'Delivered'),equals(userConfirm,'${curUser.id}'))&include=userPostData`
+			url = `/api/v1/posts?filter=and(equals(status,'Delivered'),equals(userConfirm,'${curUser.id}'))&include=userPostData&sort=-updatedAt`
 		}
 		try {
 			const res = await Axios.get(url)
@@ -50,7 +46,7 @@ const HistoryConfirm = () => {
 	}
 	useEffect(() => {
 		fetchConfirmPost()
-	}, [activeButton])
+	}, [activeButton,statePost.isLoadingHistoryConfirm])
 	return (
 		<div className='flex flex-col gap-3'>
 			<div className="flex w-full justify-between items-start bg-gray-100 border-b-[3px] border-black/40">
@@ -74,11 +70,8 @@ const HistoryConfirm = () => {
 			</div>
 			<div className="flex gap-3 items-center w-full border border-gray-400 p-2 rounded-sm">
 				<RiSearch2Line size={28} className='text-gray-400' />
-				<form
-					onSubmit={handleSubmit(onSubmit)}
-				>
+
 					<input type="text" {...register("query")} className='border-none w-full focus:outline-none text-black placeholder:text-sm' placeholder='You can search by anything....' />
-				</form>
 			</div>
 			{
 				isLoading ? (
