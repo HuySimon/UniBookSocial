@@ -58,25 +58,25 @@ const EditPost = ({ post, handleEditPost, isVisibleEditPost }) => {
 		formData.append('isGeneralSubject', data.isGeneralSubject)
 		const postData = Object.fromEntries(formData)
 		console.log(postData)
-		// setIsLoading(true)
-		// dispatchPost({type: "EDIT_POST"})
-		// try {
-		// 	const res = await Axios.patch(`/api/v1/posts/${post.id}`, postData)
-		// 	if (res.status === 200) {
-		// 		toast.success("Edit post success!")
-		// 		dispatchPost({type: "EDIT_POST_LOADING"})
-		// 		handleEditPost(false)
-		// 		console.log(res.data)
-		// 	}
-		// } catch (err) {
-		// 	//Don't use err.response it will cause error 500: Internal Server error
-		// 	//You can write specific message for it 
-		// 	// console.log(err.response.data.message)
-		// 	toast.error(err.response.data.message)
-		// } finally {
-		// 	setIsLoading(false)
-		// 	dispatchPost({type: "API_ERROR"})
-		// }
+		setIsLoading(true)
+		dispatchPost({type: "EDIT_POST"})
+		try {
+			const res = await Axios.patch(`/api/v1/posts/${post.id}`, postData)
+			if (res.status === 200) {
+				toast.success("Edit post success!")
+				dispatchPost({type: "EDIT_POST_LOADING"})
+				handleEditPost(false)
+				console.log(res.data)
+			}
+		} catch (err) {
+			//Don't use err.response it will cause error 500: Internal Server error
+			//You can write specific message for it 
+			// console.log(err.response.data.message)
+			toast.error(err.response.data.message)
+		} finally {
+			setIsLoading(false)
+			dispatchPost({type: "API_ERROR"})
+		}
 	}
 	return (
 		<>

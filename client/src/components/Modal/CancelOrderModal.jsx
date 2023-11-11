@@ -1,48 +1,36 @@
-import React, { useRef, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { GoAlertFill, GoX } from 'react-icons/go'
 import { motion } from 'framer-motion'
 import Axios from '../../api/index'
-import { toast } from 'react-toastify'
 import { usePostContext } from '../../hooks/usePostContext'
 import { ImSpinner9 } from 'react-icons/im'
-const Index = ({ postID, isVisibleModalDelete, setIsVisibleModalDelete }) => {
+const CancelOrderModal = ({ postID, setIsVisibleModalCancel }) => {
 
 	const [state, dispatch] = usePostContext()
 	const [isLoading, setIsLoading] = useState(false)
-	const toastID = useRef(null)
-	console.log(state)
-	const handleDeletePost = async () => {
+	const confirmAction = useCallback(async (status) => {
+		const data = {
+			status: status
+		}
 		try {
-			setTimeout(() => {
-				dispatch({ type: "DELETE_POST", value: true })
-			}, 2000);
+			dispatch({ type: "CANCEL_ORDER", value: true })
 			setIsLoading(true)
-			const response = await Axios.delete(`/api/v1/posts/${postID}`);
-			if (response.status === 200) {
-				console.log(response);
-				setIsVisibleModalDelete(false)
+			const res = await Axios.patch(`/api/v1/posts/${postID}/status`, data)
+			if (res.status === 200) {
+				console.log(res)
 				setIsLoading(false)
-				setTimeout(() => {
-					dispatch({ type: "DELETE_POST", value: false })
-				}, 2000);
+				setIsVisibleModalCancel(false)
+				dispatch({ type: "CANCEL_ORDER", value: false })
 			}
 		} catch (err) {
-			if (err.response) {
-				toast.error(err.response.data.message);
-				console.log(err.response);
-				setIsLoading(false)
-				setIsVisibleModalDelete(false)
-				setTimeout(() => {
-					dispatch({ type: "DELETE_POST", value: false })
-				}, 2000);
-			} else {
-				toast.error("An error occurred while deleting the post.");
-				console.error(err);
-			}
+			setIsLoading(false)
+			setIsVisibleModalCancel(false)
+			setTimeout(() => {
+				dispatch({ type: "CANCEL_ORDER", value: false })
+			}, 2000);
+			console.log(err)
 		}
-	};
-
-
+	}, [state])
 	return (
 		<>
 			<motion.div
@@ -65,27 +53,26 @@ const Index = ({ postID, isVisibleModalDelete, setIsVisibleModalDelete }) => {
 							<div className="p-5">
 								<div className="flex flex-col items-center">
 									<GoAlertFill size={60} className='text-red-600 mb-3' />
-									<p className='font-medium text-center'>Are you sure you want to delete this post?</p>
+									<p className='font-medium text-center'>Are you sure you want to cancel this order?</p>
 									<p className='text-sm'>This action cannot be undone</p>
 								</div>
 								<div
 									className="flex w-full justify-between items-center gap-2 mt-5">
 									<button
 										type='button'
-										onClick={() => setIsVisibleModalDelete(false)}
+										onClick={() => setIsVisibleModalCancel(false)}
 										className='w-full p-2 bg-gray-400 rounded-md text-white'>
 										Cancel
 									</button>
 									<button
-										type='button'
-										ref={toastID}
-										onClick={handleDeletePost}
+										type='submit'
+										onClick={() => confirmAction("Unconfirmed")}
 										className='w-full p-2 bg-red-600 rounded-md text-white hover:bg-red-500 transition-all'>
-										Delete
+										Submit
 									</button>
 								</div>
 							</div>
-							<GoX className='absolute top-2 right-2 cursor-pointer' size={22} onClick={() => setIsVisibleModalDelete(false)} />
+							<GoX className='absolute top-2 right-2 cursor-pointer' size={22} onClick={() => setIsVisibleModalCancel(false)} />
 						</>
 					) : (
 						<div className="w-full h-fit py-20 flex justify-center items-center rounded-md bg-white">
@@ -104,10 +91,10 @@ const Index = ({ postID, isVisibleModalDelete, setIsVisibleModalDelete }) => {
 						duration: 0.2
 					}
 				}}
-				onClick={() => setIsVisibleModalDelete(false)}
+				onClick={() => setIsVisibleModalCancel(false)}
 				className="fixed top-0 left-0 w-screen h-screen bg-black/30 z-10"></motion.div>
 		</>
 	)
 }
 
-export default Index
+export default CancelOrderModal

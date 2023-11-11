@@ -175,6 +175,7 @@ const ProfilePost = ({ post }) => {
 						setIsVisibleModalDelete={setIsVisibleModalDelete}
 					/>
 				)}
+				{statePost.isDeletePost && toast.success("Delete success")}
 			</AnimatePresence>
 		</>
 	);

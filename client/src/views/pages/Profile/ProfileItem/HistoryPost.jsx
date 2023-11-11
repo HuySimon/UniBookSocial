@@ -30,7 +30,7 @@ const HistoryPost = () => {
 	}
 	useEffect(() => {
 		fetchUserPost()
-	}, [state.user,statePost])
+	}, [state.user, statePost])
 	return (
 		userPosts.length === 0 ? (
 			<div className="w-full h-[80vh]">

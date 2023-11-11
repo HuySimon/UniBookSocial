@@ -63,7 +63,7 @@ const Index = () => {
 	};
 	// console.log(selectedFile)
 	return (
-		<div className='w-full flex flex-col px-[25px] lg:px-[150px] xl:px-[250px] mx-auto'>
+		<div className='w-full flex flex-col px-[25px] lg:px-[150px] xl:px-[200px] mx-auto'>
 			<div className="w-full flex flex-col h-[400px] relative">
 				<div className="w-full h-full absolute inset-0 ">
 					<img src={SignupImg} alt="" className='w-full h-full object-cover object-top' />
