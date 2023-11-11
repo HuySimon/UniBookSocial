@@ -9,9 +9,11 @@ import { AnimatePresence } from 'framer-motion'
 import Review from '../Review/Review'
 import CancelOrderModal from '../Modal/CancelOrderModal'
 import { usePostContext } from '../../hooks/usePostContext'
+import { useReviewContext } from '../../hooks/useReviewContext'
 const DetailPost = () => {
 	const postID = useParams()
 	const [state, dispatch] = useAuthContext()
+	const [stateReview, dispatchReview] = useReviewContext()
 	const [statePost, dispatchPost] = usePostContext()
 	const [detailPost, setDetailPost] = useState({})
 	const [isVisibleReviewForm, setIsVisibleReviewForm] = useState(false)
@@ -52,7 +54,7 @@ const DetailPost = () => {
 	useEffect(() => {
 		calculateTimeAgo()
 		fetchData()
-	}, [detailPost.createdAt,toastId])
+	}, [detailPost.createdAt, stateReview])
 	console.log(statePost.isCancelOrder)
 	const confirmAction = async (status, message) => {
 		if (Object.entries(state.user).length === 0) {
@@ -240,7 +242,7 @@ const DetailPost = () => {
 				}
 				{
 					isVisibleModalCancel && (
-						<CancelOrderModal postID={postID.id} setIsVisibleModalCancel={setIsVisibleModalCancel} />
+						<CancelOrderModal postID={postID.id} setDetailPost={setDetailPost} setIsVisibleModalCancel={setIsVisibleModalCancel} />
 					)
 				}
 				{

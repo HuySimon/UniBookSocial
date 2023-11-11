@@ -24,16 +24,10 @@ const reducer = (state, action) => {
 				...state,
 				isAddReviewLoading: action.value
 			}
-		case "EDIT_REVIEW":
-			return {
-				...state,
-				isEditReviewLoading: false
-			}
-			break;
 		case "SET_LOADING_EDIT":
 			return {
 				...state,
-				isEditReviewLoading: true
+				isEditReviewLoading: action.value
 			}
 			break;
 		case "SET_LOADING":
@@ -74,9 +68,9 @@ export const ReviewProvider = ({ children }) => {
 
 	console.log('review render');
 	const [state, dispatch] = useReducer(reducer, initialState);
-
+	const value = useMemo(() => ({ state, dispatch }), [state, dispatch])
 	return (
-		<ReviewContext.Provider value={{ state, dispatch }}>
+		<ReviewContext.Provider value={value}>
 			{children}
 		</ReviewContext.Provider>
 	);

@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import Axios from '../../api/index'
 import { usePostContext } from '../../hooks/usePostContext'
 import { ImSpinner9 } from 'react-icons/im'
-const CancelOrderModal = ({ postID, setIsVisibleModalCancel }) => {
+const CancelOrderModal = ({ postID, setDetailPost, setIsVisibleModalCancel }) => {
 
 	const [state, dispatch] = usePostContext()
 	const [isLoading, setIsLoading] = useState(false)
@@ -18,6 +18,7 @@ const CancelOrderModal = ({ postID, setIsVisibleModalCancel }) => {
 			const res = await Axios.patch(`/api/v1/posts/${postID}/status`, data)
 			if (res.status === 200) {
 				console.log(res)
+				setDetailPost(res.data.data.data)
 				setIsLoading(false)
 				setIsVisibleModalCancel(false)
 				dispatch({ type: "CANCEL_ORDER", value: false })

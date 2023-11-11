@@ -17,6 +17,7 @@ import { useAuthContext } from '../../hooks/useAuthContext';
 import Axios from '../../api/index';
 import { useSearchContext } from '../../hooks/useSearch';
 import { useHeaderContext } from '../../hooks/useHeaderContext';
+import { getCapitalized } from '../../utils/Uppercase'
 const Header = () => {
 	const [expand, setExpand] = useState(true)
 	const navigate = useNavigate()
@@ -30,6 +31,8 @@ const Header = () => {
 		dispatchHeader({ type: "SET_ACTIVE_BUTTON", payload: buttonName });
 		localStorage.setItem("activeButtonProfile", 0)
 	};
+	const result = getCapitalized(window.location.pathname)
+	console.log(result)
 	useEffect(() => {
 		const checkTabletMode = () => {
 			const tabletWidthThreshold = 768;
@@ -106,7 +109,7 @@ const Header = () => {
 										activeOverlay={activeOverlay}
 										setActiveOverlay={setActiveOverlay}
 										expand={expand}
-										handleCreate={() => { setIsVisibleNotify(!isVisibleNotify), handleButtonClick(!isVisibleNotify ? "Notification" : "Home") }}
+										handleCreate={() => { setIsVisibleNotify(!isVisibleNotify), handleButtonClick(!isVisibleNotify ? "Notification" : result) }}
 										icon={<PiHeartLight size={30} className='z-10' />}
 									/>
 									<SideBarItem
