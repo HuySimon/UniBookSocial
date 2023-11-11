@@ -7,11 +7,17 @@ import { toast } from 'react-toastify'
 import { useAuthContext } from '../../hooks/useAuthContext'
 import { AnimatePresence } from 'framer-motion'
 import Review from '../Review/Review'
+import CancelOrderModal from '../Modal/CancelOrderModal'
+import { usePostContext } from '../../hooks/usePostContext'
+import { useReviewContext } from '../../hooks/useReviewContext'
 const DetailPost = () => {
 	const postID = useParams()
 	const [state, dispatch] = useAuthContext()
+	const [stateReview, dispatchReview] = useReviewContext()
+	const [statePost, dispatchPost] = usePostContext()
 	const [detailPost, setDetailPost] = useState({})
 	const [isVisibleReviewForm, setIsVisibleReviewForm] = useState(false)
+	const [isVisibleModalCancel, setIsVisibleModalCancel] = useState(false)
 	const [userPost, setUserPost] = useState({})
 	const [timeAgo, setTimeAgo] = useState('')
 	const toastId = useRef(null)
@@ -26,29 +32,30 @@ const DetailPost = () => {
 			console.log(err)
 		}
 	}
-	useEffect(() => {
-		const calculateTimeAgo = () => {
-			const now = new Date();
-			const created = new Date(detailPost.createdAt);
-			const timeDifference = now - created;
-			const seconds = Math.floor(timeDifference / 1000);
+	const calculateTimeAgo = () => {
+		const now = new Date();
+		const created = new Date(detailPost.createdAt);
+		const timeDifference = now - created;
+		const seconds = Math.floor(timeDifference / 1000);
 
-			if (seconds < 60) {
-				setTimeAgo(`${seconds} seconds ago`);
-			} else if (seconds < 3600) {
-				const minutes = Math.floor(seconds / 60);
-				setTimeAgo(`${minutes} minutes ago`);
-			} else if (seconds < 86400) {
-				const hours = Math.floor(seconds / 3600);
-				setTimeAgo(`${hours} hours ago`);
-			} else {
-				const days = Math.floor(seconds / 86400);
-				setTimeAgo(`${days} days ago`);
-			}
-		};
+		if (seconds < 60) {
+			setTimeAgo(`${seconds} seconds ago`);
+		} else if (seconds < 3600) {
+			const minutes = Math.floor(seconds / 60);
+			setTimeAgo(`${minutes} minutes ago`);
+		} else if (seconds < 86400) {
+			const hours = Math.floor(seconds / 3600);
+			setTimeAgo(`${hours} hours ago`);
+		} else {
+			const days = Math.floor(seconds / 86400);
+			setTimeAgo(`${days} days ago`);
+		}
+	};
+	useEffect(() => {
 		calculateTimeAgo()
 		fetchData()
-	}, [detailPost.createdAt])
+	}, [detailPost.createdAt, stateReview])
+	console.log(statePost.isCancelOrder)
 	const confirmAction = async (status, message) => {
 		if (Object.entries(state.user).length === 0) {
 			toast.warning("Please log in to buy")
@@ -199,9 +206,9 @@ const DetailPost = () => {
 											Received
 										</button>
 										<button
-											type="submit"
+											type="button"
 											ref={toastId}
-											onClick={() => confirmAction("Unconfirmed", "Unconfirm success")}
+											onClick={() => setIsVisibleModalCancel(true)}
 											className="w-28 xl:w-36 px-4 xl:px-6 py-3 bg-transparent border border-primary-main text-primary-main rounded-lg hover:shadow transition-all">
 											Cancel Order
 										</button>
@@ -232,6 +239,14 @@ const DetailPost = () => {
 					isVisibleReviewForm && (
 						<Review setIsVisibleReviewForm={setIsVisibleReviewForm} isVisibleReviewForm={isVisibleReviewForm} id={detailPost.id} />
 					)
+				}
+				{
+					isVisibleModalCancel && (
+						<CancelOrderModal postID={postID.id} setDetailPost={setDetailPost} setIsVisibleModalCancel={setIsVisibleModalCancel} />
+					)
+				}
+				{
+					statePost.isCancelOrder && (toast.success("Unconfirm success"))
 				}
 			</AnimatePresence>
 		</>

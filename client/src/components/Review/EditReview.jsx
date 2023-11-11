@@ -34,24 +34,25 @@ const EditReview = ({ isVisibleEditReviewForm, setIsVisibleEditReviewForm, id })
 				content: data.content,
 				post: id
 			}
-			dispatch({type: "SET_LOADING_EDIT"})
+			dispatch({ type: "SET_LOADING_EDIT", value: true })
 			console.log(dataSend)
 			const res = await Axios.patch(`/api/v1/reviews/${result.id}`, dataSend)
 			console.log(res)
 			if (res.status === 200) {
-				dispatch({type: "EDIT_REVIEW"})
+				dispatch({ type: "SET_LOADING_EDIT", value: false })
 				toast.success("Edit success!")
 				setIsVisibleEditReviewForm(false)
 				console.log(res)
 			}
 		} catch (err) {
+			dispatch({ type: "SET_LOADING_EDIT", value: false })
 			toast.error(err.response.message)
 			console.log(err)
 		}
 	}
 	useEffect(() => {
 		checkExistReview()
-	},[state.isEditReviewLoading])
+	}, [state])
 	return (
 		<>
 			<motion.div
@@ -66,7 +67,7 @@ const EditReview = ({ isVisibleEditReviewForm, setIsVisibleEditReviewForm, id })
 						type: "spring"
 					}
 				}}
-				className='fixed inset-0 m-auto bg-white w-[50vh] h-fit shadow-lg rounded-md z-[6]'>
+				className='fixed inset-0 m-auto bg-white w-[50vh] h-fit shadow-lg rounded-md z-10'>
 				<div className="w-full flex flex-col p-4">
 					<div className="flex justify-between items-center mb-3">
 						<p className='text-3xl font-medium'>Order Delivered</p>

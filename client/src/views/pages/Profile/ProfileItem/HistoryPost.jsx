@@ -7,10 +7,12 @@ import { NoPostYet } from '../../../../assets'
 import ProfilePost from '../../../../components/Post/ProfilePost'
 import { usePostContext } from '../../../../hooks/usePostContext'
 import { useParams } from 'react-router-dom'
+import { useReviewContext } from '../../../../hooks/useReviewContext'
 const HistoryPost = () => {
 
 	const [state, dispatch] = useAuthContext()
 	const [statePost, dispatchPost] = usePostContext()
+	const [stateReview, dispatchReview] = useReviewContext()
 	const [userPosts, setUserPosts] = useState([])
 	const userID = useParams()
 	const [isLoading, setIsLoading] = useState(false)
@@ -30,7 +32,7 @@ const HistoryPost = () => {
 	}
 	useEffect(() => {
 		fetchUserPost()
-	}, [state.user,statePost])
+	}, [state.user, statePost, stateReview])
 	return (
 		userPosts.length === 0 ? (
 			<div className="w-full h-[80vh]">
@@ -43,7 +45,7 @@ const HistoryPost = () => {
 		) : (
 			<div className='flex flex-col gap-5'>
 				{
-					isLoading ? (
+					statePost.isLoadingHistoryConfirm || isLoading ? (
 						<div className="w-full h-full flex justify-center items-center">
 							<ImSpinner9 className="animate-spin duration-500 text-primary-main" size={50} />
 						</div>

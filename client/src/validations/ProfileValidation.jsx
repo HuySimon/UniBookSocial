@@ -4,7 +4,7 @@ export const changePasswordSchema = Yup.object().shape({
 	passwordCurrent: Yup.string().required("Please enter old password").trim(),
 	password: Yup.string().required("Please enter password").matches(
 		/^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
-		"Password must contain at least 8 characters, one uppercase, one number and one special case character.Ex(John123@)"
+		"Must contain at least 8 characters, one uppercase, one number and one special character.Ex(John123@)"
 	),
 	passwordConfirm: Yup.string().required("Please enter confirm password").oneOf([Yup.ref('password')], 'Confirm Password not match!!')
 })

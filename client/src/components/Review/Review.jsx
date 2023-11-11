@@ -56,7 +56,7 @@ const Review = ({ isVisibleReviewForm, setIsVisibleReviewForm, id }) => {
 						type: "spring"
 					}
 				}}
-				className='fixed inset-0 m-auto bg-white w-[50vh] h-fit shadow-lg rounded-md z-[6]'>
+				className='fixed inset-0 m-auto bg-white w-[50vh] h-fit shadow-lg rounded-md z-[100]'>
 				<div className="w-full flex flex-col p-4">
 					<div className="flex justify-between items-center mb-3">
 						<p className='text-3xl font-medium'>Order Delivered</p>

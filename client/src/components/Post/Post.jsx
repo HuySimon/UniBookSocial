@@ -70,8 +70,7 @@ const Post = ({ post }) => {
 								<button
 									type="button"
 									onClick={handleVisibleMenuPost}
-									className="w-10 h-10 hover:bg-gray-100 transition-all rounded-full flex justify-center items-center"
-								>
+									className="w-10 h-10 hover:bg-gray-100 transition-all rounded-full flex justify-center items-center">
 									<BiDotsVerticalRounded size={22} />
 								</button>
 							)

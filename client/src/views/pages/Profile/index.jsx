@@ -33,7 +33,7 @@ const Index = () => {
 	useEffect(() => {
 		document.title = "Profile"
 		getUser()
-	}, [profileId.id,selectedFile])
+	}, [profileId.id, selectedFile])
 	const [activeButton, setActiveButton] = useState(JSON.parse(localStorage.getItem("activeButtonProfile")))
 	const menu = [
 		{
@@ -42,10 +42,10 @@ const Index = () => {
 			href: "",
 		},
 		{
-			icon: HiOutlineServer,
-			title: "History Post",
-			href: "historyPost",
-		},
+			icon: MdOutlineRateReview,
+			title: "Review",
+			href: "review"
+		}
 	]
 	const handleButton = (id) => {
 		setActiveButton(id)
@@ -63,7 +63,7 @@ const Index = () => {
 	};
 	// console.log(selectedFile)
 	return (
-		<div className='w-full flex flex-col px-[25px] lg:px-[150px] xl:px-[250px] mx-auto'>
+		<div className='w-full flex flex-col px-[25px] lg:px-[150px] xl:px-[200px] mx-auto'>
 			<div className="w-full flex flex-col h-[400px] relative">
 				<div className="w-full h-full absolute inset-0 ">
 					<img src={SignupImg} alt="" className='w-full h-full object-cover object-top' />
@@ -106,22 +106,22 @@ const Index = () => {
 							(Object.entries(state.user).length > 0 && (state.user.user.id === currentUser.id) && (
 								<>
 									<Link
-										to={`/profile/${currentUser.id}/historyConfirm`}
+										to={`/profile/${currentUser.id}/historyPost`}
 										onClick={() => handleButton(3)}
 										className={`w-full lg:flex items-center text-[#929292] relative cursor-pointer mb-1 p-3 rounded-md 
 												transition-all duration-300 lg:text-left text-center 
 												${activeButton === 3 ? 'bg-primary-main text-white shadow-md !shadow-primary-700 ' : ''}`}>
-										<BsCheck2Circle size={26} className='lg:block hidden' />
-										<span className='inline-block lg:ml-3 text-base lg:font-medium'>History Confirm</span>
+										<HiOutlineServer size={26} className='lg:block hidden' />
+										<span className='inline-block lg:ml-3 text-base lg:font-medium'>History Post</span>
 									</Link>
 									<Link
-										to={`/profile/${currentUser.id}/review`}
+										to={`/profile/${currentUser.id}/historyConfirm`}
 										onClick={() => handleButton(4)}
 										className={`w-full lg:flex items-center text-[#929292] relative cursor-pointer mb-1 p-3 rounded-md 
 												transition-all duration-300 lg:text-left text-center 
 												${activeButton === 4 ? 'bg-primary-main text-white shadow-md !shadow-primary-700 ' : ''}`}>
-										<MdOutlineRateReview size={26} className='lg:block hidden' />
-										<span className='inline-block lg:ml-3 text-base lg:font-medium'>Review</span>
+										<BsCheck2Circle size={26} className='lg:block hidden' />
+										<span className='inline-block lg:ml-3 text-base lg:font-medium'>History Confirm</span>
 									</Link>
 								</>
 							))

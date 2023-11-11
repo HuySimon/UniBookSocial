@@ -8,6 +8,8 @@ const initialState = {
 	createPost: null,
 	isLoadingEdit: false,
 	isLoadingHistoryConfirm: false,
+	isDeletePost: false,
+	isCancelOrder: false
 }
 const url = "/api/v1/posts?filter=equals(status,'Unconfirmed')&include=userPostData&sort=-createdAt"
 const reducer = (state, action) => {
@@ -45,6 +47,16 @@ const reducer = (state, action) => {
 				isLoadingHistoryConfirm: action.value
 			}
 			break;
+		case "DELETE_POST":
+			return {
+				...state,
+				isDeletePost: action.value,
+			}
+		case "CANCEL_ORDER":
+			return {
+				...state,
+				isCancelOrder: action.value
+			}
 		case "SET_LOADING_ALL_POST":
 			return {
 				...state,
