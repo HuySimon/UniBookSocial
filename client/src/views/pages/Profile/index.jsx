@@ -77,7 +77,7 @@ const Index = () => {
 		<div className='w-full flex flex-col px-[25px] lg:px-[150px] xl:px-[200px] mx-auto'>
 			<div className="w-full flex flex-col h-[400px] relative">
 				<div className="w-full h-full absolute inset-0">
-					<img src={SignupImg} alt="" className='w-full h-full object-cover object-top rounded-b-md' />
+					<img src={`http://127.0.0.1:5000/public/images/users/cover/${currentUser.coverImage}`} alt="" className='w-full h-full object-cover object-top rounded-b-md' />
 					<label htmlFor='coverImageFile' className="w-fit flex items-center gap-1 p-3 bg-white/30 rounded-md absolute top-[85%] right-2 transition-all hover:bg-white/60 cursor-pointer">
 						<input type="file" name='' id='coverImageFile' onChange={handleCoverFileChange} accept="image/*" className='absolute w-full h-full inset-0 hidden' />
 						<MdCameraEnhance size={28} className='text-white' />
