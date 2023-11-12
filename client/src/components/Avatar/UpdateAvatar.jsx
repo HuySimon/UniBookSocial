@@ -24,8 +24,6 @@ const UpdateAvatar = ({ file, setSelectedFile }) => {
 	const onSubmit = async (data) => {
 		const fd = new FormData();
 		fd.append('avatar',dataURLtoFile(file,"avatar"))
-		// console.log(fd.get("avatar"))
-		// console.log(fd)
 		try {
 			const config = {
 				headers: {
