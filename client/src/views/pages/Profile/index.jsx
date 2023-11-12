@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import { Portrait, SignupImg } from '../../../assets'
+import { SignupImg } from '../../../assets'
 import { IoCallOutline } from 'react-icons/io5'
 import { HiOutlineServer } from 'react-icons/hi'
 import { BsCheck2Circle } from 'react-icons/bs'
-import { MdOutlineRateReview, MdPhotoCamera } from 'react-icons/md'
-import { About, HistoryConfirm, HistoryPost, Review } from './ProfileItem'
+import { MdOutlineRateReview, MdPhotoCamera, MdCameraEnhance } from 'react-icons/md'
 import Axios from '../../../api/index'
 import { useAuthContext } from '../../../hooks/useAuthContext'
 import { toast } from 'react-toastify'
 import { Link, Outlet, useNavigate, useParams } from 'react-router-dom'
 import UpdateAvatar from '../../../components/Avatar/UpdateAvatar'
+import UpdateCoverImage from '../../../components/Avatar/UpdateCoverImage'
 const Index = () => {
 
 	const [currentUser, setCurrentUser] = useState({})
 	const [selectedFile, setSelectedFile] = useState(null)
+	const [selectedCoverFile, setSelectedCoverFile] = useState(null)
 	const [state, dispatch] = useAuthContext()
 	const profileId = useParams()
 	const navigate = useNavigate()
@@ -61,16 +62,31 @@ const Index = () => {
 			reader.readAsDataURL(file);
 		}
 	};
+	const handleCoverFileChange = (e) => {
+		const file = e.target.files[0];
+		if (file) {
+			const reader = new FileReader();
+			reader.onload = () => {
+				setSelectedCoverFile(reader.result);
+			};
+			reader.readAsDataURL(file);
+		}
+	};
 	// console.log(selectedFile)
 	return (
 		<div className='w-full flex flex-col px-[25px] lg:px-[150px] xl:px-[200px] mx-auto'>
 			<div className="w-full flex flex-col h-[400px] relative">
-				<div className="w-full h-full absolute inset-0 ">
-					<img src={SignupImg} alt="" className='w-full h-full object-cover object-top' />
+				<div className="w-full h-full absolute inset-0">
+					<img src={SignupImg} alt="" className='w-full h-full object-cover object-top rounded-b-md' />
+					<label htmlFor='coverImageFile' className="w-fit flex items-center gap-1 p-3 bg-white/30 rounded-md absolute top-[85%] right-2 transition-all hover:bg-white/60 cursor-pointer">
+						<input type="file" name='' id='coverImageFile' onChange={handleCoverFileChange} accept="image/*" className='absolute w-full h-full inset-0 hidden' />
+						<MdCameraEnhance size={28} className='text-white' />
+						<span className='font-medium text-white'>Edit cover photo</span>
+					</label>
 				</div>
-				<div className="w-full flex justify-end items-center relative top-80">
+				<div className="w-fit flex justify-end items-center mx-auto relative top-80">
 					<div className="w-36 h-36 mx-auto relative">
-						<img src={`http://127.0.0.1:5000/public/images/users/${currentUser.avatar}`} alt="" className='w-full h-full rounded-full object-cover object-center' />
+						<img src={`http://127.0.0.1:5000/public/images/users/avatar/${currentUser.avatar}`} alt="" className='w-full h-full rounded-full object-cover object-center' />
 						{
 							(Object.entries(state.user).length) > 0 && (state.user.user.id === currentUser.id) && (
 								<label htmlFor="imageFile" className='absolute top-3/4 right-0 z-10 overflow-hidden cursor-pointer'>
@@ -134,6 +150,9 @@ const Index = () => {
 			</div>
 			{
 				selectedFile != null && <UpdateAvatar file={selectedFile} setSelectedFile={setSelectedFile} />
+			}
+			{
+				selectedCoverFile != null && <UpdateCoverImage file={selectedCoverFile} setSelectedCoverFile={setSelectedCoverFile}  />
 			}
 		</div >
 	)

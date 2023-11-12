@@ -8,6 +8,7 @@ const initialState = {
 	singleReview: null,
 	isEditReviewLoading: false,
 	isAddReviewLoading: false,
+	isDeleteReviewLoading: false,
 }
 const url = "/api/v1/reviews"
 const reducer = (state, action) => {
@@ -30,6 +31,11 @@ const reducer = (state, action) => {
 				isEditReviewLoading: action.value
 			}
 			break;
+		case "DELETE_REVIEW":
+			return {
+				...state,
+				isDeleteReviewLoading: action.value
+			}
 		case "SET_LOADING":
 			return {
 				...state,

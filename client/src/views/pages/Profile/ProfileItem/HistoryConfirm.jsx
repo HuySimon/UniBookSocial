@@ -13,7 +13,8 @@ const HistoryConfirm = () => {
 	const menu = ["All", "Confirm", "Delivered"]
 	const [isLoading, setIsLoading] = useState(false)
 	const [state, dispatch] = useAuthContext()
-	const [statePost,dispatchPost] = usePostContext()
+	const [statePost, dispatchPost] = usePostContext()
+	const [stateReview, dispatchReview] = useReviewContext()
 	const [activeButton, setActiveButton] = useState(0)
 	const [data, setData] = useState([])
 	const curUser = state.user.user
@@ -46,7 +47,7 @@ const HistoryConfirm = () => {
 	}
 	useEffect(() => {
 		fetchConfirmPost()
-	}, [activeButton,statePost.isLoadingHistoryConfirm])
+	}, [activeButton, statePost.isLoadingHistoryConfirm, stateReview])
 	return (
 		<div className='flex flex-col gap-3'>
 			<div className="flex w-full justify-between items-start bg-gray-100 border-b-[3px] border-black/40">
@@ -71,7 +72,7 @@ const HistoryConfirm = () => {
 			<div className="flex gap-3 items-center w-full border border-gray-400 p-2 rounded-sm">
 				<RiSearch2Line size={28} className='text-gray-400' />
 
-					<input type="text" {...register("query")} className='border-none w-full focus:outline-none text-black placeholder:text-sm' placeholder='You can search by anything....' />
+				<input type="text" {...register("query")} className='border-none w-full focus:outline-none text-black placeholder:text-sm' placeholder='You can search by anything....' />
 			</div>
 			{
 				isLoading ? (

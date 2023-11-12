@@ -103,7 +103,7 @@ const DetailPost = () => {
 					<div className="w-full flex justify-between items-center">
 						<div className="flex gap-3">
 							<div className="w-14 h-14 rounded-full overflow-hidden">
-								<img src={`http://127.0.0.1:5000/public/images/users/${userPost.avatar}`} alt="User Image" className='w-full h-full object-cover' />
+								<img src={`http://127.0.0.1:5000/public/images/users/avatar/${userPost.avatar}`} alt="User Image" className='w-full h-full object-cover' />
 							</div>
 							<div className="flex flex-col justify-start">
 								<span className="name font-medium">

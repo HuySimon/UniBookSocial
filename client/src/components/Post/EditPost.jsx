@@ -118,7 +118,7 @@ const EditPost = ({ post, handleEditPost, isVisibleEditPost }) => {
 						<div className="p-4">
 							<div className="flex mb-3">
 								<div className="w-12 h-12 rounded-full overflow-hidden mr-3">
-									<img src={`http://127.0.0.1:5000/public/images/users/${post.userPostData.avatar}`} alt="" className='w-full h-full object-cover' />
+									<img src={`http://127.0.0.1:5000/public/images/users/avatar/${post.userPostData.avatar}`} alt="" className='w-full h-full object-cover' />
 								</div>
 								<span>{post.userPostData.username}</span>
 							</div>

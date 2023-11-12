@@ -31,7 +31,7 @@ const StarRating = ({ totalStars, initialRating, onRatingChange }) => {
 					</span>
 				</div>
 			))}
-			<span className="ml-1 text-gray-500 text-base inline-block pt-1">
+			<span className="ml-1 text-gray-500 text-sm inline-block pt-1">
 				{ratingToText[initialRating]}
 			</span>
 		</div>

@@ -70,7 +70,7 @@ const ProfilePost = ({ post }) => {
 							<div className="w-14 h-14 rounded-full overflow-hidden">
 								<Link to={`/profile/${post.userPostData.id}`}>
 									<img
-										src={`http://127.0.0.1:5000/public/images/users/${post.userPostData.avatar}`}
+										src={`http://127.0.0.1:5000/public/images/users/avatar/${post.userPostData.avatar}`}
 										alt="user avatar"
 										className="w-full h-full object-cover"
 									/>
