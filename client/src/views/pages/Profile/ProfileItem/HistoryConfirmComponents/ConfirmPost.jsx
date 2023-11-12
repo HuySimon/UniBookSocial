@@ -7,6 +7,7 @@ import { toast } from 'react-toastify'
 import { AnimatePresence } from 'framer-motion'
 import Review from '../../../../../components/Review/Review'
 import EditReview from '../../../../../components/Review/EditReview'
+import DeleteReview from '../../../../../components/Modal/DeleteReview'
 import Axios from '../../../../../api/index'
 import { usePostContext } from '../../../../../hooks/usePostContext'
 const ConfirmPost = ({ post }) => {
@@ -18,6 +19,14 @@ const ConfirmPost = ({ post }) => {
 	const [userPost, setUserPost] = useState(post.userPostData)
 	const [isVisibleReviewForm, setIsVisibleReviewForm] = useState(false)
 	const [isVisibleEditReviewForm, setIsVisibleEditReviewForm] = useState(false)
+	const [isVisibleDeleteReviewModal, setIsVisibleDeleteReviewModal] = useState(false)
+	const checkExistReview = () => {
+		const result = stateReview.reviews.find((review) => {
+			return review.post === postData.id;
+		});
+		return Boolean(result);
+	};
+	const [reviewExists, setReviewExists] = useState(checkExistReview());
 
 	const toastId = useRef(null)
 
@@ -62,33 +71,17 @@ const ConfirmPost = ({ post }) => {
 			}
 		}
 	}
-	const deleteReview = async (id) => {
-		try {
-			const res = await Axios.delete(`/api/v1/reviews/${id}`)
-			if(res.status === 200) {
-				toast.success("Delete Review Success")
-			}
-		} catch (err) {
-			console.log(err)
-		}
-	}
-	const checkExistReview = () => {
-		const result = stateReview.reviews.find((review) => {
-			return review.post === postData.id;
-		});
-		return Boolean(result);
-	};
-	let result = checkExistReview()
+	console.log(reviewExists)
 	useEffect(() => {
-		checkExistReview()
-	}, [postData.status, stateReview.isLoading,stateReview.isAddReviewLoading])
+		setReviewExists(checkExistReview())
+	}, [postData.status, stateReview])
 	return (
 		<>
 			<div className="w-full flex flex-col gap-3 border border-gray-400 p-5 rounded-sm">
 				<div className="w-full flex flex-row justify-between items-center">
 					<div className="flex gap-3 items-center">
 						<div className="w-14 h-14 rounded-full overflow-hidden">
-							<img src={`http://127.0.0.1:5000/public/images/users/${userPost.avatar}`} alt="" className='w-full h-full object-cover' />
+							<img src={`http://127.0.0.1:5000/public/images/users/avatar/${userPost.avatar}`} alt="" className='w-full h-full object-cover' />
 						</div>
 						<span className="name font-medium text-lg">
 							{userPost.username}
@@ -103,8 +96,11 @@ const ConfirmPost = ({ post }) => {
 					<div className="flex items-center gap-2">
 						<span className="status uppercase text-base font-semibold !leading-7 text-primary-900">{post.status}</span>
 						{
-							result === true && (
-								<button className='p-2 bg-red-400 rounded-sm text-sm text-white hover:bg-red-500 transition-all'>
+							reviewExists === true && (
+								<button
+									type='submit'
+									onClick={() => setIsVisibleDeleteReviewModal(true)}
+									className='p-2 bg-red-400 rounded-sm text-sm text-white hover:bg-red-500 transition-all'>
 									Delete Review
 								</button>
 							)
@@ -159,7 +155,7 @@ const ConfirmPost = ({ post }) => {
 										Cancel Order
 									</button>
 								</div>
-							) : (postData.status === "Delivered" && result === false) ? (
+							) : (postData.status === "Delivered" && reviewExists === false) ? (
 								<button
 									type="submit"
 									ref={toastId}
@@ -167,7 +163,7 @@ const ConfirmPost = ({ post }) => {
 									className="w-28 xl:w-36 px-4 xl:px-6 py-3 bg-primary-main text-white rounded-md hover:shadow !shadow-primary-700 hover:bg-primary-700 transition-all">
 									Review
 								</button>
-							) : result === true && (
+							) : reviewExists === true && (
 								<p>
 									<i className=" text-gray-500">Thank you for your review. </i>
 									<i
@@ -189,6 +185,20 @@ const ConfirmPost = ({ post }) => {
 					isVisibleEditReviewForm && (
 						<EditReview setIsVisibleEditReviewForm={setIsVisibleEditReviewForm} isVisibleEditReviewForm={isVisibleEditReviewForm} id={postData.id} />
 					)
+				}
+				{
+					stateReview.isEditReviewLoading && window.location.reload()
+				}
+				{
+					isVisibleDeleteReviewModal && (
+						<DeleteReview postID={postData.id} setIsVisibleDeleteReviewModal={setIsVisibleDeleteReviewModal} />
+					)
+				}
+				{
+					stateReview.isDeleteReviewLoading && window.location.reload()
+				}
+				{
+					stateReview.isDeleteReviewLoading && toast.success("Delete review success")
 				}
 			</AnimatePresence>
 		</>

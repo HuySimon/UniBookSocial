@@ -1,10 +1,7 @@
 import React, { useLayoutEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { AiOutlineClose } from 'react-icons/ai';
-import { SiPhotobucket } from 'react-icons/si';
-import { Portrait } from '../../assets';
 import { FiUpload } from 'react-icons/fi';
-import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -123,7 +120,7 @@ const CreatePost = ({ isVisiblePost, handleCreatePost, setActiveOverlay }) => {
 						<div className="p-4">
 							<div className="flex mb-3">
 								<div className="w-12 h-12 rounded-full overflow-hidden mr-3">
-									<img src={`http://127.0.0.1:5000/public/images/users/${state.user.user.avatar}`} alt="" className="w-full h-full object-cover" />
+									<img src={`http://127.0.0.1:5000/public/images/users/avatar/${state.user.user.avatar}`} alt="" className="w-full h-full object-cover" />
 								</div>
 								<span>
 									{state.user.user && state.user.user != null ? state.user.user.username : 'John Doe'}

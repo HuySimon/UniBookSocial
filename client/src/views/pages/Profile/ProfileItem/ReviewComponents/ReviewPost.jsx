@@ -11,7 +11,7 @@ const ReviewPost = (review, userReview) => {
 				<div className="flex gap-3 items-center">
 					<div className="w-14 h-14 rounded-full overflow-hidden">
 						<img
-							src={`http://127.0.0.1:5000/public/images/users/${userReview.userReviewData.avatar}`}
+							src={`http://127.0.0.1:5000/public/images/users/avatar/${userReview.userReviewData.avatar}`}
 							alt="" className='w-full h-full object-cover' />
 					</div>
 					<div className="flex flex-col items-start">
