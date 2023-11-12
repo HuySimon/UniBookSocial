@@ -7,6 +7,7 @@ import { toast } from 'react-toastify'
 import Cropper from 'react-easy-crop'
 import { dataURLtoFile } from '../../utils/dataURLtoFile'
 import { useAuthContext } from '../../hooks/useAuthContext'
+import { getCroppedImg } from '../../utils/getCropImage'
 const UpdateCoverImage = ({ file, setSelectedCoverFile }) => {
 
 	const [isLoading, setIsLoading] = useState(false)
@@ -14,43 +15,10 @@ const UpdateCoverImage = ({ file, setSelectedCoverFile }) => {
 	const [zoom, setZoom] = useState(1)
 	const [state, dispatch] = useAuthContext()
 	const [croppedImage, setCroppedImage] = useState(null);
-	const getCroppedImg = (src, crop, aspectRatio) => {
-		const canvas = document.createElement('canvas');
-		const ctx = canvas.getContext('2d');
-		const image = new Image();
-		image.src = src;
-
-		canvas.width = crop.width;
-		canvas.height = crop.height;
-
-		ctx.drawImage(
-			image,
-			crop.x,
-			crop.y,
-			crop.width,
-			crop.height,
-			0,
-			0,
-			crop.width,
-			crop.height
-		);
-
-		const dataUrl = canvas.toDataURL('image/jpeg');
-
-		console.log(dataUrl); // Log the dataUrl here
-
-		return dataUrl;
-	};
 	const onCropComplete = useCallback((_, croppedAreaPixels) => {
-		const croppedImage = getCroppedImg(
-			file, // Replace with your image path
-			croppedAreaPixels,
-			4 / 3 // Replace with your desired aspect ratio
-		);
-
-		setCroppedImage(croppedImage);
+		const cropImage = getCroppedImg(file, croppedAreaPixels, 4 / 3);
+		setCroppedImage(cropImage);
 	}, []);
-	// console.log(croppedImage)
 	const { register, handleSubmit, formState: { errors } } = useForm({
 		defaultValues: {
 			image: file
@@ -58,26 +26,23 @@ const UpdateCoverImage = ({ file, setSelectedCoverFile }) => {
 	})
 	const onSubmit = async (data) => {
 		const fd = new FormData();
-		fd.append('coverImage', dataURLtoFile(file, "coverImage"))
-		// console.log(fd.get("avatar"))
-		// console.log(fd)
-		// try {
-		// 	const config = {
-		// 		headers: {
-		// 			'content-type': 'multipart/form-data',
-		// 		},
-		// 	};
-		// 	const res = await Axios.patch('/api/v1/users/updateMe', fd, config)
-		// 	if (res.status === 200) {
-		// 		// console.log(res.data.data.user)
-		// 		dispatch({ type: "LOGIN", value: res.data.data.user })
-		// 		toast.success("Update Cover Photo Success")
-		// 		setSelectedCoverFile(null)
-		// 	}
-		// } catch (err) {
-		// 	console.log(err)
-		// 	toast.error("Update Cover Photo Failed")
-		// }
+		fd.append('coverImage', dataURLtoFile(file, "coverImage.png"))
+		try {
+			const config = {
+				headers: {
+					'content-type': 'multipart/form-data',
+				},
+			};
+			const res = await Axios.patch('/api/v1/users/updateMe', fd, config)
+			if (res.status === 200) {
+				dispatch({ type: "LOGIN", value: res.data.data.user })
+				toast.success("Update Cover Photo Success")
+				setSelectedCoverFile(null)
+			}
+		} catch (err) {
+			console.log(err)
+			toast.error("Update Cover Photo Failed")
+		}
 	}
 	return (
 		<>

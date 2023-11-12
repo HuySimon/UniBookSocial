@@ -78,11 +78,15 @@ const Index = () => {
 			<div className="w-full flex flex-col h-[400px] relative">
 				<div className="w-full h-full absolute inset-0">
 					<img src={`http://127.0.0.1:5000/public/images/users/cover/${currentUser.coverImage}`} alt="" className='w-full h-full object-cover object-top rounded-b-md' />
-					<label htmlFor='coverImageFile' className="w-fit flex items-center gap-1 p-3 bg-white/30 rounded-md absolute top-[85%] right-2 transition-all hover:bg-white/60 cursor-pointer">
-						<input type="file" name='' id='coverImageFile' onChange={handleCoverFileChange} accept="image/*" className='absolute w-full h-full inset-0 hidden' />
-						<MdCameraEnhance size={28} className='text-white' />
-						<span className='font-medium text-white'>Edit cover photo</span>
-					</label>
+					{
+						(Object.entries(state.user).length) > 0 && (state.user.user.id === currentUser.id) && (
+							<label htmlFor='coverImageFile' className="w-fit flex items-center gap-1 p-3 bg-black/30 rounded-md absolute top-[85%] right-2 transition-all hover:bg-black/60 cursor-pointer">
+								<input type="file" name='' id='coverImageFile' onChange={handleCoverFileChange} accept="image/*" className='absolute w-full h-full inset-0 hidden' />
+								<MdCameraEnhance size={28} className='text-white' />
+								<span className='font-medium text-white'>Edit cover photo</span>
+							</label>
+						)
+					}
 				</div>
 				<div className="w-fit flex justify-end items-center mx-auto relative top-80">
 					<div className="w-36 h-36 mx-auto relative">
@@ -152,7 +156,7 @@ const Index = () => {
 				selectedFile != null && <UpdateAvatar file={selectedFile} setSelectedFile={setSelectedFile} />
 			}
 			{
-				selectedCoverFile != null && <UpdateCoverImage file={selectedCoverFile} setSelectedCoverFile={setSelectedCoverFile}  />
+				selectedCoverFile != null && <UpdateCoverImage file={selectedCoverFile} setSelectedCoverFile={setSelectedCoverFile} />
 			}
 		</div >
 	)

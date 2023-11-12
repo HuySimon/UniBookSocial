@@ -66,7 +66,7 @@ const Post = ({ post }) => {
 							</div>
 						</div>
 						{
-							localStorage.getItem("auth") != "false" && (
+							localStorage.getItem("auth") != "false" && (state.user) && (state.user.user.id != post.userPostData.id) && (
 								<button
 									type="button"
 									onClick={handleVisibleMenuPost}
