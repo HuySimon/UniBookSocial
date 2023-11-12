@@ -86,7 +86,7 @@ const Index = () => {
 				</div>
 				<div className="w-fit flex justify-end items-center mx-auto relative top-80">
 					<div className="w-36 h-36 mx-auto relative">
-						<img src={`http://127.0.0.1:5000/public/images/users/avatar/${currentUser.avatar}`} alt="" className='w-full h-full rounded-full object-cover object-center' />
+						<img src={`http://127.0.0.1:5000/public/images/users/avatar/${currentUser.avatar}`} alt="User avatar" className='w-full h-full rounded-full object-cover object-center' />
 						{
 							(Object.entries(state.user).length) > 0 && (state.user.user.id === currentUser.id) && (
 								<label htmlFor="imageFile" className='absolute top-3/4 right-0 z-10 overflow-hidden cursor-pointer'>
