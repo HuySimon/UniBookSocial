@@ -91,7 +91,7 @@ const HeaderAdmin = () => {
 					</div>
 					<motion.ul className="flex flex-col justify-start items-stretch">
 						{iconList.map((item, index) => (
-							Object.entries(state.user).length > 0 && (item.role === state.user.user.role) && (
+							// Object.entries(state.user).length > 0 && (item.role === state.user.user.role) && (
 								<SideBarItem
 									key={index}
 									title={item.title}
@@ -102,7 +102,7 @@ const HeaderAdmin = () => {
 									expand={expand}
 									icon={<item.icon size={30} className="z-10" />}
 								/>
-							)
+							// )
 						))}
 					</motion.ul>
 					<div className="flex flex-col h-full items-stretch justify-end p-2 md:p-4">

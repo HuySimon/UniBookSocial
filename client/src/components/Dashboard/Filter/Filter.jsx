@@ -32,12 +32,12 @@ function Filter({ onFilter }) {
     }, []);
 
     return (
-        <div className="ml-2" ref={modalRef}>
+        <div className="" ref={modalRef}>
             <button
                 id="dropdownActionButton"
                 onClick={toggleDropdown}
                 data-dropdown-toggle="dropdownAction"
-                className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5 "
+                className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-2 "
                 type="button"
             >
                 <span className="sr-only">Action button</span>

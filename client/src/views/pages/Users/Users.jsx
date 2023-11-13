@@ -197,8 +197,8 @@ const Users = () => {
 
     return (
         <>
-            <div className="relative overflow-x-auto shadow-md sm:rounded-lg mg">
-                <div className="flex items-center pb-4 pt-4 bg-white space-x-4">
+            <div className="relative overflow-x-auto m-4">
+                <div className="flex items-center pb-5 bg-white space-x-4">
                     <Filter onFilter={handleFilter} />
                     <label htmlFor="table-search" className="sr-only">
                         Search
@@ -211,7 +211,7 @@ const Users = () => {
                         Add user
                     </button>
                 </div>
-                <table className="w-full text-sm text-left text-gray-500 ">
+                <table className="w-full text-sm text-left text-gray-500 border">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
                         <tr>
                             <th scope="col" className="px-6 py-3">
