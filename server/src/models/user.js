@@ -15,7 +15,6 @@ module.exports = (sequelize, DataTypes) => {
 
     validatePassword(candidatePassword, userPassword) {
       const res = bcrypt.compareSync(candidatePassword, userPassword)
-      console.log(res)
       return res;
     }
   }
@@ -82,7 +81,6 @@ module.exports = (sequelize, DataTypes) => {
       beforeSave: async function (instance, options) {
         if (instance.changed('password')) {
           instance.password = await bcrypt.hash(instance.password, 12);
-          console.log(instance.password)
 
         }
       }

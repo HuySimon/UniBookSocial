@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
 			// define association here
 			Post.belongsTo(models.User, { targetKey: 'id', foreignKey: 'userPost', as: 'userPostData' })
 			Post.hasOne(models.Report, { foreignKey: 'post', as: 'reportData' })
+			Post.hasOne(models.Review, { foreignKey: 'post', as: 'reviewData' })
 		}
 	}
 	Post.init(

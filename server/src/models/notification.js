@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       typeNoti: {
         type: DataTypes.STRING,
         validate: {
-          isIn: [["Confirm", "Unconfirm", "CheckPost", "Violation"]],
+          isIn: [["Confirm", "Unconfirmed", "CheckPost", "Violation"]],
         },
       },
       content: DataTypes.TEXT,

@@ -34,7 +34,7 @@ const EditPost = ({ post, handleEditPost, isVisibleEditPost }) => {
 		}
 	};
 
-	const { register, handleSubmit, formState: { errors }, setValue, reset } = useForm({
+	const { register, handleSubmit, formState: { errors }, setValue } = useForm({
 		defaultValues: {
 			title: post.title,
 			price: post.price,
@@ -57,7 +57,7 @@ const EditPost = ({ post, handleEditPost, isVisibleEditPost }) => {
 		formData.append('isNew', data.isNew)
 		formData.append('isGeneralSubject', data.isGeneralSubject)
 		const postData = Object.fromEntries(formData)
-		console.log(post)
+		console.log(postData)
 		setIsLoading(true)
 		dispatchPost({type: "EDIT_POST"})
 		try {
@@ -118,7 +118,7 @@ const EditPost = ({ post, handleEditPost, isVisibleEditPost }) => {
 						<div className="p-4">
 							<div className="flex mb-3">
 								<div className="w-12 h-12 rounded-full overflow-hidden mr-3">
-									<img src={Portrait} alt="" className='w-full h-full object-cover' />
+									<img src={`http://127.0.0.1:5000/public/images/users/avatar/${post.userPostData.avatar}`} alt="" className='w-full h-full object-cover' />
 								</div>
 								<span>{post.userPostData.username}</span>
 							</div>
@@ -146,7 +146,7 @@ const EditPost = ({ post, handleEditPost, isVisibleEditPost }) => {
 														src={selectedFile}
 														onClick={() => setIsZoomImage(true)}
 														alt="Preview"
-														className='w-full max-h-[250px] object-cover object-center rounded-md cursor-pointer'
+														className='w-full h-[250px] max-h-[20vh] object-cover object-center rounded-md cursor-pointer'
 													/>
 												</div>
 												<AiOutlineClose
@@ -228,7 +228,7 @@ const EditPost = ({ post, handleEditPost, isVisibleEditPost }) => {
 					handleEditPost()
 				}}
 				size={22}
-				className='fixed top-4 right-4 text-white cursor-pointer hover:rotate-[360deg] transition-all duration-300 z-30' />
+				className='fixed top-4 right-4 text-white cursor-pointer hover:rotate-[360deg] transition-all duration-300 z-[11]' />
 		</>
 	)
 }

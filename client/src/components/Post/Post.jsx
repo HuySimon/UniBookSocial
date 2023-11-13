@@ -54,7 +54,7 @@ const Post = ({ post }) => {
 							<div className="w-14 h-14 rounded-full overflow-hidden">
 								<Link to={`/profile/${post.userPostData.id}`}>
 									<img
-										src={`http://127.0.0.1:5000/public/images/users/${post.userPostData.avatar}`}
+										src={`http://127.0.0.1:5000/public/images/users/avatar/${post.userPostData.avatar}`}
 										alt=""
 										className="w-full h-full object-cover"
 									/>
@@ -66,12 +66,11 @@ const Post = ({ post }) => {
 							</div>
 						</div>
 						{
-							localStorage.getItem("auth") != "false" && (
+							localStorage.getItem("auth") != "false" && (state.user) && (state.user.user.id != post.userPostData.id) && (
 								<button
 									type="button"
 									onClick={handleVisibleMenuPost}
-									className="w-10 h-10 hover:bg-gray-100 transition-all rounded-full flex justify-center items-center"
-								>
+									className="w-10 h-10 hover:bg-gray-100 transition-all rounded-full flex justify-center items-center">
 									<BiDotsVerticalRounded size={22} />
 								</button>
 							)

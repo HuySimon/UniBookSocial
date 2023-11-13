@@ -5,6 +5,7 @@ export const AuthContext = createContext();
 const initialState = {
 	isAuthorized: localStorage.getItem("auth"),
 	user: JSON.parse(localStorage.getItem("user")),
+	isLoading: false
 }
 const url = '/api/v1/users/me'
 const reducer = (state, action) => {
@@ -17,13 +18,17 @@ const reducer = (state, action) => {
 			localStorage.setItem("auth", true)
 			return {
 				...state,
-				user: JSON.parse(localStorage.getItem("user"))
+				user: JSON.parse(localStorage.getItem("user")),
+				isLoading: true,
+				isAuthorized: true
 			};
 		case "LOGOUT":
 			localStorage.setItem("user", JSON.stringify({}));
 			localStorage.setItem("auth", false)
 			return {
 				...state,
+				isLoading: false,
+				isAuthorized: false
 			};
 		default:
 			throw new Error(`Unhandled action type: ${action.type}`);

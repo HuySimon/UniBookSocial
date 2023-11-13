@@ -19,11 +19,11 @@ import CreatePost from '../Post/CreatePost';
 import Notification from '../Notification';
 import { Logo, Portrait } from '../../assets';
 import SideBarItem from './SideBarItemAdmin';
+import { useAuthContext } from '../../hooks/useAuthContext';
 
 const HeaderAdmin = () => {
     const [expand, setExpand] = useState(true);
-    const [isVisiblePost, setIsVisiblePost] = useState(false);
-    const [isVisibleNotify, setIsVisibleNotify] = useState(false);
+    const [state, dispatch] = useAuthContext();
     const [isAuth, setIsAuth] = useState(false);
     const [activeOverlay, setActiveOverlay] = useState(0);
     useEffect(() => {
@@ -37,40 +37,32 @@ const HeaderAdmin = () => {
         return () => {
             window.removeEventListener('resize', checkTabletMode);
         };
-    }, [isVisibleNotify, isVisiblePost]);
+    }, []);
 
     const iconList = [
         {
             icon: PiRocketLaunchLight,
             title: 'Dashboard',
             link: '/dashboard',
-            handleCreatePost: () => {
-                setIsVisibleNotify(false);
-            },
+            handleCreatePost: () => {},
         },
         {
             icon: PiUsersLight,
             title: 'Users',
             link: '/dashboard/users',
-            handleCreatePost: () => {
-                setIsVisibleNotify(false);
-            },
+            handleCreatePost: () => {},
         },
         {
             icon: PiNewspaperLight,
             title: 'Posts',
             link: '/dashboard/posts',
-            handleCreatePost: () => {
-                setIsVisibleNotify(false);
-            },
+            handleCreatePost: () => {},
         },
         {
             icon: PiChartBarLight,
             title: 'Statistics',
             link: '/dashboard/statistics',
-            handleCreatePost: () => {
-                setIsVisibleNotify(false);
-            },
+            handleCreatePost: () => {},
         },
     ];
 
@@ -84,7 +76,7 @@ const HeaderAdmin = () => {
                 <div className="relative w-full h-full flex flex-col items-stretch">
                     <div className="navbar-logo h-16 !ml-0 my-4">
                         <Link className="flex justify-start items-center w-full grow-0 shrink-0" to={'/'}>
-                            <img src={Logo} alt="" className="h-full w-full md:h-16 md:w-20" />
+                            <img src={Logo} alt="" className="w-12 h-14 object-contain md:h-16 md:w-20" />
                             <span
                                 className={`font-bold text-2xl overflow-hidden transition-all ${
                                     expand ? 'w-44' : 'w-0'
@@ -108,19 +100,18 @@ const HeaderAdmin = () => {
                                 icon={<item.icon size={30} className="z-10" />}
                             />
                         ))}
-                        <SideBarItem
-                            index={4}
-                            activeOverlay={activeOverlay}
-                            setActiveOverlay={setActiveOverlay}
-                            expand={expand}
-                            title={'Profile'}
-                            href={'/profile'}
-                            handleCreatePost={() => setIsVisibleNotify(false)}
-                            icon={<img src={Portrait} className="w-[30px] h-[30px] rounded-full object-cover" />}
-                        />
+                        {/* <SideBarItem
+							index={4}
+							activeOverlay={activeOverlay}
+							setActiveOverlay={setActiveOverlay}
+							expand={expand}
+							title={'Profile'}
+							href={'/profile'}
+							icon={<img src={Portrait} className="w-[30px] h-[30px] rounded-full object-cover" />}
+						/> */}
                     </motion.ul>
                     <div className="flex flex-col h-full items-stretch justify-end p-2 md:p-4">
-                        {!isAuth ? (
+                        {!localStorage.getItem('auth') === 'false' ? (
                             <div className="hidden md:flex w-full justify-between items-center gap-2">
                                 <button className="w-28 bg-primary-900 rounded-md text-white border border-primary-900 ">
                                     <Link to={'/login'} className="w-full h-full block px-6 py-2">
@@ -156,22 +147,6 @@ const HeaderAdmin = () => {
                     </div>
                 </div>
             </motion.div>
-            {isVisiblePost && (
-                <CreatePost
-                    isVisiblePost={isVisiblePost}
-                    handleCreatePost={setIsVisiblePost}
-                    setActiveOverlay={setActiveOverlay}
-                />
-            )}
-            <AnimatePresence mode="wait">
-                {isVisibleNotify && (
-                    <Notification
-                        isVisibleNotify={isVisibleNotify}
-                        handleNotify={setIsVisibleNotify}
-                        setActiveOverlay={setActiveOverlay}
-                    />
-                )}
-            </AnimatePresence>
         </>
     );
 };

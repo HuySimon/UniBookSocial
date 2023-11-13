@@ -6,29 +6,33 @@ import { ImSpinner9 } from 'react-icons/im'
 import { NoPostYet } from '../../../../assets'
 import ProfilePost from '../../../../components/Post/ProfilePost'
 import { usePostContext } from '../../../../hooks/usePostContext'
+import { useParams } from 'react-router-dom'
+import { useReviewContext } from '../../../../hooks/useReviewContext'
 const HistoryPost = () => {
 
 	const [state, dispatch] = useAuthContext()
 	const [statePost, dispatchPost] = usePostContext()
+	const [stateReview, dispatchReview] = useReviewContext()
 	const [userPosts, setUserPosts] = useState([])
+	const userID = useParams()
 	const [isLoading, setIsLoading] = useState(false)
-	useEffect(() => {
-		const fetchUserPost = async () => {
-			setIsLoading(true)
-			try {
-				const res = await Axios.get(`/api/v1/posts?filter=equals(userPost,'${JSON.parse(localStorage.getItem("user")).user.id}')&include=userPostData&sort=-createdAt`)
-				if (res.status === 200) {
-					setUserPosts(res.data.data.data)
-					// console.log(res.data.data.data)
-					setIsLoading(false)
-				}
-			} catch (err) {
-				console.log(err)
+	const fetchUserPost = async () => {
+		setIsLoading(true)
+		try {
+			const res = await Axios.get(`/api/v1/posts?filter=equals(userPost,'${userID.id}')&include=userPostData&sort=-createdAt`)
+			if (res.status === 200) {
+				setUserPosts(res.data.data.data)
+				// console.log(res.data.data.data)
 				setIsLoading(false)
 			}
+		} catch (err) {
+			console.log(err)
+			setIsLoading(false)
 		}
+	}
+	useEffect(() => {
 		fetchUserPost()
-	}, [state.user,statePost])
+	}, [state.user, statePost, stateReview])
 	return (
 		userPosts.length === 0 ? (
 			<div className="w-full h-[80vh]">
@@ -41,7 +45,7 @@ const HistoryPost = () => {
 		) : (
 			<div className='flex flex-col gap-5'>
 				{
-					isLoading ? (
+					statePost.isLoadingHistoryConfirm || isLoading ? (
 						<div className="w-full h-full flex justify-center items-center">
 							<ImSpinner9 className="animate-spin duration-500 text-primary-main" size={50} />
 						</div>
