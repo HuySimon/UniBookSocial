@@ -205,14 +205,14 @@ const Users = () => {
                     </label>
                     <Search userList={userList} onSearch={handleSearch} />
                     <button
-                        className="w-28 sm:w-20 py-2 px-1 bg-primary-900 rounded-md text-white border border-primary-900 inline-flex items-center justify-center "
+                        className="w-28 sm:w-20 py-2 px-1 text-sm bg-primary-900 rounded-md text-white inline-flex items-center justify-center hover:bg-primary-700 transition-all"
                         onClick={handleOpenModal}
                     >
                         Add user
                     </button>
                 </div>
-                <table className="w-full text-sm text-left text-gray-500 -400">
-                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 -700 -400">
+                <table className="w-full text-sm text-left text-gray-500 ">
+                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
                         <tr>
                             <th scope="col" className="px-6 py-3">
                                 User ID
@@ -254,7 +254,7 @@ const Users = () => {
                                             <img
                                                 onClick={() => openCardProfileModal(user.id)}
                                                 className="w-10 h-10 rounded-full cursor-pointer"
-                                                src={user.avatar}
+                                                src={`http://127.0.0.1:5000/public/images/users/avatar/${user.avatar}`}
                                                 alt="Jese image"
                                             />
                                             <div className="pl-3">

@@ -57,7 +57,7 @@ const Header = () => {
 			title: "Search",
 			link: "/search",
 			handleCreate: () => { setIsVisibleNotify(false), handleButtonClick("Search") },
-		},
+		}
 	]
 	const logout = () => {
 		dispatch({ type: "LOGOUT" })

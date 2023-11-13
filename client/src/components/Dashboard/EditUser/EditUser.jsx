@@ -78,7 +78,7 @@ function EditUser({ isOpen, onClose, userId, onUpdateUser, currentRole }) {
                                     value={role}
                                     onChange={handleRoleChange}
                                     name="role"
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:ring-blue-600 focus:border-blue-600 w-full p-2.5"
+                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 w-full p-2.5"
                                 >
                                     <option value>Choose a role</option>
                                     <option value="1">User</option>

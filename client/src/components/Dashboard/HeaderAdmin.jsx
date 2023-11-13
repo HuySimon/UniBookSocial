@@ -23,7 +23,7 @@ import { useAuthContext } from '../../hooks/useAuthContext';
 
 const HeaderAdmin = () => {
 	const [expand, setExpand] = useState(true);
-	const [state,dispatch] = useAuthContext()
+	const [state, dispatch] = useAuthContext()
 	const [isAuth, setIsAuth] = useState(false);
 	const [activeOverlay, setActiveOverlay] = useState(0);
 	useEffect(() => {
@@ -44,29 +44,25 @@ const HeaderAdmin = () => {
 			icon: PiRocketLaunchLight,
 			title: 'Dashboard',
 			link: '/dashboard',
-			handleCreatePost: () => {
-			},
+			role: 2
 		},
 		{
 			icon: PiUsersLight,
 			title: 'Users',
 			link: '/dashboard/users',
-			handleCreatePost: () => {
-			},
+			role: 2
 		},
 		{
 			icon: PiNewspaperLight,
 			title: 'Posts',
 			link: '/dashboard/posts',
-			handleCreatePost: () => {
-			},
+			role: 3
 		},
 		{
 			icon: PiChartBarLight,
 			title: 'Statics',
 			link: '/dashboard/statics',
-			handleCreatePost: () => {
-			},
+			role: 3
 		},
 	];
 
@@ -90,27 +86,19 @@ const HeaderAdmin = () => {
 					</div>
 					<motion.ul className="flex flex-col justify-start items-stretch">
 						{iconList.map((item, index) => (
-							<SideBarItem
-								key={index}
-								title={item.title}
-								href={item.link}
-								index={index}
-								activeOverlay={activeOverlay}
-								setActiveOverlay={setActiveOverlay}
-								expand={expand}
-								handleCreatePost={item.handleCreatePost}
-								icon={<item.icon size={30} className="z-10" />}
-							/>
+							Object.entries(state.user).length > 0 && (item.role === state.user.user.role) && (
+								<SideBarItem
+									key={index}
+									title={item.title}
+									href={item.link}
+									index={index}
+									activeOverlay={activeOverlay}
+									setActiveOverlay={setActiveOverlay}
+									expand={expand}
+									icon={<item.icon size={30} className="z-10" />}
+								/>
+							)
 						))}
-						{/* <SideBarItem
-							index={4}
-							activeOverlay={activeOverlay}
-							setActiveOverlay={setActiveOverlay}
-							expand={expand}
-							title={'Profile'}
-							href={'/profile'}
-							icon={<img src={Portrait} className="w-[30px] h-[30px] rounded-full object-cover" />}
-						/> */}
 					</motion.ul>
 					<div className="flex flex-col h-full items-stretch justify-end p-2 md:p-4">
 						{!localStorage.getItem("auth") === "false" ? (
