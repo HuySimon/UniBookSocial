@@ -203,7 +203,7 @@ const Users = () => {
                     <label htmlFor="table-search" className="sr-only">
                         Search
                     </label>
-                    <Search userList={userList} onSearch={handleSearch} />
+                    <Search userList={userList} onSearch={handleSearch} placeholder={"Search by email"}/>
                     <button
                         className="w-28 sm:w-20 py-2 px-1 text-sm bg-primary-900 rounded-md text-white inline-flex items-center justify-center hover:bg-primary-700 transition-all"
                         onClick={handleOpenModal}
