@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
 
 // eslint-disable-next-line react/prop-types, no-unused-vars
-function EditUser({ isOpen, onClose, userId, onUpdateUser }) {
+function EditUser({ isOpen, onClose, userId, onUpdateUser, currentRole }) {
     const [role, setRole] = useState('');
     const modalRef = useRef(null);
     const [formErrors, setFormErrors] = useState({});
@@ -21,8 +21,8 @@ function EditUser({ isOpen, onClose, userId, onUpdateUser }) {
         };
     }, []);
 
-    const handleRoleChange = (event) => {
-        setRole(event.target.value);
+    const handleRoleChange = (e) => {
+        setRole(e.target.value);
     };
 
     const validateForm = () => {
@@ -30,6 +30,8 @@ function EditUser({ isOpen, onClose, userId, onUpdateUser }) {
 
         if (!role) {
             errors.role = 'Role is required';
+        } else if (role == currentRole) {
+            errors.role = 'The role must be different from the current role';
         }
 
         setFormErrors(errors);
@@ -37,7 +39,9 @@ function EditUser({ isOpen, onClose, userId, onUpdateUser }) {
     };
 
     const handleSave = () => {
-        onUpdateUser(userId, { role: role });
+        if (validateForm()) {
+            onUpdateUser(userId, { role: role, currentRole });
+        }
     };
 
     if (!isOpen) {
@@ -48,7 +52,7 @@ function EditUser({ isOpen, onClose, userId, onUpdateUser }) {
             id="editUserModal"
             tabIndex="-1"
             aria-hidden="true"
-            className="fixed top-0 left-0 right-0 z-50 items-center justify-center flex w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 max-h-full bg-opacity-50 bg-black"
+            className="fixed top-0 left-0 right-0 z-50 items-center justify-center flex w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 max-h-full bg-opacity-50 bg-black h-webkit-fill-available"
         >
             <div ref={modalRef} className="relative w-full max-w-2xl max-h-full">
                 {/* <!-- Modal content --> */}
@@ -74,29 +78,15 @@ function EditUser({ isOpen, onClose, userId, onUpdateUser }) {
                                     value={role}
                                     onChange={handleRoleChange}
                                     name="role"
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:ring-blue-600 focus:border-blue-600 w-full p-2.5"
+                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 w-full p-2.5"
                                 >
                                     <option value>Choose a role</option>
                                     <option value="1">User</option>
                                     <option value="2">Admin</option>
                                     <option value="3">Post management</option>
                                 </select>
+                                {formErrors.role && <p className="text-sm text-red-500">{formErrors.role}</p>}
                             </div>
-                            {/* <div className="col-span-6 sm:col-span-3">
-                                <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 ">
-                                    Password
-                                </label>
-                                <input
-                                    value={formData.password}
-                                    onChange={handleChange}
-                                    type="password"
-                                    name="password"
-                                    id="password"
-                                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
-                                    placeholder="••••••••"
-                                    required=""
-                                />
-                            </div> */}
                         </div>
                     </div>
                     {/* <!-- Modal footer --> */}
@@ -104,7 +94,7 @@ function EditUser({ isOpen, onClose, userId, onUpdateUser }) {
                         <button
                             onClick={handleSave}
                             type="button"
-                            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                            className="text-white bg-primary-900 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                         >
                             Save
                         </button>

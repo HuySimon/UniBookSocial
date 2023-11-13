@@ -1,9 +1,16 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import React from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { changePasswordSchema } from '../../../../../validations/ProfileValidation'
-
+import { toast } from 'react-toastify'
+import Axios from '../../../../../api/index'
+import { PiEyeBold, PiEyeClosedBold } from 'react-icons/pi'
 const ChangePasswordProfile = () => {
+
+	const [password, setPassword] = useState(false)
+	const [newPassword, setNewPassword] = useState(false)
+	const [confirmPassword, setConfirmPassword] = useState(false)
+
 
 	const { register, handleSubmit, formState: { errors } } = useForm({
 		defaultValues: {
@@ -35,27 +42,60 @@ const ChangePasswordProfile = () => {
 			onSubmit={handleSubmit(onSubmitChangePassword)}
 			className='py-8'>
 			<span className='text-xl'>Change Password</span>
-			<div className="flex flex-col gap-3 mt-4">
-				<div className="flex justify-between items-center">
+			<div className="flex flex-col gap-8 mt-4">
+				<div className="flex justify-between items-center relative">
 					<label htmlFor="" className='w-1/4 font-medium'>Old Password</label>
-					<input type="password" {...register("passwordCurrent")} className='w-3/4 rounded-md px-3 py-2 text-black' />
+					<input type={`${!password ? "password" : "text"}`} {...register("passwordCurrent")} className='w-3/4 rounded-md px-3 py-2 text-black' />
+					{
+						!password ? (
+							<PiEyeBold
+								onClick={() => setPassword(!password)}
+								size={22} className='absolute top-1/4 right-3 cursor-pointer' />
+						) : (
+							<PiEyeClosedBold
+								onClick={() => setPassword(!password)}
+								size={22} className='absolute top-1/4 right-3 cursor-pointer' />
+						)
+					}
+					<p className='text-sm text-red-400 absolute top-12 left-1/4'>{errors.passwordCurrent?.message}</p>
 				</div>
-				<div className="flex justify-between items-center">
+				<div className="flex justify-between items-center relative">
 					<label htmlFor="" className='w-1/4 font-medium'>New Password</label>
-					<input type="password" {...register("password")} className='w-3/4 rounded-md px-3 py-2 text-black' />
+					<input type={`${!newPassword ? "password" : "text"}`} {...register("password")} className='w-3/4 rounded-md px-3 py-2 text-black' />
+					{
+						!newPassword ? (
+							<PiEyeBold
+								onClick={() => setNewPassword(!newPassword)}
+								size={22} className='absolute top-1/4 right-3 cursor-pointer' />
+						) : (
+							<PiEyeClosedBold
+								onClick={() => setNewPassword(!newPassword)}
+								size={22} className='absolute top-1/4 right-3 cursor-pointer' />
+						)
+					}
+					<p className='text-sm text-red-400 absolute top-12 left-1/4 w-full'>{errors.password?.message}</p>
+
 				</div>
-				<div className="flex justify-between items-center">
+				<div className="flex justify-between items-center relative">
 					<label htmlFor="" className='w-1/4 font-medium'>Confirm New Password</label>
-					<input type="password" {...register("passwordConfirm")} className='w-3/4 rounded-md px-3 py-2 text-black' />
+					<input type={`${!confirmPassword ? "password" : "text"}`} {...register("passwordConfirm")} className='w-3/4 rounded-md px-3 py-2 text-black' />
+					{
+						!confirmPassword ? (
+							<PiEyeBold
+								onClick={() => setConfirmPassword(!confirmPassword)}
+								size={22} className='absolute top-1/4 right-3 cursor-pointer' />
+						) : (
+							<PiEyeClosedBold
+								onClick={() => setConfirmPassword(!confirmPassword)}
+								size={22} className='absolute top-1/4 right-3 cursor-pointer' />
+						)
+					}
+					<p className='text-sm text-red-400 absolute top-12 left-1/4'>{errors.passwordConfirm?.message}</p>
+
 				</div>
 			</div>
 			<button
 				type="submit"
-				onClick={() => {
-					toast.error(errors.passwordCurrent?.message)
-					toast.error(errors.password?.message)
-					toast.error(errors.passwordConfirm?.message)
-				}}
 				className='w-fit bg-primary-main px-8 py-2 mt-5 text-white hover:bg-primary-800 cursor-pointer transition-all rounded-md'> Submit
 			</button>
 		</form>

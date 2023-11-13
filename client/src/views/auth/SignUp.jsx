@@ -48,11 +48,12 @@ const SignUp = () => {
 			const res = await Axios.post('/api/v1/users/signup', newUser);
 			if (res.status === 201) {
 				toast.success("Signup successful!");
-				dispatch({ type: "LOGIN", value: res.data.data.user });
+				dispatch({ type: "LOGIN", value: res.data.data.user});
 				navigate('/');
 			}
 		} catch (err) {
 			toast.error(err.response.message)
+			console.log(err)
 		} finally {
 			setIsLoading(false);
 		}

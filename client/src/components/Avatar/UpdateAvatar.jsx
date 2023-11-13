@@ -6,41 +6,46 @@ import Axios from '../../api/index'
 import { toast } from 'react-toastify'
 import Cropper from 'react-easy-crop'
 import { dataURLtoFile } from '../../utils/dataURLtoFile'
+import { useAuthContext } from '../../hooks/useAuthContext'
+import { getCroppedImg } from '../../utils/getCropImage'
 const UpdateAvatar = ({ file, setSelectedFile }) => {
 
 	const [isLoading, setIsLoading] = useState(false)
 	const [crop, setCrop] = useState({ x: 0, y: 0 })
 	const [zoom, setZoom] = useState(1)
-
-	const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
-		console.log(croppedArea, croppedAreaPixels)
+	const [state, dispatch] = useAuthContext()
+	const [cropImage, setCropImage] = useState(file)
+	const onCropComplete = useCallback((_, croppedAreaPixels) => {
+		// console.log(croppedArea, croppedAreaPixels)
+		const cropImg = getCroppedImg(file, croppedAreaPixels, 1)
+		setCropImage(cropImg)
 	}, [])
 	const { register, handleSubmit, formState: { errors } } = useForm({
 		defaultValues: {
 			image: file
 		},
 	})
+
 	const onSubmit = async (data) => {
 		const fd = new FormData();
-		fd.append('avatar',dataURLtoFile(file,"avatar.png"))
-		// console.log(fd)
+		fd.append('avatar', dataURLtoFile(cropImage, "avatar.png"))
+		console.log(fd.get("avatar"))
 		try {
 			const config = {
 				headers: {
 					'content-type': 'multipart/form-data',
 				},
 			};
-			const res = await Axios.patch('/api/v1/users/updateMe', fd, config)
+			const res = await Axios.patch('/api/v1/users/avatar', fd, config)
 			if (res.status === 200) {
-				console.log(res.data)
-				// window.location.reload()
-				// toast.success("Update Avatar Success")
-				// setSelectedFile(null)
+				// console.log(res.data.data.user)
+				dispatch({ type: "LOGIN", value: res.data.data.user })
+				toast.success("Update Avatar Success")
+				setSelectedFile(null)
 			}
 		} catch (err) {
 			console.log(err)
 			toast.error("Update Avatar Failed")
-			// setSelectedFile(null)
 		}
 	}
 	return (

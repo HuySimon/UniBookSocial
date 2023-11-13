@@ -15,8 +15,6 @@ import { toast } from 'react-toastify';
 const Post = ({ post }) => {
 	const [isVisibleMenuPost, setIsVisibleMenuPost] = useState(false)
 	const [isVisibleReport, setIsVisibleReport] = useState(false)
-	const [isVisibleEditPost, setIsVisibleEditPost] = useState(false)
-	const [isVisibleModalDelete, setIsVisibleModalDelete] = useState(false)
 	const [selectedFile, setSelectedFile] = useState(null);
 	const [timeAgo, setTimeAgo] = useState('');
 	const toastId = useRef(null)
@@ -25,22 +23,6 @@ const Post = ({ post }) => {
 	const handleVisibleMenuPost = () => {
 		setIsVisibleMenuPost(!isVisibleMenuPost);
 	};
-	const menuOption = [
-		{
-			title: 'Edit Post',
-			icon: AiOutlineEdit,
-			handle: () => {
-				setIsVisibleEditPost(!isVisibleEditPost);
-			},
-		},
-		{
-			title: 'Delete Post',
-			icon: BiTrash,
-			handle: () => {
-				setIsVisibleModalDelete(!isVisibleModalDelete);
-			},
-		},
-	];
 	useEffect(() => {
 		const calculateTimeAgo = () => {
 			const now = new Date();
@@ -63,34 +45,6 @@ const Post = ({ post }) => {
 		};
 		calculateTimeAgo();
 	}, [statePost.isLoading, post.createdAt]);
-	const confirmAction = async () => {
-		toastId.current = toast.loading("Please wait ....")
-		try {
-			const res = await Axios.patch(`/api/v1/posts/${post.id}/updateStatus`)
-			if (res.status === 200) {
-				console.log(res)
-				// dispatchPost({ type: "CONFIRM_POST",value: post })
-				toast.update(toastId.current, {
-					render: "Confirm Success!",
-					type: "success",
-					isLoading: false,
-					autoClose: 5000,
-					className: 'animated rotateY',
-					closeOnClick: true,
-				})
-			}
-		} catch (err) {
-			toast.update(toastId.current, {
-				render: "Confirm Fail!",
-				type: "error",
-				isLoading: false,
-				autoClose: 5000,
-				className: 'animated',
-				closeOnClick: true,
-			})
-			console.log(err)
-		}
-	}
 	return (
 		<>
 			<div className="w-full h-fit px-6 py-5 border border-gray-400 shadow-md rounded-lg mb-8">
@@ -100,7 +54,7 @@ const Post = ({ post }) => {
 							<div className="w-14 h-14 rounded-full overflow-hidden">
 								<Link to={`/profile/${post.userPostData.id}`}>
 									<img
-										src={`http://127.0.0.1:5000/public/images/users/${post.userPostData.avatar}`}
+										src={`http://127.0.0.1:5000/public/images/users/avatar/${post.userPostData.avatar}`}
 										alt=""
 										className="w-full h-full object-cover"
 									/>
@@ -112,12 +66,11 @@ const Post = ({ post }) => {
 							</div>
 						</div>
 						{
-							localStorage.getItem("auth") != "false" && (
+							localStorage.getItem("auth") != "false" && (state.user) && (state.user.user.id != post.userPostData.id) && (
 								<button
 									type="button"
 									onClick={handleVisibleMenuPost}
-									className="w-10 h-10 hover:bg-gray-100 transition-all rounded-full flex justify-center items-center"
-								>
+									className="w-10 h-10 hover:bg-gray-100 transition-all rounded-full flex justify-center items-center">
 									<BiDotsVerticalRounded size={22} />
 								</button>
 							)
@@ -132,23 +85,6 @@ const Post = ({ post }) => {
 										<AiOutlineAlert size={22} />
 										<p className="font-medium">Report</p>
 									</button>
-									{
-										post.userPost === JSON.parse(localStorage.getItem("user")).user.id && localStorage.getItem("user") && (
-											menuOption.map((item, index) => (
-												<button
-													key={index}
-													type="button"
-													onClick={item.handle}
-													className={`flex gap-4 p-2 hover:bg-black/10 transition-all z-10 ${index != menuOption.length && 'border-b'
-														}`}
-												>
-													<item.icon size={22} />
-													<p className="font-medium">{item.title}</p>
-												</button>
-											))
-
-										)
-									}
 									<AiFillCaretRight
 										className="absolute rotate-[180deg] -right-2 -top-[14px] text-white"
 										size={30}
@@ -202,27 +138,9 @@ const Post = ({ post }) => {
 							</tr>
 						</tbody>
 					</table>
-					<button
-						type="submit"
-						ref={toastId}
-						onClick={() => confirmAction()}
-						className="px-10 py-2 bg-primary-main text-white w-fit rounded-lg hover:shadow !shadow-primary-700 hover:bg-primary-700 transition-all"
-					>
-						Buy
-					</button>
 				</div>
 			</div>
-			{isVisibleEditPost && (
-				<EditPost post={post} handleEditPost={setIsVisibleEditPost} isVisibleEditPost={isVisibleEditPost} />
-			)}
 			<AnimatePresence mode="wait">
-				{isVisibleModalDelete && (
-					<Modal
-						postID={post.id}
-						isVisibleModalDelete={isVisibleModalDelete}
-						setIsVisibleModalDelete={setIsVisibleModalDelete}
-					/>
-				)}
 				{
 					isVisibleReport && (
 						<Report post={post} setIsVisibleReport={setIsVisibleReport} />

@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
 			// define association here
 			Post.belongsTo(models.User, { targetKey: 'id', foreignKey: 'userPost', as: 'userPostData' })
 			Post.hasOne(models.Report, { foreignKey: 'post', as: 'reportData' })
+			Post.hasOne(models.Review, { foreignKey: 'post', as: 'reviewData' })
 		}
 	}
 	Post.init(
@@ -57,7 +58,7 @@ module.exports = (sequelize, DataTypes) => {
 			status: {
 				type: DataTypes.STRING,
 				validate: {
-					isIn: [["Confirm", "Unconfirmed", "Delivery", 'Violation','CheckPost']],
+					isIn: [["Confirm", "Unconfirmed", "Delivered", 'Violation', 'CheckPost']],
 				},
 			},
 			isNew: {
@@ -103,7 +104,7 @@ module.exports = (sequelize, DataTypes) => {
 		{
 			hooks: {
 				beforeCreate: async function (instance, options) {
-					instance.status = "Unconfirm";
+					instance.status = "Unconfirmed";
 				},
 			},
 			sequelize,

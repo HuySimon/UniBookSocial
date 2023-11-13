@@ -5,8 +5,9 @@ export const AuthContext = createContext();
 const initialState = {
 	isAuthorized: localStorage.getItem("auth"),
 	user: JSON.parse(localStorage.getItem("user")),
+	isLoading: false
 }
-
+const url = '/api/v1/users/me'
 const reducer = (state, action) => {
 	switch (action.type) {
 		case "LOGIN":
@@ -17,12 +18,17 @@ const reducer = (state, action) => {
 			localStorage.setItem("auth", true)
 			return {
 				...state,
+				user: JSON.parse(localStorage.getItem("user")),
+				isLoading: true,
+				isAuthorized: true
 			};
 		case "LOGOUT":
-			localStorage.setItem("user",JSON.stringify({}));
+			localStorage.setItem("user", JSON.stringify({}));
 			localStorage.setItem("auth", false)
 			return {
 				...state,
+				isLoading: false,
+				isAuthorized: false
 			};
 		default:
 			throw new Error(`Unhandled action type: ${action.type}`);
@@ -33,6 +39,7 @@ export const AuthProvider = ({ children }) => {
 	const [state, dispatch] = useReducer(reducer, initialState)
 	console.log('context render')
 	const value = useMemo(() => ({ state, dispatch }), [state, dispatch])
+
 
 	return (
 		<AuthContext.Provider value={value}>

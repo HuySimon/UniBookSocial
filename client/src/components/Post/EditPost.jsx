@@ -13,12 +13,14 @@ import { toast } from 'react-toastify'
 import { ImSpinner9 } from 'react-icons/im';
 import { useAuthContext } from '../../hooks/useAuthContext'
 import { createPostSchema, editPostSchema } from '../../validations/PostValidation'
+import { usePostContext } from '../../hooks/usePostContext'
 const EditPost = ({ post, handleEditPost, isVisibleEditPost }) => {
 	const [selectedFile, setSelectedFile] = useState(`http://127.0.0.1:5000/public/images/posts/${post.mainImage}`);
 	const [isLoading, setIsLoading] = useState(false)
 	const [isZoomImage, setIsZoomImage] = useState(false)
 	const navigate = useNavigate()
 	const [state, dispatch] = useAuthContext()
+	const [statePost, dispatchPost] = usePostContext()
 	const handleFileChange = (e) => {
 		const file = e.target.files[0];
 		console.log(file)
@@ -32,7 +34,7 @@ const EditPost = ({ post, handleEditPost, isVisibleEditPost }) => {
 		}
 	};
 
-	const { register, handleSubmit, formState: { errors }, setValue, reset } = useForm({
+	const { register, handleSubmit, formState: { errors }, setValue } = useForm({
 		defaultValues: {
 			title: post.title,
 			price: post.price,
@@ -55,12 +57,14 @@ const EditPost = ({ post, handleEditPost, isVisibleEditPost }) => {
 		formData.append('isNew', data.isNew)
 		formData.append('isGeneralSubject', data.isGeneralSubject)
 		const postData = Object.fromEntries(formData)
-		console.log(post)
+		console.log(postData)
 		setIsLoading(true)
+		dispatchPost({type: "EDIT_POST"})
 		try {
 			const res = await Axios.patch(`/api/v1/posts/${post.id}`, postData)
 			if (res.status === 200) {
 				toast.success("Edit post success!")
+				dispatchPost({type: "EDIT_POST_LOADING"})
 				handleEditPost(false)
 				console.log(res.data)
 			}
@@ -71,6 +75,7 @@ const EditPost = ({ post, handleEditPost, isVisibleEditPost }) => {
 			toast.error(err.response.data.message)
 		} finally {
 			setIsLoading(false)
+			dispatchPost({type: "API_ERROR"})
 		}
 	}
 	return (
@@ -113,7 +118,7 @@ const EditPost = ({ post, handleEditPost, isVisibleEditPost }) => {
 						<div className="p-4">
 							<div className="flex mb-3">
 								<div className="w-12 h-12 rounded-full overflow-hidden mr-3">
-									<img src={Portrait} alt="" className='w-full h-full object-cover' />
+									<img src={`http://127.0.0.1:5000/public/images/users/avatar/${post.userPostData.avatar}`} alt="" className='w-full h-full object-cover' />
 								</div>
 								<span>{post.userPostData.username}</span>
 							</div>
@@ -141,7 +146,7 @@ const EditPost = ({ post, handleEditPost, isVisibleEditPost }) => {
 														src={selectedFile}
 														onClick={() => setIsZoomImage(true)}
 														alt="Preview"
-														className='w-full max-h-[250px] object-cover object-center rounded-md cursor-pointer'
+														className='w-full h-[250px] max-h-[20vh] object-cover object-center rounded-md cursor-pointer'
 													/>
 												</div>
 												<AiOutlineClose
@@ -216,14 +221,14 @@ const EditPost = ({ post, handleEditPost, isVisibleEditPost }) => {
 				</div>
 			</motion.div>
 			<motion.div
-				className="fixed w-full inset-0 m-auto h-screen bg-black/50 z-10">
+				className="fixed w-[calc(100%+250px)] top-0 left-0 h-screen bg-black/50 z-[11]">
 			</motion.div>
 			<AiOutlineClose
 				onClick={() => {
 					handleEditPost()
 				}}
 				size={22}
-				className='fixed top-4 right-4 text-white cursor-pointer hover:rotate-[360deg] transition-all duration-300 z-10' />
+				className='fixed top-4 right-4 text-white cursor-pointer hover:rotate-[360deg] transition-all duration-300 z-[11]' />
 		</>
 	)
 }

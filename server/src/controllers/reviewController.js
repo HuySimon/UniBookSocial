@@ -12,7 +12,7 @@ exports.setUserReview = (req, res, next) => {
 };
 exports.isDelivery = catchAsync(async (req, res, next) => {
   const post = await Post.findByPk(req.body.post);
-  if (post.status !== "Delivery")
+  if (post.status !== "Delivered")
     return next(new AppError("This post has not been delivered!", 403));
   next();
 });

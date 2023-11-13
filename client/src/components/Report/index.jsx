@@ -17,21 +17,24 @@ const Index = ({ post, setIsVisibleReport }) => {
 	})
 	const onSubmit = async (data) => {
 		setIsLoading(true)
-		const fd = new FormData()
-		fd.append('post', post.id)
-		fd.append('content', data.content)
-		// try {
-		// 	const res = await Axios.post('/api/v1/reports', fd)
-		// 	if (res.status === 200) {
-		// 		toast.success('Report Success')
-		// 		setIsLoading(false)
-		// 		setIsVisibleReport(false)
-		// 	}
-		// } catch (err) {
-		// 	console.log(err)
-		// 	setIsLoading(false)
-		// 	setIsVisibleReport(false)
-		// }
+		const reportData = {
+			post: post.id,
+			content: data.content
+		}
+		try {
+			const res = await Axios.post('/api/v1/reports', reportData)
+			console.log(res)
+			if (res.status === 201) {
+				console.log(res)
+				toast.success('Report Success')
+				setIsLoading(false)
+				setIsVisibleReport(false)
+			}
+		} catch (err) {
+			console.log(err)
+			setIsLoading(false)
+			setIsVisibleReport(false)
+		}
 	}
 	return (
 		<>
@@ -45,6 +48,7 @@ const Index = ({ post, setIsVisibleReport }) => {
 					opacity: 1,
 					transition: {
 						duration: 0.3,
+						type: "spring"
 					}
 				}}
 				className="w-[50vh] h-[50vh] fixed inset-0 m-auto z-[11]">

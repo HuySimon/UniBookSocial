@@ -10,7 +10,7 @@ const Index = () => {
 	const [isLoading, setIsLoading] = useState(state.isLoading)
 	useEffect(() => {
 		setIsLoading(state.isLoading)
-	}, [state.isLoading])
+	}, [state])
 	return (
 		<>
 			<div className="p-[25px] lg:px-[150px] xl:px-[250px] 2xl:px-[400px] mx-auto lg:flex justify-center items-start gap-5">
@@ -39,8 +39,7 @@ const Index = () => {
 export const AllPostLoader = async () => {
 	try {
 		// const response = await Axios.get("/api/v1/posts?filter=and(and(and(equals(status,'Unconfirm'),equals(isGeneralSubject,'0')),contains(title,'t')),equals(isNew,'0'))&include=userPostData&sort=-createdAt");
-		const response = await Axios.get("/api/v1/posts?filter=equals(status,'Unconfirm')&include=userPostData&sort=-createdAt");
-
+		const response = await Axios.get("/api/v1/posts?filter=equals(status,'Unconfirmed')&include=userPostData&sort=-createdAt");
 		// /api/v1/posts?filter=and(equals(status,'Unconfirm'),contains(title,'t'),)&include=userPostData&sort=-createdAt
 		//greaterOrEqual
 		//lessOrEqual
