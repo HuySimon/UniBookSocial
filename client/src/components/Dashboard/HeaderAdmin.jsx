@@ -66,8 +66,8 @@ const HeaderAdmin = () => {
         },
         {
             icon: PiChartBarLight,
-            title: 'Statics',
-            link: '/dashboard/statics',
+            title: 'Statistics',
+            link: '/dashboard/statistics',
             handleCreatePost: () => {
                 setIsVisibleNotify(false);
             },

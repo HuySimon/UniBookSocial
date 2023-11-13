@@ -2,30 +2,49 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
 import { toast } from 'react-toastify';
-
 import Axios from '../../../api/index';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { AddUserValidationSchema } from '../../../validations/AddUserValidation';
 
 // eslint-disable-next-line react/prop-types, no-unused-vars
 function AddUserModal({ onClose, onAddUser }) {
     const [formErrors, setFormErrors] = useState({});
     const modalRef = useRef(null);
 
-    const [formData, setFormData] = useState({
-        email: '',
-        firstName: '',
-        lastName: '',
-        phoneNumber: '',
-        role: '',
-        password: '',
-    });
+    // const [formData, setFormData] = useState({
+    //     email: '',
+    //     firstName: '',
+    //     lastName: '',
+    //     phoneNumber: '',
+    //     role: '',
+    //     password: '',
+    // });
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            [name]: value,
-        }));
-    };
+    const {
+        register,
+        setValue,
+        handleSubmit,
+        formState: { errors },
+    } = useForm({
+        defaultValues: {
+            email: '',
+            firstName: '',
+            lastName: '',
+            phoneNumber: '',
+            role: '',
+            password: '',
+        },
+        mode: 'onChange',
+        resolver: yupResolver(AddUserValidationSchema),
+    });
+    // const handleChange = (e) => {
+    //     const { name, value } = e.target;
+    //     setFormData((prevFormData) => ({
+    //         ...prevFormData,
+    //         [name]: value,
+    //     }));
+    // };
 
     const validateForm = () => {
         let errors = {};
@@ -65,31 +84,28 @@ function AddUserModal({ onClose, onAddUser }) {
         return Object.keys(errors).length === 0;
     };
 
-    const handleSaveClick = async () => {
-        if (validateForm()) {
-            const newUser = {
-                email: '',
-                firstName: '',
-                lastName: '',
-                phoneNumber: '',
-                role: '',
-                password: '',
-            };
-
-            try {
-                const url = `/api/v1/users`;
-                const res = await Axios.post(url, formData);
-                // const data = res.data.data.data;
-                console.log(res.data.data.data);
-                onAddUser(newUser);
-                onClose();
-                if (res.status === 201) {
-                    toast.success('Thêm người dùng thành công!');
-                }
-            } catch (error) {
-                console.error(error);
-                toast.error('Thêm người dùng thất bại!');
+    const handleSaveClick = async (data) => {
+        let fd = new FormData();
+        fd.append('email', data.email);
+        fd.append('firstName', data.firstName);
+        fd.append('lastName', data.lastName);
+        fd.append('phoneNumber', data.phoneNumber);
+        fd.append('role', data.role);
+        fd.append('password', data.password);
+        console.log(data);
+        try {
+            const url = `/api/v1/users`;
+            const res = await Axios.post(url, fd);
+            const data = res.data.data.data;
+            console.log(res.data.data.data);
+            onAddUser(data);
+            onClose();
+            if (res.status === 201) {
+                toast.success('Thêm người dùng thành công!');
             }
+        } catch (error) {
+            console.error(error);
+            toast.error('Thêm người dùng thất bại!');
         }
     };
 
@@ -98,14 +114,13 @@ function AddUserModal({ onClose, onAddUser }) {
             onClose();
         }
     };
-
     useEffect(() => {
         document.addEventListener('mousedown', handleClickOutside);
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
-
+    console.log(errors);
     return (
         <div
             id="addUserModal"
@@ -115,7 +130,7 @@ function AddUserModal({ onClose, onAddUser }) {
         >
             <div ref={modalRef} className="relative w-full max-w-2xl max-h-full">
                 {/* <!-- Modal content --> */}
-                <form action="#" className="relative bg-white rounded-lg shadow">
+                <form onSubmit={handleSubmit(handleSaveClick)} className="relative bg-white rounded-lg shadow">
                     {/* <!-- Modal header --> */}
                     <div className="flex items-start justify-between p-4 border-b rounded-t">
                         <h3 className="text-xl font-semibold text-gray-900">Add user</h3>
@@ -133,24 +148,25 @@ function AddUserModal({ onClose, onAddUser }) {
                                     First Name
                                 </label>
                                 <input
-                                    value={formData.firstName}
-                                    onChange={handleChange}
+                                    // value={formData.firstName}
+                                    {...register('firstName')}
                                     type="text"
-                                    name="firstName"
                                     id="first-name"
                                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                                     placeholder="Bonnie"
                                     required=""
                                 />
-                                {formErrors.firstName && <p className="text-sm text-red-600">{formErrors.firstName}</p>}
+                                <p className="text-sm text-red-500">{errors.firstName?.message}</p>
+                                {/* {formErrors.firstName && <p className="text-sm text-red-600">{formErrors.firstName}</p>} */}
                             </div>
                             <div className="col-span-6 sm:col-span-3">
                                 <label htmlFor="last-name" className="block mb-2 text-sm font-medium text-gray-900 ">
                                     Last Name
                                 </label>
                                 <input
-                                    value={formData.lastName}
-                                    onChange={handleChange}
+                                    // value={formData.lastName}
+                                    // onChange={handleChange}
+                                    {...register('lastName')}
                                     type="text"
                                     name="lastName"
                                     id="last-name"
@@ -158,15 +174,17 @@ function AddUserModal({ onClose, onAddUser }) {
                                     placeholder="Green"
                                     required=""
                                 />
-                                {formErrors.lastName && <p className="text-sm text-red-500">{formErrors.lastName}</p>}
+                                <p className="text-sm text-red-500">{errors.lastName?.message}</p>
+                                {/* {formErrors.lastName && <p className="text-sm text-red-500">{formErrors.lastName}</p>} */}
                             </div>
                             <div className="col-span-6 sm:col-span-3">
                                 <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">
                                     Email
                                 </label>
                                 <input
-                                    value={formData.email}
-                                    onChange={handleChange}
+                                    // value={formData.email}
+                                    // onChange={handleChange}
+                                    {...register('email')}
                                     type="email"
                                     name="email"
                                     id="email"
@@ -174,15 +192,17 @@ function AddUserModal({ onClose, onAddUser }) {
                                     placeholder="example@company.com"
                                     required=""
                                 />
-                                {formErrors.email && <p className="text-sm text-red-500">{formErrors.email}</p>}
+                                <p className="text-sm text-red-500">{errors.email?.message}</p>
+                                {/* {formErrors.email && <p className="text-sm text-red-500">{formErrors.email}</p>} */}
                             </div>
                             <div className="col-span-6 sm:col-span-3">
                                 <label htmlFor="phone-number" className="block mb-2 text-sm font-medium text-gray-900 ">
                                     Phone Number
                                 </label>
                                 <input
-                                    value={formData.phoneNumber}
-                                    onChange={handleChange}
+                                    // value={formData.phoneNumber}
+                                    // onChange={handleChange}
+                                    {...register('phoneNumber')}
                                     type="number"
                                     name="phoneNumber"
                                     id="phone-number"
@@ -190,19 +210,20 @@ function AddUserModal({ onClose, onAddUser }) {
                                     placeholder="e.g. +(12)3456 789"
                                     required=""
                                 />
-                                {formErrors.phoneNumber && (
+                                <p className="text-sm text-red-500">{errors.phoneNumber?.message}</p>
+                                {/* {formErrors.phoneNumber && (
                                     <p className="text-sm text-red-500">{formErrors.phoneNumber}</p>
-                                )}
+                                )} */}
                             </div>
                             <div className="col-span-6 sm:col-span-3">
                                 <label htmlFor="department" className="block mb-2 text-sm font-medium text-gray-900 ">
                                     Role
                                 </label>
                                 <select
-                                    value={formData.role}
-                                    onChange={handleChange}
                                     id="roles"
                                     name="role"
+                                    {...register('role')}
+                                    onChange={(e) => setValue('select', e.target.value, { shouldValidate: true })}
                                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:ring-blue-600 focus:border-blue-600 w-full p-2.5"
                                 >
                                     <option value>Choose a role</option>
@@ -210,15 +231,15 @@ function AddUserModal({ onClose, onAddUser }) {
                                     <option value="2">Admin</option>
                                     <option value="3">Post management</option>
                                 </select>
-                                {formErrors.role && <p className="text-sm text-red-500">{formErrors.role}</p>}
+                                <p className="text-sm text-red-500">{errors.role?.message}</p>
+                                {/* {formErrors.role && <p className="text-sm text-red-500">{formErrors.role}</p>} */}
                             </div>
                             <div className="col-span-6 sm:col-span-3">
                                 <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 ">
                                     Password
                                 </label>
                                 <input
-                                    value={formData.password}
-                                    onChange={handleChange}
+                                    {...register('password')}
                                     type="password"
                                     name="password"
                                     id="password"
@@ -226,18 +247,18 @@ function AddUserModal({ onClose, onAddUser }) {
                                     placeholder="••••••••"
                                     required=""
                                 />
-                                {formErrors.password && <p className="text-sm text-red-500">{formErrors.password}</p>}
+                                <p className="text-sm text-red-500">{errors.password?.message}</p>
+                                {/* {formErrors.password && <p className="text-sm text-red-500">{formErrors.password}</p>} */}
                             </div>
                         </div>
                     </div>
                     {/* <!-- Modal footer --> */}
                     <div className="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b">
                         <button
-                            onClick={handleSaveClick}
-                            type="button"
+                            type="submit"
                             className="text-white bg-primary-900 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                         >
-                            Save all
+                            Create
                         </button>
                     </div>
                 </form>

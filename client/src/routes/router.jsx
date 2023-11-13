@@ -13,7 +13,7 @@ import CreatePost from '../components/Post/CreatePost';
 import PrivateRoutes from '../wrapper/PrivateRoutes';
 import { useAuthContext } from '../hooks/useAuthContext';
 import Users from '../views/pages/Users/Users';
-import Statics from '../views/pages/Statics';
+import Statistics from '../views/pages/Statistics';
 import Posts from '../views/pages/Posts/Posts';
 import DetailPost from '../components/Post/DetailPost';
 import EditPost from '../components/Post/EditPost';
@@ -81,8 +81,8 @@ const router = createBrowserRouter([
                 element: <Posts />,
             },
             {
-                path: 'statics',
-                element: <Statics />,
+                path: 'statistics',
+                element: <Statistics />,
             },
         ],
     },
