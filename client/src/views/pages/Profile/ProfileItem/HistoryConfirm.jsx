@@ -2,35 +2,52 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { RiSearch2Line } from 'react-icons/ri'
-import { PiUserCircleLight } from 'react-icons/pi'
 import { ImSpinner9 } from 'react-icons/im'
-import { Avatar, LoginImg } from '../../../../assets'
 import Axios from '../../../../api/index'
 import ConfirmPost from './HistoryConfirmComponents/ConfirmPost'
+import { useAuthContext } from '../../../../hooks/useAuthContext'
+import { useForm } from 'react-hook-form'
+import { useReviewContext } from '../../../../hooks/useReviewContext'
+import { usePostContext } from '../../../../hooks/usePostContext'
 const HistoryConfirm = () => {
-	const menu = ["All", "Confirm", "Completed"]
-	const [isLoading, setIsLoading] = useState(true)
-	const [confirmType, setConfirmType] = useState('Confirm')
+	const menu = ["All", "Confirm", "Delivered"]
+	const [isLoading, setIsLoading] = useState(false)
+	const [state, dispatch] = useAuthContext()
+	const [statePost, dispatchPost] = usePostContext()
+	const [stateReview, dispatchReview] = useReviewContext()
 	const [activeButton, setActiveButton] = useState(0)
 	const [data, setData] = useState([])
-	const curUser = JSON.parse(localStorage.getItem("user")).user
-	useEffect(() => {
-		const fetchConfirmPost = async () => {
-			setIsLoading(true)
-			try {
-				const res = await Axios.get(`/api/v1/posts?filter=and(equals(status,'Confirm'),equals(userConfirm,'${curUser.id}'))&include=userPostData`)
-				if (res.status === 200) {
-					// console.log(res.data.data.data)
-					setData(res.data.data.data)
-					setIsLoading(false)
-				}
-			} catch (err) {
-				console.log(err)
+	const curUser = state.user.user
+	const { register, handleSubmit } = useForm({
+		defaultValues: {
+			query: ""
+		}
+	})
+	const fetchConfirmPost = async () => {
+		setIsLoading(true)
+		let url = `/api/v1/posts?filter=equals(userConfirm,'${curUser.id}')&include=userPostData&sort=-updatedAt`
+		if (activeButton === 0) {
+			url = `/api/v1/posts?filter=equals(userConfirm,'${curUser.id}')&include=userPostData&sort=-updatedAt`
+		} else if (activeButton === 1) {
+			url = `/api/v1/posts?filter=and(equals(status,'Confirm'),equals(userConfirm,'${curUser.id}'))&include=userPostData&sort=-updatedAt`
+		} else {
+			url = `/api/v1/posts?filter=and(equals(status,'Delivered'),equals(userConfirm,'${curUser.id}'))&include=userPostData&sort=-updatedAt`
+		}
+		try {
+			const res = await Axios.get(url)
+			if (res.status === 200) {
+				// console.log(res.data.data.data)
+				setData(res.data.data.data)
 				setIsLoading(false)
 			}
+		} catch (err) {
+			console.log(err)
+			setIsLoading(false)
 		}
+	}
+	useEffect(() => {
 		fetchConfirmPost()
-	}, [activeButton])
+	}, [activeButton, statePost.isLoadingHistoryConfirm, stateReview])
 	return (
 		<div className='flex flex-col gap-3'>
 			<div className="flex w-full justify-between items-start bg-gray-100 border-b-[3px] border-black/40">
@@ -54,64 +71,34 @@ const HistoryConfirm = () => {
 			</div>
 			<div className="flex gap-3 items-center w-full border border-gray-400 p-2 rounded-sm">
 				<RiSearch2Line size={28} className='text-gray-400' />
-				<input type="text" name="" id="" className='border-none w-full focus:outline-none text-black placeholder:text-sm' placeholder='You can search by anything....' />
+
+				<input type="text" {...register("query")} className='border-none w-full focus:outline-none text-black placeholder:text-sm' placeholder='You can search by anything....' />
 			</div>
 			{
 				isLoading ? (
-					<div className="w-full h-[30vh] flex justify-center items-center">
+					<div className="w-full h-screen flex justify-center items-center">
 						<ImSpinner9 className="animate-spin duration-500 text-primary-main" size={50} />
 					</div>
 				) : (
-					<div className="flex flex-col gap-5 mb-5">
+					<>
 						{
-							data.map((post, index) => (
-								<ConfirmPost key={index} post={post} />
-							))
+							data.length != 0 ? (
+								<div className="flex flex-col gap-5 mb-5">
+									{
+										data.map((post, index) => (
+											<ConfirmPost key={index} post={post} />
+										))
+									}
+								</div>
+							) : (
+								<div className="w-full h-screen flex justify-center items-center">
+									<p className='text-6xl text-gray-500 font-mono'>Nothing in here</p>
+								</div>
+							)
 						}
-					</div>
+					</>
 				)
 			}
-			{/* <div className="w-full flex flex-col gap-3 border border-gray-400 p-5 rounded-sm">
-				<div className="w-full flex flex-row justify-between items-center">
-					<div className="flex gap-3 items-center">
-						<div className="w-14 h-14 rounded-full overflow-hidden">
-							<img src={Avatar} alt="" className='w-full h-full object-cover' />
-						</div>
-						<span className="name font-medium text-lg">
-							John Doe
-						</span>
-						<Link className="p-1 border text-sm flex items-center text-gray-700">
-							<PiUserCircleLight size={18} />
-							<span className='inline-block ml-1'>View Profile</span>
-						</Link>
-					</div>
-					<span className="status uppercase text-base font-semibold !leading-7 text-primary-900">completed</span>
-				</div>
-				<div className="my-1">
-					<div className="w-full flex justify-between items-center border-y border-gray-400">
-						<div className="flex flex-[4] py-4">
-							<div className="w-32 h-32">
-								<img src={LoginImg} alt="" className='w-full h-full object-cover' />
-							</div>
-							<div className="flex flex-col gap-2 text-sm ml-3">
-								<p className='text-base	'>Everybody is a Genius. But If You Judge a Fish by Its Ability to Climb a Tree</p>
-								<p><span className='font-semibold'>Major:</span> Information Technology</p>
-							</div>
-						</div>
-						<div className="flex-1 text-right">
-							<span className='text-primary-main font-medium'>₫45.000</span>
-						</div>
-					</div>
-					<div className="flex justify-end items-center p-5">
-						<p>Order Total: <span className='text-2xl text-primary-main'>₫45.000</span></p>
-					</div>
-					<div className="flex justify-end items-center gap-5">
-						<button className='w-fit px-5 py-2 bg-primary-main text-white rounded-sm hover:bg-primary-700 transition-all'>
-							Review
-						</button>
-					</div>
-				</div>
-			</div> */}
 		</div >
 	)
 }

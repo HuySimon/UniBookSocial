@@ -1,29 +1,23 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { CiSearch } from 'react-icons/ci';
 import { AiOutlineLogout, AiOutlineDashboard } from 'react-icons/ai';
 import {
 	PiHeartLight,
-	PiEnvelopeLight,
-	PiListBold,
 	PiHouseLight,
 	PiPlusCircleLight,
-	PiUsersLight,
-	PiNewspaperLight,
-	PiChartBarLight,
-	PiGearLight,
 } from 'react-icons/pi';
 import { AnimatePresence, motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import CreatePost from '../Post/CreatePost';
 import Notification from '../Notification';
-import { Logo, Portrait } from '../../assets';
+import { Logo } from '../../assets';
 import SideBarItem from './SideBarItem';
-import Setting from '../../views/pages/Setting';
 import { useAuthContext } from '../../hooks/useAuthContext';
 import Axios from '../../api/index';
 import { useSearchContext } from '../../hooks/useSearch';
 import { useHeaderContext } from '../../hooks/useHeaderContext';
+import { getCapitalized } from '../../utils/Uppercase'
 const Header = () => {
 	const [expand, setExpand] = useState(true)
 	const navigate = useNavigate()
@@ -35,8 +29,9 @@ const Header = () => {
 	const { stateHeader, dispatchHeader } = useHeaderContext()
 	const handleButtonClick = (buttonName) => {
 		dispatchHeader({ type: "SET_ACTIVE_BUTTON", payload: buttonName });
-		localStorage.setItem("activeButtonProfile",0)
+		localStorage.setItem("activeButtonProfile", 0)
 	};
+	const result = getCapitalized(window.location.pathname)
 	useEffect(() => {
 		const checkTabletMode = () => {
 			const tabletWidthThreshold = 768;
@@ -48,8 +43,8 @@ const Header = () => {
 		return () => {
 			window.removeEventListener('resize', checkTabletMode);
 		};
-	}, [state.user]);
-
+	}, [state.user, state.isLoading]);
+	console.log(state)
 	const iconList = [
 		{
 			icon: PiHouseLight,
@@ -70,13 +65,13 @@ const Header = () => {
 		Axios.get('/api/v1/users/logout').then(res => {
 			if (res.status === 200) {
 				toast.success("Log out success")
-
 			}
 			navigate('/')
 		}).catch(err => {
 			console.log("BE ncc")
 		})
 	}
+
 	return (
 		<>
 			<motion.div className={`fixed top-0 ${expand ? "w-[251px]" : "w-16 duration-[800ms]"} h-full bg-white border-r border-gray-300 transition-all z-[2]`}>
@@ -86,7 +81,7 @@ const Header = () => {
 							className='flex justify-center items-center w-full grow-0 shrink-0'
 							to={"/"}
 						>
-							<img src={Logo} alt="" className='w-12 h-14 object-contain' />
+							<img src={Logo} alt="Logo" className='w-12 h-14 object-contain' />
 							<span className={`font-bold text-2xl overflow-hidden transition-all ml-2 ${expand ? "w-44" : "w-0"}`}>SGU School</span>
 						</Link>
 					</div>
@@ -114,7 +109,7 @@ const Header = () => {
 										activeOverlay={activeOverlay}
 										setActiveOverlay={setActiveOverlay}
 										expand={expand}
-										handleCreate={() => { setIsVisibleNotify(!isVisibleNotify), handleButtonClick(!isVisibleNotify ? "Notification" : "Home") }}
+										handleCreate={() => { setIsVisibleNotify(!isVisibleNotify), handleButtonClick(!isVisibleNotify ? "Notification" : result) }}
 										icon={<PiHeartLight size={30} className='z-10' />}
 									/>
 									<SideBarItem
@@ -135,9 +130,24 @@ const Header = () => {
 										title={"Profile"}
 										href={`/profile/${JSON.parse(localStorage.getItem("user")).user.id}`}
 										handleCreate={() => { setIsVisibleNotify(false), clearSearch(), handleButtonClick("Profile") }}
-										icon={<img src={`http://127.0.0.1:5000/public/images/users/${JSON.parse(localStorage.getItem("user")).user.avatar}`} className='w-[30px] h-[30px] rounded-full object-cover' />}
+										icon={<img src={`http://127.0.0.1:5000/public/images/users/avatar/${state.user.user.avatar}`} className='w-[30px] h-[30px] rounded-full object-cover' />}
 									/>
 								</>
+							)
+						}
+						{
+							Object.entries(state.user).length > 0 && (state.user.user.role === 2) && (
+								<SideBarItem
+									index={5}
+									activeOverlay={activeOverlay}
+									setActiveOverlay={setActiveOverlay}
+									expand={expand}
+									target={"_blank"}
+									title={"Dashboard"}
+									href={`/dashboard`}
+									handleCreate={() => { setIsVisibleNotify(false), clearSearch(), handleButtonClick("Dashboard") }}
+									icon={<AiOutlineDashboard size={30} className='' />}
+								/>
 							)
 						}
 					</motion.ul>

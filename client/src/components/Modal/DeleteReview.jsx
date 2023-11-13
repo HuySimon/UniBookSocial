@@ -1,48 +1,41 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { GoAlertFill, GoX } from 'react-icons/go'
 import { motion } from 'framer-motion'
 import Axios from '../../api/index'
-import { toast } from 'react-toastify'
-import { usePostContext } from '../../hooks/usePostContext'
 import { ImSpinner9 } from 'react-icons/im'
-const Index = ({ postID, isVisibleModalDelete, setIsVisibleModalDelete }) => {
+import { useReviewContext } from '../../hooks/useReviewContext'
+import { toast } from 'react-toastify'
+const DeleteReview = ({ postID, setIsVisibleDeleteReviewModal }) => {
 
-	const [state, dispatch] = usePostContext()
+	const [state, dispatch] = useReviewContext()
 	const [isLoading, setIsLoading] = useState(false)
-	const toastID = useRef(null)
-	console.log(state)
-	const handleDeletePost = async () => {
+
+	const getReviewData = () => {
+		const result = state.reviews.find(review => review.post === postID)
+		return result;
+	}
+	let review = getReviewData()
+
+	const deleteReview = async () => {
 		try {
-			setTimeout(() => {
-				dispatch({ type: "DELETE_POST", value: true })
-			}, 2000);
 			setIsLoading(true)
-			const response = await Axios.delete(`/api/v1/posts/${postID}`);
-			if (response.status === 200) {
-				console.log(response);
-				setIsVisibleModalDelete(false)
+			setTimeout(() => {
+				dispatch({ type: "DELETE_REVIEW", value: true })
+			}, 2000);
+			const res = await Axios.delete(`/api/v1/reviews/${review.id}`)
+			if (res.status === 201) {
 				setIsLoading(false)
 				setTimeout(() => {
-					dispatch({ type: "DELETE_POST", value: false })
+					dispatch({ type: "DELETE_REVIEW", value: false })
 				}, 2000);
+				toast.success("Delete Review Success")
 			}
 		} catch (err) {
-			if (err.response) {
-				toast.error(err.response.data.message);
-				console.log(err.response);
-				setIsLoading(false)
-				setIsVisibleModalDelete(false)
-				setTimeout(() => {
-					dispatch({ type: "DELETE_POST", value: false })
-				}, 2000);
-			} else {
-				toast.error("An error occurred while deleting the post.");
-				console.error(err);
-			}
+			console.log(err)
+			setIsLoading(false)
+			dispatch({ type: "DELETE_REVIEW", value: false })
 		}
-	};
-
-
+	}
 	return (
 		<>
 			<motion.div
@@ -65,27 +58,26 @@ const Index = ({ postID, isVisibleModalDelete, setIsVisibleModalDelete }) => {
 							<div className="p-5">
 								<div className="flex flex-col items-center">
 									<GoAlertFill size={60} className='text-red-600 mb-3' />
-									<p className='font-medium text-center'>Are you sure you want to delete this post?</p>
+									<p className='font-medium text-center'>Are you sure you want to delete this review?</p>
 									<p className='text-sm'>This action cannot be undone</p>
 								</div>
 								<div
 									className="flex w-full justify-between items-center gap-2 mt-5">
 									<button
 										type='button'
-										onClick={() => setIsVisibleModalDelete(false)}
+										onClick={() => setIsVisibleDeleteReviewModal(false)}
 										className='w-full p-2 bg-gray-400 rounded-md text-white'>
 										Cancel
 									</button>
 									<button
-										type='button'
-										ref={toastID}
-										onClick={handleDeletePost}
+										type='submit'
+										onClick={deleteReview}
 										className='w-full p-2 bg-red-600 rounded-md text-white hover:bg-red-500 transition-all'>
-										Delete
+										Submit
 									</button>
 								</div>
 							</div>
-							<GoX className='absolute top-2 right-2 cursor-pointer' size={22} onClick={() => setIsVisibleModalDelete(false)} />
+							<GoX className='absolute top-2 right-2 cursor-pointer' size={22} onClick={() => setIsVisibleDeleteReviewModal(false)} />
 						</>
 					) : (
 						<div className="w-full h-fit py-20 flex justify-center items-center rounded-md bg-white">
@@ -104,10 +96,10 @@ const Index = ({ postID, isVisibleModalDelete, setIsVisibleModalDelete }) => {
 						duration: 0.2
 					}
 				}}
-				onClick={() => setIsVisibleModalDelete(false)}
+				onClick={() => setIsVisibleDeleteReviewModal(false)}
 				className="fixed top-0 left-0 w-screen h-screen bg-black/30 z-10"></motion.div>
 		</>
 	)
 }
 
-export default Index
+export default DeleteReview
