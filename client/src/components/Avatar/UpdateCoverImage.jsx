@@ -33,7 +33,7 @@ const UpdateCoverImage = ({ file, setSelectedCoverFile }) => {
 					'content-type': 'multipart/form-data',
 				},
 			};
-			const res = await Axios.patch('/api/v1/users/updateMe', fd, config)
+			const res = await Axios.patch('/api/v1/users/coverImage', fd, config)
 			if (res.status === 200) {
 				dispatch({ type: "LOGIN", value: res.data.data.user })
 				toast.success("Update Cover Photo Success")

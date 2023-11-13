@@ -16,9 +16,14 @@ router.use(authController.protect)
 
 router.patch('/updateMyPassword', authController.updatePassword);
 router.get('/me', userController.getMe, userController.getUser);
+router.patch('/updateMe', userController.updateMe);
 router.patch(
-  '/updateMe',
-  uploadImgMiddleware.uploadSingleImg('avatar', 'public/images/users'),
+  '/avatar',
+  uploadImgMiddleware.uploadSingleImg('avatar', 'public/images/users/avatar'),
+  userController.updateMe);
+router.patch(
+  '/coverImage',
+  uploadImgMiddleware.uploadSingleImg('coverImage', 'public/images/users/cover'),
   userController.updateMe);
 router.delete('/deleteMe', userController.deleteMe);
 

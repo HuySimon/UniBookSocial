@@ -16,15 +16,16 @@ const upload = multer({ storage: storage });
 exports.uploadSingleImg = (nameImageFile, pathSave) => (req, res, next) => {
   req.pathSave = pathSave;
 
+
   // Use upload.single() middleware with the correct function signature
   upload.single(nameImageFile)(req, res, function (err) {
     if (err) {
-      // Handle any potential errors
-      return next(err);
+      return next();
     }
 
-    // Continue processing the request after the file upload is complete
-    req.body[`${nameImageFile}`] = req.file.filename;
+    if (req.file) {
+      req.body[nameImageFile] = req.file.filename;
+    }
     next();
   });
 };

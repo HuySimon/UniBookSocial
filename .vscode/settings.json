@@ -1,11 +1,5 @@
 {
-  "cSpell.words": [
-    "firstname",
-    "lastname",
-    "Noti",
-    "PUTCH"
-  ],
-    "editor.formatOnSave": true,
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  "cSpell.words": ["firstname", "lastname", "Noti", "PUTCH", "rangepicker"],
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
 }
-

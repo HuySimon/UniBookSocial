@@ -74,7 +74,7 @@ const ConfirmPost = ({ post }) => {
 	console.log(reviewExists)
 	useEffect(() => {
 		setReviewExists(checkExistReview())
-	}, [postData.status, stateReview])
+	}, [postData.status, stateReview, reviewExists])
 	return (
 		<>
 			<div className="w-full flex flex-col gap-3 border border-gray-400 p-5 rounded-sm">

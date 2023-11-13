@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AiOutlineLogout } from 'react-icons/ai';
@@ -134,17 +135,17 @@ const HeaderAdmin = () => {
                                         invisible opacity-20 -translate-x-3 transition-all
                                         group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
                                     `}
-									>
-										Log out
-									</div>
-								)}
-							</div>
-						)}
-					</div>
-				</div>
-			</motion.div>
-		</>
-	);
+                                    >
+                                        Log out
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </motion.div>
+        </>
+    );
 };
 
 export default HeaderAdmin;
