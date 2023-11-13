@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { CiSearch } from 'react-icons/ci';
 import { AiOutlineLogout, AiOutlineDashboard } from 'react-icons/ai';
@@ -32,7 +32,6 @@ const Header = () => {
 		localStorage.setItem("activeButtonProfile", 0)
 	};
 	const result = getCapitalized(window.location.pathname)
-	console.log(result)
 	useEffect(() => {
 		const checkTabletMode = () => {
 			const tabletWidthThreshold = 768;
@@ -45,7 +44,7 @@ const Header = () => {
 			window.removeEventListener('resize', checkTabletMode);
 		};
 	}, [state.user, state.isLoading]);
-	console.log(state.isLoading)
+	console.log(state)
 	const iconList = [
 		{
 			icon: PiHouseLight,
@@ -72,6 +71,7 @@ const Header = () => {
 			console.log("BE ncc")
 		})
 	}
+
 	return (
 		<>
 			<motion.div className={`fixed top-0 ${expand ? "w-[251px]" : "w-16 duration-[800ms]"} h-full bg-white border-r border-gray-300 transition-all z-[2]`}>
@@ -81,7 +81,7 @@ const Header = () => {
 							className='flex justify-center items-center w-full grow-0 shrink-0'
 							to={"/"}
 						>
-							<img src={Logo} alt="" className='w-12 h-14 object-contain' />
+							<img src={Logo} alt="Logo" className='w-12 h-14 object-contain' />
 							<span className={`font-bold text-2xl overflow-hidden transition-all ml-2 ${expand ? "w-44" : "w-0"}`}>SGU School</span>
 						</Link>
 					</div>
@@ -136,12 +136,13 @@ const Header = () => {
 							)
 						}
 						{
-							Object.entries(state.user).length > 0 && (state.user.user.role === 2) && state.isAuthorized === true && (
+							Object.entries(state.user).length > 0 && (state.user.user.role === 2) && (
 								<SideBarItem
 									index={5}
 									activeOverlay={activeOverlay}
 									setActiveOverlay={setActiveOverlay}
 									expand={expand}
+									target={"_blank"}
 									title={"Dashboard"}
 									href={`/dashboard`}
 									handleCreate={() => { setIsVisibleNotify(false), clearSearch(), handleButtonClick("Dashboard") }}
