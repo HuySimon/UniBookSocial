@@ -36,7 +36,6 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     'linkFacebook', 'linkZalo', 'linkInstagram'
   ]
   const filteredBody = filterObj(req.body, ...allowedFields);
-  console.log(filteredBody)
   // 3) Update user data
   const user = await User.update(filteredBody, {
     where: { id: req.user.id },

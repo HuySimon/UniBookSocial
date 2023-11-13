@@ -36,7 +36,7 @@ const UpdateAvatar = ({ file, setSelectedFile }) => {
 					'content-type': 'multipart/form-data',
 				},
 			};
-			const res = await Axios.patch('/api/v1/users/updateMe', fd, config)
+			const res = await Axios.patch('/api/v1/users/avatar', fd, config)
 			if (res.status === 200) {
 				// console.log(res.data.data.user)
 				dispatch({ type: "LOGIN", value: res.data.data.user })
