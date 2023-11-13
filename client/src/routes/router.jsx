@@ -11,7 +11,7 @@ import ForgotPassword from '../views/auth/forgotPassword/ForgotPassword';
 import Search from '../views/pages/Search';
 import PrivateRoutes from '../wrapper/PrivateRoutes';
 import Users from '../views/pages/Users/Users';
-import Statics from '../views/pages/Statics';
+import Statistics from '../views/pages/Statistics';
 import Posts from '../views/pages/Posts/Posts';
 import DetailPost from '../components/Post/DetailPost';
 import { AllPostLoader } from '../views/pages/Home';
@@ -79,8 +79,8 @@ const router = createBrowserRouter([
                 element: <Posts />,
             },
             {
-                path: 'statics',
-                element: <Statics />,
+                path: 'statistics',
+                element: <Statistics />,
             },
         ],
     },

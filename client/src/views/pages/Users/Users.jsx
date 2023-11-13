@@ -254,7 +254,7 @@ const Users = () => {
                                             <img
                                                 onClick={() => openCardProfileModal(user.id)}
                                                 className="w-10 h-10 rounded-full cursor-pointer"
-                                                src={user.avatar}
+                                                src={`http://127.0.0.1:5000/public/images/users/${user.avatar}`}
                                                 alt="Jese image"
                                             />
                                             <div className="pl-3">

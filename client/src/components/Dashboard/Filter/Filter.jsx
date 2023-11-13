@@ -1,10 +1,11 @@
 // eslint-disable-next-line no-unused-vars
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 // eslint-disable-next-line react/prop-types
 function Filter({ onFilter }) {
     const [selectedOption, setSelectedOption] = useState('All');
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const modalRef = useRef(null);
 
     const handleOptionClick = (option) => {
         setSelectedOption(option);
@@ -16,8 +17,22 @@ function Filter({ onFilter }) {
         setIsDropdownOpen(!isDropdownOpen);
     };
 
+    useEffect(() => {
+        const handleOutsideClick = (event) => {
+            if (modalRef.current && !modalRef.current.contains(event.target)) {
+                setIsDropdownOpen(false);
+            }
+        };
+
+        document.addEventListener('click', handleOutsideClick);
+
+        return () => {
+            document.removeEventListener('click', handleOutsideClick);
+        };
+    }, []);
+
     return (
-        <div className="ml-2">
+        <div className="ml-2" ref={modalRef}>
             <button
                 id="dropdownActionButton"
                 onClick={toggleDropdown}
