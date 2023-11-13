@@ -51,11 +51,24 @@ const DetailPost = () => {
 			setTimeAgo(`${days} days ago`);
 		}
 	};
+	const checkExistReview = () => {
+		let result;
+		if (stateReview.reviews) {
+			result = stateReview.reviews.find((review) => {
+				return review.post === detailPost.id;
+			});
+		} else {
+			result === false
+		}
+		return Boolean(result);
+	};
+	console.log(stateReview)
+	const [reviewExists, setReviewExists] = useState(checkExistReview());
 	useEffect(() => {
 		calculateTimeAgo()
+		setReviewExists(checkExistReview())
 		fetchData()
 	}, [detailPost.createdAt, stateReview])
-	console.log(statePost.isCancelOrder)
 	const confirmAction = async (status, message) => {
 		if (Object.entries(state.user).length === 0) {
 			toast.warning("Please log in to buy")
@@ -184,11 +197,15 @@ const DetailPost = () => {
 							</table>
 						</div>
 						<div className="flex flex-col gap-3">
-							<p className='text-sm text-gray-500'>Status: <span>{detailPost.status}</span></p>
+							{
+								userPost.id === 1 && (
+									<p className='text-sm text-gray-500'>Status: <span>{detailPost.status}</span></p>
+								)
+							}
 							{
 								Object.entries(state.user).length > 0 && (userPost.id === state.user.user.id) ? (
 									<span className='text-gray-400 text-base'>You own this post!</span>
-								) : detailPost.status === "Unconfirmed" ? (
+								) : (detailPost.status === "Unconfirmed" && userPost.id === 1) ? (
 									<button
 										type="submit"
 										ref={toastId}
@@ -213,7 +230,7 @@ const DetailPost = () => {
 											Cancel Order
 										</button>
 									</div>
-								) : (
+								) : (detailPost.status === "Delivered" && reviewExists === false) ? (
 									<button
 										type="submit"
 										ref={toastId}
@@ -221,6 +238,10 @@ const DetailPost = () => {
 										className="w-28 xl:w-36 px-4 xl:px-6 py-3 bg-primary-main text-white rounded-lg hover:shadow !shadow-primary-700 hover:bg-primary-700 transition-all">
 										Review
 									</button>
+								) : reviewExists === true && (
+									<p>
+										<i className=" text-gray-500">Thank you for your review. </i>
+									</p>
 								)
 							}
 						</div>
