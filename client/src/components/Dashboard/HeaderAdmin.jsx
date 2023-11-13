@@ -1,30 +1,22 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
-import { CiSearch } from 'react-icons/ci';
+import { Link, useNavigate } from 'react-router-dom';
 import { AiOutlineLogout } from 'react-icons/ai';
 import {
-	PiHeartLight,
-	PiEnvelopeLight,
-	PiListBold,
-	PiHouseLight,
-	PiPlusCircleLight,
 	PiUsersLight,
 	PiNewspaperLight,
 	PiChartBarLight,
 	PiRocketLaunchLight,
 } from 'react-icons/pi';
-import { AnimatePresence, motion } from 'framer-motion';
-
-import CreatePost from '../Post/CreatePost';
-import Notification from '../Notification';
-import { Logo, Portrait } from '../../assets';
+import { motion } from 'framer-motion';
+import { Logo } from '../../assets';
 import SideBarItem from './SideBarItemAdmin';
 import { useAuthContext } from '../../hooks/useAuthContext';
-
+import Axios from '../../api/index'
+import { toast } from 'react-toastify';
 const HeaderAdmin = () => {
 	const [expand, setExpand] = useState(true);
 	const [state, dispatch] = useAuthContext()
-	const [isAuth, setIsAuth] = useState(false);
+	const navigate = useNavigate()
 	const [activeOverlay, setActiveOverlay] = useState(0);
 	useEffect(() => {
 		const checkTabletMode = () => {
@@ -65,6 +57,18 @@ const HeaderAdmin = () => {
 			role: 3
 		},
 	];
+	const logout = async () => {
+		dispatch({ type: "LOGOUT" })
+		try {
+			const res = await Axios.get('/api/v1/users/logout')
+			if (res.status === 200) {
+				toast.success("Log out success")
+			}
+			navigate('/login')
+		} catch (err) {
+			console.log(err)
+		}
+	}
 
 	return (
 		<>
@@ -80,7 +84,7 @@ const HeaderAdmin = () => {
 								className={`font-bold text-2xl overflow-hidden transition-all ${expand ? 'w-44' : 'w-0'
 									}`}
 							>
-								SGU School
+								UnibookSocial
 							</span>
 						</Link>
 					</div>
@@ -115,7 +119,9 @@ const HeaderAdmin = () => {
 								</button>
 							</div>
 						) : (
-							<div className="group flex items-center justify-center md:justify-normal text-xl transition-all hover:bg-black hover:shadow-md !shadow-black hover:text-white p-2 rounded-lg cursor-pointer">
+							<div
+								onClick={() => { logout() }}
+								className="group flex items-center justify-center md:justify-normal text-xl transition-all hover:bg-black hover:shadow-md !shadow-black hover:text-white p-2 rounded-lg cursor-pointer">
 								<AiOutlineLogout size={30} />
 								<span className={`ml-2 overflow-hidden ${expand ? 'w-44' : 'w-0 hidden'}`}>
 									Log out

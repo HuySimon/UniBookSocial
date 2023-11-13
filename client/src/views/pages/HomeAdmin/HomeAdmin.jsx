@@ -32,7 +32,7 @@ function HomeAdmin() {
 			image: Phat,
 			github: "",
 			linkedln: "",
-			instagram: ""
+			instagram: "",
 		},
 		{
 			name: "Bùi Hồng Bảo",
@@ -41,7 +41,7 @@ function HomeAdmin() {
 			facebook: "",
 			github: "",
 			linkedln: "",
-			instagram: ""
+			instagram: "",
 		},
 		{
 			name: "Đặng Lê Anh Huy",
@@ -50,7 +50,7 @@ function HomeAdmin() {
 			facebook: "",
 			github: "",
 			linkedln: "",
-			instagram: ""
+			instagram: "",
 		}, {
 			name: "Trần Đăng Nam",
 			email: "langueofdie@gmail.com",
@@ -58,7 +58,7 @@ function HomeAdmin() {
 			facebook: "",
 			github: "",
 			linkedln: "",
-			instagram: ""
+			instagram: "",
 		}, {
 			name: "Phan Huỳnh Minh Tiến",
 			email: "tienphan09098@gmail.com",
@@ -66,7 +66,7 @@ function HomeAdmin() {
 			facebook: "",
 			github: "",
 			linkedln: "",
-			instagram: ""
+			instagram: "",
 		},
 		{
 			name: "Tăng Quốc Tuấn",
@@ -75,7 +75,7 @@ function HomeAdmin() {
 			facebook: "",
 			github: "",
 			linkedln: "",
-			instagram: ""
+			instagram: "",
 		}
 	]
 	return (
@@ -161,7 +161,7 @@ function HomeAdmin() {
 			<div className="mx-5 mb-5 flex justify-between items-center flex-wrap gap-5">
 				{
 					data.map((item, index) => (
-						<TeamCard data={data[index]} />
+						<TeamCard data={data[index]} index={index} />
 					))
 				}
 			</div>
