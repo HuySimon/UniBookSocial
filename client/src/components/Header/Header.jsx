@@ -57,7 +57,7 @@ const Header = () => {
 			title: "Search",
 			link: "/search",
 			handleCreate: () => { setIsVisibleNotify(false), handleButtonClick("Search") },
-		},
+		}
 	]
 	const logout = () => {
 		dispatch({ type: "LOGOUT" })
@@ -136,7 +136,7 @@ const Header = () => {
 							)
 						}
 						{
-							Object.entries(state.user).length > 0 && (state.user.user.role === 2) && (
+							Object.entries(state.user).length > 0 && (state.user.user.role === 2 || state.user.user.role === 3) && (
 								<SideBarItem
 									index={5}
 									activeOverlay={activeOverlay}
