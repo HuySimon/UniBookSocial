@@ -24,7 +24,7 @@ const ForgotPassword = ({ isVisible, setIsVisible }) => {
 		} else if (step == 2) {
 			return <ChangePassword title={"Change Password"} />
 		}
-	}
+	} 
 	useEffect(() => {
 		document.title = "Forgot Password"
 	})

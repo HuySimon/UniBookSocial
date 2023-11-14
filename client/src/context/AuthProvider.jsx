@@ -5,7 +5,9 @@ export const AuthContext = createContext();
 const initialState = {
 	isAuthorized: localStorage.getItem("auth"),
 	user: JSON.parse(localStorage.getItem("user")),
-	isLoading: false
+	isLoading: false,
+	resetPasswordToken: null,
+	email:""
 }
 const url = '/api/v1/users/me'
 const reducer = (state, action) => {
@@ -30,6 +32,12 @@ const reducer = (state, action) => {
 				isLoading: false,
 				isAuthorized: false
 			};
+		case "RESET_PASSWORD":
+			return {
+				...state,
+				resetPasswordToken: action.value,
+				email: action.email,
+			}
 		default:
 			throw new Error(`Unhandled action type: ${action.type}`);
 	}

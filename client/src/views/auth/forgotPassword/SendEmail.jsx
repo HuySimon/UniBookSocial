@@ -28,7 +28,7 @@ const SendEmail = ({ title, handleNextStep }) => {
 		}
 		Axios.post('/api/v1/users/forgotPassword', user).then(res => {
 			console.log(res)
-			dispatch({ type: "RESET_PASSWORD", value: res.data.resetToken })
+			dispatch({ type: "RESET_PASSWORD", value: res.data.resetToken, email: data.email })
 			toast.success("OTP has been sent to your email")
 			handleNextStep()
 			setIsLoading(false)
@@ -42,6 +42,14 @@ const SendEmail = ({ title, handleNextStep }) => {
 	return (
 		<motion.form
 			onSubmit={handleSubmit(onSubmit)}
+			initial={{
+				x: "40%",
+				opacity: 0,
+				transition: {
+					duration: 0.35,
+					ease: [0.32, 0, 0.67, 0]
+				}
+			}}
 			animate={{
 				x: 0,
 				opacity: 1,
