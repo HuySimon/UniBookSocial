@@ -40,7 +40,7 @@ const Index = ({ isVisibleNotify, handleNotify }) => {
 							</p>
 						</div>
 					</div>
-					<div className="flex flex-col">
+					<div className="flex flex-col h-[75vh] overflow-y-scroll">
 						{dataNotify &&
 							dataNotify
 								.filter((item) => item.userReceive === user.user.id)
