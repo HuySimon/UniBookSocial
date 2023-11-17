@@ -123,7 +123,6 @@ function Pagination({ totalPages, currentPage, onPageChange }) {
 						<div className="w-[56px]"></div>
 					)
 				}
-
 			</div>
 		</div>
 	);

@@ -46,7 +46,11 @@ const ChangePassword = ({ title }) => {
 			onSubmit={handleSubmit(onSubmit)}
 			initial={{
 				x: "50%",
-				opacity: 0
+				opacity: 0,
+				transition: {
+					duration: 0.35,
+					ease: [0.32, 0, 0.67, 0]
+				}
 			}}
 			animate={{
 				x: 0,

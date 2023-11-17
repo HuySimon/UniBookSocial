@@ -30,6 +30,12 @@ const reducer = (state, action) => {
 				isLoading: false,
 				isAuthorized: false
 			};
+		case "RESET_PASSWORD":
+			return {
+				...state,
+				resetPasswordToken: action.value,
+				email: action.email,
+			}
 		default:
 			throw new Error(`Unhandled action type: ${action.type}`);
 	}

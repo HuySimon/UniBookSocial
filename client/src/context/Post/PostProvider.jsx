@@ -91,13 +91,13 @@ export const PostProvider = ({ children }) => {
 			console.log(err);
 		}
 	};
-
+	console.log('post render');
+	const [state, dispatch] = useReducer(reducer, initialState);
+	
 	useEffect(() => {
 		getPosts(url);
 	}, []);
 
-	console.log('post render');
-	const [state, dispatch] = useReducer(reducer, initialState);
 
 	return (
 		<PostsContext.Provider value={{ state, dispatch }}>

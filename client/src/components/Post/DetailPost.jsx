@@ -205,7 +205,7 @@ const DetailPost = () => {
 							{
 								Object.entries(state.user).length > 0 && (userPost.id === state.user.user.id) ? (
 									<span className='text-gray-400 text-base'>You own this post!</span>
-								) : (detailPost.status === "Unconfirmed" && userPost.id === 1) ? (
+								) : (detailPost.status === "Unconfirmed" && state.user.user.role === 1) ? (
 									<button
 										type="submit"
 										ref={toastId}
