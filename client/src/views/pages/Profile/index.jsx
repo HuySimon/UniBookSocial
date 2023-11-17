@@ -34,7 +34,7 @@ const Index = () => {
 	useEffect(() => {
 		document.title = "Profile"
 		getUser()
-	}, [profileId.id, selectedFile])
+	}, [profileId.id, selectedFile,selectedCoverFile])
 	const [activeButton, setActiveButton] = useState(JSON.parse(localStorage.getItem("activeButtonProfile")))
 	const menu = [
 		{
@@ -77,7 +77,7 @@ const Index = () => {
 		<div className='w-full flex flex-col px-[25px] lg:px-[150px] xl:px-[200px] mx-auto'>
 			<div className="w-full flex flex-col h-[400px] relative">
 				<div className="w-full h-full absolute inset-0">
-					<img src={`http://127.0.0.1:5000/public/images/users/cover/${currentUser.coverImage}`} alt="" className='w-full h-full object-cover object-top rounded-b-md' />
+					<img src={`http://127.0.0.1:5000/public/images/users/cover/${currentUser.coverImage}`} alt="" className='w-full h-full object-cover rounded-b-md' />
 					{
 						(Object.entries(state.user).length) > 0 && (state.user.user.id === currentUser.id) && (
 							<label htmlFor='coverImageFile' className="w-fit flex items-center gap-1 p-3 bg-black/30 rounded-md absolute top-[85%] right-2 transition-all hover:bg-black/60 cursor-pointer">

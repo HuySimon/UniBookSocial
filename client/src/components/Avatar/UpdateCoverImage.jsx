@@ -26,7 +26,7 @@ const UpdateCoverImage = ({ file, setSelectedCoverFile }) => {
 	})
 	const onSubmit = async (data) => {
 		const fd = new FormData();
-		fd.append('coverImage', dataURLtoFile(file, "coverImage.png"))
+		fd.append('coverImage', dataURLtoFile(croppedImage, "coverImage.png"))
 		try {
 			const config = {
 				headers: {

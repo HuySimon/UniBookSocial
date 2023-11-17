@@ -18,21 +18,21 @@ export const SearchProvider = ({ children }) => {
 	useEffect(() => {
 		const storedSearchValue = localStorage.getItem('searchValue');
 		const storedSearchResults = localStorage.getItem('searchResults');
-
+	
 		if (storedSearchValue) {
-			setSearchValues(storedSearchValue);
+			setSearchValues(JSON.parse(storedSearchValue));
 		}
-
+	
 		if (storedSearchResults) {
 			setSearchResults(JSON.parse(storedSearchResults));
 		}
 	}, []);
-
 	const updateSearch = (newSearchValue, data) => {
+		let updatedSearchValue
 		if (newSearchValue != null) {
-			const updatedSearchValue = { ...searchValues, ...newSearchValue };
+			updatedSearchValue = { ...searchValues, ...newSearchValue };
 		}else {
-			const updatedSearchValue = { ...searchValues };
+			updatedSearchValue = { ...searchValues };
 		}
 		setSearchValues(updatedSearchValue);
 		setSearchResults(data);

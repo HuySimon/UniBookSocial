@@ -3,8 +3,8 @@ import Axios from '../api/index'
 export const AuthContext = createContext();
 
 const initialState = {
-	isAuthorized: localStorage.getItem("auth"),
-	user: JSON.parse(localStorage.getItem("user")),
+	isAuthorized: localStorage.getItem("auth") || false,
+	user: JSON.parse(localStorage.getItem("user")) || {},
 	isLoading: false
 }
 const url = '/api/v1/users/me'
@@ -40,6 +40,16 @@ export const AuthProvider = ({ children }) => {
 	console.log('context render')
 	const value = useMemo(() => ({ state, dispatch }), [state, dispatch])
 
+
+	useEffect(() => {
+		// Initialize localStorage if not already set
+		if (localStorage.getItem("auth") === null) {
+			localStorage.setItem("auth", false);
+		}
+		if (localStorage.getItem("user") === null) {
+			localStorage.setItem("user", JSON.stringify({}));
+		}
+	}, []);
 
 	return (
 		<AuthContext.Provider value={value}>
