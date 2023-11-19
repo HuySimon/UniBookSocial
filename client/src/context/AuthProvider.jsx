@@ -5,7 +5,9 @@ export const AuthContext = createContext();
 const initialState = {
 	isAuthorized: localStorage.getItem("auth") || false,
 	user: JSON.parse(localStorage.getItem("user")) || {},
-	isLoading: false
+	isLoading: false,
+	resetPasswordToken: "",
+	email: "",
 }
 const url = '/api/v1/users/me'
 const reducer = (state, action) => {

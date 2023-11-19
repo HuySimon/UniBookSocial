@@ -100,7 +100,7 @@ const Header = () => {
 							/>
 						))}
 						{
-							localStorage.getItem("auth") === "true" && localStorage.getItem("user") != "" && (
+							localStorage.getItem("auth") === "true" && localStorage.getItem("user") != "" && (state.user.user.role != 2) && (state.user.user.role != 3)&& (
 								<>
 									<SideBarItem
 										title={"Notification"}
@@ -122,17 +122,21 @@ const Header = () => {
 										handleCreate={() => { setIsVisiblePost(!isVisiblePost) }}
 										icon={<PiPlusCircleLight size={30} className='z-10' />}
 									/>
-									<SideBarItem
-										index={4}
-										activeOverlay={activeOverlay}
-										setActiveOverlay={setActiveOverlay}
-										expand={expand}
-										title={"Profile"}
-										href={`/profile/${JSON.parse(localStorage.getItem("user")).user.id}`}
-										handleCreate={() => { setIsVisibleNotify(false), clearSearch(), handleButtonClick("Profile") }}
-										icon={<img src={`http://127.0.0.1:5000/public/images/users/avatar/${state.user.user.avatar}`} className='w-[30px] h-[30px] rounded-full object-cover' />}
-									/>
 								</>
+							)
+						}
+						{
+							localStorage.getItem("auth") === "true" && localStorage.getItem("user") != "" && (
+								<SideBarItem
+									index={4}
+									activeOverlay={activeOverlay}
+									setActiveOverlay={setActiveOverlay}
+									expand={expand}
+									title={"Profile"}
+									href={`/profile/${state.user.user.id}`}
+									handleCreate={() => { setIsVisibleNotify(false), clearSearch(), handleButtonClick("Profile") }}
+									icon={<img src={`http://127.0.0.1:5000/public/images/users/avatar/${state.user.user.avatar}`} className='w-[30px] h-[30px] rounded-full object-cover' />}
+								/>
 							)
 						}
 						{
