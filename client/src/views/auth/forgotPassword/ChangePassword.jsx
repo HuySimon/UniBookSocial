@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify'
@@ -7,9 +7,13 @@ import Axios from '../../../api/index'
 import * as Yup from 'yup'
 import { useAuthContext } from '../../../hooks/useAuthContext';
 import { useNavigate } from 'react-router-dom';
+import { PiEyeBold, PiEyeClosedBold } from 'react-icons/pi'
 const ChangePassword = ({ title }) => {
 
 	const [state, dispatch] = useAuthContext()
+	const [password, setPassword] = useState(false)
+	const [confirmPassword, setConfirmPassword] = useState(false)
+
 	const navigate = useNavigate()
 	const newPasswordSchema = Yup.object().shape({
 		password: Yup.string().required("Please enter password").matches(
@@ -34,10 +38,7 @@ const ChangePassword = ({ title }) => {
 		Axios.patch(`/api/v1/users/resetPassword/${state.resetToken}`, newPassword).then(res => {
 			toast.success("Change password success!")
 			navigate('/login')
-			// console.log(res)
-			// console.log(res.data)
 		}).catch(err => {
-			// console.log(err.response)
 			toast.error("Change password failed!!")
 		})
 	}
@@ -70,8 +71,34 @@ const ChangePassword = ({ title }) => {
 			}}
 			className="w-[60%] flex flex-col items-center mx-auto">
 			<span className='font-medium text-3xl mb-3'>{title}</span>
-			<input type="password" {...register("password")} className='w-full px-4 py-2 mb-4 border border-gray-500 text-black rounded-md placeholder:text-sm' placeholder='New Password' />
-			<input type="password" {...register("confirmPassword")} className='w-full px-4 py-2 border border-gray-500 text-black rounded-md placeholder:text-sm' placeholder='Confirm New Password' />
+			<div className="relative w-full">
+				<input type={`${!password ? "password" : "text"}`} {...register("password")} className='w-full px-4 py-2 mb-4 border border-gray-500 text-black rounded-md placeholder:text-sm' placeholder='New Password' />
+				{
+					!password ? (
+						<PiEyeBold
+							onClick={() => setPassword(!password)}
+							size={22} className='absolute top-1/4 right-3 cursor-pointer' />
+					) : (
+						<PiEyeClosedBold
+							onClick={() => setPassword(!password)}
+							size={22} className='absolute top-1/4 right-3 cursor-pointer' />
+					)
+				}
+			</div>
+			<div className="relative w-full">
+			<input type={`${!confirmPassword ? "password" : "text"}`} {...register("confirmPassword")} className='w-full px-4 py-2 border border-gray-500 text-black rounded-md placeholder:text-sm' placeholder='Confirm New Password' />
+			{
+						!confirmPassword ? (
+							<PiEyeBold
+								onClick={() => setConfirmPassword(!confirmPassword)}
+								size={22} className='absolute top-1/4 right-3 cursor-pointer' />
+						) : (
+							<PiEyeClosedBold
+								onClick={() => setConfirmPassword(!confirmPassword)}
+								size={22} className='absolute top-1/4 right-3 cursor-pointer' />
+						)
+					}
+			</div>
 			<p className='text-sm text-gray-500 text-left my-2'>Password must contain at least 8 characters, one uppercase, one number and one special case character.Ex(John123@)</p>
 			<input
 				onClick={() => {
