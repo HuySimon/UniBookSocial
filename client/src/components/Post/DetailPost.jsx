@@ -62,7 +62,7 @@ const DetailPost = () => {
 		}
 		return Boolean(result);
 	};
-	console.log(stateReview)
+	// console.log(stateReview)
 	const [reviewExists, setReviewExists] = useState(checkExistReview());
 	useEffect(() => {
 		calculateTimeAgo()
@@ -80,7 +80,7 @@ const DetailPost = () => {
 			try {
 				const res = await Axios.patch(`/api/v1/posts/${detailPost.id}/status`, data)
 				if (res.status === 200) {
-					console.log(res)
+					// console.log(res)
 					setDetailPost(res.data.data.data)
 					toast.update(toastId.current, {
 						render: message,
@@ -198,7 +198,7 @@ const DetailPost = () => {
 						</div>
 						<div className="flex flex-col gap-3">
 							{
-								userPost.id === 1 && (
+								state.user.user.role === 1 && (
 									<p className='text-sm text-gray-500'>Status: <span>{detailPost.status}</span></p>
 								)
 							}

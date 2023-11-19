@@ -166,15 +166,14 @@ const Index = () => {
 						</div>
 						<button
 							type="submit"
-							disabled={!isDirty || !isValid}
 							// className='hidden'
-							className={`w-fit mb-3 px-8 py-3 rounded-md font-normal shadow cursor-pointer ${!isDirty ? "bg-gray-600 text-white" : "bg-primary-600 text-white"}`}
+							className={`w-fit mb-3 px-8 py-3 rounded-md font-normal shadow cursor-pointer bg-primary-600 text-white`}
 						>Search</button>
 					</div>
 				</form>
 				<div className="w-full h-full">
 					{
-						searchPost.length === 0 ? (
+						searchResults.length === 0 ? (
 							<div className="w-full h-fit flex flex-col justify-center items-center">
 								<img src={NoResultFound} alt="" className='w-[45vh] h-[45vh]' />
 								<p className='font-medium text-xl text-black/90 mb-2 tracking-wide'>No Result Found</p>
