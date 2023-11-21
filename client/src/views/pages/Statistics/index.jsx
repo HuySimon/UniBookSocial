@@ -42,6 +42,7 @@ const Statistics = () => {
 
     const handleStartDateChange = (value) => {
         const date = new Date(value.$d);
+        console.log(date);
         const year = date.getFullYear();
         const month = ('0' + (date.getMonth() + 1)).slice(-2); // Tháng được đánh số từ 0 đến 11
         const day = ('0' + date.getDate()).slice(-2);
@@ -61,6 +62,7 @@ const Statistics = () => {
 
     //     setSelectedEndDate(formattedDate);
     // };
+
     const handleEndDateChange = (value) => {
         const date = new Date(value.$d);
         const year = date.getFullYear();
@@ -71,13 +73,24 @@ const Statistics = () => {
 
         const startDate = new Date(selectedStartDate);
         const endDate = new Date(formattedDate);
-        console.log(startDate);
 
-        // Kiểm tra nếu endDate nhỏ hơn startDate hoặc khoảng cách giữa chúng lớn hơn 30 ngày
-        // if (isAfter(startDate, endDate) && differenceInDays(startDate, endDate) >= 30) {
-        //     // Đặt lại startDate và endDate thành null
+        console.log(startDate, endDate);
+
+        // if (isNaN(startDate) || isNaN(endDate)) {
+        //     // Đặt lại startDate và endDate thành null nếu ngày không hợp lệ
         //     setSelectedStartDate(null);
         //     setSelectedEndDate(null);
+        //     return;
+        // }
+
+        // Kiểm tra nếu endDate nhỏ hơn startDate hoặc khoảng cách giữa chúng lớn hơn 30 ngày
+        // const dayDiff = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24)); // Số lượng ngày giữa startDate và endDate
+
+        // if (dayDiff < 0 || dayDiff > 30) {
+        //     // Đặt lại startDate và endDate thành null
+        //     // setSelectedStartDate(null);
+        //     // setSelectedEndDate(null);
+        //     console.log('')
         // } else {
         //     setSelectedEndDate(formattedDate);
         // }
