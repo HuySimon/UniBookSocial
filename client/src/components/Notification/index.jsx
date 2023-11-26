@@ -10,41 +10,74 @@ import { toast } from 'react-toastify';
 import Axios from '../../api/index';
 import { useAuthContext } from '../../hooks/useAuthContext';
 import { useNotificationContext } from '../../hooks/useNotificationContext';
+import { useNavigate } from 'react-router-dom';
 
 const Index = ({ isVisibleNotify, handleNotify }) => {
 	const [dataNotify, setDataNotify] = useState(null);
 	const [type, setType] = useState("Unread");
 	const [state, dispatch] = useAuthContext();
 	const [stateNotify, dispatchNotify] = useNotificationContext()
+	const [timeAgo, setTimeAgo] = useState('')
 	const { isAuthorized, user } = state;
+	const navigate = useNavigate()
+	const calculateTimeAgo = (createdAt) => {
+		const now = new Date();
+		const created = new Date(createdAt);
+		const timeDifference = now - created;
+		const seconds = Math.floor(timeDifference / 1000);
 
+		if (seconds < 60) {
+			return `${seconds} seconds ago`;
+		} else if (seconds < 3600) {
+			const minutes = Math.floor(seconds / 60);
+			return `${minutes} minutes ago`;
+		} else if (seconds < 86400) {
+			const hours = Math.floor(seconds / 3600);
+			return `${hours} hours ago`;
+		} else {
+			const days = Math.floor(seconds / 86400);
+			return `${days} days ago`;
+		}
+	};
 	const getNotifications = async (isSeen) => {
-		let url = `/api/v1/notifications`
+		dispatchNotify({ type: "TYPE_LOADING", value: true })
+		let url = `/api/v1/notifications&include=postData,userSendData&sort=-createdAt`
 		try {
 			if (type === "Unread") {
-				url = `/api/v1/notifications?filter=(equals(isSeen,'false'))`
+				url = `/api/v1/notifications?filter=(equals(isSeen,'false'))&include=postData,userSendData&sort=-createdAt`
 			} else {
-				url = `/api/v1/notifications?filter=(equals(isSeen,'true'))`
+				url = `/api/v1/notifications?filter=(equals(isSeen,'true'))&include=postData,userSendData&sort=-createdAt`
 			}
 			const res = await Axios.get(url)
 			if (res.status === 200) {
 				setDataNotify(res.data.data.data)
+				dispatchNotify({ type: "TYPE_LOADING", value: false })
 				// console.log(res)
 			}
 		} catch (error) {
 			console.log(error)
+			dispatchNotify({ type: "TYPE_LOADING", value: false })
+
 		}
 	}
-	const updateNotifications = async (id) => {
+	const updateNotifications = async (id, value) => {
 		try {
 			const res = await Axios.patch(`/api/v1/notifications/${id}`, {
-				isSeen: true
+				isSeen: value
 			})
 			if (res.status === 200) {
 				toast.success("Update notifications successfully")
 			}
 		} catch (error) {
 			console.log(error)
+		}
+	}
+	const handleChange = (e, id) => {
+		let isChecked = e.target.checked;
+		if (isChecked) {
+			updateNotifications(id, true)
+		} else {
+			updateNotifications(id, false)
 		}
 	}
 	useEffect(() => {
@@ -64,19 +97,19 @@ const Index = ({ isVisibleNotify, handleNotify }) => {
 	const notifySend = [
 		{
 			type: "Confirm",
-			content: `Bài đăng được xác nhận bởi`
+			content: `Bài đăng title được xác nhận bởi username`
 		},
 		{
 			type: "Unconfirmed",
-			content: `Bài đăng bị hủy xác nhận bởi`
+			content: `Bài đăng title bị hủy xác nhận bởi username`
 		},
 		{
 			type: "Checkpost",
-			content: "Bài đăng của bạn bị báo cáo",
+			content: "Bài đăng title của bạn bị báo cáo",
 		},
 		{
 			type: "Violation",
-			content: "Chúng tôi đã gỡ bài đăng của bạn do có vi phạm"
+			content: "Nội dung vi phạm: content"
 		}
 	]
 	return (
@@ -109,32 +142,51 @@ const Index = ({ isVisibleNotify, handleNotify }) => {
 						}
 					</div>
 					<div className={`flex flex-col h-full overflow-y-scroll`}>
-						{dataNotify &&
-							dataNotify
-								.filter((item) => item.userReceive === user.user.id)
-								.map((item, index) => (
-									<div key={index} className={`w-full flex items-center border-b py-2`}>
-										{item.typeNoti === 'Confirm' ? (
-											<GiConfirmed size={45} color='green' className='w-1/4' />
-										) : item.typeNoti === 'Violation' ? (
-											<PiWarningBold size={45} color='red' className='w-1/4' />
-										) : (
-											<GiCancel size={45} color='red' className='w-1/4' />
-										)}
-										<div className={`w-3/4 flex flex-col justify-between`}>
-											<span className='text-lg font-medium'>{item.typeNoti}</span>
-											{
-												notifySend.map((notiItem, notiIndex) => (
-													// Check if item.typeNoti === notiItem.type
-													item.typeNoti === notiItem.type && (
-														<p className='text-sm text-gray-400' key={notiIndex}>{notiItem.content} người dùng có ID {index}</p>
-													)
-												))
-											}
+						{
+							stateNotify.isLoadingType ? (
+								<div className=""></div>
+							) : (
+								dataNotify &&
+								dataNotify
+									.filter((item) => item.userReceive === user.user.id)
+									.map((item, index) => (
+										<div
+											onClick={() => { navigate(`/detailPost/${item.post}`)}}
+											key={index} className={`w-full flex items-center border-b py-2 cursor-pointer transition-all bg-transparent hover:bg-gray-100`}>
+											{item.typeNoti === 'Confirm' ? (
+												<GiConfirmed size={52} color='green' className='w-1/4' />
+											) : item.typeNoti === 'Violation' ? (
+												<PiWarningBold size={52} color='red' className='w-1/4' />
+											) : (
+												<GiCancel size={52} color='red' className='w-1/4' />
+											)}
+											<div className={`w-3/4 flex flex-col justify-between`}>
+												<div className="w-full flex justify-between items-center mb-1">
+													<span className='text-lg font-medium'>{item.typeNoti}</span>
+													<span className='text-sm text-gray-500'>
+														<i>
+															{calculateTimeAgo(item.createdAt)}
+														</i>
+													</span>
+												</div>
+												{
+													notifySend.map((notiItem, notiIndex) => (
+														// Check if item.typeNoti === notiItem.type
+														item.typeNoti === notiItem.type && (
+															<p className='text-sm text-gray-500' key={notiIndex} dangerouslySetInnerHTML={{
+																__html: notiItem.content
+																	.replace("title", `<i class="text-black/70">' ${item.postData.title} '</i>`)
+																	.replace("username", `<i class="font-medium text-black/70">${item.userSendData.username}</i>`)
+															}}></p>
+														)
+													))
+												}
+											</div>
+											{item.isSeen === false && (<input type="checkbox" className='w-4 h-4 ml-1' onChange={(e) => handleChange(e, item.id)} />)}
 										</div>
-										{ item.isSeen === false && ( <input type="checkbox" className='w-4 h-4' onClick={() => updateNotifications(item.id)} /> )}
-									</div>
-								))}
+									))
+							)
+						}
 					</div>
 				</div>
 				{/* <Curve /> */}

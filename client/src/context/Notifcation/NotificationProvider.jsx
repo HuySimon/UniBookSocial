@@ -5,6 +5,7 @@ export const NotificationContext = createContext()
 const initialState = {
 	notifications: null,
 	isLoading: false,
+	isLoadingType: false
 }
 const url = "/api/v1/notifications"
 const reducer = (state, action) => {
@@ -20,6 +21,11 @@ const reducer = (state, action) => {
 			return {
 				...state,
 				isLoading: true
+			}
+		case "TYPE_LOADING":
+			return {
+				...state,
+				isLoadingType: action.value
 			}
 		case "API_ERROR":
 			return {

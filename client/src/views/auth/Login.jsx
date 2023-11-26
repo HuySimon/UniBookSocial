@@ -126,7 +126,7 @@ const Login = () => {
 						</form>
 					</div>
 					<div className="hidden md:block md:w-1/2 xl:w-[60%] p-3 z-10">
-						<img src={LoginImg} alt="" className='rounded-2xl w-full h-full xl:object-none object-cover' />
+						<img src={LoginImg} alt="" className='rounded-2xl w-full h-full object-cover' />
 					</div>
 				</motion.div>
 			</section>

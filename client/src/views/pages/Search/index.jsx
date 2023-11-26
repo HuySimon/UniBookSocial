@@ -16,7 +16,6 @@ const Index = () => {
 	const [searchPost, setSearchPost] = useState([])
 	const [isLoading, setIsLoading] = useState(false)
 	const { searchValues, searchResults, updateSearch } = useSearchContext()
-
 	const { register, handleSubmit, formState: { errors, isDirty, isValid } } = useForm({
 		mode: 'onChange',
 		defaultValues: {
@@ -90,7 +89,6 @@ const Index = () => {
 		document.title = "Search"
 		getPost()
 	}, [])
-
 	return (
 		<div className="w-full h-full px-10 py-6	">
 			<div className="w-full h-full flex flex-col">
@@ -173,7 +171,7 @@ const Index = () => {
 				</form>
 				<div className="w-full h-full">
 					{
-						searchResults.length === 0 ? (
+						searchPost.length === 0 ? (
 							<div className="w-full h-fit flex flex-col justify-center items-center">
 								<img src={NoResultFound} alt="" className='w-[45vh] h-[45vh]' />
 								<p className='font-medium text-xl text-black/90 mb-2 tracking-wide'>No Result Found</p>
