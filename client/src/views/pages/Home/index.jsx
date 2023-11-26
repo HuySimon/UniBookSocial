@@ -10,7 +10,7 @@ const Index = () => {
 	const [isLoading, setIsLoading] = useState(state.isLoading)
 	useEffect(() => {
 		setIsLoading(state.isLoading)
-	}, [state,isLoading])
+	}, [state,isLoading,state])
 	console.log(state)
 	return (
 		<>
