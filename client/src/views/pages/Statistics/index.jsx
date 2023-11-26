@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import Chart from 'react-apexcharts';
 import { DatePicker } from 'antd';
-import { isAfter, differenceInDays } from 'date-fns';
+import { toast } from 'react-toastify';
+import { isAfter, differenceInDays, parse } from 'date-fns';
 
 import Axios from '../../../api/index';
 
@@ -14,8 +15,6 @@ const Statistics = () => {
     const [selectedEndDate, setSelectedEndDate] = useState(null);
     const [chartData, setChartData] = useState({ categories: [], data: [] });
     const modalRef = useRef(null);
-
-    console.log(selectedStartDate, selectedEndDate);
 
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);
@@ -48,19 +47,23 @@ const Statistics = () => {
 
         const formattedDate = `${day}-${month}-${year}`;
 
-        setSelectedStartDate(formattedDate);
+        // Current date
+        const currentDate = new Date();
+        const current = `${currentDate.getDate()}-${currentDate.getMonth() + 1}-${currentDate.getFullYear()}`;
+
+        const dateFormat = 'dd-MM-yyyy';
+        const startDate = parse(formattedDate, dateFormat, new Date());
+        const toDay = parse(current, dateFormat, new Date());
+
+        const dayDiff = differenceInDays(toDay, startDate);
+
+        if (dayDiff === 0) {
+            setSelectedStartDate(formattedDate);
+        } else {
+            toast.error('The start date must be the current date');
+        }
     };
 
-    // const handleEndDateChange = (value) => {
-    //     const date = new Date(value.$d);
-    //     const year = date.getFullYear();
-    //     const month = ('0' + (date.getMonth() + 1)).slice(-2); // Tháng được đánh số từ 0 đến 11
-    //     const day = ('0' + date.getDate()).slice(-2);
-
-    //     const formattedDate = `${day}-${month}-${year}`;
-
-    //     setSelectedEndDate(formattedDate);
-    // };
     const handleEndDateChange = (value) => {
         const date = new Date(value.$d);
         const year = date.getFullYear();
@@ -69,18 +72,17 @@ const Statistics = () => {
 
         const formattedDate = `${day}-${month}-${year}`;
 
-        const startDate = new Date(selectedStartDate);
-        const endDate = new Date(formattedDate);
-        console.log(startDate);
+        const dateFormat = 'dd-MM-yyyy';
+        const startDate = parse(selectedStartDate, dateFormat, new Date());
+        const endDate = parse(formattedDate, dateFormat, new Date());
 
-        // Kiểm tra nếu endDate nhỏ hơn startDate hoặc khoảng cách giữa chúng lớn hơn 30 ngày
-        // if (isAfter(startDate, endDate) && differenceInDays(startDate, endDate) >= 30) {
-        //     // Đặt lại startDate và endDate thành null
-        //     setSelectedStartDate(null);
-        //     setSelectedEndDate(null);
-        // } else {
-        //     setSelectedEndDate(formattedDate);
-        // }
+        const dayDiff = differenceInDays(endDate, startDate);
+
+        if (dayDiff > 0 || dayDiff < -30) {
+            toast.error('Please end date is 30 days less than start date or equal to start date');
+        } else {
+            setSelectedEndDate(formattedDate);
+        }
     };
 
     const updateChartData = async (startDate, endDate) => {

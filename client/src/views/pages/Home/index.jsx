@@ -11,7 +11,6 @@ const Index = () => {
 	useEffect(() => {
 		setIsLoading(state.isLoading)
 	}, [state,isLoading,state])
-	console.log(state)
 	return (
 		<>
 			<div className="p-[25px] lg:px-[150px] xl:px-[250px] 2xl:px-[400px] mx-auto lg:flex justify-center items-start gap-5">
