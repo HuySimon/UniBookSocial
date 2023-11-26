@@ -44,7 +44,7 @@ const Header = () => {
 			window.removeEventListener('resize', checkTabletMode);
 		};
 	}, [state.user, state.isLoading]);
-	console.log(state)
+	// console.log(state)
 	const iconList = [
 		{
 			icon: PiHouseLight,
