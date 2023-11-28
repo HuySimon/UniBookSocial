@@ -31,47 +31,62 @@ const ConfirmPost = ({ post }) => {
 	const toastId = useRef(null)
 
 	const confirmAction = async (status, message) => {
-		if (Object.entries(state.user).length === 0) {
-			toast.warning("Please log in to buy")
-		} else {
-			toastId.current = toast.loading("Please wait ....")
-			setTimeout(() => {
-				dispatchPost({ type: "LOADING_HISTORY_POST", value: true })
-			}, 2000);
-			const data = {
-				status: status
-			}
-			try {
-				const res = await Axios.patch(`/api/v1/posts/${postData.id}/status`, data)
-				if (res.status === 200) {
-					console.log(res)
-					toast.update(toastId.current, {
-						render: message,
-						type: "success",
-						isLoading: false,
-						autoClose: 5000,
-						className: 'animated rotateY',
-						closeOnClick: true,
-					})
-					setTimeout(() => {
-						dispatchPost({ type: "LOADING_HISTORY_POST", value: false })
-					}, 2000);
-				}
-			} catch (err) {
-				console.log(err)
+		toastId.current = toast.loading("Please wait ....")
+		setTimeout(() => {
+			dispatchPost({ type: "LOADING_HISTORY_POST", value: true })
+		}, 2000);
+		const data = {
+			status: status
+		}
+		try {
+			const res = await Axios.patch(`/api/v1/posts/${postData.id}/status`, data)
+			if (res.status === 200) {
+				console.log(res)
 				toast.update(toastId.current, {
-					render: "Confirm Fail",
-					type: "error",
+					render: message,
+					type: "success",
 					isLoading: false,
 					autoClose: 5000,
-					className: 'animated',
+					className: 'animated rotateY',
 					closeOnClick: true,
 				})
-				dispatchPost({ type: "LOADING_HISTORY_POST", value: false })
+				setTimeout(() => {
+					dispatchPost({ type: "LOADING_HISTORY_POST", value: false })
+				}, 2000);
 			}
+		} catch (err) {
+			console.log(err)
+			toast.update(toastId.current, {
+				render: "Confirm Fail",
+				type: "error",
+				isLoading: false,
+				autoClose: 5000,
+				className: 'animated',
+				closeOnClick: true,
+			})
+			dispatchPost({ type: "LOADING_HISTORY_POST", value: false })
 		}
 	}
-	console.log(reviewExists)
+	const getDataReview = () => {
+		const result = stateReview.reviews.find((review) => {
+			return review.post === postData.id;
+		});
+		return result;
+	}
+	let review = getDataReview()
+	const confirmDeleteReview = async (message) => {
+		try {
+			const res = await Axios.delete(`/api/v1/reviews/${review.id}`)
+			if (res.status === 204) {
+				toast.success(message)
+				setReviewExists(checkExistReview())
+				setIsVisibleDeleteReviewModal(false)
+			}
+		} catch (error) {
+			setIsVisibleDeleteReviewModal(false)
+			console.log(error)
+		}
+	}
 	useEffect(() => {
 		setReviewExists(checkExistReview())
 	}, [postData.status, stateReview, reviewExists])
@@ -191,7 +206,7 @@ const ConfirmPost = ({ post }) => {
 				}
 				{
 					isVisibleDeleteReviewModal && (
-						<DeleteReview postID={postData.id} setIsVisibleDeleteReviewModal={setIsVisibleDeleteReviewModal} />
+						<DeleteReview setIsVisibleDeleteReviewModal={setIsVisibleDeleteReviewModal} confirmDeleteReview={confirmDeleteReview} />
 					)
 				}
 				{

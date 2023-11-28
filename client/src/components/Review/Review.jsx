@@ -25,33 +25,37 @@ const Review = ({ isVisibleReviewForm, setIsVisibleReviewForm, id }) => {
 		setRating(rate)
 	}
 	const onSubmit = async (data) => {
-		try {
-			const dataSend = {
-				numStars: rating,
-				content: data.content,
-				post: id
-			}
-			setIsLoading(true)
-			setTimeout(() => {
-				dispatch({ type: "ADD_REVIEW", value: true })
-			}, 2000);
-			const res = await Axios.post(`/api/v1/reviews`, dataSend)
-			console.log(res)
-			if (res.status === 201) {
-				toast.success("Thank you for your review !")
+		if (rating === 0) {
+			toast.error("Please rate the star!")
+		} else {
+			try {
+				const dataSend = {
+					numStars: rating,
+					content: data.content,
+					post: id
+				}
+				setIsLoading(true)
+				setTimeout(() => {
+					dispatch({ type: "ADD_REVIEW", value: true })
+				}, 2000);
+				const res = await Axios.post(`/api/v1/reviews`, dataSend)
+				console.log(res)
+				if (res.status === 201) {
+					toast.success("Thank you for your review !")
+					setIsLoading(false)
+					setIsVisibleReviewForm(false)
+					setTimeout(() => {
+						dispatch({ type: "ADD_REVIEW", value: false })
+					}, 2000);
+				}
+			} catch (err) {
 				setIsLoading(false)
-				setIsVisibleReviewForm(false)
 				setTimeout(() => {
 					dispatch({ type: "ADD_REVIEW", value: false })
 				}, 2000);
+				toast.error(err.response.message)
+				console.log(err)
 			}
-		} catch (err) {
-			setIsLoading(false)
-			setTimeout(() => {
-				dispatch({ type: "ADD_REVIEW", value: false })
-			}, 2000);
-			toast.error(err.response.message)
-			console.log(err)
 		}
 	}
 	return (

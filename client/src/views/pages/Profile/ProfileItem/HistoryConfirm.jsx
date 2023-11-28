@@ -71,7 +71,6 @@ const HistoryConfirm = () => {
 			</div>
 			<div className="flex gap-3 items-center w-full border border-gray-400 p-2 rounded-sm">
 				<RiSearch2Line size={28} className='text-gray-400' />
-
 				<input type="text" {...register("query")} className='border-none w-full focus:outline-none text-black placeholder:text-sm' placeholder='You can search by anything....' />
 			</div>
 			{

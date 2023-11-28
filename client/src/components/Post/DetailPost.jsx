@@ -7,17 +7,19 @@ import { toast } from 'react-toastify'
 import { useAuthContext } from '../../hooks/useAuthContext'
 import { AnimatePresence } from 'framer-motion'
 import Review from '../Review/Review'
-import CancelOrderModal from '../Modal/CancelOrderModal'
 import { usePostContext } from '../../hooks/usePostContext'
 import { useReviewContext } from '../../hooks/useReviewContext'
+import GenericModal from '../Modal/GenericModal'
 const DetailPost = () => {
 	const postID = useParams()
 	const [state, dispatch] = useAuthContext()
 	const [stateReview, dispatchReview] = useReviewContext()
+	const [actionType, setActionType] = useState(["Confirm", "Confirm success!"])
 	const [statePost, dispatchPost] = usePostContext()
 	const [detailPost, setDetailPost] = useState({})
 	const [isVisibleReviewForm, setIsVisibleReviewForm] = useState(false)
 	const [isVisibleModalCancel, setIsVisibleModalCancel] = useState(false)
+	const [isVisibleModal, setIsVisibleModal] = useState(false)
 	const [userPost, setUserPost] = useState({})
 	const [timeAgo, setTimeAgo] = useState('')
 	const toastId = useRef(null)
@@ -62,7 +64,6 @@ const DetailPost = () => {
 		}
 		return Boolean(result);
 	};
-	// console.log(stateReview)
 	const [reviewExists, setReviewExists] = useState(checkExistReview());
 	useEffect(() => {
 		calculateTimeAgo()
@@ -82,6 +83,7 @@ const DetailPost = () => {
 				if (res.status === 200) {
 					// console.log(res)
 					setDetailPost(res.data.data.data)
+					setIsVisibleModal(false)
 					toast.update(toastId.current, {
 						render: message,
 						type: "success",
@@ -93,6 +95,7 @@ const DetailPost = () => {
 				}
 			} catch (err) {
 				console.log(err)
+				setIsVisibleModal(false)
 				toast.update(toastId.current, {
 					render: "Confirm Fail",
 					type: "error",
@@ -209,7 +212,10 @@ const DetailPost = () => {
 									<button
 										type="submit"
 										ref={toastId}
-										onClick={() => confirmAction("Confirm", "Confirm success!")}
+										onClick={() => {
+											setIsVisibleModal(true)
+											setActionType(["Confirm", "Confirm success!"])
+										}}
 										className="w-28 xl:w-36 px-4 xl:px-6 py-3 bg-primary-main text-white rounded-lg hover:shadow !shadow-primary-700 hover:bg-primary-700 transition-all">
 										Buy
 									</button>
@@ -218,14 +224,20 @@ const DetailPost = () => {
 										<button
 											type="submit"
 											ref={toastId}
-											onClick={() => confirmAction("Delivered", "Delivery success!Let's review it now")}
+											onClick={() => {
+												setIsVisibleModal(true)
+												setActionType(["Delivered", "Delivery success!Let's review it now"])
+											}}
 											className="w-28 xl:w-36 px-4 xl:px-6 py-3 bg-primary-main text-white rounded-lg hover:shadow !shadow-primary-700 hover:bg-primary-700 transition-all">
 											Received
 										</button>
 										<button
 											type="button"
 											ref={toastId}
-											onClick={() => setIsVisibleModalCancel(true)}
+											onClick={() => {
+												setIsVisibleModal(true)
+												setActionType(["Unconfirmed", "Unconfirm successfully"])
+											}}
 											className="w-28 xl:w-36 px-4 xl:px-6 py-3 bg-transparent border border-primary-main text-primary-main rounded-lg hover:shadow transition-all">
 											Cancel Order
 										</button>
@@ -262,12 +274,9 @@ const DetailPost = () => {
 					)
 				}
 				{
-					isVisibleModalCancel && (
-						<CancelOrderModal postID={postID.id} setDetailPost={setDetailPost} setIsVisibleModalCancel={setIsVisibleModalCancel} />
+					isVisibleModal && (
+						<GenericModal actionType={actionType} setIsVisibleModal={setIsVisibleModal} confirmAction={confirmAction} />
 					)
-				}
-				{
-					statePost.isCancelOrder && (toast.success("Unconfirm success"))
 				}
 			</AnimatePresence>
 		</>
