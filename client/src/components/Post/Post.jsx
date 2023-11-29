@@ -1,12 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Avatar, LoginImg } from '../../assets';
-import { BiDotsVerticalRounded, BiTrash } from 'react-icons/bi';
-import { AiOutlineEdit, AiFillCaretRight, AiOutlineAlert } from 'react-icons/ai';
-import { PlaceHolderPostImg } from '../../assets';
+import { BiDotsVerticalRounded } from 'react-icons/bi';
+import { AiFillCaretRight, AiOutlineAlert } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
-import EditPost from './EditPost';
-import Modal from '../Modal';
-import Axios from '../../api/index';
 import { AnimatePresence } from 'framer-motion';
 import { useAuthContext } from '../../hooks/useAuthContext';
 import Report from '../Report'
@@ -15,9 +10,7 @@ import { toast } from 'react-toastify';
 const Post = ({ post }) => {
 	const [isVisibleMenuPost, setIsVisibleMenuPost] = useState(false)
 	const [isVisibleReport, setIsVisibleReport] = useState(false)
-	const [selectedFile, setSelectedFile] = useState(null);
 	const [timeAgo, setTimeAgo] = useState('');
-	const toastId = useRef(null)
 	const [state, dispatch] = useAuthContext()
 	const [statePost, dispatchPost] = usePostContext()
 	const handleVisibleMenuPost = () => {
@@ -62,7 +55,7 @@ const Post = ({ post }) => {
 							</div>
 							<div className="flex flex-col justify-start">
 								<span className="name text-base font-medium">{post.userPostData.username}</span>
-								<p className="text-sm leading-4 text-gray-600">{timeAgo}</p>
+								<p className="text-sm leading-4 text-gray-600">#{post.id} · {timeAgo}</p>
 							</div>
 						</div>
 						{
@@ -122,7 +115,7 @@ const Post = ({ post }) => {
 						</thead>
 						<tbody className="flex flex-col w-1/2 xl:w-4/5">
 							<tr className="p-2 text-sm">
-								<td>{post.title}</td>
+								<td>#{post.title}</td>
 							</tr>
 							<tr className="p-2 border-t border-gray-500 text-sm">
 								<td>{post.price}</td>

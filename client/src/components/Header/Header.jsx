@@ -68,7 +68,7 @@ const Header = () => {
 			}
 			navigate('/')
 		}).catch(err => {
-			console.log("BE ncc")
+			console.log(err)
 		})
 	}
 
@@ -82,7 +82,7 @@ const Header = () => {
 							to={"/"}
 						>
 							<img src={Logo} alt="Logo" className='w-12 h-14 object-contain' />
-							<span className={`font-bold text-2xl overflow-hidden transition-all ml-2 ${expand ? "w-44" : "w-0"}`}>SGU School</span>
+							<span className={`font-bold text-2xl overflow-hidden transition-all ml-2 ${expand ? "w-44" : "w-0"}`}>UnibookSocial</span>
 						</Link>
 					</div>
 					<motion.ul className='flex flex-col justify-start items-stretch'>
@@ -100,7 +100,7 @@ const Header = () => {
 							/>
 						))}
 						{
-							localStorage.getItem("auth") === "true" && localStorage.getItem("user") != "" && (state.user.user.role != 2) && (state.user.user.role != 3)&& (
+							localStorage.getItem("auth") === "true" && localStorage.getItem("user") != "" && (state.user.user.role != 2) && (state.user.user.role != 3) && (
 								<>
 									<SideBarItem
 										title={"Notification"}

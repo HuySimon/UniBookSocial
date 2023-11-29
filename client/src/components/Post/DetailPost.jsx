@@ -1,13 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { AiOutlineClose } from 'react-icons/ai'
+import { AiFillCaretRight, AiOutlineAlert, AiOutlineClose } from 'react-icons/ai'
 import { BiDotsVerticalRounded } from 'react-icons/bi'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import Axios from '../../api/index'
 import { toast } from 'react-toastify'
 import { useAuthContext } from '../../hooks/useAuthContext'
 import { AnimatePresence } from 'framer-motion'
 import Review from '../Review/Review'
 import { usePostContext } from '../../hooks/usePostContext'
+import Report from '../Report'
 import { useReviewContext } from '../../hooks/useReviewContext'
 import GenericModal from '../Modal/GenericModal'
 const DetailPost = () => {
@@ -15,14 +16,17 @@ const DetailPost = () => {
 	const [state, dispatch] = useAuthContext()
 	const [stateReview, dispatchReview] = useReviewContext()
 	const [actionType, setActionType] = useState(["Confirm", "Confirm success!"])
-	const [statePost, dispatchPost] = usePostContext()
 	const [detailPost, setDetailPost] = useState({})
 	const [isVisibleReviewForm, setIsVisibleReviewForm] = useState(false)
-	const [isVisibleModalCancel, setIsVisibleModalCancel] = useState(false)
+	const [isVisibleMenuPost, setIsVisibleMenuPost] = useState(false)
+	const [isVisibleReport, setIsVisibleReport] = useState(false)
 	const [isVisibleModal, setIsVisibleModal] = useState(false)
 	const [userPost, setUserPost] = useState({})
 	const [timeAgo, setTimeAgo] = useState('')
 	const toastId = useRef(null)
+	const handleVisibleMenuPost = () => {
+		setIsVisibleMenuPost(!isVisibleMenuPost);
+	};
 	const fetchData = async () => {
 		try {
 			const res = await Axios.get(`/api/v1/posts/${postID.id}`)
@@ -119,18 +123,44 @@ const DetailPost = () => {
 					<div className="w-full flex justify-between items-center">
 						<div className="flex gap-3">
 							<div className="w-14 h-14 rounded-full overflow-hidden">
-								<img src={`http://127.0.0.1:5000/public/images/users/avatar/${userPost.avatar}`} alt="User Image" className='w-full h-full object-cover' />
+								<Link to={`/profile/${userPost.id}`} target='_blank'>
+									<img src={`http://127.0.0.1:5000/public/images/users/avatar/${userPost.avatar}`} alt="User Image" className='w-full h-full object-cover' />
+								</Link>
 							</div>
 							<div className="flex flex-col justify-start">
-								<span className="name font-medium">
+								<span className="name text-base font-medium">
 									{userPost.username}
 								</span>
-								<p className='text-[10px] leading-4 text-gray-600'>{timeAgo}</p>
+								<p className="text-sm leading-4 text-gray-600">#{detailPost.id} · {timeAgo}</p>
 							</div>
 						</div>
-						<button className='w-10 h-10 hover:bg-gray-100 transition-all rounded-full flex justify-center items-center'>
-							<BiDotsVerticalRounded size={22} />
-						</button>
+						{
+							localStorage.getItem("auth") != "false" && (state.user) && (state.user.user.id != userPost.id) && (
+								<button
+									type="button"
+									onClick={handleVisibleMenuPost}
+									className="w-10 h-10 hover:bg-gray-100 transition-all rounded-full flex justify-center items-center">
+									<BiDotsVerticalRounded size={22} />
+								</button>
+							)
+						}
+						{isVisibleMenuPost && (
+							<div className="w-44 h-fit bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] absolute top-16 right-8 rounded-md overflow-hidden">
+								<div className="flex flex-col relative">
+									<button
+										type="button"
+										onClick={() => { setIsVisibleReport(!isVisibleReport) }}
+										className={`flex gap-4 p-2 hover:bg-black/10 transition-all z-10 border-b`}>
+										<AiOutlineAlert size={22} />
+										<p className="font-medium">Report</p>
+									</button>
+									<AiFillCaretRight
+										className="absolute rotate-[180deg] -right-2 -top-[14px] text-white"
+										size={30}
+									/>
+								</div>
+							</div>
+						)}
 					</div>
 					<div className="h-full flex flex-col justify-between">
 						<div className="flex flex-col">
@@ -276,6 +306,11 @@ const DetailPost = () => {
 				{
 					isVisibleModal && (
 						<GenericModal actionType={actionType} setIsVisibleModal={setIsVisibleModal} confirmAction={confirmAction} />
+					)
+				}
+				{
+					isVisibleReport && (
+						<Report post={detailPost} setIsVisibleReport={setIsVisibleReport} />
 					)
 				}
 			</AnimatePresence>

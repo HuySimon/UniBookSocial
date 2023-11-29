@@ -88,11 +88,7 @@ const Login = () => {
 								}
 								<p className='absolute -bottom-6 text-red-600 text-sm'>{errors.password?.message}</p>
 							</div>
-							<div className="flex justify-between items-center my-3">
-								<div className="flex items-center gap-2">
-									<input type="checkbox" name="" id="remember-me" className='w-fit checked:ring-2 ring-offset-2 ring-primary-main' />
-									<label htmlFor="remember-me">Remember me</label>
-								</div>
+							<div className="flex justify-end items-center my-3">
 								<Link
 									to={"/forgotpassword"}
 									className='underline-offset-2 underline'

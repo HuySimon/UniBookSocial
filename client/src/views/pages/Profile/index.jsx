@@ -32,9 +32,8 @@ const Index = () => {
 		}
 	}
 	useEffect(() => {
-		document.title = "Profile"
 		getUser()
-	}, [profileId.id, selectedFile,selectedCoverFile])
+	}, [profileId.id, selectedFile, selectedCoverFile])
 	const [activeButton, setActiveButton] = useState(JSON.parse(localStorage.getItem("activeButtonProfile")))
 	const menu = [
 		{
@@ -72,6 +71,14 @@ const Index = () => {
 			reader.readAsDataURL(file);
 		}
 	};
+	useEffect(() => {
+		if(currentUser.username) {
+			document.title = currentUser.username;
+		}
+		return () => {
+			document.title = "Home"
+		}
+	}, [currentUser.username])
 	// console.log(selectedFile)
 	return (
 		<div className='w-full flex flex-col px-[25px] lg:px-[150px] xl:px-[200px] mx-auto'>

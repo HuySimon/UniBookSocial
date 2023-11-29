@@ -15,8 +15,8 @@ const Index = () => {
 
 	const [searchPost, setSearchPost] = useState([])
 	const [isLoading, setIsLoading] = useState(false)
-	const { searchValues, searchResults, updateSearch } = useSearchContext()
-	const { register, handleSubmit, formState: { errors, isDirty, isValid } } = useForm({
+	const { searchValues, searchResults, updateSearch, clearSearch } = useSearchContext()
+	const { register, handleSubmit, formState: { errors, isDirty }, reset } = useForm({
 		mode: 'onChange',
 		defaultValues: {
 			query: searchValues.query,
@@ -85,9 +85,20 @@ const Index = () => {
 			console.log(err)
 		}
 	}
+	const handleClearSeachValue = () => {
+		clearSearch()
+		reset()
+		toast.success("Clear search data!")
+		getPost()
+	}
+
 	useEffect(() => {
 		document.title = "Search"
 		getPost()
+		//This will return the title to Home when the component is unmount
+		return () => {
+			document.title = "Home"
+		}
 	}, [])
 	return (
 		<div className="w-full h-full px-10 py-6	">
@@ -162,11 +173,18 @@ const Index = () => {
 								</div>
 							</div>
 						</div>
-						<button
-							type="submit"
-							// className='hidden'
-							className={`w-fit mb-3 px-8 py-3 rounded-md font-normal shadow cursor-pointer bg-primary-600 text-white`}
-						>Search</button>
+						<div className="flex gap-5">
+							<button
+								type="submit"
+								className={`w-28 mb-3 px-8 py-3 rounded-md font-normal shadow cursor-pointer bg-primary-600 hover:bg-primary-400 transition-all text-white`}>Search</button>
+							<button type='button'
+								onClick={() => {
+									handleClearSeachValue()
+								}}
+								className='w-28 mb-3 px-8 py-3 rounded-md font-normal shadow cursor-pointer bg-red-600 hover:bg-red-400 transition-all text-white'>
+								Clear
+							</button>
+						</div>
 					</div>
 				</form>
 				<div className="w-full h-full">

@@ -281,14 +281,17 @@ function Posts() {
 						</div>
 					))
 				) : (
-					<tr id="NotFound" className="bg-white border-b -800 -700 hover:bg-gray-50">
-						<td className="px-6 py-4">This post could not be found</td>
-					</tr>
+					<div id="NotFound" className="bg-white hover:bg-gray-50">
+						<p className="px-6 py-4">This post could not be found</p>
+					</div>
 				)}
-
 			</div>
 			{/* Pagination */}
-			<Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={handlePageChange} />
+			{
+				totalPages != 0 && (
+					<Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={handlePageChange} />
+				)
+			}
 			{/* Modal Popup Message */}
 			{selectedModalId && (
 				<ModalMessage postId={selectedModalId} onClose={() => handleModalClose(selectedModalId)} />
