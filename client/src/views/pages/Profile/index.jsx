@@ -72,7 +72,7 @@ const Index = () => {
 		}
 	};
 	useEffect(() => {
-		if(currentUser.username) {
+		if (currentUser.username) {
 			document.title = currentUser.username;
 		}
 		return () => {
@@ -117,20 +117,23 @@ const Index = () => {
 					<div className=" w-full lg:w-1/4 flex lg:h-full h-fit flex-row lg:flex-col justify-between lg:justify-start items-center gap-5 lg:pr-6 lg:mb-0 mb-6">
 						{
 							menu.map((item, index) => (
-								<Link
-									key={index}
-									to={`/profile/${currentUser.id}/${item.href}`}
-									onClick={() => handleButton(index)}
-									className={`w-full lg:flex items-center text-[#929292] relative cursor-pointer mb-1 p-3 rounded-md 
-												transition-all duration-300 lg:text-left text-center 
-												${activeButton === index ? 'bg-primary-main text-white shadow-md !shadow-primary-700 ' : ''}`}>
-									<item.icon size={26} className='lg:block hidden' />
-									<span className='inline-block lg:ml-3 text-base lg:font-medium'>{item.title}</span>
-								</Link>
+								(item.title !== 'Review' || state.user.user.role === 1) && (
+									<Link
+										key={index}
+										to={`/profile/${currentUser.id}/${item.href}`}
+										onClick={() => handleButton(index)}
+										className={`w-full lg:flex items-center text-[#929292] relative cursor-pointer mb-1 p-3 rounded-md 
+                    transition-all duration-300 lg:text-left text-center 
+                    ${activeButton === index ? 'bg-primary-main text-white shadow-md !shadow-primary-700 ' : ''}`}>
+										<item.icon size={26} className='lg:block hidden' />
+										<span className='inline-block lg:ml-3 text-base lg:font-medium'>{item.title}</span>
+									</Link>
+								)
 							))
 						}
+
 						{
-							(Object.entries(state.user).length > 0 && (state.user.user.id === currentUser.id) && (
+							(Object.entries(state.user).length > 0 && (state.user.user.id === currentUser.id) && (state.user.user.role === 1) && (
 								<>
 									<Link
 										to={`/profile/${currentUser.id}/historyPost`}

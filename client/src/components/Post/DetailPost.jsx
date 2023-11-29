@@ -1,43 +1,47 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { AiFillCaretRight, AiOutlineAlert, AiOutlineClose } from 'react-icons/ai'
-import { BiDotsVerticalRounded } from 'react-icons/bi'
-import { Link, useParams } from 'react-router-dom'
-import Axios from '../../api/index'
-import { toast } from 'react-toastify'
-import { useAuthContext } from '../../hooks/useAuthContext'
-import { AnimatePresence } from 'framer-motion'
-import Review from '../Review/Review'
-import { usePostContext } from '../../hooks/usePostContext'
-import Report from '../Report'
-import { useReviewContext } from '../../hooks/useReviewContext'
-import GenericModal from '../Modal/GenericModal'
+import React, { useEffect, useRef, useState } from 'react';
+import { AiFillCaretRight, AiOutlineAlert, AiOutlineClose } from 'react-icons/ai';
+import { BiDotsVerticalRounded } from 'react-icons/bi';
+import { Link, useParams } from 'react-router-dom';
+import Axios from '../../api/index';
+import { toast } from 'react-toastify';
+import { useAuthContext } from '../../hooks/useAuthContext';
+import { AnimatePresence } from 'framer-motion';
+import Review from '../Review/Review';
+import { usePostContext } from '../../hooks/usePostContext';
+import Report from '../Report';
+import { useReviewContext } from '../../hooks/useReviewContext';
+import GenericModal from '../Modal/GenericModal';
+
 const DetailPost = () => {
-	const postID = useParams()
-	const [state, dispatch] = useAuthContext()
-	const [stateReview, dispatchReview] = useReviewContext()
-	const [actionType, setActionType] = useState(["Confirm", "Confirm success!"])
-	const [detailPost, setDetailPost] = useState({})
-	const [isVisibleReviewForm, setIsVisibleReviewForm] = useState(false)
-	const [isVisibleMenuPost, setIsVisibleMenuPost] = useState(false)
-	const [isVisibleReport, setIsVisibleReport] = useState(false)
-	const [isVisibleModal, setIsVisibleModal] = useState(false)
-	const [userPost, setUserPost] = useState({})
-	const [timeAgo, setTimeAgo] = useState('')
-	const toastId = useRef(null)
+	const postID = useParams();
+	const [state, dispatch] = useAuthContext();
+	const [stateReview, dispatchReview] = useReviewContext();
+	const [actionType, setActionType] = useState(["Confirm", "Confirm success!"]);
+	const [detailPost, setDetailPost] = useState({});
+	const [isVisibleReviewForm, setIsVisibleReviewForm] = useState(false);
+	const [isVisibleMenuPost, setIsVisibleMenuPost] = useState(false);
+	const [isVisibleReport, setIsVisibleReport] = useState(false);
+	const [isVisibleModal, setIsVisibleModal] = useState(false);
+	const [userPost, setUserPost] = useState({});
+	const [timeAgo, setTimeAgo] = useState('');
+	const toastId = useRef(null);
+
 	const handleVisibleMenuPost = () => {
 		setIsVisibleMenuPost(!isVisibleMenuPost);
 	};
+
 	const fetchData = async () => {
 		try {
-			const res = await Axios.get(`/api/v1/posts/${postID.id}`)
+			const res = await Axios.get(`/api/v1/posts/${postID.id}`);
 			if (res.status === 200) {
-				setDetailPost(res.data.data.data)
-				setUserPost(res.data.data.data.userPostData)
+				setDetailPost(res.data.data.data);
+				setUserPost(res.data.data.data.userPostData);
 			}
 		} catch (err) {
-			console.log(err)
+			console.error(err);
 		}
-	}
+	};
+
 	const calculateTimeAgo = () => {
 		const now = new Date();
 		const created = new Date(detailPost.createdAt);
@@ -57,37 +61,35 @@ const DetailPost = () => {
 			setTimeAgo(`${days} days ago`);
 		}
 	};
+
 	const checkExistReview = () => {
-		let result;
 		if (stateReview.reviews) {
-			result = stateReview.reviews.find((review) => {
-				return review.post === detailPost.id;
-			});
+			return stateReview.reviews.some((review) => review.post === detailPost.id);
 		} else {
-			result === false
+			return false;
 		}
-		return Boolean(result);
 	};
+
 	const [reviewExists, setReviewExists] = useState(checkExistReview());
+
 	useEffect(() => {
-		calculateTimeAgo()
-		setReviewExists(checkExistReview())
-		fetchData()
-	}, [detailPost.createdAt, stateReview])
+		calculateTimeAgo();
+		setReviewExists(checkExistReview());
+		fetchData();
+	}, [detailPost.createdAt, stateReview]);
+
 	const confirmAction = async (status, message) => {
 		if (Object.entries(state.user).length === 0) {
-			toast.warning("Please log in to buy")
+			toast.warning("Please log in to buy");
 		} else {
-			toastId.current = toast.loading("Please wait ....")
-			const data = {
-				status: status
-			}
+			toastId.current = toast.loading("Please wait ....");
+			const data = { status };
+
 			try {
-				const res = await Axios.patch(`/api/v1/posts/${detailPost.id}/status`, data)
+				const res = await Axios.patch(`/api/v1/posts/${detailPost.id}/status`, data);
 				if (res.status === 200) {
-					// console.log(res)
-					setDetailPost(res.data.data.data)
-					setIsVisibleModal(false)
+					setDetailPost(res.data.data.data);
+					setIsVisibleModal(false);
 					toast.update(toastId.current, {
 						render: message,
 						type: "success",
@@ -95,11 +97,11 @@ const DetailPost = () => {
 						autoClose: 5000,
 						className: 'animated rotateY',
 						closeOnClick: true,
-					})
+					});
 				}
 			} catch (err) {
-				console.log(err)
-				setIsVisibleModal(false)
+				console.error(err);
+				setIsVisibleModal(false);
 				toast.update(toastId.current, {
 					render: "Confirm Fail",
 					type: "error",
@@ -107,10 +109,10 @@ const DetailPost = () => {
 					autoClose: 5000,
 					className: 'animated',
 					closeOnClick: true,
-				})
+				});
 			}
 		}
-	}
+	};
 	return (
 		<>
 			<div className='flex w-full h-screen'>
@@ -231,14 +233,28 @@ const DetailPost = () => {
 						</div>
 						<div className="flex flex-col gap-3">
 							{
-								state.user.user.role === 1 && (
+								Object.entries(state.user).length > 0 && state.user.user.role === 1 && (
 									<p className='text-sm text-gray-500'>Status: <span>{detailPost.status}</span></p>
+								)
+							}
+							{
+								Object.entries(state.user).length === 0 && (
+									<button
+										type="submit"
+										ref={toastId}
+										onClick={() => {
+											setIsVisibleModal(true)
+											setActionType(["Confirm", "Confirm success!"])
+										}}
+										className="w-28 xl:w-36 px-4 xl:px-6 py-3 bg-primary-main text-white rounded-lg hover:shadow !shadow-primary-700 hover:bg-primary-700 transition-all">
+										Buy
+									</button>
 								)
 							}
 							{
 								Object.entries(state.user).length > 0 && (userPost.id === state.user.user.id) ? (
 									<span className='text-gray-400 text-base'>You own this post!</span>
-								) : (detailPost.status === "Unconfirmed" && state.user.user.role === 1) ? (
+								) : (detailPost.status === "Unconfirmed" && Object.entries(state.user).length > 0 && state.user.user.role === 1) ? (
 									<button
 										type="submit"
 										ref={toastId}

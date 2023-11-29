@@ -237,7 +237,7 @@ function Posts() {
 										<th className="border-b p-2 border-gray-500 font-medium text-sm">Type</th>
 										<th className="border-b p-2 border-gray-500 font-medium text-sm">Description</th>
 										<th className="border-b p-2 border-gray-500 font-medium text-sm">Email</th>
-										<th className="p-2 font-medium text-sm">Content Reports</th>
+										{/* <th className="p-2 font-medium text-sm">Content Reports</th> */}
 									</thead>
 									<tbody className="flex flex-col w-1/2 xl:w-4/5">
 										<td className="p-2 text-sm">{post.title}</td>
@@ -246,7 +246,7 @@ function Posts() {
 										<td className="p-2 border-t border-gray-500 text-sm">Old</td>
 										<td className="p-2 border-t border-gray-500 text-sm">{post.description}</td>
 										<td className="p-2 border-t border-gray-500 text-sm">{post.userPostData.email}</td>
-										<td className="p-2 border-t border-gray-500 text-sm">Hình ảnh nhạy cảm</td>
+										{/* <td className="p-2 border-t border-gray-500 text-sm">Hình ảnh nhạy cảm</td> */}
 									</tbody>
 								</table>
 								<div className="flex justify-end">

@@ -115,7 +115,7 @@ const Post = ({ post }) => {
 						</thead>
 						<tbody className="flex flex-col w-1/2 xl:w-4/5">
 							<tr className="p-2 text-sm">
-								<td>#{post.title}</td>
+								<td>{post.title}</td>
 							</tr>
 							<tr className="p-2 border-t border-gray-500 text-sm">
 								<td>{post.price}</td>

@@ -26,6 +26,7 @@ const Header = () => {
 	const [activeOverlay, setActiveOverlay] = useState('')
 	const [state, dispatch] = useAuthContext()
 	const { clearSearch } = useSearchContext()
+	const [isLoading, setIsLoading] = useState(false)
 	const { stateHeader, dispatchHeader } = useHeaderContext()
 	const handleButtonClick = (buttonName) => {
 		dispatchHeader({ type: "SET_ACTIVE_BUTTON", payload: buttonName });
@@ -43,9 +44,8 @@ const Header = () => {
 		return () => {
 			window.removeEventListener('resize', checkTabletMode);
 		};
-	}, [state.user, state.isLoading]);
-	// console.log(state)
-	const iconList = [
+	}, [state]);
+	const iconList = localStorage.getItem("auth") === "true" && localStorage.getItem("user") !== "" ? [
 		{
 			icon: PiHouseLight,
 			title: "Home",
@@ -57,18 +57,74 @@ const Header = () => {
 			title: "Search",
 			link: "/search",
 			handleCreate: () => { setIsVisibleNotify(false), handleButtonClick("Search") },
-		}
-	]
-	const logout = () => {
+		},
+		...(localStorage.getItem("auth") === "true" &&
+			localStorage.getItem("user") !== "" &&
+			state.user.user.role !== 2 // Exclude "Create" and "Notification" for role 2
+			? [
+				{
+					icon: PiHeartLight,
+					title: "Notification",
+					link: window.location.href,
+					handleCreate: () => { setIsVisibleNotify(!isVisibleNotify), handleButtonClick(!isVisibleNotify ? "Notification" : result) },
+				},
+				{
+					icon: PiPlusCircleLight,
+					title: "Create",
+					link: window.location.href,
+					handleCreate: () => { setIsVisiblePost(!isVisiblePost) },
+				},
+			]
+			: []
+		),
+		{
+			icon: null, // Replace with the appropriate icon component
+			title: "Profile",
+			link: `/profile/${state.user.user.id}`,
+			handleCreate: () => { setIsVisibleNotify(false), clearSearch(), handleButtonClick("Profile") },
+			avatar: <img src={`http://127.0.0.1:5000/public/images/users/avatar/${state.user.user.avatar}`} className='w-[30px] h-[30px] rounded-full object-cover' />,
+		},
+		...(localStorage.getItem("auth") === "true" &&
+			localStorage.getItem("user") !== "" &&
+			[2, 3].includes(state.user.user.role) // Exclude "Dashboard" for role 2 or 3
+			? [
+				{
+					icon: AiOutlineDashboard,
+					title: "Dashboard",
+					link: "/dashboard",
+					handleCreate: () => { setIsVisibleNotify(false), clearSearch(), handleButtonClick("Dashboard") },
+				},
+			]
+			: []
+		),
+	] : [
+		{
+			icon: PiHouseLight,
+			title: "Home",
+			link: "/",
+			handleCreate: () => { setIsVisibleNotify(false), clearSearch(), handleButtonClick("Home") },
+		},
+		{
+			icon: CiSearch,
+			title: "Search",
+			link: "/search",
+			handleCreate: () => { setIsVisibleNotify(false), handleButtonClick("Search") },
+		},
+	];
+	const logout = async () => {
 		dispatch({ type: "LOGOUT" })
+		setIsLoading(true)
 		setIsVisibleNotify(false)
-		Axios.get('/api/v1/users/logout').then(res => {
+		await Axios.get('/api/v1/users/logout').then(res => {
 			if (res.status === 200) {
 				toast.success("Log out success")
+				setIsLoading(false)
 			}
 			navigate('/')
 		}).catch(err => {
 			console.log(err)
+			setIsLoading(false)
+
 		})
 	}
 
@@ -86,74 +142,20 @@ const Header = () => {
 						</Link>
 					</div>
 					<motion.ul className='flex flex-col justify-start items-stretch'>
-						{iconList.map((item, index) => (
+						{iconList.map(({ icon: Icon, title, link, handleCreate, avatar }, index) => (
 							<SideBarItem
 								key={index}
-								title={item.title}
-								href={item.link}
+								title={title}
+								href={link}
 								index={index}
+								target={title === "Dashboard" ? "_blank" : undefined}
 								activeOverlay={activeOverlay}
 								setActiveOverlay={setActiveOverlay}
 								expand={expand}
-								handleCreate={item.handleCreate}
-								icon={<item.icon size={30} className='z-10' />}
+								handleCreate={handleCreate}
+								icon={Icon ? <Icon size={30} className='z-10' /> : avatar}
 							/>
 						))}
-						{
-							localStorage.getItem("auth") === "true" && localStorage.getItem("user") != "" && (state.user.user.role != 2) && (state.user.user.role != 3) && (
-								<>
-									<SideBarItem
-										title={"Notification"}
-										href={window.location.href}
-										index={2}
-										activeOverlay={activeOverlay}
-										setActiveOverlay={setActiveOverlay}
-										expand={expand}
-										handleCreate={() => { setIsVisibleNotify(!isVisibleNotify), handleButtonClick(!isVisibleNotify ? "Notification" : result) }}
-										icon={<PiHeartLight size={30} className='z-10' />}
-									/>
-									<SideBarItem
-										title={"Create"}
-										href={window.location.href}
-										index={3}
-										activeOverlay={activeOverlay}
-										setActiveOverlay={setActiveOverlay}
-										expand={expand}
-										handleCreate={() => { setIsVisiblePost(!isVisiblePost) }}
-										icon={<PiPlusCircleLight size={30} className='z-10' />}
-									/>
-								</>
-							)
-						}
-						{
-							localStorage.getItem("auth") === "true" && localStorage.getItem("user") != "" && (
-								<SideBarItem
-									index={4}
-									activeOverlay={activeOverlay}
-									setActiveOverlay={setActiveOverlay}
-									expand={expand}
-									title={"Profile"}
-									href={`/profile/${state.user.user.id}`}
-									handleCreate={() => { setIsVisibleNotify(false), clearSearch(), handleButtonClick("Profile") }}
-									icon={<img src={`http://127.0.0.1:5000/public/images/users/avatar/${state.user.user.avatar}`} className='w-[30px] h-[30px] rounded-full object-cover' />}
-								/>
-							)
-						}
-						{
-							Object.entries(state.user).length > 0 && (state.user.user.role === 2 || state.user.user.role === 3) && (
-								<SideBarItem
-									index={5}
-									activeOverlay={activeOverlay}
-									setActiveOverlay={setActiveOverlay}
-									expand={expand}
-									target={"_blank"}
-									title={"Dashboard"}
-									href={`/dashboard`}
-									handleCreate={() => { setIsVisibleNotify(false), clearSearch(), handleButtonClick("Dashboard") }}
-									icon={<AiOutlineDashboard size={30} className='' />}
-								/>
-							)
-						}
 					</motion.ul>
 					<div className="flex flex-col h-full items-stretch justify-end p-2 md:p-4">
 						{
