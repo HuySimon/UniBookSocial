@@ -34,18 +34,22 @@ const EditReview = ({ isVisibleEditReviewForm, setIsVisibleEditReviewForm, id })
 				content: data.content,
 				post: id
 			}
-			dispatch({ type: "SET_LOADING_EDIT", value: true })
+			setTimeout(() => {
+				dispatch({ type: "EDIT_REVIEW", value: true })
+			}, 500);
 			console.log(dataSend)
 			const res = await Axios.patch(`/api/v1/reviews/${result.id}`, dataSend)
 			console.log(res)
 			if (res.status === 200) {
-				dispatch({ type: "SET_LOADING_EDIT", value: false })
+				setTimeout(() => {
+					dispatch({ type: "EDIT_REVIEW", value: false })
+				}, 500);
 				toast.success("Edit success!")
 				setIsVisibleEditReviewForm(false)
 				console.log(res)
 			}
 		} catch (err) {
-			dispatch({ type: "SET_LOADING_EDIT", value: false })
+			dispatch({ type: "EDIT_REVIEW", value: false })
 			toast.error(err.response.message)
 			console.log(err)
 		}

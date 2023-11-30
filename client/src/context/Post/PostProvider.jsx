@@ -32,13 +32,7 @@ const reducer = (state, action) => {
 		case "EDIT_POST":
 			return {
 				...state,
-				isLoadingEdit: true
-			}
-			break;
-		case "EDIT_POST_LOADING":
-			return {
-				...state,
-				isLoadingEdit: false
+				isLoadingEdit: action.value
 			}
 			break;
 		case "LOADING_HISTORY_POST":
@@ -96,7 +90,7 @@ export const PostProvider = ({ children }) => {
 	
 	useEffect(() => {
 		getPosts(url);
-	}, []);
+	}, [state.isLoadingEdit,state.isCancelOrder,state.isLoadingHistoryConfirm]);
 
 
 	return (

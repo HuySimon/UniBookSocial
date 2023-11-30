@@ -10,6 +10,7 @@ import EditReview from '../../../../../components/Review/EditReview'
 import DeleteReview from '../../../../../components/Modal/DeleteReview'
 import Axios from '../../../../../api/index'
 import { usePostContext } from '../../../../../hooks/usePostContext'
+import GenericModal from '../../../../../components/Modal/GenericModal'
 const ConfirmPost = ({ post }) => {
 
 	const [state, dispatch] = useAuthContext()
@@ -17,24 +18,25 @@ const ConfirmPost = ({ post }) => {
 	const [statePost, dispatchPost] = usePostContext()
 	const [postData, setPostData] = useState(post)
 	const [userPost, setUserPost] = useState(post.userPostData)
+	const [review, setReview] = useState({})
+	const [actionType, setActionType] = useState(["Confirm", "Confirm success!"]);
 	const [isVisibleReviewForm, setIsVisibleReviewForm] = useState(false)
 	const [isVisibleEditReviewForm, setIsVisibleEditReviewForm] = useState(false)
 	const [isVisibleDeleteReviewModal, setIsVisibleDeleteReviewModal] = useState(false)
+	const [isVisibleModal, setIsVisibleModal] = useState(false)
 	const checkExistReview = () => {
 		const result = stateReview.reviews.find((review) => {
 			return review.post === postData.id;
 		});
 		return Boolean(result);
 	};
-	const [reviewExists, setReviewExists] = useState(checkExistReview());
+	const [reviewExists, setReviewExists] = useState(false);
 
 	const toastId = useRef(null)
 
 	const confirmAction = async (status, message) => {
 		toastId.current = toast.loading("Please wait ....")
-		setTimeout(() => {
-			dispatchPost({ type: "LOADING_HISTORY_POST", value: true })
-		}, 2000);
+		dispatchPost({ type: "LOADING_HISTORY_POST", value: true })
 		const data = {
 			status: status
 		}
@@ -42,6 +44,7 @@ const ConfirmPost = ({ post }) => {
 			const res = await Axios.patch(`/api/v1/posts/${postData.id}/status`, data)
 			if (res.status === 200) {
 				console.log(res)
+				setIsVisibleModal(false)
 				toast.update(toastId.current, {
 					render: message,
 					type: "success",
@@ -50,12 +53,11 @@ const ConfirmPost = ({ post }) => {
 					className: 'animated rotateY',
 					closeOnClick: true,
 				})
-				setTimeout(() => {
-					dispatchPost({ type: "LOADING_HISTORY_POST", value: false })
-				}, 2000);
+				dispatchPost({ type: "LOADING_HISTORY_POST", value: false })
 			}
 		} catch (err) {
 			console.log(err)
+			setIsVisibleModal(false)
 			toast.update(toastId.current, {
 				render: "Confirm Fail",
 				type: "error",
@@ -73,23 +75,42 @@ const ConfirmPost = ({ post }) => {
 		});
 		return result;
 	}
-	let review = getDataReview()
 	const confirmDeleteReview = async (message) => {
+		setTimeout(() => {
+			dispatchReview({ type: "DELETE_REVIEW", value: true })
+		}, 500);
 		try {
 			const res = await Axios.delete(`/api/v1/reviews/${review.id}`)
 			if (res.status === 204) {
 				toast.success(message)
-				setReviewExists(checkExistReview())
+				setTimeout(() => {
+					dispatchReview({ type: "DELETE_REVIEW", value: false })
+				}, 500);
 				setIsVisibleDeleteReviewModal(false)
 			}
 		} catch (error) {
 			setIsVisibleDeleteReviewModal(false)
+			dispatchReview({ type: "DELETE_REVIEW", value: false })
 			console.log(error)
 		}
 	}
 	useEffect(() => {
+		const checkExistReview = () => {
+			const result = stateReview.reviews.find((review) => {
+				return review.post === postData.id;
+			});
+			return Boolean(result);
+		};
 		setReviewExists(checkExistReview())
-	}, [postData.status, stateReview, reviewExists])
+		const getDataReview = () => {
+			const result = stateReview.reviews.find((review) => {
+				return review.post === postData.id;
+			});
+			return result;
+		}
+		setReview(getDataReview())
+	}, [postData.status, review, reviewExists, isVisibleDeleteReviewModal, stateReview])
+
 	return (
 		<>
 			<div className="w-full flex flex-col gap-3 border border-gray-400 p-5 rounded-sm">
@@ -103,6 +124,7 @@ const ConfirmPost = ({ post }) => {
 						</span>
 						<Link
 							to={`/profile/${userPost.id}`}
+							target='_blank'
 							className="p-1 border text-sm flex items-center text-gray-700">
 							<PiUserCircleLight size={18} />
 							<span className='inline-block ml-1'>View Profile</span>
@@ -149,7 +171,10 @@ const ConfirmPost = ({ post }) => {
 								<button
 									type="submit"
 									ref={toastId}
-									onClick={() => confirmAction("Confirm", "Confirm success!")}
+									onClick={() => {
+										setIsVisibleModal(true)
+										setActionType(["Confirm", "Confirm success!"])
+									}}
 									className="w-28 xl:w-36 px-4 xl:px-6 py-3 bg-primary-main text-white rounded-md hover:shadow !shadow-primary-700 hover:bg-primary-700 transition-all">
 									Buy
 								</button>
@@ -158,15 +183,21 @@ const ConfirmPost = ({ post }) => {
 									<button
 										type="submit"
 										ref={toastId}
-										onClick={() => confirmAction("Delivered", "Delivery success!Let's review it now")}
-										className="w-28 xl:w-36 px-4 xl:px-6 py-3 bg-primary-main text-white rounded-md hover:shadow !shadow-primary-700 hover:bg-primary-700 transition-all">
+										onClick={() => {
+											setIsVisibleModal(true)
+											setActionType(["Delivered", "Delivery success!Let's review it now"])
+										}}
+										className="w-fit xl:w-36 px-4 xl:px-6 py-3 bg-primary-main text-white rounded-md hover:shadow !shadow-primary-700 hover:bg-primary-700 transition-all">
 										Received
 									</button>
 									<button
 										type="submit"
 										ref={toastId}
-										onClick={() => confirmAction("Unconfirmed", "Unconfirm success")}
-										className="w-28 xl:w-36 px-4 xl:px-6 py-3 bg-transparent border border-primary-main text-primary-main rounded-md hover:shadow transition-all">
+										onClick={() => {
+											setIsVisibleModal(true)
+											setActionType(["Unconfirmed", "Unconfirm successfully"])
+										}}
+										className="w-fit xl:w-36 px-4 xl:px-6 py-3 bg-transparent border border-primary-main text-primary-main rounded-md hover:shadow transition-all">
 										Cancel Order
 									</button>
 								</div>
@@ -178,7 +209,7 @@ const ConfirmPost = ({ post }) => {
 									className="w-28 xl:w-36 px-4 xl:px-6 py-3 bg-primary-main text-white rounded-md hover:shadow !shadow-primary-700 hover:bg-primary-700 transition-all">
 									Review
 								</button>
-							) : reviewExists === true && (
+							) : (reviewExists === true && postData.status === "Delivered") && (
 								<p>
 									<i className=" text-gray-500">Thank you for your review. </i>
 									<i
@@ -202,18 +233,17 @@ const ConfirmPost = ({ post }) => {
 					)
 				}
 				{
+					isVisibleModal && (
+						<GenericModal actionType={actionType} setIsVisibleModal={setIsVisibleModal} confirmAction={confirmAction} />
+					)
+				}
+				{
 					stateReview.isEditReviewLoading && window.location.reload()
 				}
 				{
 					isVisibleDeleteReviewModal && (
 						<DeleteReview setIsVisibleDeleteReviewModal={setIsVisibleDeleteReviewModal} confirmDeleteReview={confirmDeleteReview} />
 					)
-				}
-				{
-					stateReview.isDeleteReviewLoading && window.location.reload()
-				}
-				{
-					stateReview.isDeleteReviewLoading && toast.success("Delete review success")
 				}
 			</AnimatePresence>
 		</>

@@ -45,15 +45,9 @@ const HistoryPost = () => {
 		) : (
 			<div className='flex flex-col gap-5'>
 				{
-					statePost.isLoadingHistoryConfirm || isLoading ? (
-						<div className="w-full h-full flex justify-center items-center">
-							<ImSpinner9 className="animate-spin duration-500 text-primary-main" size={50} />
-						</div>
-					) : (
-						userPosts.map((post, index) => (
-							<ProfilePost key={index} post={post} />
-						))
-					)
+					userPosts.map((post, index) => (
+						<ProfilePost key={index} post={post} />
+					))	
 				}
 			</div>
 		)

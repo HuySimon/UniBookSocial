@@ -37,22 +37,21 @@ const Review = ({ isVisibleReviewForm, setIsVisibleReviewForm, id }) => {
 				setIsLoading(true)
 				setTimeout(() => {
 					dispatch({ type: "ADD_REVIEW", value: true })
-				}, 2000);
+				}, 1000);
 				const res = await Axios.post(`/api/v1/reviews`, dataSend)
-				console.log(res)
 				if (res.status === 201) {
 					toast.success("Thank you for your review !")
 					setIsLoading(false)
 					setIsVisibleReviewForm(false)
 					setTimeout(() => {
 						dispatch({ type: "ADD_REVIEW", value: false })
-					}, 2000);
+					}, 1000);
 				}
 			} catch (err) {
 				setIsLoading(false)
 				setTimeout(() => {
 					dispatch({ type: "ADD_REVIEW", value: false })
-				}, 2000);
+				}, 1000);
 				toast.error(err.response.message)
 				console.log(err)
 			}

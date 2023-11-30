@@ -53,9 +53,10 @@ const Post = ({ post }) => {
 									/>
 								</Link>
 							</div>
-							<div className="flex flex-col justify-start">
+							<div className="flex flex-col justify-stretch">
 								<span className="name text-base font-medium">{post.userPostData.username}</span>
-								<p className="text-sm leading-4 text-gray-600">#{post.id} · {timeAgo}</p>
+								<p className="text-sm leading-4 text-gray-600">{timeAgo}</p>
+								<p className="text-[12px] leading-4 text-gray-600">#{post.id}</p>
 							</div>
 						</div>
 						{

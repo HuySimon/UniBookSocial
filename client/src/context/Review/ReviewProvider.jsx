@@ -5,7 +5,6 @@ export const ReviewContext = createContext()
 const initialState = {
 	reviews: null,
 	isLoading: false,
-	singleReview: null,
 	isEditReviewLoading: false,
 	isAddReviewLoading: false,
 	isDeleteReviewLoading: false,
@@ -25,7 +24,7 @@ const reducer = (state, action) => {
 				...state,
 				isAddReviewLoading: action.value
 			}
-		case "SET_LOADING_EDIT":
+		case "EDIT_REVIEW":
 			return {
 				...state,
 				isEditReviewLoading: action.value
@@ -56,6 +55,7 @@ const reducer = (state, action) => {
 export const ReviewProvider = ({ children }) => {
 	const getReviews = async (url) => {
 		dispatch({ type: "SET_LOADING" });
+		console.log("123")
 		try {
 			const res = await Axios.get(url);
 			if (res.status === 200) {
@@ -68,13 +68,13 @@ export const ReviewProvider = ({ children }) => {
 		}
 	}
 
-	useEffect(() => {
-		getReviews(url);
-	}, []);
 
 	console.log('review render');
 	const [state, dispatch] = useReducer(reducer, initialState);
 	const value = useMemo(() => ({ state, dispatch }), [state, dispatch])
+	useEffect(() => {
+		getReviews(url);
+	}, [state.isAddReviewLoading,state.isDeleteReviewLoading,state.isEditReviewLoading]);
 	return (
 		<ReviewContext.Provider value={value}>
 			{children}

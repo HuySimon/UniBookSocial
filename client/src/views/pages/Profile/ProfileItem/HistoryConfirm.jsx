@@ -21,7 +21,8 @@ const HistoryConfirm = () => {
 	const { register, handleSubmit } = useForm({
 		defaultValues: {
 			query: ""
-		}
+		},
+		mode: "onChange"
 	})
 	const fetchConfirmPost = async () => {
 		setIsLoading(true)
@@ -73,31 +74,23 @@ const HistoryConfirm = () => {
 				<RiSearch2Line size={28} className='text-gray-400' />
 				<input type="text" {...register("query")} className='border-none w-full focus:outline-none text-black placeholder:text-sm' placeholder='You can search by anything....' />
 			</div>
-			{
-				isLoading ? (
-					<div className="w-full h-screen flex justify-center items-center">
-						<ImSpinner9 className="animate-spin duration-500 text-primary-main" size={50} />
-					</div>
-				) : (
-					<>
-						{
-							data.length != 0 ? (
-								<div className="flex flex-col gap-5 mb-5">
-									{
-										data.map((post, index) => (
-											<ConfirmPost key={index} post={post} />
-										))
-									}
-								</div>
-							) : (
-								<div className="w-full h-screen flex justify-center items-center">
-									<p className='text-6xl text-gray-500 font-mono'>Nothing in here</p>
-								</div>
-							)
-						}
-					</>
-				)
-			}
+			<>
+				{
+					data.length != 0 ? (
+						<div className="flex flex-col gap-5 mb-5">
+							{
+								data.map((post, index) => (
+									<ConfirmPost key={index} post={post} />
+								))
+							}
+						</div>
+					) : (
+						<div className="w-full h-screen flex justify-center items-center">
+							<p className='text-6xl text-gray-500 font-mono'>Nothing in here</p>
+						</div>
+					)
+				}
+			</>
 		</div >
 	)
 }

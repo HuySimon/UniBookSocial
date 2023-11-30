@@ -59,12 +59,13 @@ const EditPost = ({ post, handleEditPost, isVisibleEditPost }) => {
 		const postData = Object.fromEntries(formData)
 		console.log(postData)
 		setIsLoading(true)
-		dispatchPost({type: "EDIT_POST"})
+		dispatchPost({ type: "EDIT_POST", value: true })
 		try {
 			const res = await Axios.patch(`/api/v1/posts/${post.id}`, postData)
 			if (res.status === 200) {
 				toast.success("Edit post success!")
-				dispatchPost({type: "EDIT_POST_LOADING"})
+				dispatchPost({ type: "EDIT_POST", value: false })
+
 				handleEditPost(false)
 				console.log(res.data)
 			}
@@ -75,7 +76,8 @@ const EditPost = ({ post, handleEditPost, isVisibleEditPost }) => {
 			toast.error(err.response.data.message)
 		} finally {
 			setIsLoading(false)
-			dispatchPost({type: "API_ERROR"})
+			dispatchPost({ type: "EDIT_POST", value: false })
+
 		}
 	}
 	return (

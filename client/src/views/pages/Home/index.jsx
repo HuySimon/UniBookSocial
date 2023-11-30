@@ -10,7 +10,7 @@ const Index = () => {
 	const [isLoading, setIsLoading] = useState(state.isLoading)
 	useEffect(() => {
 		setIsLoading(state.isLoading)
-	}, [state, isLoading, state])
+	}, [state,isLoading])
 	return (
 		<>
 			<div className="p-[25px] lg:px-[150px] xl:px-[250px] 2xl:px-[400px] mx-auto lg:flex justify-center items-start gap-5">
