@@ -60,7 +60,7 @@ const Header = () => {
 		},
 		...(localStorage.getItem("auth") === "true" &&
 			localStorage.getItem("user") !== "" &&
-			state.user.user.role !== 2 // Exclude "Create" and "Notification" for role 2
+			![2, 3].includes(state.user.user.role) // Exclude "Create" and "Notification" for role 2
 			? [
 				{
 					icon: PiHeartLight,
