@@ -9,7 +9,8 @@ const initialState = {
 	isLoadingEdit: false,
 	isLoadingHistoryConfirm: false,
 	isDeletePost: false,
-	isCancelOrder: false
+	isCancelOrder: false,
+	isReport: false,
 }
 const url = "/api/v1/posts?filter=equals(status,'Unconfirmed')&include=userPostData&sort=-createdAt"
 const reducer = (state, action) => {
@@ -56,6 +57,11 @@ const reducer = (state, action) => {
 				...state,
 				isLoading: action.value
 			}
+		case "REPORT_POST":
+			return {
+				...state,
+				isReport: action.value
+			}
 		case "API_ERROR":
 			return {
 				...state,
@@ -87,10 +93,10 @@ export const PostProvider = ({ children }) => {
 	};
 	console.log('post render');
 	const [state, dispatch] = useReducer(reducer, initialState);
-	
+
 	useEffect(() => {
 		getPosts(url);
-	}, [state.isLoadingEdit,state.isCancelOrder,state.isLoadingHistoryConfirm]);
+	}, [state.isLoadingEdit, state.isCancelOrder, state.isLoadingHistoryConfirm,state.isReport]);
 
 
 	return (

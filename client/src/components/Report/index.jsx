@@ -7,8 +7,10 @@ import { toast } from 'react-toastify'
 import { ReportSchema } from '../../validations/ReportValidation'
 import { ImSpinner9 } from 'react-icons/im'
 import { AiOutlineClose } from 'react-icons/ai'
+import { usePostContext } from '../../hooks/usePostContext'
 const Index = ({ post, setIsVisibleReport }) => {
 	const [isLoading, setIsLoading] = useState(false)
+	const [state, dispatch] = usePostContext()
 	const { register, handleSubmit, formState: { errors } } = useForm({
 		defaultValues: {
 			content: ''
@@ -21,17 +23,20 @@ const Index = ({ post, setIsVisibleReport }) => {
 			post: post.id,
 			content: data.content
 		}
+		dispatch({ type: "REPORT_POST", value: true })
 		try {
 			const res = await Axios.post('/api/v1/reports', reportData)
 			console.log(res)
 			if (res.status === 201) {
 				console.log(res)
+				dispatch({ type: "REPORT_POST", value: false })
 				toast.success('Report Success')
 				setIsLoading(false)
 				setIsVisibleReport(false)
 			}
 		} catch (err) {
 			console.log(err)
+			dispatch({ type: "REPORT_POST", value: false })
 			setIsLoading(false)
 			setIsVisibleReport(false)
 		}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { RiSearch2Line } from 'react-icons/ri'
@@ -13,6 +13,7 @@ const HistoryConfirm = () => {
 	const menu = ["All", "Confirm", "Delivered"]
 	const [isLoading, setIsLoading] = useState(false)
 	const [state, dispatch] = useAuthContext()
+	const [query, setQuery] = useState("")
 	const [statePost, dispatchPost] = usePostContext()
 	const [stateReview, dispatchReview] = useReviewContext()
 	const [activeButton, setActiveButton] = useState(0)
@@ -46,6 +47,11 @@ const HistoryConfirm = () => {
 			setIsLoading(false)
 		}
 	}
+	const filteredItems = useMemo(() => {
+		return data.filter(item => {
+			return item.title.toLowerCase().includes(query.toLowerCase())
+		})
+	}, [query,data])
 	useEffect(() => {
 		fetchConfirmPost()
 	}, [activeButton, statePost.isLoadingHistoryConfirm, stateReview])
@@ -72,14 +78,14 @@ const HistoryConfirm = () => {
 			</div>
 			<div className="flex gap-3 items-center w-full border border-gray-400 p-2 rounded-sm">
 				<RiSearch2Line size={28} className='text-gray-400' />
-				<input type="text" {...register("query")} className='border-none w-full focus:outline-none text-black placeholder:text-sm' placeholder='You can search by anything....' />
+				<input type="search" value={query} onChange={e => setQuery(e.target.value)} className='border-none w-full focus:outline-none text-black placeholder:text-sm' placeholder='Search here ....' />
 			</div>
 			<>
 				{
-					data.length != 0 ? (
+					filteredItems.length != 0 ? (
 						<div className="flex flex-col gap-5 mb-5">
 							{
-								data.map((post, index) => (
+								filteredItems.map((post, index) => (
 									<ConfirmPost key={index} post={post} />
 								))
 							}

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BiDotsVerticalRounded } from 'react-icons/bi';
 import { AiFillCaretRight, AiOutlineAlert } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
@@ -6,7 +6,7 @@ import { AnimatePresence } from 'framer-motion';
 import { useAuthContext } from '../../hooks/useAuthContext';
 import Report from '../Report'
 import { usePostContext } from '../../hooks/usePostContext';
-import { toast } from 'react-toastify';
+import { motion } from 'framer-motion'
 const Post = ({ post }) => {
 	const [isVisibleMenuPost, setIsVisibleMenuPost] = useState(false)
 	const [isVisibleReport, setIsVisibleReport] = useState(false)
@@ -40,7 +40,15 @@ const Post = ({ post }) => {
 	}, [statePost.isLoading, post.createdAt]);
 	return (
 		<>
-			<div className="w-full h-fit px-6 py-5 border border-gray-400 shadow-md rounded-lg mb-8">
+			<motion.div
+				exit={{
+					y: 100,
+					opacity: 0,
+					transition: {
+						duration: .5
+					}
+				}}
+				className="w-full h-fit px-6 py-5 border border-gray-400 shadow-md rounded-lg mb-8">
 				<div className="w-full flex flex-col">
 					<div className="w-full flex justify-between items-center relative">
 						<div className="flex gap-3">
@@ -133,7 +141,7 @@ const Post = ({ post }) => {
 						</tbody>
 					</table>
 				</div>
-			</div>
+			</motion.div>
 			<AnimatePresence mode="wait">
 				{
 					isVisibleReport && (

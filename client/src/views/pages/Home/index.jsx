@@ -5,6 +5,7 @@ import BriefProfile from '../Profile/BriefProfile';
 import { ImSpinner9 } from 'react-icons/im';
 import { ScrollRestoration, useLoaderData, useNavigate } from 'react-router-dom';
 import { usePostContext } from '../../../hooks/usePostContext'
+import { AnimatePresence } from 'framer-motion';
 const Index = () => {
 	const [state, dispatch] = usePostContext()
 	const [isLoading, setIsLoading] = useState(state.isLoading)
@@ -21,11 +22,13 @@ const Index = () => {
 						</div>
 					) : (
 						<>
+						<AnimatePresence mode='wait'>
 							<div className="post-list flex-1">
 								{state.posts.map((post) => (
 									<Post key={post.id} post={post} />
 								))}
 							</div>
+						</AnimatePresence>
 						</>
 					)
 				}

@@ -150,37 +150,39 @@ const Index = ({ isVisibleNotify, handleNotify }) => {
 								dataNotify
 									.filter((item) => item.userReceive === user.user.id)
 									.map((item, index) => (
-										<div
-											onClick={() => { navigate(`/detailPost/${item.post}`)}}
-											key={index} className={`w-full flex items-center border-b py-2 cursor-pointer transition-all bg-transparent hover:bg-gray-100`}>
-											{item.typeNoti === 'Confirm' ? (
-												<GiConfirmed size={52} color='green' className='w-1/4' />
-											) : item.typeNoti === 'Violation' ? (
-												<PiWarningBold size={52} color='red' className='w-1/4' />
-											) : (
-												<GiCancel size={52} color='red' className='w-1/4' />
-											)}
-											<div className={`w-3/4 flex flex-col justify-between`}>
-												<div className="w-full flex justify-between items-center mb-1">
-													<span className='text-lg font-medium'>{item.typeNoti}</span>
-													<span className='text-sm text-gray-500'>
-														<i>
-															{calculateTimeAgo(item.createdAt)}
-														</i>
-													</span>
+										<div className="flex items-center border-b">
+											<div
+												onClick={() => { navigate(`/detailPost/${item.post}`) }}
+												key={index} className={`w-full flex items-center py-2 cursor-pointer transition-all bg-transparent hover:bg-gray-100`}>
+												{item.typeNoti === 'Confirm' ? (
+													<GiConfirmed size={52} color='green' className='w-1/4' />
+												) : item.typeNoti === 'Violation' ? (
+													<PiWarningBold size={52} color='red' className='w-1/4' />
+												) : (
+													<GiCancel size={52} color='red' className='w-1/4' />
+												)}
+												<div className={`w-3/4 flex flex-col justify-between`}>
+													<div className="w-full flex justify-between items-center mb-1">
+														<span className='text-lg font-medium'>{item.typeNoti}</span>
+														<span className='text-sm text-gray-500'>
+															<i>
+																{calculateTimeAgo(item.createdAt)}
+															</i>
+														</span>
+													</div>
+													{
+														notifySend.map((notiItem, notiIndex) => (
+															// Check if item.typeNoti === notiItem.type
+															item.typeNoti === notiItem.type && (
+																<p className='text-sm text-gray-500' key={notiIndex} dangerouslySetInnerHTML={{
+																	__html: notiItem.content
+																		.replace("title", `<i class="text-black/70">' ${item.postData.title} '</i>`)
+																		.replace("username", `<i class="font-medium text-black/70">${item.userSendData.username}</i>`)
+																}}></p>
+															)
+														))
+													}
 												</div>
-												{
-													notifySend.map((notiItem, notiIndex) => (
-														// Check if item.typeNoti === notiItem.type
-														item.typeNoti === notiItem.type && (
-															<p className='text-sm text-gray-500' key={notiIndex} dangerouslySetInnerHTML={{
-																__html: notiItem.content
-																	.replace("title", `<i class="text-black/70">' ${item.postData.title} '</i>`)
-																	.replace("username", `<i class="font-medium text-black/70">${item.userSendData.username}</i>`)
-															}}></p>
-														)
-													))
-												}
 											</div>
 											{item.isSeen === false && (<input type="checkbox" className='w-4 h-4 ml-1' onChange={(e) => handleChange(e, item.id)} />)}
 										</div>

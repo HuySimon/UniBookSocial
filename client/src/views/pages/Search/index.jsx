@@ -109,7 +109,7 @@ const Index = () => {
 					<span className="text-4xl">Search</span>
 					<div className="flex justify-between items-center border border-gray-400 rounded-md px-3 py-2 mt-3">
 						<input
-							type="text"
+							type="search"
 							{...register("query")}
 							defaultValue={searchValues.query}
 							className="w-full border-none focus:outline-none text-black"
