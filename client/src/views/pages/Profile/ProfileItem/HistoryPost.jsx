@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import Post from '../../../../components/Post/Post'
 import Axios from '../../../../api/index'
 import { useAuthContext } from '../../../../hooks/useAuthContext'
 import { ImSpinner9 } from 'react-icons/im'

@@ -53,6 +53,10 @@ const Index = () => {
 	}
 	const handleFileChange = (e) => {
 		const file = e.target.files[0];
+		if (file && !file.type.startsWith('image/')) {
+			toast.error('Please select a valid image file.');
+			return;
+		}
 		if (file) {
 			const reader = new FileReader();
 			reader.onload = () => {
@@ -63,6 +67,10 @@ const Index = () => {
 	};
 	const handleCoverFileChange = (e) => {
 		const file = e.target.files[0];
+		if (file && !file.type.startsWith('image/')) {
+			toast.error('Please select a valid image file.');
+			return;
+		}
 		if (file) {
 			const reader = new FileReader();
 			reader.onload = () => {

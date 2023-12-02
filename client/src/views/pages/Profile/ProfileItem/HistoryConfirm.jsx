@@ -98,7 +98,7 @@ const HistoryConfirm = () => {
 						</div>
 					) : (
 						<div className="w-full h-screen flex justify-center items-center">
-							<p className='text-6xl text-gray-500 font-mono'>No posts found with {query.trim() != "" ? `"${query}"` : ""}</p>
+							<p className='text-6xl text-gray-500 font-mono'>No posts found {query.trim() != "" ? `with "${query}"` : ""}</p>
 						</div>
 					)
 				}

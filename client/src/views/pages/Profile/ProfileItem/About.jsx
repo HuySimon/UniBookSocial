@@ -27,10 +27,9 @@ const About = () => {
 	const {
 		register,
 		handleSubmit,
-		trigger,
-		reset,
-		formState: { errors, dirtyFields, isValid },
-		getValues
+		formState: { errors },
+		setFocus,
+		setError
 	} = useForm({
 		defaultValues: {
 			firstName: currentUser.firstName,
@@ -41,7 +40,7 @@ const About = () => {
 			linkInstagram: currentUser.linkInstagram,
 			linkZalo: currentUser.linkZalo
 		},
-		resolver: yupResolver(changeInformationSchema),
+		// resolver: yupResolver(changeInformationSchema),
 	});
 
 	useEffect(() => {
@@ -63,16 +62,42 @@ const About = () => {
 			'linkInstagram',
 			'linkZalo',
 		];
-
-		const curUser = {};
-
-		fieldsToTrack.forEach((fieldName) => {
-			if (dirtyFields[fieldName]) {
-				curUser[fieldName] = getValues(fieldName);
-				trigger(fieldName);
+		if (data.firstName === "") {
+			toast.error("Please enter first name")
+			setFocus("firstName")
+			return;
+		}
+		if (data.lastName === "") {
+			toast.error("Please enter last name")
+			setFocus("lastName")
+			return;
+		}
+		if (data.phoneNumber != null) {
+			if (!/^(0|84)(2(0[3-9]|1[0-6|8|9]|2[0-2|5-9]|3[2-9]|4[0-9]|5[1|2|4-9]|6[0-3|9]|7[0-7]|8[0-9]|9[0-4|6|7|9])|3[2-9]|5[5|6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])([0-9]{7})$/.test(data.phoneNumber)) {
+				toast.error("Please enter valid phone number")
+				setFocus("phoneNumber")
+				return;
 			}
+		}
+		if (data.linkFacebook != null) {
+			if (!/(?:http:\/\/)?(?:www\.)?facebook\.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[\w\-]*\/)*([\w\-]*)/.test(data.linkFacebook)) {
+				toast.error("Please enter valid link")
+				setFocus("linkFacebook")
+				return;
+			}
+		}
+		if (data.linkInstagram != null) {
+			if (!/(?:(?:http|https):\/\/)?(?:www\.)?(?:instagram\.com|instagr\.am)\/([A-Za-z0-9-_\.]+)/im.test(data.linkInstagram)) {
+				toast.error("Please enter valid link")
+				setFocus("linkInstagram")
+				return;
+			}
+		}
+		const curUser = {};
+		fieldsToTrack.forEach((field) => {
+			curUser[field] = data[field] || currentUser[field];
 		});
-
+		console.log(curUser)
 		if (isObjectEmpty(curUser)) {
 			toast.error("You haven't changed anything");
 		} else {
@@ -96,9 +121,9 @@ const About = () => {
 			>
 				{["firstName", "lastName", "phoneNumber", "email", "linkFacebook", "linkZalo", "linkInstagram"].map((field) => (
 					<div key={field} className={`flex justify-between items-center relative mb-2`}>
-						<label htmlFor={field} className='w-1/4 font-medium'>{field}</label>
+						<label htmlFor={field} className='w-1/4 font-medium first-letter:uppercase'>{field.replace(/([a-z])([A-Z])/g, '$1 $2')}</label>
 						<input
-							type="text"
+							type={field.includes("link") ? "url" : "text"}
 							disabled={!edit}
 							defaultValue={currentUser[field]}
 							{...register(field)}
