@@ -63,7 +63,7 @@ const ProfilePost = ({ post }) => {
 	}, [statePost.isLoading, post.createdAt]);
 	return (
 		<>
-			<div className="w-full h-fit px-6 py-5 border border-gray-400 shadow-md rounded-lg mb-8">
+			<div className="w-full h-fit px-6 py-5 border border-gray-400 shadow-md rounded-sm mb-8">
 				<div className="w-full flex flex-col">
 					<div className="w-full flex justify-between items-center relative">
 						<div className="flex gap-3">

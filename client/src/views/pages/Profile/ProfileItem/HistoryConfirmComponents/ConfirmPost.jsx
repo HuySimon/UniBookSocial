@@ -12,11 +12,10 @@ import Axios from '../../../../../api/index'
 import { usePostContext } from '../../../../../hooks/usePostContext'
 import GenericModal from '../../../../../components/Modal/GenericModal'
 const ConfirmPost = ({ post }) => {
-
+	// console.log(post.title)
 	const [state, dispatch] = useAuthContext()
 	const [stateReview, dispatchReview] = useReviewContext()
 	const [statePost, dispatchPost] = usePostContext()
-	const [postData, setPostData] = useState(post)
 	const [userPost, setUserPost] = useState(post.userPostData)
 	const [review, setReview] = useState({})
 	const [actionType, setActionType] = useState(["Confirm", "Confirm success!"]);
@@ -26,7 +25,7 @@ const ConfirmPost = ({ post }) => {
 	const [isVisibleModal, setIsVisibleModal] = useState(false)
 	const checkExistReview = () => {
 		const result = stateReview.reviews.find((review) => {
-			return review.post === postData.id;
+			return review.post === post.id;
 		});
 		return Boolean(result);
 	};
@@ -41,7 +40,7 @@ const ConfirmPost = ({ post }) => {
 			status: status
 		}
 		try {
-			const res = await Axios.patch(`/api/v1/posts/${postData.id}/status`, data)
+			const res = await Axios.patch(`/api/v1/posts/${post.id}/status`, data)
 			if (res.status === 200) {
 				console.log(res)
 				setIsVisibleModal(false)
@@ -71,7 +70,7 @@ const ConfirmPost = ({ post }) => {
 	}
 	const getDataReview = () => {
 		const result = stateReview.reviews.find((review) => {
-			return review.post === postData.id;
+			return review.post === post.id;
 		});
 		return result;
 	}
@@ -97,19 +96,19 @@ const ConfirmPost = ({ post }) => {
 	useEffect(() => {
 		const checkExistReview = () => {
 			const result = stateReview.reviews.find((review) => {
-				return review.post === postData.id;
+				return review.post === post.id;
 			});
 			return Boolean(result);
 		};
 		setReviewExists(checkExistReview())
 		const getDataReview = () => {
 			const result = stateReview.reviews.find((review) => {
-				return review.post === postData.id;
+				return review.post === post.id;
 			});
 			return result;
 		}
 		setReview(getDataReview())
-	}, [postData.status, review, reviewExists, isVisibleDeleteReviewModal, stateReview])
+	}, [post.status, review, reviewExists, isVisibleDeleteReviewModal, stateReview])
 
 	return (
 		<>
@@ -148,26 +147,26 @@ const ConfirmPost = ({ post }) => {
 					<div className="w-full flex justify-between items-center border-y border-gray-400">
 						<div className="flex lg:flex-[4] py-4">
 							<div className="w-32 h-32 max-w-[128px]">
-								<img src={`http://127.0.0.1:5000/public/images/posts/${postData.mainImage}`} alt="" className='w-full h-full object-cover' />
+								<img src={`http://127.0.0.1:5000/public/images/posts/${post.mainImage}`} alt="" className='w-full h-full object-cover' />
 							</div>
 							<div className="lg:w-fit w-1/2 flex flex-col gap-1 text-sm ml-3">
-								<p className='text-base	font-medium tracking-wide'>{postData.title}</p>
-								<p><span className='font-semibold'>General Subject:</span> {postData.isGeneralSubject === 0 ? "Yes" : "No"} </p>
-								<p><span className='font-semibold'>New:</span> {postData.isNew === 0 ? "Old" : "New"} </p>
+								<p className='text-base	font-medium tracking-wide'>{post.title}</p>
+								<p><span className='font-semibold'>General Subject:</span> {post.isGeneralSubject === 0 ? "Yes" : "No"} </p>
+								<p><span className='font-semibold'>New:</span> {post.isNew === 0 ? "Old" : "New"} </p>
 							</div>
 						</div>
 						<div className="flex-1 text-right">
-							<span className='text-primary-main font-medium'>₫{postData.price}</span>
+							<span className='text-primary-main font-medium'>₫{post.price}</span>
 						</div>
 					</div>
 					<div className="flex justify-end items-center p-5">
-						<p>Order Total: <span className='text-2xl text-primary-main'>₫{postData.price}</span></p>
+						<p>Order Total: <span className='text-2xl text-primary-main'>₫{post.price}</span></p>
 					</div>
 					<div className="w-full flex justify-end gap-3">
 						{
 							Object.entries(state.user).length > 0 && (userPost.id === state.user.user.id) ? (
 								<span className='text-gray-400 text-base'>You own this post!</span>
-							) : postData.status === "Unconfirmed" ? (
+							) : post.status === "Unconfirmed" ? (
 								<button
 									type="submit"
 									ref={toastId}
@@ -175,10 +174,10 @@ const ConfirmPost = ({ post }) => {
 										setIsVisibleModal(true)
 										setActionType(["Confirm", "Confirm success!"])
 									}}
-									className="w-28 xl:w-36 px-4 xl:px-6 py-3 bg-primary-main text-white rounded-md hover:shadow !shadow-primary-700 hover:bg-primary-700 transition-all">
+									className="w-32 xl:w-36 px-4 xl:px-6 py-3 bg-primary-main text-white rounded-md hover:shadow !shadow-primary-700 hover:bg-primary-700 transition-all">
 									Buy
 								</button>
-							) : postData.status === "Confirm" ? (
+							) : post.status === "Confirm" ? (
 								<div className="flex justify-start gap-5 items-center">
 									<button
 										type="submit"
@@ -187,7 +186,7 @@ const ConfirmPost = ({ post }) => {
 											setIsVisibleModal(true)
 											setActionType(["Delivered", "Delivery success!Let's review it now"])
 										}}
-										className="w-fit xl:w-36 px-4 xl:px-6 py-3 bg-primary-main text-white rounded-md hover:shadow !shadow-primary-700 hover:bg-primary-700 transition-all">
+										className="w-32 xl:w-36 px-4 xl:px-6 py-3 bg-primary-main text-white rounded-md hover:shadow !shadow-primary-700 hover:bg-primary-700 transition-all">
 										Received
 									</button>
 									<button
@@ -197,19 +196,19 @@ const ConfirmPost = ({ post }) => {
 											setIsVisibleModal(true)
 											setActionType(["Unconfirmed", "Unconfirm successfully"])
 										}}
-										className="w-fit xl:w-36 px-4 xl:px-6 py-3 bg-transparent border border-primary-main text-primary-main rounded-md hover:shadow transition-all">
+										className="w-32 xl:w-36 px-4 xl:px-6 py-3 bg-transparent border border-primary-main text-primary-main rounded-md hover:shadow transition-all">
 										Cancel Order
 									</button>
 								</div>
-							) : (postData.status === "Delivered" && reviewExists === false) ? (
+							) : (post.status === "Delivered" && reviewExists === false) ? (
 								<button
 									type="submit"
 									ref={toastId}
 									onClick={() => setIsVisibleReviewForm(true)}
-									className="w-28 xl:w-36 px-4 xl:px-6 py-3 bg-primary-main text-white rounded-md hover:shadow !shadow-primary-700 hover:bg-primary-700 transition-all">
+									className="w-32 xl:w-36 px-4 xl:px-6 py-3 bg-primary-main text-white rounded-md hover:shadow !shadow-primary-700 hover:bg-primary-700 transition-all">
 									Review
 								</button>
-							) : (reviewExists === true && postData.status === "Delivered") && (
+							) : (reviewExists === true && post.status === "Delivered") && (
 								<p>
 									<i className=" text-gray-500">Thank you for your review. </i>
 									<i
@@ -224,21 +223,18 @@ const ConfirmPost = ({ post }) => {
 			<AnimatePresence mode='wait'>
 				{
 					isVisibleReviewForm && (
-						<Review setIsVisibleReviewForm={setIsVisibleReviewForm} isVisibleReviewForm={isVisibleReviewForm} id={postData.id} />
+						<Review setIsVisibleReviewForm={setIsVisibleReviewForm} isVisibleReviewForm={isVisibleReviewForm} id={post.id} />
 					)
 				}
 				{
 					isVisibleEditReviewForm && (
-						<EditReview setIsVisibleEditReviewForm={setIsVisibleEditReviewForm} isVisibleEditReviewForm={isVisibleEditReviewForm} id={postData.id} />
+						<EditReview setIsVisibleEditReviewForm={setIsVisibleEditReviewForm} isVisibleEditReviewForm={isVisibleEditReviewForm} id={post.id} />
 					)
 				}
 				{
 					isVisibleModal && (
 						<GenericModal actionType={actionType} setIsVisibleModal={setIsVisibleModal} confirmAction={confirmAction} />
 					)
-				}
-				{
-					stateReview.isEditReviewLoading && window.location.reload()
 				}
 				{
 					isVisibleDeleteReviewModal && (

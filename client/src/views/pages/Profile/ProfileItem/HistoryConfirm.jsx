@@ -30,6 +30,7 @@ const HistoryConfirm = () => {
 		let url = `/api/v1/posts?filter=equals(userConfirm,'${curUser.id}')&include=userPostData&sort=-updatedAt`
 		if (activeButton === 0) {
 			url = `/api/v1/posts?filter=equals(userConfirm,'${curUser.id}')&include=userPostData&sort=-updatedAt`
+			// if(query.trim())
 		} else if (activeButton === 1) {
 			url = `/api/v1/posts?filter=and(equals(status,'Confirm'),equals(userConfirm,'${curUser.id}'))&include=userPostData&sort=-updatedAt`
 		} else {
@@ -49,12 +50,17 @@ const HistoryConfirm = () => {
 	}
 	const filteredItems = useMemo(() => {
 		return data.filter(item => {
-			return item.title.toLowerCase().includes(query.toLowerCase())
+			return (
+				item.title.toLowerCase().includes(query.toLowerCase()) ||
+				item.id.toString().toLowerCase().includes(query.toLowerCase())
+				// item.userPostData.username.toLowerCase().includes(query.toLowerCase())
+			)
 		})
-	}, [query,data])
+	}, [query, data])
 	useEffect(() => {
 		fetchConfirmPost()
 	}, [activeButton, statePost.isLoadingHistoryConfirm, stateReview])
+	// console.log(filteredItems)
 	return (
 		<div className='flex flex-col gap-3'>
 			<div className="flex w-full justify-between items-start bg-gray-100 border-b-[3px] border-black/40">
@@ -82,7 +88,7 @@ const HistoryConfirm = () => {
 			</div>
 			<>
 				{
-					filteredItems.length != 0 ? (
+					filteredItems && filteredItems.length != 0 ? (
 						<div className="flex flex-col gap-5 mb-5">
 							{
 								filteredItems.map((post, index) => (
@@ -92,7 +98,7 @@ const HistoryConfirm = () => {
 						</div>
 					) : (
 						<div className="w-full h-screen flex justify-center items-center">
-							<p className='text-6xl text-gray-500 font-mono'>Nothing in here</p>
+							<p className='text-6xl text-gray-500 font-mono'>No posts found with {query.trim() != "" ? `"${query}"` : ""}</p>
 						</div>
 					)
 				}
