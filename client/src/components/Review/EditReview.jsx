@@ -21,7 +21,7 @@ const EditReview = ({ isVisibleEditReviewForm, setIsVisibleEditReviewForm, id })
 			numStars: result.numStars,
 			content: result.content
 		},
-		mode: "onChange"
+		mode: "onChange",
 	})
 	const handleRating = (rate) => {
 		setRating(rate)
@@ -29,6 +29,9 @@ const EditReview = ({ isVisibleEditReviewForm, setIsVisibleEditReviewForm, id })
 
 	const onSubmit = async (data) => {
 		try {
+			if (data.content === "") {
+				return toast.error("Please enter content")
+			}
 			const dataSend = {
 				numStars: rating,
 				content: data.content,
