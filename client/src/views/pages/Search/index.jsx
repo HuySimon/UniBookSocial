@@ -50,7 +50,8 @@ const Index = () => {
 						var minPricequery = `greaterOrEqual(price,'${data.minPrice}')`
 						url = result + "and(" + url.substring(21, url.length) + "," + minPricequery + ")"
 					} else {
-						toast.error("Please provide an valid number")
+						return toast.error("Please provide an valid number")
+
 					}
 				}
 				if (data.maxPrice != '') {
@@ -58,7 +59,7 @@ const Index = () => {
 						var maxPricequery = `lessOrEqual(price,'${data.maxPrice}')`
 						url = result + "and(" + url.substring(21, url.length) + "," + maxPricequery + ")"
 					} else {
-						toast.error("Please provide an valid number")
+						return toast.error("Please provide an valid number")
 					}
 				}
 				console.log(url)
