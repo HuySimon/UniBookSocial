@@ -44,9 +44,8 @@ module.exports = (sequelize, DataTypes) => {
       },
       post: {
         allowNull: false,
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         validate: {
-          isNumeric: true,
           notNull: {
             msg: "Please provide a valid post!",
           },

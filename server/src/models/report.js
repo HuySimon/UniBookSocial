@@ -27,8 +27,7 @@ module.exports = (sequelize, DataTypes) => {
       post: {
         primaryKey: true,
         allowNull: false,
-        isNumeric: true,
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         validate: {
           notNull: {
             msg: "Please provide a valid post!",

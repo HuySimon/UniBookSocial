@@ -110,7 +110,22 @@ exports.isNotDeliveryPost = catchAsync(async (req, res, next) => {
 });
 
 const postOptions = { include: 'userPostData' };
-exports.createPost = factory.createOne(Post, postOptions);
+exports.createPost = catchAsync(async (req, res, next) => {
+	const currentDate =
+		new Date().getDate().toString().padStart(2, '0')
+		+ (new Date().getMonth() + 1).toString().padStart(2, '0')
+		+ new Date().getFullYear().toString().slice(-2)
+	const numPost = (await Post.findAll({ where: { id: { [Op.like]: `${currentDate}%` } } })).length
+	req.body.id = currentDate + (numPost + 1).toString().padStart(4, '0');
+	let data = await Post.create(req.body);
+	data = await Post.findByPk(data.id, { include: 'userPostData' })
+	res.status(201).json({
+		status: "success",
+		data: {
+			data,
+		},
+	});
+})
 exports.getAllPosts = factory.getAll(Post);
 exports.updatePost = factory.updateOne(Post);
 const optionGetPost = { include: [User, 'userPostData'] };
