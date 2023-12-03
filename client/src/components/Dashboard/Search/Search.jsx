@@ -2,23 +2,9 @@ import { useState } from 'react';
 
 // eslint-disable-next-line react/prop-types, no-unused-vars
 function Search({ userList, onSearch, placeholder }) {
-	// const [searchTerm, setSearchTerm] = useState(''); // Giá trị của ô input
 	const [isEmailValid, setIsEmailValid] = useState(true);
 
-	// const handleSearch = (event) => {
-	//     const value = event.target.value;
-	//     setSearchTerm(value);
-	//     // eslint-disable-next-line react/prop-types
-	//     const filteredUsers = userList.filter((user) => user.name.toLowerCase().includes(value.toLowerCase()));
-	//     onSearch(filteredUsers);
-	// };
-
 	const handleInputChange = (event) => {
-		// setSearchTerm(event.target.value);
-		// const input = event.target.value;
-		// const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-		// const isValid = emailRegex.test(input);
-		// setIsEmailValid(isValid);
 		onSearch(event.target.value);
 	};
 

@@ -16,7 +16,7 @@ exports.createReport = catchAsync(async (req, res, next) => {
   if (post.status != 'Unconfirmed') {
     return next(new AppError('Unconfirmed posts can only be reported', 400))
   }
-  post.status = 'Violation'
+  post.status = 'CheckPost'
   await post.save();
   
   //create report notification

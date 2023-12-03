@@ -29,7 +29,7 @@ const About = () => {
 		handleSubmit,
 		formState: { errors },
 		setFocus,
-		setError
+
 	} = useForm({
 		defaultValues: {
 			firstName: currentUser.firstName,
@@ -121,15 +121,14 @@ const About = () => {
 			>
 				{["firstName", "lastName", "phoneNumber", "email", "linkFacebook", "linkZalo", "linkInstagram"].map((field) => (
 					<div key={field} className={`flex justify-between items-center relative mb-2`}>
-						<label htmlFor={field} className='w-1/4 font-medium first-letter:uppercase'>{field.replace(/([a-z])([A-Z])/g, '$1 $2')}</label>
+						<label htmlFor={field} className='w-1/5 font-medium first-letter:uppercase'>{field.replace(/([a-z])([A-Z])/g, '$1 $2')}</label>
 						<input
 							type={field.includes("link") ? "url" : "text"}
 							disabled={!edit}
 							defaultValue={currentUser[field]}
 							{...register(field)}
-							className='w-3/4 rounded-md px-3 py-2 text-black'
+							className='w-4/5 rounded-md px-3 py-2 text-black'
 						/>
-						<p className='text-[12px] text-red-600 absolute top-[46px] left-1/4'>{errors[field]?.message}</p>
 					</div>
 				))}
 				{Object.entries(state.user).length > 0 && state.user.user.id === currentUser.id && (

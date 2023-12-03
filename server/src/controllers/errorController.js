@@ -5,7 +5,7 @@ const sendErrorDev = (err, req, res) => {
     return res.status(err.statusCode).json({
       status: err.status,
       error: err,
-      message: err.errors[0].message,
+      message: err.message,
       stack: err.stack
     });
   }

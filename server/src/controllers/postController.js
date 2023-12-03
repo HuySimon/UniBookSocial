@@ -61,9 +61,9 @@ exports.updateStatus = catchAsync(async (req, res, next) => {
 			req.body.userConfirm = req.user.id;
 			break;
 		case 'Unconfirmed':
-			if (post.status !== 'Confirm' && post.status !== 'Violation')
-				return next(new AppError('You can only unconfirmed when the post is confirm or violation', 400));
-			if (post.userPost !== req.user.id && post.userConfirm !== req.user.id && req.user.role != 2) {
+			if (post.status !== 'Confirm' && post.status !== 'CheckPost')
+				return next(new AppError('You can only unconfirmed when the post is confirm or checkPost', 400));
+			if (post.userPost !== req.user.id && post.userConfirm !== req.user.id && req.user.role != 3) {
 				return next(new AppError('You are not belong to this post!', 403));
 			}
 			if (post.status === 'Confirm') {

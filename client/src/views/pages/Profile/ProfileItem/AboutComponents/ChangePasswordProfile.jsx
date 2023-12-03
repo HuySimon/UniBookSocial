@@ -57,7 +57,7 @@ const ChangePasswordProfile = () => {
 								size={22} className='absolute top-1/4 right-3 cursor-pointer' />
 						)
 					}
-					<p className='text-sm text-red-400 absolute top-12 left-1/4'>{errors.passwordCurrent?.message}</p>
+					<p className='text-sm w-fit text-red-400 absolute top-12 left-1/4'>{errors.passwordCurrent?.message}</p>
 				</div>
 				<div className="flex justify-between items-center relative">
 					<label htmlFor="" className='w-1/4 font-medium'>New Password</label>
@@ -73,7 +73,7 @@ const ChangePasswordProfile = () => {
 								size={22} className='absolute top-1/4 right-3 cursor-pointer' />
 						)
 					}
-					<p className='text-sm text-red-400 absolute top-12 left-1/4 w-full'>{errors.password?.message}</p>
+					<p className='text-sm w-fit text-red-400 absolute top-12 left-1/4'>{errors.password?.message}</p>
 
 				</div>
 				<div className="flex justify-between items-center relative">
@@ -90,13 +90,13 @@ const ChangePasswordProfile = () => {
 								size={22} className='absolute top-1/4 right-3 cursor-pointer' />
 						)
 					}
-					<p className='text-sm text-red-400 absolute top-12 left-1/4'>{errors.passwordConfirm?.message}</p>
+					<p className='text-sm w-fit text-red-400 absolute top-12 left-1/4'>{errors.passwordConfirm?.message}</p>
 
 				</div>
 			</div>
 			<button
 				type="submit"
-				className='w-fit bg-primary-main px-8 py-2 mt-5 text-white hover:bg-primary-800 cursor-pointer transition-all rounded-md'> Submit
+				className='w-fit bg-primary-main px-8 py-2 mt-10 text-white hover:bg-primary-800 cursor-pointer transition-all rounded-md'> Submit
 			</button>
 		</form>
 	)

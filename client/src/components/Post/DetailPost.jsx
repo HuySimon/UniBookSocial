@@ -129,11 +129,10 @@ const DetailPost = () => {
 									<img src={`http://127.0.0.1:5000/public/images/users/avatar/${userPost.avatar}`} alt="User Image" className='w-full h-full object-cover' />
 								</Link>
 							</div>
-							<div className="flex flex-col justify-start">
-								<span className="name text-base font-medium">
-									{userPost.username}
-								</span>
-								<p className="text-sm leading-4 text-gray-600">#{detailPost.id} · {timeAgo}</p>
+							<div className="flex flex-col justify-stretch">
+								<span className="name text-base font-medium">{userPost.username}</span>
+								<p className="text-sm leading-4 text-gray-600">{timeAgo}</p>
+								<p className="text-[12px] leading-4 text-gray-600">#{detailPost.id}</p>
 							</div>
 						</div>
 						{

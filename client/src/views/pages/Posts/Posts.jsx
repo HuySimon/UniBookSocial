@@ -1,67 +1,39 @@
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { BiDotsVerticalRounded } from 'react-icons/bi';
-import { PiTrashSimpleLight } from 'react-icons/pi';
+import { IoMdCheckmark } from "react-icons/io";
+import { PiWarningCircleLight } from "react-icons/pi";
 import { toast } from 'react-toastify';
 import Pagination from '../../../components/Dashboard/Pagination';
 import './Posts.scss';
 import Axios from '../../../api/index';
 import Search from '../../../components/Dashboard/Search';
 import ModalMessage from '../../../components/Dashboard/ModalMessage';
+import GenericModal from '../../../components/Modal/GenericModal';
+import { useForm } from 'react-hook-form';
 function Posts() {
 	const [postList, setPostList] = useState([]);
+	const [idConfirm, setIDConfirm] = useState(0)
 	const [currentPage, setCurrentPage] = useState(1);
 	const [totalPages, setTotalPages] = useState(0);
 	const [itemsPerPage] = useState(2);
 	const [searchTerm, setSearchTerm] = useState('');
 	const [isEmailValid, setIsEmailValid] = useState(true);
-	const [checkboxStates, setCheckboxStates] = useState([]);
+	const [isVisibleModal, setIsVisibleModal] = useState(false)
 	const [selectedModalId, setSelectedModalId] = useState(null);
-	const [activeIcon, setActiveIcon] = useState(null);
-
+	const { register, handleSubmit, formState: { errors } } = useForm({
+		defaultValues: {
+			query: ""
+		}
+	})
 	const fetchData = async () => {
 		try {
-			let url = `/api/v1/posts?include=userPostData,reportData&page[number]=${currentPage}&page[size]=2`;
-
-			// &filter=equals(status,CheckPost)
-			// -------------
-			// if (searchTerm && isEmailValid === true) {
-			//     url += `&filter=or(contains(email,'${searchTerm}'))`;
-			// } else if (searchTerm && isEmailValid === false) {
-			//     url += `&filter=or(contains(username,'${searchTerm}'))`;
-			// }
-			if (searchTerm && isEmailValid === true) {
-				url += `&filter=or(contains(title,'${searchTerm}'))`;
-			} else if (searchTerm && isEmailValid === false) {
-				url += `&filter=or(contains(title,'${searchTerm}'))`;
-			}
-
-			//  url += `&filter=or(contains(title,'${searchTerm}'))`;
-			// if (filterValue != 'All' && filterValue != '') {
-			//     url += `&filter=or(equals(role,'${filterValue}'))`;
-			// } else {
-			//     url += ``;
-			// }
-
-			// console.log(filterValue != '' && searchTerm != '');
-
-			// if (filterValue != '' && searchTerm != '') {
-			//     url += `&filter=and(contains(username,'${searchTerm}'),equals(role,'${filterValue}'))`;
-			// }
-			// url += `&filter=or(contains(username,'${searchValue}'),equals(role,'${filterValue}'))`;
-			// const url = `/api/v1/users?page[number]=1&page[size]=10&filter=or(contains(email,'nguoi'),contains(username,'nguoi'))`;
-			// const url = `/api/v1/users`;
-			// &filter=or(equals(role,'1'))
-			// const url = `/api/v1/users?page[number]=${currentPage}&page[size]=10$filter=or(contains(email,'${searchTerm}'),contains(username,'${searchTerm}'))`;
-			// const url = `/api/v1/users?page[number]=${currentPage}&page[size]=${itemsPerPage}&filter=or(contains(email,'${searchValue}'),contains(username,'${searchValue}'))`;
-			// const url = `/api/v1/users?page[number]=${currentPage}&page[size]=${itemsPerPage}&filter=or(contains(username,'${searchValue}'),equals(role,'${filterValue}'))`
+			let url = `/api/v1/posts?include=userPostData,reportData&page[number]=${currentPage}&page[size]=2&filter=(equals(status,'CheckPost'))`
 			const response = await Axios.get(url);
 			const data = response.data.data.data;
 			const initialCheckboxStates = data.map((post) => ({
 				id: post.id,
 				checked: false,
 			}));
-			setCheckboxStates(initialCheckboxStates);
 			setPostList(data);
 
 			const totalItems = response.data.totalItem;
@@ -113,24 +85,22 @@ function Posts() {
 		setCurrentPage(pageNumber);
 	};
 
-	const handleCheckboxChange = async (postId, updatedStatus) => {
+	const handleConfirmViolation = async (postId, status, message) => {
 		try {
-			const checked = checkboxStates.find((checkbox) => checkbox.id === postId)?.checked || false;
-			setCheckboxStates((prevState) =>
-				prevState.map((checkbox) => (checkbox.id === postId ? { ...checkbox, checked: !checked } : checkbox)),
-			);
-			const res = await Axios.patch(`/api/v1/users/${postId}`, updatedStatus);
+			const data = {
+				status: status
+			}
+			const res = await Axios.patch(`/api/v1/posts/${postId}/status`, data);
 			if (res.status === 200) {
-				toast.success('Xác nhận bài đăng không vi phạm thành công!');
+				toast.success(message);
 			}
 			fetchData();
 		} catch (error) {
-			toast.error('Failed!');
+			console.log(error)
+			toast.error(error.response.message);
 		}
 	};
-
 	const handleModalClose = (postId) => {
-		setActiveIcon(null);
 		if (postId === selectedModalId) {
 			setSelectedModalId(null);
 		}
@@ -138,9 +108,23 @@ function Posts() {
 
 	const handleDeleteActive = (postId) => {
 		setSelectedModalId(postId);
-		setActiveIcon(postId);
 	};
-
+	const onSubmit = async (data) => {
+		let url = `/api/v1/posts?include=userPostData,reportData&page[number]=${currentPage}&page[size]=2&filter=(equals(status,'CheckPost')`
+		try {
+			if (data.query != "") {
+				var newQuery = `or(contains(title,'${data.query}'),equals(id,'${data.query}'))`
+				url = url.substring(0, 81) + 'and' + url.substring(81,url.length) +',' + newQuery + ')'
+			}
+			const res = await Axios.get(url)
+			if (res.status === 200) {
+				setPostList(res.data.data.data)
+			}
+		} catch (error) {
+			console.log(url)
+			console.log(error)
+		}
+	}
 	return (
 		<div className="relative overflow-x-auto sm:rounded-lg">
 			<div className="flex items-center pb-4 pt-4 bg-white ">
@@ -201,10 +185,46 @@ function Posts() {
 				<label htmlFor="table-search" className="sr-only">
 					Search
 				</label>
-				<Search onSearch={handleSearch} placeholder={"Search by title ..."} />
+				<form
+					onSubmit={handleSubmit(onSubmit)}
+					className='flex gap-2'>
+					<div className="relative ml-2">
+						<div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+							<svg
+								className="w-4 h-4 text-gray-500 "
+								aria-hidden="true"
+								xmlns="http://www.w3.org/2000/svg"
+								fill="none"
+								viewBox="0 0 20 20"
+							>
+								<path
+									stroke="currentColor"
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									strokeWidth="2"
+									d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+								/>
+							</svg>
+						</div>
+						<input
+							type="search"
+							id="table-search-users"
+							className="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500  none-outline"
+							placeholder={"Search by title ..."}
+							{...register("query")}
+						/>
+					</div>
+					<button
+						id="dropdownActionButton"
+						data-dropdown-toggle="dropdownAction"
+						className="inline-flex items-center text-white bg-primary-main border border-primary-main focus:outline-none hover:bg-primary-700 transition-all focus:ring-4 focus:ring-primary-200 font-medium rounded-lg text-sm px-4 py-2 "
+						type="submit"
+					>
+						Search
+					</button>
+				</form>
 			</div>
-
-			<div className="flex justify-between items-center pt-2 px-5 gap-5 bg-white">
+			<div className="grid grid-cols-1 xl:grid-cols-2 pt-2 px-5 gap-5 bg-white">
 				{postList && postList.length > 0 ? (
 					postList.map((post) => (
 						// eslint-disable-next-line react/jsx-key
@@ -218,9 +238,10 @@ function Posts() {
 										<div className="w-14 h-14 rounded-full overflow-hidden">
 											<img src={`http://127.0.0.1:5000/public/images/users/avatar/${post.userPostData.avatar}`} alt="" className="w-full h-full object-cover" />
 										</div>
-										<div className="flex flex-col justify-start">
-											<span className="name font-medium">{post.userPostData.username}</span>
-											<p className="text-[10px] leading-4 text-gray-600">{calculateTimeAgo(post.createdAt)}</p>
+										<div className="flex flex-col justify-stretch">
+											<span className="name text-base font-medium">{post.userPostData.username}</span>
+											<p className="text-sm leading-4 text-gray-600">{calculateTimeAgo(post.createdAt)}</p>
+											<p className="text-[12px] leading-4 text-gray-600">#{post.id}</p>
 										</div>
 									</div>
 								</div>
@@ -231,13 +252,13 @@ function Posts() {
 								</div>
 								<table className="flex border border-gray-500 rounded-lg my-4">
 									<thead className="flex flex-col border-r w-1/2 xl:w-1/5 border-gray-500">
-										<th className="border-b p-2 border-gray-500 font-medium text-sm">Name</th>
+										<th className="border-b p-2 border-gray-500 font-medium text-sm">Title</th>
 										<th className="border-b p-2 border-gray-500 font-medium text-sm">Price</th>
 										<th className="border-b p-2 border-gray-500 font-medium text-sm">Major</th>
 										<th className="border-b p-2 border-gray-500 font-medium text-sm">Type</th>
 										<th className="border-b p-2 border-gray-500 font-medium text-sm">Description</th>
 										<th className="border-b p-2 border-gray-500 font-medium text-sm">Email</th>
-										{/* <th className="p-2 font-medium text-sm">Content Reports</th> */}
+										<th className="p-2 font-medium text-sm">Content Reports</th>
 									</thead>
 									<tbody className="flex flex-col w-1/2 xl:w-4/5">
 										<td className="p-2 text-sm">{post.title}</td>
@@ -246,36 +267,24 @@ function Posts() {
 										<td className="p-2 border-t border-gray-500 text-sm">Old</td>
 										<td className="p-2 border-t border-gray-500 text-sm">{post.description}</td>
 										<td className="p-2 border-t border-gray-500 text-sm">{post.userPostData.email}</td>
-										{/* <td className="p-2 border-t border-gray-500 text-sm">Hình ảnh nhạy cảm</td> */}
+										<td className="p-2 border-t border-gray-500 text-sm">Hình ảnh nhạy cảm</td>
 									</tbody>
 								</table>
-								<div className="flex justify-end">
-									<label className="checkbox">
-										<input
-											checked={
-												checkboxStates.find((checkbox) => checkbox.id === post.id)?.checked ||
-												false
-											}
-											onChange={() => handleCheckboxChange(post.id)}
-											type="checkbox"
-											id={post.id}
-										/>
-										<div className="checkbox__indicator"></div>
-									</label>
-									<Link
-										onClick={() => handleDeleteActive(post.id)}
-										to="#"
-										type="button"
-										data-modal-target="deleteUserModal"
-										data-modal-show="deleteUserModal"
-										// className="font-medium text-2xl color"
-										className={`font-medium text-2xl color${activeIcon === post.id ? ' active' : ''
-											}`}
-									>
-										<i>
-											<PiTrashSimpleLight />
-										</i>
-									</Link>
+								<div className="flex justify-end gap-2 items-center">
+									<p
+										onClick={() => {
+											setIsVisibleModal(true)
+											setIDConfirm(post.id)
+										}}
+										className='bg-green-500 w-[125px] flex items-center gap-2 text-center text-white px-4 py-2 rounded-lg hover:bg-green-400 transition-all cursor-pointer'>
+										<IoMdCheckmark size={20} />
+										Normal
+									</p>
+									<p className='bg-red-500 w-[125px] flex items-center gap-2 text-center text-white px-4 py-2 rounded-lg hover:bg-red-400 transition-all cursor-pointer'
+										onClick={() => handleDeleteActive(post.id)}>
+										<PiWarningCircleLight size={20} />
+										Violation
+									</p>
 								</div>
 							</div>
 						</div>
@@ -296,6 +305,12 @@ function Posts() {
 			{selectedModalId && (
 				<ModalMessage postId={selectedModalId} onClose={() => handleModalClose(selectedModalId)} />
 			)}
+			{
+				isVisibleModal && (
+					<GenericModal alterType="CheckPost" actionType={["Unconfirmed", "Verify post has not been violated successfully!"]}
+						setIsVisibleModal={setIsVisibleModal} confirmAction={handleConfirmViolation} postID={idConfirm} />
+				)
+			}
 		</div>
 	);
 }

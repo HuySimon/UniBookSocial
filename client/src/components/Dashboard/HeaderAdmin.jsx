@@ -42,7 +42,7 @@ const HeaderAdmin = () => {
 		},
 		{
 			icon: PiNewspaperLight,
-			title: 'Posts',
+			title: 'Violation Posts',
 			link: '/dashboard/posts',
 			role: 3,
 		},
