@@ -26,32 +26,30 @@ const HeaderAdmin = () => {
 			window.removeEventListener('resize', checkTabletMode);
 		};
 	}, []);
-
-	const iconList = [
+	const menu = localStorage.getItem("auth") === "true" && localStorage.getItem("user") !== "" && state.user.user.role === 2 ? [
 		{
 			icon: PiRocketLaunchLight,
 			title: 'Dashboard',
 			link: '/dashboard',
-			role: 2,
 		},
 		{
 			icon: PiUsersLight,
 			title: 'Users',
 			link: '/dashboard/users',
-			role: 2,
 		},
+	] : [
 		{
 			icon: PiNewspaperLight,
 			title: 'Violation Posts',
 			link: '/dashboard/posts',
-			role: 3,
 		},
 		{
 			icon: PiChartBarLight,
 			title: 'Statistics',
 			link: '/dashboard/statistics',
-			role: 3,
 		},
+	]
+	const iconList = [
 	];
 	const logout = async () => {
 		dispatch({ type: 'LOGOUT' });
@@ -83,21 +81,18 @@ const HeaderAdmin = () => {
 						</Link>
 					</div>
 					<motion.ul className="flex flex-col justify-start items-stretch">
-						{iconList.map(
+						{menu.map(
 							(item, index) => (
-								Object.entries(state.user).length > 0 &&
-								item.role === state.user.user.role && (
-									<SideBarItem
-										key={index}
-										title={item.title}
-										href={item.link}
-										index={index}
-										activeOverlay={activeOverlay}
-										setActiveOverlay={setActiveOverlay}
-										expand={expand}
-										icon={<item.icon size={30} className="z-10" />}
-									/>
-								)
+								<SideBarItem
+									key={index}
+									title={item.title}
+									href={item.link}
+									index={index}
+									activeOverlay={activeOverlay}
+									setActiveOverlay={setActiveOverlay}
+									expand={expand}
+									icon={<item.icon size={30} className="z-10" />}
+								/>
 							),
 						)}
 					</motion.ul>

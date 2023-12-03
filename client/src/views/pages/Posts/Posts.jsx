@@ -114,12 +114,19 @@ function Posts() {
 		try {
 			if (data.query != "") {
 				var newQuery = `or(contains(title,'${data.query}'),equals(id,'${data.query}'))`
-				url = url.substring(0, 81) + 'and' + url.substring(81,url.length) +',' + newQuery + ')'
+				if (/\d/.test(data.query)) {
+					var newQuery = `or(contains(title,'"${data.query}"'),equals(id,'${data.query}'))`
+				} else {
+					var newQuery = `or(contains(title,'${data.query}'),equals(id,'${data.query}'))`
+				}
+				url = url.substring(0, 81) + 'and' + url.substring(81, url.length) + ',' + newQuery + ')'
 			}
+			console.log(url)
 			const res = await Axios.get(url)
 			if (res.status === 200) {
 				setPostList(res.data.data.data)
 			}
+
 		} catch (error) {
 			console.log(url)
 			console.log(error)

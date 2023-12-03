@@ -7,7 +7,7 @@ import { isAfter, differenceInDays, parse } from 'date-fns';
 import Axios from '../../../api/index';
 
 const Statistics = () => {
-    const [selectedFilter, setSelectedFilter] = useState('Unconfirm');
+    const [selectedFilter, setSelectedFilter] = useState('Violation');
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     // -----
@@ -177,9 +177,6 @@ const Statistics = () => {
                                     </a>
                                 </li>
                                 <li>
-                                    {/* <a href="#" className="block px-4 py-2 hover:bg-gray-100 ">
-                                    Year
-                                </a> */}
                                     <a
                                         href="#"
                                         className={`block px-4 py-2 hover:bg-gray-100 ${
@@ -190,118 +187,12 @@ const Statistics = () => {
                                         Check Post
                                     </a>
                                 </li>
-                                {/* <li>
-                                    <a
-                                        href="#"
-                                        className={`block px-4 py-2 hover:bg-gray-100 ${
-                                            selectedFilter === 'Year' ? 'bg-gray-100' : ''
-                                        }`}
-                                        onClick={() => handleFilterChange('Year')}
-                                    >
-                                        Year
-                                    </a>
-                                </li> */}
                             </ul>
-                            {/* <div className="py-1">
-                            <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 ">
-                                Delete User
-                            </a>
-                        </div> */}
                         </div>
                     )}
-                    {/* <div
-                        id="dropdownAction"
-                        className="z-10 absolute hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 "
-                    >
-                        <ul className="py-1 text-sm text-gray-700 " aria-labelledby="dropdownActionButhrefn">
-                            <li>
-                                <a href="#" className="block px-4 py-2 hover:bg-gray-100">
-                                    Month
-                                </a>
-                                <a
-                                    href="#"
-                                    className={`block px-4 py-2 hover:bg-gray-100 ${
-                                        selectedFilter === 'Week' ? 'bg-gray-100' : ''
-                                    }`}
-                                    onClick={() => handleFilterChange('Week')}
-                                >
-                                    Week
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" className="block px-4 py-2 hover:bg-gray-100 ">
-                                    Year
-                                </a>
-                                <a
-                                    href="#"
-                                    className={`block px-4 py-2 hover:bg-gray-100 ${
-                                        selectedFilter === 'Year' ? 'bg-gray-100' : ''
-                                    }`}
-                                    onClick={() => handleFilterChange('Year')}
-                                >
-                                    Year
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" className="block px-4 py-2 hover:bg-gray-100 ">
-                                    Activate account
-                                </a>
-                            </li>
-                        </ul>
-                        <div className="py-1">
-                            <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 ">
-                                Delete User
-                            </a>
-                        </div>
-                    </div> */}
                 </div>
                 <DatePicker placeholder="Select date start" onChange={handleStartDateChange} />
                 <DatePicker placeholder="Select date end" onChange={handleEndDateChange} />
-                {/* <div className="flex items-center">
-                    <div className="relative">
-                        <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <svg
-                                className="w-4 h-4 text-gray-500 "
-                                aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                            >
-                                <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-                            </svg>
-                        </div>
-                        <input
-                            name="start"
-                            type="text"
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5"
-                            placeholder="Select date start"
-                            onFocus={() => setShowDatepicker(true)}
-                            onBlur={() => setShowDatepicker(null)}
-                        />
-                    </div>
-                    <span className="mx-4 text-gray-500">to</span>
-                    <div className="relative">
-                        <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <svg
-                                className="w-4 h-4 text-gray-500 "
-                                aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                            >
-                                <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-                            </svg>
-                        </div>
-                        <input
-                            name="end"
-                            type="text"
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5"
-                            placeholder="Select date end"
-                            onFocus={() => setShowDatepicker(true)}
-                            onBlur={() => setShowDatepicker(null)}
-                        />
-                    </div>
-                </div> */}
             </div>
             {/* <!-- BarChart --> */}
             <div className="row">
