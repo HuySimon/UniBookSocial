@@ -34,6 +34,7 @@ const About = () => {
 		defaultValues: {
 			firstName: currentUser.firstName,
 			lastName: currentUser.lastName,
+			username: currentUser.username,
 			email: currentUser.email,
 			phoneNumber: currentUser.phoneNumber,
 			linkFacebook: currentUser.linkFacebook,
@@ -56,6 +57,7 @@ const About = () => {
 		const fieldsToTrack = [
 			'firstName',
 			'lastName',
+			'username',
 			'email',
 			'phoneNumber',
 			'linkFacebook',
@@ -70,6 +72,11 @@ const About = () => {
 		if (data.lastName === "") {
 			toast.error("Please enter last name")
 			setFocus("lastName")
+			return;
+		}
+		if (data.username === "") {
+			toast.error("Please enter username")
+			setFocus("username")
 			return;
 		}
 		if (data.phoneNumber != null) {
@@ -119,7 +126,7 @@ const About = () => {
 				onSubmit={handleSubmit(handleEditInformation)}
 				className='w-full flex flex-col gap-5 mb-2'
 			>
-				{["firstName", "lastName", "phoneNumber", "email", "linkFacebook", "linkZalo", "linkInstagram"].map((field) => (
+				{["firstName", "lastName","username", "phoneNumber", "email", "linkFacebook", "linkZalo", "linkInstagram"].map((field) => (
 					<div key={field} className={`flex justify-between items-center relative mb-2`}>
 						<label htmlFor={field} className='w-1/5 font-medium first-letter:uppercase'>{field.replace(/([a-z])([A-Z])/g, '$1 $2')}</label>
 						<input

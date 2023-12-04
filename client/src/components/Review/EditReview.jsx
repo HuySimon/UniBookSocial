@@ -32,6 +32,9 @@ const EditReview = ({ isVisibleEditReviewForm, setIsVisibleEditReviewForm, id })
 			if (data.content === "") {
 				return toast.error("Please enter content")
 			}
+			if(data.content.length > 150) {
+				return toast.error("You can only type 150 characters!")
+			}
 			const dataSend = {
 				numStars: rating,
 				content: data.content,

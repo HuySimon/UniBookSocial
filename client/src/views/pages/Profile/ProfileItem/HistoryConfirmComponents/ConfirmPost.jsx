@@ -11,6 +11,7 @@ import DeleteReview from '../../../../../components/Modal/DeleteReview'
 import Axios from '../../../../../api/index'
 import { usePostContext } from '../../../../../hooks/usePostContext'
 import GenericModal from '../../../../../components/Modal/GenericModal'
+import { AiFillStar } from 'react-icons/ai'
 const ConfirmPost = ({ post }) => {
 	// console.log(post.title)
 	const [state, dispatch] = useAuthContext()
@@ -67,12 +68,6 @@ const ConfirmPost = ({ post }) => {
 			})
 			dispatchPost({ type: "LOADING_HISTORY_POST", value: false })
 		}
-	}
-	const getDataReview = () => {
-		const result = stateReview.reviews.find((review) => {
-			return review.post === post.id;
-		});
-		return result;
 	}
 	const confirmDeleteReview = async (message) => {
 		setTimeout(() => {
@@ -159,7 +154,7 @@ const ConfirmPost = ({ post }) => {
 							<span className='text-primary-main font-medium'>₫{post.price}</span>
 						</div>
 					</div>
-					<div className="flex justify-end items-center p-5">
+					<div className="flex justify-end items-center pl-5 py-5">
 						<p>Order Total: <span className='text-2xl text-primary-main'>₫{post.price}</span></p>
 					</div>
 					<div className="w-full flex justify-end gap-3">
@@ -209,12 +204,32 @@ const ConfirmPost = ({ post }) => {
 									Review
 								</button>
 							) : (reviewExists === true && post.status === "Delivered") && (
-								<p>
-									<i className=" text-gray-500">Thank you for your review. </i>
-									<i
-										onClick={() => setIsVisibleEditReviewForm(true)}
-										className='hover:underline hover:text-primary-main transition-all cursor-pointer text-gray-500'>Click here to edit review</i>
-								</p>
+								<div className="w-full flex justify-between items-center p-2 border border-gray-400">
+									<div className="flex flex-col">
+										<div className="flex items-center gap-2">
+											<i className='text-gray-500'>Rating:</i>
+											<div className="flex gap-1">
+												{
+													Array(review.numStars).fill(null).map((_, index) => (
+														<AiFillStar key={index} className='text-yellow-400 border p-1 rounded-md border-gray-400' size={28} />
+													))
+												}
+											</div>
+
+										</div>
+										<div className="flex gap-2">
+											<i className='text-gray-500'>Description:</i>
+											<p className='text-black'>{review.content}</p>
+										</div>
+									</div>
+									<p className='flex flex-col'>
+										<i className=" text-gray-500 text-right">Thank you for your review. </i>
+										<i
+											onClick={() => setIsVisibleEditReviewForm(true)}
+											className='hover:underline hover:text-primary-main transition-all cursor-pointer text-gray-500 text-right'>Click here to edit review</i>
+									</p>
+
+								</div>
 							)
 						}
 					</div>

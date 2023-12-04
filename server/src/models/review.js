@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Review.belongsTo(models.User, { targetKey: 'id', foreignKey: 'user', as: 'userReviewData' })
+	  Review.belongsTo(models.Post, {targetKey: 'id',foreignKey: 'post', as: 'postData'})
     }
   }
   Review.init(
@@ -56,6 +57,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       isShow: {
         allowNull: false,
+		defaultValue: true,
         type: DataTypes.BOOLEAN,
       },
     },

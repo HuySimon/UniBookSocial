@@ -51,37 +51,50 @@ const EditPost = ({ post, handleEditPost, isVisibleEditPost }) => {
         resolver: yupResolver(editPostSchema),
     });
     const onSubmit = async (data) => {
-        let formData = new FormData();
-        formData.append('title', data.title);
-        formData.append('price', data.price);
-        formData.append('mainImage', data.mainImage);
-        formData.append('description', data.description);
-        formData.append('price', data.price);
-        formData.append('isNew', data.isNew);
-        formData.append('isGeneralSubject', data.isGeneralSubject);
-        const postData = Object.fromEntries(formData);
-        console.log(postData);
-        setIsLoading(true);
-        dispatchPost({ type: 'EDIT_POST', value: true });
-        try {
-            const res = await Axios.patch(`/api/v1/posts/${post.id}`, postData);
-            if (res.status === 200) {
-                toast.success('Edit post success!');
-                dispatchPost({ type: 'EDIT_POST', value: false });
-
-                handleEditPost(false);
-                console.log(res.data);
-            }
-        } catch (err) {
-            console.log(err);
-            //Don't use err.response it will cause error 500: Internal Server error
-            //You can write specific message for it
-            // console.log(err.response.data.message)
-            toast.error(err.response.data.message);
-        } finally {
-            setIsLoading(false);
-            dispatchPost({ type: 'EDIT_POST', value: false });
-        }
+		if(post.status === "Unconfirmed") {
+			const fieldsToTrack = [
+				'firstName',
+				'lastName',
+				'email',
+				'phoneNumber',
+				'linkFacebook',
+				'linkInstagram',
+				'linkZalo',
+			];
+			let formData = new FormData();
+			formData.append('title', data.title);
+			formData.append('price', data.price);
+			formData.append('mainImage', data.mainImage);
+			formData.append('description', data.description);
+			formData.append('price', data.price);
+			formData.append('isNew', data.isNew);
+			formData.append('isGeneralSubject', data.isGeneralSubject);
+			const postData = Object.fromEntries(formData);
+			console.log(postData);
+			setIsLoading(true);
+			dispatchPost({ type: 'EDIT_POST', value: true });
+			try {
+				const res = await Axios.patch(`/api/v1/posts/${post.id}`, postData);
+				if (res.status === 200) {
+					toast.success('Edit post success!');
+					dispatchPost({ type: 'EDIT_POST', value: false });
+	
+					handleEditPost(false);
+					console.log(res.data);
+				}
+			} catch (err) {
+				console.log(err);
+				//Don't use err.response it will cause error 500: Internal Server error
+				//You can write specific message for it
+				// console.log(err.response.data.message)
+				toast.error(err.response.data.message);
+			} finally {
+				setIsLoading(false);
+				dispatchPost({ type: 'EDIT_POST', value: false });
+			}
+		}else {
+			return toast.error("This post is confirmed")
+		}
     };
     return (
         <>

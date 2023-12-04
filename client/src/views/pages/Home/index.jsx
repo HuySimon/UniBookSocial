@@ -11,7 +11,7 @@ const Index = () => {
 	const [isLoading, setIsLoading] = useState(state.isLoading)
 	useEffect(() => {
 		setIsLoading(state.isLoading)
-	}, [state,isLoading])
+	}, [state.isLoadingEdit, state.isCancelOrder, state.isLoadingHistoryConfirm,state.isReport, isLoading])
 	return (
 		<>
 			<div className="p-[25px] lg:px-[150px] xl:px-[250px] 2xl:px-[400px] mx-auto lg:flex justify-center items-start gap-5">
@@ -22,13 +22,11 @@ const Index = () => {
 						</div>
 					) : (
 						<>
-						<AnimatePresence mode='wait'>
 							<div className="post-list flex-1">
 								{state.posts.map((post) => (
 									<Post key={post.id} post={post} />
 								))}
 							</div>
-						</AnimatePresence>
 						</>
 					)
 				}

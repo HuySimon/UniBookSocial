@@ -70,6 +70,9 @@ const Review = () => {
 											</div>
 										</div>
 									</div>
+									{
+										review.reviewData.userReceive
+									}
 									<button 
 									className='rounded-md px-5 py-2 bg-primary-800 text-white transition-all hover:bg-primary-700'>Hide Review</button>
 								</div>

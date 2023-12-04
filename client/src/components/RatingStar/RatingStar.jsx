@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { AiFillStar } from 'react-icons/ai';
 
 const StarRating = ({ totalStars, initialRating, onRatingChange }) => {
 	const [rating, setRating] = useState(initialRating || 0);
@@ -19,16 +20,14 @@ const StarRating = ({ totalStars, initialRating, onRatingChange }) => {
 	};
 
 	return (
-		<div className="flex items-center">
+		<div className="flex gap-1 items-center">
 			{Array.from({ length: totalStars }, (_, index) => (
-				<div key={index} className="text-3xl cursor-pointer">
-					<span
+				<div key={index} className={`w-8 h-8 flex justify-center items-center text-2xl border rounded-md ${index < rating ? 'border-yellow-400' : ''} text-center cursor-pointer`}>
+					<AiFillStar
 						onClick={() => handleStarClick(index + 1)}
-						className={`${index < rating ? 'text-yellow-400' : 'text-gray-400'
+						className={`w-full h-full p-[6px] ${index < rating ? 'text-yellow-400' : 'text-gray-400'
 							}`}
-					>
-						★
-					</span>
+						size={20} />
 				</div>
 			))}
 			<span className="ml-1 text-gray-500 text-sm inline-block pt-1">
