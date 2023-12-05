@@ -111,12 +111,14 @@ exports.isNotDeliveryPost = catchAsync(async (req, res, next) => {
 
 const postOptions = { include: 'userPostData' };
 exports.createPost = catchAsync(async (req, res, next) => {
+	//create new id
 	const currentDate =
 		new Date().getDate().toString().padStart(2, '0')
 		+ (new Date().getMonth() + 1).toString().padStart(2, '0')
 		+ new Date().getFullYear().toString().slice(-2)
 	const numPost = (await Post.findAll({ where: { id: { [Op.like]: `${currentDate}%` } } })).length
 	req.body.id = currentDate + (numPost + 1).toString().padStart(4, '0');
+	//create post
 	let data = await Post.create(req.body);
 	data = await Post.findByPk(data.id, { include: 'userPostData' })
 	res.status(201).json({
