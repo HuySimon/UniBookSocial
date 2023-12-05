@@ -159,7 +159,7 @@ const About = () => {
 							field === "linkZalo" ? "Zalo" : field.replace(/([a-z])([A-Z])/g, '$1 $2')
 						}</label>
 						<input
-							type={field.includes("link") ? "url" : "text"}
+							type={field === "linkZalo" ? "text" : field.includes("link") ? "url" : "text"}
 							disabled={!edit}
 							defaultValue={currentUser[field]}
 							{...register(field)}
