@@ -26,22 +26,10 @@ export const informationSchema = Yup.object().shape({
 // 	linkZalo: Yup.string().trim().required("Please insert your Zalo")
 // })
 export const changeInformationSchema = Yup.object().shape({
-	firstName: Yup.string().trim(),
-	lastName: Yup.string().trim(),
-	email: Yup.string().trim().email("Invalid Email Format"),
-	phoneNumber: Yup.string().trim().matches(
-		/^(0|84)(2(0[3-9]|1[0-6|8|9]|2[0-2|5-9]|3[2-9]|4[0-9]|5[1|2|4-9]|6[0-3|9]|7[0-7]|8[0-9]|9[0-4|6|7|9])|3[2-9]|5[5|6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])([0-9]{7})$/,
-		'Invalid Phone Number',
-	),
-	linkFacebook: Yup.string().trim().matches(
-		/(?:http:\/\/)?(?:www\.)?facebook\.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[\w\-]*\/)*([\w\-]*)/,
-		"Invalid Facebook Link"
-	),
-	linkInstagram: Yup.string().trim().matches(
-		/(?:(?:http|https):\/\/)?(?:www\.)?(?:instagram\.com|instagr\.am)\/([A-Za-z0-9-_\.]+)/im,
-		"Invalid Instagram Link"
-	),
-	linkZalo: Yup.string().trim()
+	firstName: Yup.string().trim().max(100, "The max length of first name is 100 characters"),
+	lastName: Yup.string().trim().max(100, "The max length of last name is 100 characters"),
+	username: Yup.string().trim().max(100, "The max length of username is 100 characters"),
+	email: Yup.string().trim().email("Invalid Email Format")
 })
 
 export const updateAvatarSchema = Yup.object().shape({

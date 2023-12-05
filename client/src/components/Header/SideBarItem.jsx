@@ -26,7 +26,7 @@ const SideBarItem = ({ title, href, index, activeOverlay, setActiveOverlay, expa
                         flex items-center w-full h-12 transition-all hover:text-primary-main
                         pl-2 py-3 group
                         hover:bg-black/10 rounded-md
-                        ${stateHeader.activeButton === title ? "text-primary-main" : "text-black"}
+                        ${stateHeader.activeButton === title ? "text-primary-main bg-black/10" : "text-black"}
                     `}
 			>
 				{icon}

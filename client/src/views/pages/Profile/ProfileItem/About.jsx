@@ -41,7 +41,7 @@ const About = () => {
 			linkInstagram: currentUser.linkInstagram,
 			linkZalo: currentUser.linkZalo
 		},
-		// resolver: yupResolver(changeInformationSchema),
+		resolver: yupResolver(changeInformationSchema),
 	});
 
 	useEffect(() => {
@@ -68,23 +68,21 @@ const About = () => {
 			toast.error("Please enter first name")
 			setFocus("firstName")
 			return;
-		} else if (data.firstName.length > 100) {
-			toast.error("The max length of first name is 100 characters")
-			return;
 		}
 		if (data.lastName === "") {
 			toast.error("Please enter last name")
 			setFocus("lastName")
 			return;
-		} else if (data.lastName.length > 100) {
-			toast.error("The max length of first name is 100 characters")
 		}
 		if (data.username === "") {
 			toast.error("Please enter username")
 			setFocus("username")
 			return;
-		} else if (data.username.length > 100) {
-			toast.error("The max length of first name is 100 characters")
+		}
+		if (data.email === "") {
+			toast.error("Please enter email")
+			setFocus("email")
+			return;
 		}
 		if (data.phoneNumber != null) {
 			if (!/^(0|84)(2(0[3-9]|1[0-6|8|9]|2[0-2|5-9]|3[2-9]|4[0-9]|5[1|2|4-9]|6[0-3|9]|7[0-7]|8[0-9]|9[0-4|6|7|9])|3[2-9]|5[5|6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])([0-9]{7})$/.test(data.phoneNumber)) {
@@ -95,21 +93,25 @@ const About = () => {
 		}
 		if (data.linkFacebook != null) {
 			if (!/(?:http:\/\/)?(?:www\.)?facebook\.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[\w\-]*\/)*([\w\-]*)/.test(data.linkFacebook)) {
-				toast.error("Please enter valid link")
+				toast.error("Please enter valid facebook link")
 				setFocus("linkFacebook")
 				return;
 			}
 		}
 		if (data.linkInstagram != null) {
 			if (!/(?:(?:http|https):\/\/)?(?:www\.)?(?:instagram\.com|instagr\.am)\/([A-Za-z0-9-_\.]+)/im.test(data.linkInstagram)) {
-				toast.error("Please enter valid link")
+				toast.error("Please enter valid linkInstagram link")
 				setFocus("linkInstagram")
 				return;
 			}
 		}
 		const curUser = {};
 		fieldsToTrack.forEach((field) => {
-			curUser[field] = data[field] || currentUser[field];
+			if (data[field]) {
+				curUser[field] = data[field]
+			} else {
+				curUser[field] = data[field] || currentUser[field];
+			}
 		});
 		console.log(curUser)
 		if (isObjectEmpty(curUser)) {
@@ -143,6 +145,7 @@ const About = () => {
 							{...register(field)}
 							className='w-4/5 rounded-md px-3 py-2 text-black'
 						/>
+						<p className='text-sm text-red-400 absolute -bottom-6 left-[20%]'>{errors[field]?.message}</p>
 					</div>
 				))}
 				{Object.entries(state.user).length > 0 && state.user.user.id === currentUser.id && (
