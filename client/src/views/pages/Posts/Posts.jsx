@@ -134,64 +134,7 @@ function Posts() {
 	}
 	return (
 		<div className="relative overflow-x-auto sm:rounded-lg">
-			<div className="flex items-center pb-4 pt-4 bg-white ">
-				<div className="ml-5">
-					<button
-						id="dropdownActionButton"
-						data-dropdown-toggle="dropdownAction"
-						className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-2 "
-						type="button"
-					>
-						<span className="sr-only">Action button</span>
-						Today
-						<svg
-							className="w-2.5 h-2.5 ml-2.5"
-							aria-hidden="true"
-							xmlns="http://www.w3.org/2000/svg"
-							fill="none"
-							viewBox="0 0 10 6"
-						>
-							<path
-								stroke="currentColor"
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								strokeWidth="2"
-								d="m1 1 4 4 4-4"
-							/>
-						</svg>
-					</button>
-					{/* <!-- Dropdown menu --> */}
-					<div
-						id="dropdownAction"
-						className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 "
-					>
-						<ul className="py-1 text-sm text-gray-700 " aria-labelledby="dropdownActionButton">
-							<li>
-								<Link to="#" className="block px-4 py-2 hover:bg-gray-100">
-									Reward
-								</Link>
-							</li>
-							<li>
-								<Link to="#" className="block px-4 py-2 hover:bg-gray-100 ">
-									Promote
-								</Link>
-							</li>
-							<li>
-								<Link to="#" className="block px-4 py-2 hover:bg-gray-100 ">
-									Activate account
-								</Link>
-							</li>
-						</ul>
-						<div className="py-1">
-							<Link to="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 ">
-								Delete User
-							</Link>
-						</div>
-					</div>
-				</div>
-				<label htmlFor="table-search" className="sr-only">
-					Search
-				</label>
+			<div className="flex items-center py-4 pl-3 bg-white ">
 				<form
 					onSubmit={handleSubmit(onSubmit)}
 					className='flex gap-2'>
