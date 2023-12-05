@@ -68,16 +68,23 @@ const About = () => {
 			toast.error("Please enter first name")
 			setFocus("firstName")
 			return;
+		} else if (data.firstName.length > 100) {
+			toast.error("The max length of first name is 100 characters")
+			return;
 		}
 		if (data.lastName === "") {
 			toast.error("Please enter last name")
 			setFocus("lastName")
 			return;
+		} else if (data.lastName.length > 100) {
+			toast.error("The max length of first name is 100 characters")
 		}
 		if (data.username === "") {
 			toast.error("Please enter username")
 			setFocus("username")
 			return;
+		} else if (data.username.length > 100) {
+			toast.error("The max length of first name is 100 characters")
 		}
 		if (data.phoneNumber != null) {
 			if (!/^(0|84)(2(0[3-9]|1[0-6|8|9]|2[0-2|5-9]|3[2-9]|4[0-9]|5[1|2|4-9]|6[0-3|9]|7[0-7]|8[0-9]|9[0-4|6|7|9])|3[2-9]|5[5|6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])([0-9]{7})$/.test(data.phoneNumber)) {
@@ -126,7 +133,7 @@ const About = () => {
 				onSubmit={handleSubmit(handleEditInformation)}
 				className='w-full flex flex-col gap-5 mb-2'
 			>
-				{["firstName", "lastName","username", "phoneNumber", "email", "linkFacebook", "linkZalo", "linkInstagram"].map((field) => (
+				{["firstName", "lastName", "username", "phoneNumber", "email", "linkFacebook", "linkZalo", "linkInstagram"].map((field) => (
 					<div key={field} className={`flex justify-between items-center relative mb-2`}>
 						<label htmlFor={field} className='w-1/5 font-medium first-letter:uppercase'>{field.replace(/([a-z])([A-Z])/g, '$1 $2')}</label>
 						<input

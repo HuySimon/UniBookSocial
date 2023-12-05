@@ -6,6 +6,7 @@ import { Link, useParams } from 'react-router-dom'
 import { useReviewContext } from '../../../../hooks/useReviewContext'
 import Axios from '../../../../api/index'
 import ReviewPost from './ReviewComponents/ReviewPost'
+import { toast } from 'react-toastify'
 const Review = () => {
 
 	const [state, dispatch] = useReviewContext()
@@ -31,7 +32,21 @@ const Review = () => {
 			return review.reviewData != null
 		})
 	}
-	console.log(checkExistData())
+	const handleHideReview = async (id, isShow) => {
+		const data = {
+			isShow: isShow
+		}
+		try {
+			const res = await Axios.patch(`/api/v1/reviews/${id}`, data)
+			if (res.status === 200) {
+				console.log(res)
+				toast.success("Hide review success")
+				getPostReview()
+			}
+		} catch (error) {
+			console.log(error)
+		}
+	}
 	useEffect(() => {
 		getPostReview()
 	}, [])
@@ -70,11 +85,10 @@ const Review = () => {
 											</div>
 										</div>
 									</div>
-									{
-										review.reviewData.userReceive
-									}
-									<button 
-									className='rounded-md px-5 py-2 bg-primary-800 text-white transition-all hover:bg-primary-700'>Hide Review</button>
+									<button
+										type='button'
+										onClick={() => { handleHideReview(review.reviewData.id, review.reviewData.isShow !== 1 ? 1 : 0) }}
+										className='rounded-md px-5 py-2 bg-primary-800 text-white transition-all hover:bg-primary-700'>{review.reviewData.isShow !== 1 ? "Hide Review" : "Show Review"}</button>
 								</div>
 							</div>
 							<div className="flex p-2 border border-gray-400 rounded-sm">
