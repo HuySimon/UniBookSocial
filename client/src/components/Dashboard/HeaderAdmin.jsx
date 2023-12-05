@@ -27,11 +27,11 @@ const HeaderAdmin = () => {
 		};
 	}, []);
 	const menu = localStorage.getItem("auth") === "true" && localStorage.getItem("user") !== "" && state.user.user.role === 2 ? [
-		{
-			icon: PiRocketLaunchLight,
-			title: 'Dashboard',
-			link: '/dashboard',
-		},
+		// {
+		// 	icon: PiRocketLaunchLight,
+		// 	title: 'Dashboard',
+		// 	link: '/dashboard',
+		// },
 		{
 			icon: PiUsersLight,
 			title: 'Users',

@@ -7,11 +7,7 @@ import { set } from 'react-hook-form';
 
 // eslint-disable-next-line react/prop-types
 function UserCardProfile({ onClose, user }) {
-    console.log(user);
     const modalRef = useRef(null);
-    const [isZoomImage, setIsZoomImage] = useState(false);
-    const [srcImg, setSrcImg] = useState();
-
     const handleClickOutside = (event) => {
         if (modalRef.current && !modalRef.current.contains(event.target)) {
             onClose();
@@ -49,7 +45,7 @@ function UserCardProfile({ onClose, user }) {
                             />
                         </div>
                         <div className="flex flex-col mt-16">
-                            <div className="flex justify-between items-center gap-3 px-4 py-3 border-y border-gray-500">
+                            {/* <div className="flex justify-between items-center gap-3 px-4 py-3 border-y border-gray-500">
                                 <span className="font-medium">Phone</span>
                                 <span className="text-gray-600">{user.phoneNumber}</span>
                             </div>
@@ -62,7 +58,7 @@ function UserCardProfile({ onClose, user }) {
                                 <a href="https://www.facebook.com/jack.willam2003" target="_blank">
                                     <span className="text-gray-600">{}</span>
                                 </a>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>

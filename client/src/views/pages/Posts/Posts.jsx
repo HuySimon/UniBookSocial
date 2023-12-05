@@ -80,7 +80,6 @@ function Posts() {
 	const handleSearch = (value) => {
 		setSearchTerm(value);
 		setCurrentPage(1);
-
 		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 		const isValid = emailRegex.test(value);
 		setIsEmailValid(isValid);

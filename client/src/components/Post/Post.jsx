@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { BiDotsVerticalRounded } from 'react-icons/bi';
 import { AiFillCaretRight, AiOutlineAlert } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
@@ -16,6 +16,19 @@ const Post = ({ post }) => {
 	const handleVisibleMenuPost = () => {
 		setIsVisibleMenuPost(!isVisibleMenuPost);
 	};
+	const modalRef = useRef(null);
+	
+	useEffect(() => {
+		const handleClickOutside = (event) => {
+			if (modalRef.current && !modalRef.current.contains(event.target)) {
+				setIsVisibleMenuPost(false)
+			}
+		};
+		document.addEventListener('mousedown', handleClickOutside);
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutside);
+		};
+	}, []);
 	useEffect(() => {
 		const calculateTimeAgo = () => {
 			const now = new Date();
@@ -78,7 +91,7 @@ const Post = ({ post }) => {
 							)
 						}
 						{isVisibleMenuPost && (
-							<div className="w-44 h-fit bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] absolute top-14 right-5 rounded-md overflow-hidden">
+							<div ref={modalRef} className="w-44 h-fit bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] absolute top-14 right-5 rounded-md overflow-hidden">
 								<div className="flex flex-col relative">
 									<button
 										type="button"

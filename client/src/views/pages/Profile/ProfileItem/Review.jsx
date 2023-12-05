@@ -54,14 +54,7 @@ const Review = () => {
 		<div className='flex flex-col gap-3 lg:mt-0 mt-[66px] mb-10'>
 			{
 				Boolean(checkExistData()) === true && reviews.length !== 0 ? (
-					reviews
-						// .filter(review => {
-						// 	if (review.reviewData != null && state.user.user.id != review.userPost && review.reviewData.isShow === false) {
-						// 		return false
-						// 	}
-						// 	return true
-						// })
-						.map((review, index) => (review.reviewData != null && ((state.user.user.id != review.userPost && review.reviewData.isShow === false) ? false : true) &&
+					reviews.map((review, index) => (review.reviewData != null && ((state.user.user.id != review.userPost && review.reviewData.isShow === false) ? false : true) &&
 							<div
 								key={index}
 								className={`w-full flex-col gap-3 border border-gray-400 p-5 rounded-sm flex`}>

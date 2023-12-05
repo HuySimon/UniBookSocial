@@ -9,11 +9,10 @@ const SearchPost = ({ post }) => {
 		<div className='2xl:w-64 h-fit border border-gray-300 hover:shadow-xl hover:-translate-y-1 transition-all'>
 			<div className="w-full h-[25vh]">
 				<Link
-				to={`/detailPost/${post.id}`}
-				>
+				to={`/detailPost/${post.id}`}>
 					<img src={`http://127.0.0.1:5000/public/images/posts/${post.mainImage}`} alt="Short Preview Img"
 						title='Click to view detail'
-						className='w-full h-[full] object-contain object-center' />
+						className='w-full h-full object-cover object-center' />
 				</Link>
 			</div>
 			<div className="flex flex-col gap-1 p-2 border-t bg-white text-black">

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { NotifyAppear } from './animation';
 import { GiConfirmed, GiCancel } from "react-icons/gi";
@@ -17,7 +17,6 @@ const Index = ({ isVisibleNotify, handleNotify }) => {
 	const [type, setType] = useState("Unread");
 	const [state, dispatch] = useAuthContext();
 	const [stateNotify, dispatchNotify] = useNotificationContext()
-	const [timeAgo, setTimeAgo] = useState('')
 	const { isAuthorized, user } = state;
 	const navigate = useNavigate()
 	const calculateTimeAgo = (createdAt) => {
@@ -80,6 +79,19 @@ const Index = ({ isVisibleNotify, handleNotify }) => {
 			updateNotifications(id, false)
 		}
 	}
+	const modalRef = useRef(null);
+	const handleClickOutside = (event) => {
+		if (modalRef.current && !modalRef.current.contains(event.target)) {
+			handleNotify(false)
+		}
+	};
+
+	useEffect(() => {
+		document.addEventListener('mousedown', handleClickOutside);
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutside);
+		};
+	}, []);
 	useEffect(() => {
 		getNotifications(false)
 		setDataNotify(stateNotify.notifications)
@@ -115,6 +127,7 @@ const Index = ({ isVisibleNotify, handleNotify }) => {
 	return (
 		<>
 			<motion.div
+				ref={modalRef}
 				variants={NotifyAppear}
 				initial="initial"
 				animate={isVisibleNotify && 'open'}
@@ -193,7 +206,6 @@ const Index = ({ isVisibleNotify, handleNotify }) => {
 				</div>
 				{/* <Curve /> */}
 			</motion.div>
-			<div onClick={() => handleNotify(false)} className="fixed inset-0 m-auto w-screen h-screen bg-transparent" />
 		</>
 	);
 };

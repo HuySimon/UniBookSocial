@@ -1,23 +1,18 @@
 import { useState, useEffect, useRef } from 'react';
 import Chart from 'react-apexcharts';
-import { DatePicker } from 'antd';
 import { toast } from 'react-toastify';
-import { isAfter, differenceInDays, parse } from 'date-fns';
-
 import Axios from '../../../api/index';
 import { useForm } from 'react-hook-form';
 
 const Statistics = () => {
 	const [selectedFilter, setSelectedFilter] = useState('Violation');
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-	const [selectedStartDate, setSelectedStartDate] = useState(null);
-	const [selectedEndDate, setSelectedEndDate] = useState(null);
 	const [chartData, setChartData] = useState({ categories: [], data: [] });
 	const modalRef = useRef(null);
-	const { register, handleSubmit, formState: { errors } } = useForm({
+	const { register, handleSubmit, formState: { errors }, setFocus } = useForm({
 		defaultValues: {
-			dayStart: null,
-			dayEnd: null
+			dayStart: new Date().toISOString().substring(0, 10),
+			dayEnd: new Date().toISOString().substring(0, 10)
 		}
 	})
 	const toggleDropdown = () => {
@@ -30,9 +25,7 @@ const Statistics = () => {
 				setIsDropdownOpen(false);
 			}
 		};
-
 		document.addEventListener('click', handleOutsideClick);
-
 		return () => {
 			document.removeEventListener('click', handleOutsideClick);
 		};
@@ -43,78 +36,42 @@ const Statistics = () => {
 		setIsDropdownOpen(false);
 	};
 
-	const handleStartDateChange = (value) => {
-		const date = new Date(value.$d);
-		const year = date.getFullYear();
-		const month = ('0' + (date.getMonth() + 1)).slice(-2); // Tháng được đánh số từ 0 đến 11
-		const day = ('0' + date.getDate()).slice(-2);
-
-		const formattedDate = `${day}-${month}-${year}`;
-
-		// Current date
-		const currentDate = new Date();
-		const current = `${currentDate.getDate()}-${currentDate.getMonth() + 1}-${currentDate.getFullYear()}`;
-
-		const dateFormat = 'dd-MM-yyyy';
-		const startDate = parse(formattedDate, dateFormat, new Date());
-		const toDay = parse(current, dateFormat, new Date());
-
-		const dayDiff = differenceInDays(toDay, startDate);
-
-		if (dayDiff === 0) {
-			setSelectedStartDate(formattedDate);
-		} else {
-			toast.error('The start date must be the current date');
-		}
-	};
-
-	const handleEndDateChange = (value) => {
-		const date = new Date(value.$d);
-		const year = date.getFullYear();
-		const month = ('0' + (date.getMonth() + 1)).slice(-2);
-		const day = ('0' + date.getDate()).slice(-2);
-
-		const formattedDate = `${day}-${month}-${year}`;
-
-		const dateFormat = 'dd-MM-yyyy';
-		const startDate = parse(selectedStartDate, dateFormat, new Date());
-		const endDate = parse(formattedDate, dateFormat, new Date());
-
-		const dayDiff = differenceInDays(endDate, startDate);
-
-		if (dayDiff > 0 || dayDiff < -30) {
-			toast.error('Please end date is 30 days less than start date or equal to start date');
-		} else {
-			setSelectedEndDate(formattedDate);
-		}
-	};
-
 	const updateChartData = async (data) => {
+		if (new Date(data.dayStart) > new Date(data.dayEnd)) {
+			toast.error("Please choose day End is greater than day Start")
+			return setFocus("dayStart")
+		}
+		if (new Date(data.dayEnd) > new Date()) {
+			toast.error("Please choose day End before or equal the current day")
+			return setFocus("dayEnd")
+		}
+		if (new Date(data.dayEnd) - new Date(data.dayStart) > 30 * 60 * 60 * 24 * 1000) {
+			toast.error("The limit between 2 dates is less or equal than 30 days")
+			return setFocus("dayStart")
+		}
 		try {
-			const response = await Axios.get(
-				`/api/v1/posts/statistics/${selectedFilter}/dayStart/${data.dayStart}/dayEnd/${data.dayEnd}`,
-			);
+			const response = await Axios.get(`/api/v1/posts/statistics/${selectedFilter}/dayStart/${data.dayStart}/dayEnd/${data.dayEnd}`,);
 			if (response.status === 200) {
 				console.log(response)
+				const statisticsData = response.data.posts;
+				const categories = statisticsData.map((item) => item.date_col_formed);
+				const data = statisticsData.map((item) => item.count);
+				setChartData({ categories, data });
 			}
-			const statisticsData = response.data.posts;
-			const categories = statisticsData.map((item) => item.date_col_formed);
-			const data = statisticsData.map((item) => item.count);
-			setChartData({ categories, data });
 		} catch (error) {
 			console.error('Error fetching statistics data:', error);
 		}
 	};
 
-	useEffect(() => {
-		if (selectedStartDate && selectedEndDate) {
-			updateChartData(selectedStartDate, selectedEndDate);
-		}
-	}, [selectedStartDate, selectedEndDate]);
+	// useEffect(() => {
+	// 	if (selectedStartDate && selectedEndDate) {
+	// 		updateChartData(selectedStartDate, selectedEndDate);
+	// 	}
+	// }, [selectedStartDate, selectedEndDate]);
 
-	useEffect(() => {
-		updateChartData(selectedStartDate, selectedEndDate);
-	}, [selectedFilter]);
+	// useEffect(() => {
+	// 	updateChartData(selectedStartDate, selectedEndDate);
+	// }, [selectedFilter]);
 
 	const options = {
 		chart: {
@@ -123,24 +80,36 @@ const Statistics = () => {
 		xaxis: {
 			categories: chartData.categories,
 		},
+		title: {
+			text: `Number of ${selectedFilter === "Violation" ? "violated" : "checking"} posts`,
+			offsetX: 0,
+			offsetY: 0,
+			align: 'center',
+			margin: 10,
+			style: {
+				fontSize: '30px',
+				fontWeight: '500'
+			},
+		}
 	};
 
 	const series = [
 		{
-			name: 'number of violating posts',
+			name: 'Number of violating posts',
 			data: chartData.data,
 		},
 	];
+	console.log(chartData)
 
 	return (
-		<div className="relative overflow-x-auhref shadow-md sm:rounded-lg mg">
-			<div className="flex items-center pb-4 pt-4 bg-white space-x-4">
+		<div className="relative w-full h-full">
+			<div className="flex items-center pb-4 pt-[15px] bg-white space-x-4">
 				<div className="ml-5" ref={modalRef}>
 					<button
 						onClick={toggleDropdown}
 						id="dropdownActionButhrefn"
 						data-dropdown-hrefggle="dropdownAction"
-						className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-2"
+						className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-[10px]"
 						type="button"
 					>
 						<span className="sr-only">Action buthrefn</span>
@@ -197,15 +166,15 @@ const Statistics = () => {
 				<form
 					className='flex gap-2'
 					onSubmit={handleSubmit(updateChartData)}>
-					<input type="date" {...register("dayStart")} className='rounded-md w-fit' />
-					<input type="date" {...register("dayEnd")} className='rounded-md w-fit' />
+					<input type="date" {...register("dayStart")} defaultValue={new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().substring(0, 10)} className='rounded-md w-fit' />
+					<input type="date" {...register("dayEnd")} defaultValue={new Date().toISOString().substring(0, 10)} className='rounded-md w-fit' />
 					<button type="submit" className='px-5 py-2 bg-primary-main text-white rounded-md hover:bg-primary-700 transition-all'>Filter</button>
 				</form>
 			</div>
 			{/* <!-- BarChart --> */}
-			<div className="row">
-				<div className="col-10 flex justify-center">
-					<Chart options={options} series={series} type="bar" width={900} height={576} />
+			<div className="w-full h-[86%] mt-10">
+				<div className="h-full w-full flex justify-center">
+					<Chart options={options} series={series} type="bar" width={900} height={"90%"} />
 				</div>
 			</div>
 		</div>

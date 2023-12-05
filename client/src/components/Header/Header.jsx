@@ -91,7 +91,7 @@ const Header = () => {
 				{
 					icon: AiOutlineDashboard,
 					title: "Dashboard",
-					link: state.user.user.role === 2 ? "/dashboard/" : "/dashboard/posts",
+					link: state.user.user.role === 2 ? "/dashboard/users" : "/dashboard/posts",
 					handleCreate: () => { setIsVisibleNotify(false), clearSearch()},
 				},
 			]

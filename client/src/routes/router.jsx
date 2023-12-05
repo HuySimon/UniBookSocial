@@ -60,10 +60,10 @@ const router = createBrowserRouter([
         path: '/dashboard',
         element: <Dashboard />,
         children: [
-            {
-                path: '/dashboard',
-                element: <HomeAdmin />,
-            },
+            // {
+            //     path: '/dashboard',
+            //     element: <HomeAdmin />,
+            // },
             {
                 path: 'users',
                 element: <Users />,
