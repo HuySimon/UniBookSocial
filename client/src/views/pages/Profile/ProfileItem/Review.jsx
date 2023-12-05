@@ -37,10 +37,10 @@ const Review = () => {
 			isShow: isShow
 		}
 		try {
-			const res = await Axios.patch(`/api/v1/reviews/${id}`, data)
+			const res = await Axios.patch(`/api/v1/reviews/${id}/show`, data)
 			if (res.status === 200) {
 				console.log(res)
-				toast.success("Hide review success")
+				toast.success(`${isShow === 1 ? "Show" : "Hide"} review success`)
 				getPostReview()
 			}
 		} catch (error) {
@@ -67,7 +67,7 @@ const Review = () => {
 							<div className="w-full flex flex-row justify-between items-center">
 								<div className="w-full flex justify-between gap-3 items-center">
 									<div className="flex gap-3">
-										<div className="w-14 h-14 rounded-full overflow-hidden">
+										<div className ="w-14 h-14 rounded-full overflow-hidden">
 											<img
 												src={`http://127.0.0.1:5000/public/images/users/avatar/${review.reviewData.userReviewData.avatar}`}
 												alt="" className='w-full h-full object-cover' />
@@ -87,8 +87,8 @@ const Review = () => {
 									</div>
 									<button
 										type='button'
-										onClick={() => { handleHideReview(review.reviewData.id, review.reviewData.isShow !== 1 ? 1 : 0) }}
-										className='rounded-md px-5 py-2 bg-primary-800 text-white transition-all hover:bg-primary-700'>{review.reviewData.isShow !== 1 ? "Hide Review" : "Show Review"}</button>
+										onClick={() => { handleHideReview(review.reviewData.id, review.reviewData.isShow === true ? 0 : 1) }}
+										className='rounded-md px-5 py-2 bg-primary-800 text-white transition-all hover:bg-primary-700'>{review.reviewData.isShow === true ? "Hide Review" : "Show Review"}</button>
 								</div>
 							</div>
 							<div className="flex flex-col p-2 border border-gray-400 rounded-sm">

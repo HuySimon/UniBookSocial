@@ -9,7 +9,7 @@ router
   .patch(
     '/:id/show',
     authController.protect,
-    authController.restrictTo(RoleEnum.MANAGER),
+    authController.restrictTo(RoleEnum.USER),
     reviewController.isUserPost,
     reviewController.updateReview
   )

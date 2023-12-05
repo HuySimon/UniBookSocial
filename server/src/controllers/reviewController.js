@@ -17,7 +17,21 @@ exports.isDelivery = catchAsync(async (req, res, next) => {
   next();
 });
 exports.isUserPost = catchAsync(async (req, res, next) => {
-  const post = await Post.findByPk(req.body.post);
+  let post
+  if (req.body.post)
+    post = await Post.findByPk(req.body.post);
+  else if (req.params.id)
+    post = await Post.findAll({
+      include: [{
+        model: Review, attributes:
+          ['id'],
+        as: 'reviewData',
+        where: {
+          id: req.params.id,
+        },
+      }]
+    })
+  console.log(req.body)
   if (post.userPost == req.user.id)
     return next(new AppError("You can not review this post!", 403));
   next();
