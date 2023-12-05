@@ -7,64 +7,61 @@ import { set } from 'react-hook-form';
 
 // eslint-disable-next-line react/prop-types
 function UserCardProfile({ onClose, user }) {
-    const modalRef = useRef(null);
-    const handleClickOutside = (event) => {
-        if (modalRef.current && !modalRef.current.contains(event.target)) {
-            onClose();
-        }
-    };
+	const [role, setRole] = useState(user.roleData)
+	const modalRef = useRef(null);
+	const handleClickOutside = (event) => {
+		if (modalRef.current && !modalRef.current.contains(event.target)) {
+			onClose([false,null]);
+		}
+	};
 
-    useEffect(() => {
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
-    return (
-        <div className="fixed top-0 left-0 right-0 z-50 items-center justify-center flex w-full p-4 overflow-hidden md:inset-0 max-h-full bg-opacity-50 bg-black h-webkit-fill-available">
-            <div ref={modalRef} className="relative w-full max-w-xs max-h-full">
-                <AiOutlineClose
-                    onClick={() => onClose()}
-                    size={22}
-                    className="fixed top-4 right-4 text-white cursor-pointer hover:rotate-[360deg] transition-all duration-300 z-20"
-                />
-                <div className="max-w-sm w-fit h-fit items-center">
-                    <div className="lg:block w-[300px] bg-white rounded-lg overflow-hidden border border-gray-400 relative shadow-md">
-                        <div className="w-full h-[200px]">
-                            <img
-                                src={`http://127.0.0.1:5000/public/images/users/cover/${user.coverImage}`}
-                                alt=""
-                                className="w-full h-full object-cover"
-                            />
-                        </div>
-                        <div className="w-28 h-28 rounded-full overflow-hidden absolute left-0 right-0 top-[14vh] mx-auto">
-                            <img
-                                src={`http://127.0.0.1:5000/public/images/users/avatar/${user.avatar}`}
-                                alt=""
-                                className="w-full h-full object-cover"
-                            />
-                        </div>
-                        <div className="flex flex-col mt-16">
-                            {/* <div className="flex justify-between items-center gap-3 px-4 py-3 border-y border-gray-500">
-                                <span className="font-medium">Phone</span>
-                                <span className="text-gray-600">{user.phoneNumber}</span>
-                            </div>
-                            <div className="flex justify-between items-center gap-3 px-4 py-3 border-b border-gray-500">
-                                <span className="font-medium">Email</span>
-                                <span className="text-gray-600">{user.email}</span>
-                            </div>
-                            <div className="flex justify-between items-center gap-3 px-4 py-3">
-                                <span className="font-medium">Facebook</span>
-                                <a href="https://www.facebook.com/jack.willam2003" target="_blank">
-                                    <span className="text-gray-600">{}</span>
-                                </a>
-                            </div> */}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
+	useEffect(() => {
+		document.addEventListener('mousedown', handleClickOutside);
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutside);
+		};
+	}, []);
+	console.log(role)
+	return (
+		<div className="fixed top-0 left-0 right-0 z-50 items-center justify-center flex w-full p-4 overflow-hidden md:inset-0 max-h-full bg-opacity-50 bg-black">
+			<div ref={modalRef} className="relative w-full max-w-3xl max-h-full">
+				<AiOutlineClose
+					onClick={() => onClose([false, null])}
+					size={22}
+					className="fixed top-4 right-4 text-white cursor-pointer hover:rotate-[360deg] transition-all duration-300 z-20"
+				/>
+				<div className="w-full flex justify-center items-center">
+					<div className="w-full bg-white rounded-lg overflow-hidden border border-gray-400 relative shadow-md">
+						<div className="w-full h-[200px]">
+							<img
+								src={`http://127.0.0.1:5000/public/images/users/cover/${user.coverImage}`}
+								alt=""
+								className="w-full h-full object-cover"
+							/>
+						</div>
+						<div className="w-28 h-28 rounded-full overflow-hidden absolute left-0 right-0 top-[14vh] mx-auto">
+							<img
+								src={`http://127.0.0.1:5000/public/images/users/avatar/${user.avatar}`}
+								alt=""
+								className="w-full h-full object-cover"
+							/>
+						</div>
+						<div className="w-full grid grid-cols-2 grid-rows-3 mt-16">
+							{["firstName", "lastName", "username", "phoneNumber", "email", "linkFacebook", "linkZalo", "linkInstagram", "role", "status"].map((field) => (
+								<div key={field} className={`w-full h-full flex justify-between items-center relative mb-2 border p-2`}>
+									<span
+										htmlFor={field} className='w-2/5 font-medium first-letter:uppercase'>{
+											field === "linkZalo" ? "Zalo" : field.replace(/([a-z])([A-Z])/g, '$1 $2')
+										}:</span>
+									<span className='w-4/5 rounded-md px-3 py-2 text-black'>{field === "role" ? role.name : user[field]}</span>
+								</div>
+							))}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
 }
 
 export default UserCardProfile;
