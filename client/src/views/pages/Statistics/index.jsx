@@ -90,6 +90,9 @@ const Statistics = () => {
             const response = await Axios.get(
                 `/api/v1/posts/statistics/${selectedFilter}/dayStart/${startDate}/dayEnd/${endDate}`,
             );
+			if(response.status === 200) {
+				console.log(response)
+			}
             const statisticsData = response.data.posts;
             const categories = statisticsData.map((item) => item.date_col_formed);
             const data = statisticsData.map((item) => item.count);
@@ -128,12 +131,12 @@ const Statistics = () => {
     return (
         <div className="relative overflow-x-auhref shadow-md sm:rounded-lg mg">
             <div className="flex items-center pb-4 pt-4 bg-white space-x-4">
-                <div className="ml-2" ref={modalRef}>
+                <div className="ml-5" ref={modalRef}>
                     <button
                         onClick={toggleDropdown}
                         id="dropdownActionButhrefn"
                         data-dropdown-hrefggle="dropdownAction"
-                        className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5 "
+                        className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-2"
                         type="button"
                     >
                         <span className="sr-only">Action buthrefn</span>
@@ -191,8 +194,8 @@ const Statistics = () => {
                         </div>
                     )}
                 </div>
-                <DatePicker placeholder="Select date start" onChange={handleStartDateChange} />
-                <DatePicker placeholder="Select date end" onChange={handleEndDateChange} />
+                <DatePicker placeholder="Select date start" className='py-[6px]' onChange={handleStartDateChange} />
+                <DatePicker placeholder="Select date end" className='py-[6px]' onChange={handleEndDateChange} />
             </div>
             {/* <!-- BarChart --> */}
             <div className="row">

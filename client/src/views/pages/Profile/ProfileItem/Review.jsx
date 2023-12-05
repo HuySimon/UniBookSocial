@@ -51,7 +51,7 @@ const Review = () => {
 		getPostReview()
 	}, [])
 	return (
-		<div className='flex flex-col gap-3 lg:mt-0 mt-[66px]'>
+		<div className='flex flex-col gap-3 lg:mt-0 mt-[66px] mb-10'>
 			{/* {
 				reviews.map((review, index) => (
 					<ReviewPost review={review} userReview={review.reviewData} />
@@ -76,10 +76,10 @@ const Review = () => {
 											<span className="name font-medium text-lg">
 												{review.reviewData.userReviewData.username}
 											</span>
-											<div className='flex justify-start'>
+											<div className="flex gap-1">
 												{
 													Array(review.reviewData.numStars).fill(null).map((_, index) => (
-														<AiFillStar key={index} className='text-yellow-500' size={14} />
+														<AiFillStar key={index} className='text-yellow-400 border p-1 rounded-md border-gray-400' size={28} />
 													))
 												}
 											</div>
@@ -91,8 +91,19 @@ const Review = () => {
 										className='rounded-md px-5 py-2 bg-primary-800 text-white transition-all hover:bg-primary-700'>{review.reviewData.isShow !== 1 ? "Hide Review" : "Show Review"}</button>
 								</div>
 							</div>
-							<div className="flex p-2 border border-gray-400 rounded-sm">
-								<p>{review.reviewData.content}</p>
+							<div className="flex flex-col p-2 border border-gray-400 rounded-sm">
+								<p className='border-b w-full pb-2'><i className='text-gray-400'>Content:</i> {review.reviewData.content}</p>
+								<div className="flex w-full py-2">
+									<div className="w-32 h-32 max-w-[128px]">
+										<img src={`http://127.0.0.1:5000/public/images/posts/${review.mainImage}`} alt="" className='w-full h-full object-cover' />
+									</div>
+									<div className="lg:w-fit w-1/2 flex flex-col gap-1 text-sm ml-3">
+										<p className='text-base	font-medium tracking-wide'><i className='font-normal text-gray-500'>Title:</i> {review.title}</p>
+										<p><i className='text-gray-500'>General Subject:</i> {review.isGeneralSubject === 0 ? "Yes" : "No"} </p>
+										<p><i className='text-gray-500'>New:</i> {review.isNew === 0 ? "Old" : "New"} </p>
+										<span className='text-primary-main font-medium text-2xl'>₫{review.price}</span>
+									</div>
+								</div>
 							</div>
 						</div>
 					))
