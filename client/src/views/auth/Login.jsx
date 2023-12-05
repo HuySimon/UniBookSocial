@@ -107,18 +107,6 @@ const Login = () => {
 									to={"/signup"}
 									className='ml-1 font-semibold text-primary-main hover:underline underline-offset-2'>Create an account</Link>
 							</div>
-							<div className="flex flex-col justify-center items-center gap-3 mt-2 w-full">
-								<p className='text-black'>Or, login with</p>
-								<Link
-									className='w-full px-4 py-2 border border-primary-900 rounded-lg
-                                            transition-all hover:bg-primary-900 hover:text-white
-                                            flex justify-center items-center gap-2 font-semibold
-                                            '
-								>
-									<FcGoogle size={22} />
-									Sign in with Google
-								</Link>
-							</div>
 						</form>
 					</div>
 					<div className="hidden md:block md:w-1/2 xl:w-[60%] p-3 z-10">
