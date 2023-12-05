@@ -1,7 +1,18 @@
 const express = require("express");
 const reviewController = require("../controllers/reviewController");
 const authController = require("../controllers/authController");
+const { RoleEnum } = require('../enums/role.enum')
 const router = express.Router();
+
+
+router
+  .patch(
+    '/:id/show',
+    authController.protect,
+    authController.restrictTo(RoleEnum.MANAGER),
+    reviewController.isUserPost,
+    reviewController.updateReview
+  )
 
 router
   .route("/")
