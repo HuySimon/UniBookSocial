@@ -19,7 +19,7 @@ function Posts() {
 	const [searchTerm, setSearchTerm] = useState('');
 	const [isEmailValid, setIsEmailValid] = useState(true);
 	const [isVisibleModal, setIsVisibleModal] = useState(false)
-	const [selectedModalId, setSelectedModalId] = useState(null);
+	const [selectedModalId, setSelectedModalId] = useState([false, 0]);
 	const { register, handleSubmit, formState: { errors } } = useForm({
 		defaultValues: {
 			query: ""
@@ -27,14 +27,11 @@ function Posts() {
 	})
 	const fetchData = async () => {
 		try {
-			let url = `/api/v1/posts?include=userPostData,reportData&page[number]=${currentPage}&page[size]=2&filter=(equals(status,'CheckPost'))`
+			let url = `/api/v1/posts?include=userPostData,reportData&page[number]=${currentPage}&page[size]=2&filter=(equals(status,'CheckPost'))&sort=-updatedAt`
 			const response = await Axios.get(url);
 			const data = response.data.data.data;
-			const initialCheckboxStates = data.map((post) => ({
-				id: post.id,
-				checked: false,
-			}));
 			setPostList(data);
+			console.log(data)
 
 			const totalItems = response.data.totalItem;
 			setTotalPages(Math.ceil(totalItems / itemsPerPage));
@@ -42,6 +39,13 @@ function Posts() {
 			console.log(error);
 		}
 	};
+	const getReportData = async () => {
+		try {
+			const res = await Axios.get(`/api/v1/reports`)
+		} catch (error) {
+			console.log(error)
+		}
+	}
 	const calculateTimeAgo = (createdAt) => {
 		const now = new Date();
 		const created = new Date(createdAt);
@@ -105,12 +109,8 @@ function Posts() {
 			setSelectedModalId(null);
 		}
 	};
-
-	const handleDeleteActive = (postId) => {
-		setSelectedModalId(postId);
-	};
 	const onSubmit = async (data) => {
-		let url = `/api/v1/posts?include=userPostData,reportData&page[number]=${currentPage}&page[size]=2&filter=(equals(status,'CheckPost')`
+		let url = `/api/v1/posts?include=userPostData,reportData&page[number]=${currentPage}&page[size]=2&sort=-updatedAt&filter=(equals(status,'CheckPost'))`
 		try {
 			if (data.query != "") {
 				var newQuery = `or(contains(title,'${data.query}'),equals(id,'${data.query}'))`
@@ -119,16 +119,14 @@ function Posts() {
 				} else {
 					var newQuery = `or(contains(title,'${data.query}'),equals(id,'${data.query}'))`
 				}
-				url = url.substring(0, 81) + 'and' + url.substring(81, url.length) + ',' + newQuery + ')'
+				url = url.substring(0, 97) + 'and' + url.substring(97, url.length) + ',' + newQuery + ')'
 			}
-			console.log(url)
 			const res = await Axios.get(url)
 			if (res.status === 200) {
 				setPostList(res.data.data.data)
 			}
-
 		} catch (error) {
-			console.log(url)
+			// console.log(url)
 			console.log(error)
 		}
 	}
@@ -196,9 +194,7 @@ function Posts() {
 									</div>
 								</div>
 								<div className="w-full h-[30vh] xl:h-[35vh] overflow-hidden rounded-lg border border-gray-500 mt-4">
-									<Link>
-										<img src={`http://127.0.0.1:5000/public/images/posts/${post.mainImage}`} alt="" className="w-full h-full object-contain" />
-									</Link>
+									<img src={`http://127.0.0.1:5000/public/images/posts/${post.mainImage}`} alt="" className="w-full h-full object-contain" />
 								</div>
 								<table className="flex border border-gray-500 rounded-lg my-4">
 									<thead className="flex flex-col border-r w-1/2 xl:w-1/5 border-gray-500">
@@ -217,7 +213,7 @@ function Posts() {
 										<td className="p-2 border-t border-gray-500 text-sm">Old</td>
 										<td className="p-2 border-t border-gray-500 text-sm">{post.description}</td>
 										<td className="p-2 border-t border-gray-500 text-sm">{post.userPostData.email}</td>
-										<td className="p-2 border-t border-gray-500 text-sm">Hình ảnh nhạy cảm</td>
+										<td className="p-2 border-t border-gray-500 text-sm">{post.reportData.content}</td>
 									</tbody>
 								</table>
 								<div className="flex justify-end gap-2 items-center">
@@ -230,8 +226,11 @@ function Posts() {
 										<IoMdCheckmark size={20} />
 										Normal
 									</p>
-									<p className='bg-red-500 w-[125px] flex items-center gap-2 text-center text-white px-4 py-2 rounded-lg hover:bg-red-400 transition-all cursor-pointer'
-										onClick={() => handleDeleteActive(post.id)}>
+									<p
+										onClick={() => {
+											setSelectedModalId([true, post.id])
+										}}
+										className='bg-red-500 w-[125px] flex items-center gap-2 text-center text-white px-4 py-2 rounded-lg hover:bg-red-400 transition-all cursor-pointer'>
 										<PiWarningCircleLight size={20} />
 										Violation
 									</p>
@@ -252,8 +251,8 @@ function Posts() {
 				)
 			}
 			{/* Modal Popup Message */}
-			{selectedModalId && (
-				<ModalMessage postId={selectedModalId} onClose={() => handleModalClose(selectedModalId)} />
+			{selectedModalId[0] && (
+				<ModalMessage postID={selectedModalId[1]} onClose={setSelectedModalId} fetchData={fetchData}/>
 			)}
 			{
 				isVisibleModal && (

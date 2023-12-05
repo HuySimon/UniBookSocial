@@ -40,7 +40,7 @@ const HeaderAdmin = () => {
 	] : [
 		{
 			icon: PiNewspaperLight,
-			title: 'Violation Posts',
+			title: 'Check Posts',
 			link: '/dashboard/posts',
 		},
 		{

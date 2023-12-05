@@ -98,7 +98,7 @@ const About = () => {
 		if (data.linkFacebook != null) {
 			if (data.linkFacebook != "") {
 				if (!/(?:http:\/\/)?(?:www\.)?facebook\.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[\w\-]*\/)*([\w\-]*)/.test(data.linkFacebook)) {
-					toast.error("Please enter valid facebook link")
+					toast.error("Please enter valid Facebook link")
 					setFocus("linkFacebook")
 					console.log(data)
 					return;
@@ -108,8 +108,17 @@ const About = () => {
 		if (data.linkInstagram != null) {
 			if (data.linkInstagram != "") {
 				if (!/(?:(?:http|https):\/\/)?(?:www\.)?(?:instagram\.com|instagr\.am)\/([A-Za-z0-9-_\.]+)/im.test(data.linkInstagram)) {
-					toast.error("Please enter valid linkInstagram link")
+					toast.error("Please enter valid Instagram link")
 					setFocus("linkInstagram")
+					return;
+				}
+			}
+		}
+		if (data.linkZalo != null) {
+			if (data.linkZalo != "") {
+				if (!/^(0|84)(2(0[3-9]|1[0-6|8|9]|2[0-2|5-9]|3[2-9]|4[0-9]|5[1|2|4-9]|6[0-3|9]|7[0-7]|8[0-9]|9[0-4|6|7|9])|3[2-9]|5[5|6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])([0-9]{7})$/.test(data.linkZalo)) {
+					toast.error("Please enter valid zalo phone number")
+					setFocus("linkZalo")
 					return;
 				}
 			}
@@ -144,11 +153,13 @@ const About = () => {
 				onSubmit={handleSubmit(handleEditInformation)}
 				className='w-full flex flex-col gap-5 mb-2'
 			>
-				{["firstName", "lastName", "username", "phoneNumber", "email", "linkFacebook", "linkInstagram"].map((field) => (
+				{["firstName", "lastName", "username", "phoneNumber", "email", "linkFacebook", "linkZalo", "linkInstagram"].map((field) => (
 					<div key={field} className={`flex justify-between items-center relative mb-2`}>
-						<label htmlFor={field} className='w-1/5 font-medium first-letter:uppercase'>{field.replace(/([a-z])([A-Z])/g, '$1 $2')}</label>
+						<label htmlFor={field} className='w-1/5 font-medium first-letter:uppercase'>{
+							field === "linkZalo" ? "Zalo" : field.replace(/([a-z])([A-Z])/g, '$1 $2')
+						}</label>
 						<input
-							type={field.includes("link") ? "url" : "text"}
+							type={field === "linkZalo" ? "text" : field.includes("link") ? "url" : "text"}
 							disabled={!edit}
 							defaultValue={currentUser[field]}
 							{...register(field)}
