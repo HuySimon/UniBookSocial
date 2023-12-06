@@ -44,7 +44,8 @@ const Login = () => {
 				navigate('/');
 			}
 		} catch (err) {
-			toast.error("Incorrect password or email");
+			// console.log(err)
+			toast.error(err.response.data.message);
 		} finally {
 			setIsLoading(false);
 		}
