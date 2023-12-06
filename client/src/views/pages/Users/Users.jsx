@@ -1,20 +1,18 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
-import { PiPencilSimpleLine, PiTrashSimpleLight } from 'react-icons/pi';
+import { PiPencilSimpleLine } from 'react-icons/pi';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import Swal from 'sweetalert2';
-
 import Axios from '../../../api/index';
 import Pagination from '../../../components/Dashboard/Pagination';
 import Search from '../../../components/Dashboard/Search';
 import Filter from '../../../components/Dashboard/Filter/Filter';
-import { AvatarUser } from '../../../assets';
 import './Users.scss';
 import AddUserModal from '../../../components/Dashboard/AddUser/AddUserModal';
 import Delete from '../../../components/Dashboard/Delete/Delete';
 import EditUser from '../../../components/Dashboard/EditUser/EditUser';
 import UserCardProfile from '../../../components/Dashboard/UserInformation/UserCardProfile';
+import { toast } from 'react-toastify';
 
 const Users = () => {
 	const [userList, setUserList] = useState([]);
@@ -25,9 +23,7 @@ const Users = () => {
 	const [isEmailValid, setIsEmailValid] = useState(true);
 	const [filterValue, setFilterValue] = useState('All');
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [editUserId, setEditUserId] = useState(null);
-	const [editRole, setEditRole] = useState(null);
-	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+	const [edit, setEdit] = useState([false, 0, 0, 0]);
 	const [selectedUser, setSelectedUser] = useState([false, null]);
 
 	const fetchData = async () => {
@@ -107,10 +103,7 @@ const Users = () => {
 	};
 
 	const handleFilter = (value) => {
-		// setFilterValue(value);
-		// console.log(filterValue === 'All');
 		let filterRole = '';
-
 		if (value === 'User') {
 			filterRole = '1';
 		} else if (value === 'Admin') {
@@ -127,33 +120,19 @@ const Users = () => {
 		fetchData();
 	}, [filterValue]);
 
-	// Handle Edit User
-	const handleEditUser = (userId, role) => {
-		setEditUserId(userId);
-		setEditRole(role);
-		setIsEditModalOpen(true);
-	};
 
 	// Handle update role user
 	const handleUpdateUser = async (userId, updatedUser) => {
 		try {
 			const res = await Axios.patch(`/api/v1/users/${userId}`, updatedUser);
-			setIsEditModalOpen(false);
 			if (res.status === 200) {
-				Swal.fire({
-					title: 'Edited Successfully!',
-					icon: 'success',
-					confirmButtonText: 'OK',
-				});
+				toast.success("Edit user successfully")
+				setEdit([false, 0, 0, 0])
+				fetchData();
+				console.log(res.data.data.data)
 			}
-			fetchData();
 		} catch (error) {
-			Swal.fire({
-				title: 'Error',
-				text: error.message,
-				icon: 'error',
-				confirmButtonText: 'OK',
-			});
+			toast.error(error.response.message)
 		}
 	};
 	// Handle Delete User
@@ -241,7 +220,7 @@ const Users = () => {
 										<td className="px-6 py-4">{user.role}</td>
 										<td className="px-6 py-4">
 											<div className="flex items-center">
-												<div className="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div>{' '}
+												<div className={`h-2.5 w-2.5 rounded-full ${user.status === "Active" ? "bg-green-500" : "bg-red-500"} mr-2`}></div>{' '}
 												{user.status}
 											</div>
 										</td>
@@ -249,7 +228,9 @@ const Users = () => {
 											{/* <!-- Modal toggle --> */}
 											<div className="flex items-center space-x-2 md:space-x-2">
 												<Link
-													onClick={() => handleEditUser(user.id, user.role)}
+													onClick={() => {
+														setEdit([true, user.id, user.role, user.status])
+													}}
 													to="#"
 													type="button"
 													data-modal-target="editUserModal"
@@ -279,13 +260,15 @@ const Users = () => {
 				{/* <!-- Add user modal --> */}
 				{isModalOpen && <AddUserModal onClose={handleCloseModal} onAddUser={handleAddUser} />}
 				{/* Edit user modal */}
-				<EditUser
-					isOpen={isEditModalOpen}
-					onClose={() => setIsEditModalOpen(false)}
-					userId={editUserId}
-					onUpdateUser={handleUpdateUser}
-					currentRole={editRole}
-				/>
+				{
+					edit[0] && (
+						<EditUser
+							data={edit}
+							onUpdateUser={handleUpdateUser}
+							onClose={setEdit}
+						/>
+					)
+				}
 
 				{/* Card Profile User */}
 				{selectedUser[0] && <UserCardProfile onClose={setSelectedUser} user={selectedUser[1]} />}

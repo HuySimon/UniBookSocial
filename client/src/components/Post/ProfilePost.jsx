@@ -172,7 +172,6 @@ const ProfilePost = ({ post }) => {
 				{isVisibleModalDelete && (
 					<Modal
 						postID={post.id}
-						isVisibleModalDelete={isVisibleModalDelete}
 						setIsVisibleModalDelete={setIsVisibleModalDelete}
 					/>
 				)}

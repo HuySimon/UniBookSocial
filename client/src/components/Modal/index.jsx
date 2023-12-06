@@ -5,7 +5,7 @@ import Axios from '../../api/index'
 import { toast } from 'react-toastify'
 import { usePostContext } from '../../hooks/usePostContext'
 import { ImSpinner9 } from 'react-icons/im'
-const Index = ({ postID, isVisibleModalDelete, setIsVisibleModalDelete }) => {
+const Index = ({ postID, setIsVisibleModalDelete }) => {
 
 	const [state, dispatch] = usePostContext()
 	const [isLoading, setIsLoading] = useState(false)

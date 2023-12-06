@@ -7,7 +7,6 @@ import SendEmail from './SendEmail'
 import ConfirmOTP from './ConfirmOTP'
 import ChangePassword from './ChangePassword'
 import { BsArrowLeft } from 'react-icons/bs'
-import { useMultistepForm } from '../../../hooks/useMultiStepForm'
 const ForgotPassword = ({ isVisible, setIsVisible }) => {
 	const [step, setStep] = useState(0)
 	const handleNextStep = () => {
