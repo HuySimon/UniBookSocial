@@ -61,6 +61,19 @@ const ProfilePost = ({ post }) => {
 		};
 		calculateTimeAgo();
 	}, [statePost.isLoading, post.createdAt]);
+	const modalRef = useRef(null);
+
+	useEffect(() => {
+		const handleClickOutside = (event) => {
+			if (modalRef.current && !modalRef.current.contains(event.target)) {
+				setIsVisibleMenuPost(false)
+			}
+		};
+		document.addEventListener('mousedown', handleClickOutside);
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutside);
+		};
+	}, []);
 	return (
 		<>
 			<div className="w-full h-fit px-6 py-5 border border-gray-400 shadow-md rounded-sm mb-8">
@@ -94,7 +107,7 @@ const ProfilePost = ({ post }) => {
 							)
 						}
 						{isVisibleMenuPost && (
-							<div className="w-44 h-fit bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] absolute top-14 right-5 rounded-md overflow-hidden">
+							<div ref={modalRef} className="w-44 h-fit bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] absolute top-14 right-5 rounded-md overflow-hidden">
 								<div className="flex flex-col relative">
 									{
 										menuOption.map((item, index) => (
