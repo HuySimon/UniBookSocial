@@ -1,6 +1,7 @@
 const AppError = require("../utils/appError");
 const catchAsync = require("../utils/catchAsync");
 const factory = require("./handlerFactory");
+const { Op } = require('sequelize');
 
 const db = require("../models");
 const User = db.User;
@@ -54,7 +55,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteMe = catchAsync(async (req, res, next) => {
-  const user = await User.update({ status: 'Disabled' }, {
+  const user = await User.update({ status: 'Deleted' }, {
     where: { id: req.user.id },
   });
   if (!user) {
@@ -66,20 +67,32 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
     data: null
   });
 });
-
+const filterUser = (users) => {
+  return users.filter(user => user.status != 'Deleted')
+}
 exports.createUser = factory.createOne(User)
-exports.getAllUsers = factory.getAll(User)
+exports.getAllUsers = factory.getAll(User, filterUser)
 exports.getUser = factory.getOne(User)
 //Do not update password with this!
+exports.checkDisabledUser = catchAsync(async (req, res, next) => {
+  if (req.body.status == 'Disabled') {
+    let user = await User.findByPk(req.params.id)
+    if (user.role == 2) return next(new AppError('You can\'t disabled the Admin account', 403))
+  }
+  next()
+})
 exports.updateUser = factory.updateOne(User);
 exports.deleteUser = catchAsync(async (req, res, next) => {
-  const user = await User.update({ status: 'Disabled' }, {
-    where: { id: req.user.id },
-  });
+
+  let user = await User.findByPk(req.params.id)
   if (!user) {
     return next(new AppError('No user found with that ID', 404));
   }
-
+  if (user.role == 2) {
+    return next(new AppError('You can\'t delete the Admin account', 403));
+  }
+  user.status = 'Deleted';
+  await user.save();
   res.status(204).json({
     status: 'success',
     data: null

@@ -11,17 +11,18 @@ import { toast } from 'react-toastify';
 const Delete = ({ userId, onDeleteSuccess }) => {
 	const onDeleteUser = async () => {
 		try {
-			const res = await Axios.delete(`/api/v1/users/${userId}`);
-			console.log(res)
-			if (res.status === 204) {
+			const res = await Axios.delete(`${apiUrl}/${userId}`);
+			console.log(userId)
+			if (res && +res.status === 204) {
+				// onDeleteSuccess(userId);
 				toast.success("Delete user successfully!")
 				onDeleteSuccess(userId);
 			} else {
 				toast.error("Delete user failed!")
-				throw new Error('Error deleting user');
+				// throw new Error('Error deleting user');
 			}
 		} catch (error) {
-			toast.error(error.response.message)
+			toast.error(error.response.data.message)
 		}
 	};
 	const handleDelete = () => {

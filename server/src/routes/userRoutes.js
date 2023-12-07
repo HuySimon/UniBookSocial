@@ -35,7 +35,7 @@ router
 router
   .route('/:id')
   .get(userController.getUser)
-  .patch(authController.restrictTo(2), userController.updateUser)
+  .patch(authController.restrictTo(2), userController.checkDisabledUser, userController.updateUser)
   .delete(authController.restrictTo(2), userController.deleteUser);
 
 module.exports = router;

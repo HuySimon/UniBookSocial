@@ -60,7 +60,12 @@ module.exports = (sequelize, DataTypes) => {
 		username: DataTypes.STRING,
 		avatar: DataTypes.STRING,
 		coverImage: DataTypes.STRING,
-		status: DataTypes.STRING,
+		status: {
+			type: DataTypes.STRING,
+			validate: {
+				isIn: [['Active', 'Disabled', 'Deleted']],
+			},
+		},
 		role: DataTypes.INTEGER,
 		linkFacebook: DataTypes.STRING,
 		linkZalo: DataTypes.STRING,
