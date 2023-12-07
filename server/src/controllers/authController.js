@@ -82,7 +82,12 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 	if (!user) {
 		return next(new AppError('There is no user with email address.', 404));
 	}
-
+	if (user.status === 'Deleted') {
+		return next(new AppError('This account has been deleted', 403)); // 403 for forbidden
+	}
+	if (user.status === 'Disabled') {
+		return next(new AppError('This account has been disabled', 403)); // 403 for forbidden
+	}
 	// 2) Generate the random reset token
 	const resetPasswordToken = ResetPasswordToken.build()
 	resetPasswordToken.email = req.body.email
