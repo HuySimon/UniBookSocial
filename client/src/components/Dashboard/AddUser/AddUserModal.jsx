@@ -7,8 +7,10 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { addUserSchema } from '../../../validations/AddUserValidation';
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { motion } from 'framer-motion';
-function AddUserModal({ onClose, onAddUser }) {
+import { useAuthContext } from '../../../hooks/useAuthContext'
+function AddUserModal({ onClose }) {
 	const [eye, setEye] = useState(false)
+	const [state, dispatch] = useAuthContext()
 	const modalRef = useRef(null);
 	const {
 		register,
@@ -38,13 +40,14 @@ function AddUserModal({ onClose, onAddUser }) {
 		try {
 			const url = `/api/v1/users`;
 			const res = await Axios.post(url, addUserdata);
-			console.log(res.data.data.data);
-			onAddUser(addUserdata);
-			onClose();
+			dispatch({ type: "ADD_USER", value: true })
 			if (res.status === 201) {
-				toast.success('Thêm người dùng thành công!');
+				toast.success('Add user successfully!!');
+				dispatch({ type: "ADD_USER", value: false })
+				onClose();
 			}
 		} catch (error) {
+			dispatch({ type: "ADD_USER", value: false })
 			console.error(error);
 		}
 	};
@@ -69,12 +72,12 @@ function AddUserModal({ onClose, onAddUser }) {
 				{/* <!-- Modal content --> */}
 				<form onSubmit={handleSubmit(handleSaveClick)} className="relative bg-white rounded-lg shadow">
 					{/* <!-- Modal header --> */}
-					<div className="flex items-start justify-between p-4 border-b rounded-t">
+					<div className="flex items-center justify-between p-4 border-b rounded-t">
 						<h3 className="text-xl font-semibold text-gray-900">Add user</h3>
 						<AiOutlineClose
 							onClick={() => onClose()}
 							size={22}
-							className="fixed top-4 right-4 text-white cursor-pointer hover:rotate-[360deg] transition-all duration-300 z-20"
+							className="text-black cursor-pointer hover:rotate-[360deg] transition-all duration-300 z-20"
 						/>
 					</div>
 					{/* <!-- Modal body --> */}

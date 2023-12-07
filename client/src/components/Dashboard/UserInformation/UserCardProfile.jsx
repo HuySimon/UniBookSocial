@@ -11,7 +11,7 @@ function UserCardProfile({ onClose, user }) {
 	const modalRef = useRef(null);
 	const handleClickOutside = (event) => {
 		if (modalRef.current && !modalRef.current.contains(event.target)) {
-			onClose([false,null]);
+			onClose([false, null]);
 		}
 	};
 
@@ -25,11 +25,6 @@ function UserCardProfile({ onClose, user }) {
 	return (
 		<div className="fixed top-0 left-0 right-0 z-50 items-center justify-center flex w-full p-4 overflow-hidden md:inset-0 max-h-full bg-opacity-50 bg-black">
 			<div ref={modalRef} className="relative w-full max-w-3xl max-h-full">
-				<AiOutlineClose
-					onClick={() => onClose([false, null])}
-					size={22}
-					className="fixed top-4 right-4 text-white cursor-pointer hover:rotate-[360deg] transition-all duration-300 z-20"
-				/>
 				<div className="w-full flex justify-center items-center">
 					<div className="w-full bg-white rounded-lg overflow-hidden border border-gray-400 relative shadow-md">
 						<div className="w-full h-[200px]">
@@ -57,6 +52,11 @@ function UserCardProfile({ onClose, user }) {
 								</div>
 							))}
 						</div>
+						<AiOutlineClose
+							onClick={() => onClose([false, null])}
+							size={40}
+							className="fixed top-[22%] right-[31%] bg-black/50 rounded-full p-2 text-white cursor-pointer hover:rotate-[720deg] transition-all duration-700 z-20"
+						/>
 					</div>
 				</div>
 			</div>

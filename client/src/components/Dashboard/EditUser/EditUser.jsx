@@ -1,7 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useState, useRef, useEffect } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
-
 // eslint-disable-next-line react/prop-types, no-unused-vars
 function EditUser({ data, onUpdateUser, onClose }) {
 	const [role, setRole] = useState(data[2]);

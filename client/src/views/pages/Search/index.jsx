@@ -4,13 +4,9 @@ import { HiChevronDown } from 'react-icons/hi';
 import SearchPost from '../../../components/Post/SearchPost';
 import { useForm } from 'react-hook-form';
 import Axios from '../../../api/index'
-import { ImSpinner9 } from 'react-icons/im';
 import { useSearchContext } from '../../../hooks/useSearch';
-import { FaRegFaceSadTear } from 'react-icons/fa6'
 import { NoResultFound } from '../../../assets';
-import { Outlet } from 'react-router-dom';
 import { toast } from 'react-toastify'
-import { usePostContext } from '../../../hooks/usePostContext';
 const Index = () => {
 
 	const [searchPost, setSearchPost] = useState([])

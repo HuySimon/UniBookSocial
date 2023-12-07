@@ -8,13 +8,12 @@ import Axios from '../../../api/index';
 import { toast } from 'react-toastify';
 
 // eslint-disable-next-line react/prop-types
-const Delete = ({ userId, apiUrl, onDeleteSuccess }) => {
-	const onDeleteUser = async (userId) => {
+const Delete = ({ userId, onDeleteSuccess }) => {
+	const onDeleteUser = async () => {
 		try {
-			const res = await Axios.delete(`${apiUrl}/${userId}`);
-
-			if (res && +res.status === 204) {
-				// onDeleteSuccess(userId);
+			const res = await Axios.delete(`/api/v1/users/${userId}`);
+			console.log(res)
+			if (res.status === 204) {
 				toast.success("Delete user successfully!")
 				onDeleteSuccess(userId);
 			} else {
@@ -22,20 +21,20 @@ const Delete = ({ userId, apiUrl, onDeleteSuccess }) => {
 				throw new Error('Error deleting user');
 			}
 		} catch (error) {
-			toast.error(error.message)
+			toast.error(error.response.message)
 		}
 	};
 	const handleDelete = () => {
 		Swal.fire({
-			title: 'Bạn có chắc chắn muốn xóa người dùng này?',
+			title: `Are you sure you want to delete this user?`,
 			icon: 'warning',
 			showCancelButton: true,
-			confirmButtonText: 'Xác nhận',
-			cancelButtonText: 'Hủy',
+			confirmButtonText: 'Confirm',
+			cancelButtonText: 'Cancel',
 			allowOutsideClick: false,
 		}).then((result) => {
 			if (result.isConfirmed) {
-				onDeleteUser(userId);
+				onDeleteUser();
 			}
 		});
 	};
@@ -43,7 +42,6 @@ const Delete = ({ userId, apiUrl, onDeleteSuccess }) => {
 	return (
 		<Link
 			onClick={handleDelete}
-			to="#"
 			type="button"
 			data-modal-target="deleteUserModal"
 			data-modal-show="deleteUserModal"

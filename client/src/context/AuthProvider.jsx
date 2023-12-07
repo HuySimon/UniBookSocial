@@ -8,6 +8,7 @@ const initialState = {
 	isLoading: false,
 	resetPasswordToken: "",
 	email: "",
+	addUser: false,
 }
 const url = '/api/v1/users/me'
 const reducer = (state, action) => {
@@ -37,6 +38,11 @@ const reducer = (state, action) => {
 				...state,
 				resetPasswordToken: action.value,
 				email: action.email,
+			}
+		case "ADD_USER":
+			return {
+				...state,
+				addUser: action.value
 			}
 		default:
 			throw new Error(`Unhandled action type: ${action.type}`);

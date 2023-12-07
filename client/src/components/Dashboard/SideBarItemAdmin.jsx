@@ -5,17 +5,14 @@ import { AiOutlineLogout } from 'react-icons/ai';
 import { PiHeartLight, PiEnvelopeLight, PiListBold, PiHouseLight, PiPlusCircleLight } from 'react-icons/pi';
 import { motion } from 'framer-motion';
 // eslint-disable-next-line react/prop-types
-const SideBarItem = ({ title, href, index, activeOverlay, setActiveOverlay, expand, icon, handleCreatePost }) => {
+const SideBarItem = ({ title, href, index, activeOverlay, setActiveOverlay, expand, icon }) => {
     return (
-        <li
-            onClick={() => {
-                setActiveOverlay(index);
-                handleCreatePost();
-            }}
-            className="px-2 md:px-4 pb-4 flex items-center font-semibold relative"
-        >
+        <li className="px-2 md:px-4 pb-4 flex items-center font-semibold relative">
             <Link
                 to={href}
+				onClick={() => {
+					setActiveOverlay(index);
+				}}
                 className={`
                     relative
                     flex items-center w-full h-12 transition-all hover:text-primary-main
