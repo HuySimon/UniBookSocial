@@ -69,6 +69,9 @@ exports.login = catchAsync(async (req, res, next) => {
 	if (user.status === 'Disabled') {
 		return next(new AppError('You have been banned', 403)); // 403 for forbidden
 	}
+	if (user.status === 'Deteled') {
+		return next(new AppError('Your account has been deleted', 403)); // 403 for forbidden
+	}
 	// 3) If everything ok, send token to client
 	createSendToken(user, 200, res);
 });

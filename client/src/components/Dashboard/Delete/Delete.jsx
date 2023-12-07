@@ -12,7 +12,7 @@ const Delete = ({ userId, apiUrl, onDeleteSuccess }) => {
 	const onDeleteUser = async (userId) => {
 		try {
 			const res = await Axios.delete(`${apiUrl}/${userId}`);
-
+			console.log(userId)
 			if (res && +res.status === 204) {
 				// onDeleteSuccess(userId);
 				toast.success("Delete user successfully!")
