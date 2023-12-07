@@ -29,16 +29,16 @@ const Users = () => {
 		try {
 			let url = `/api/v1/users?page[number]=${currentPage}&page[size]=10&include=roleData`;
 			if (data.role != -1) {
-				var roleQuery = `equals(role,'${data.role}')`
+				let roleQuery = `equals(role,'${data.role}')`
 				url += `&filter=` + roleQuery
 			}
 			if (data.query != "") {
 				if (data.role === "-1") {
-					var newQuery = `contains(email,'${data.query}')`
+					let newQuery = `contains(email,'${data.query}')`
 					url += `&filter=` + newQuery
 				} else {
 					let temp = url.substring(0, 67)
-					var newQuery = `contains(email,'${data.query}')`
+					let newQuery = `contains(email,'${data.query}')`
 					url = temp + 'and(' + url.substring(67, url.length) + ',' + newQuery + ')'
 				}
 			}
