@@ -132,7 +132,7 @@ const Users = () => {
 				console.log(res.data.data.data)
 			}
 		} catch (error) {
-			toast.error(error.response.message)
+			toast.error(error.response.data.message)
 		}
 	};
 	// Handle Delete User

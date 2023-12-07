@@ -19,10 +19,10 @@ const Delete = ({ userId, apiUrl, onDeleteSuccess }) => {
 				onDeleteSuccess(userId);
 			} else {
 				toast.error("Delete user failed!")
-				throw new Error('Error deleting user');
+				// throw new Error('Error deleting user');
 			}
 		} catch (error) {
-			toast.error(error.message)
+			toast.error(error.response.data.message)
 		}
 	};
 	const handleDelete = () => {

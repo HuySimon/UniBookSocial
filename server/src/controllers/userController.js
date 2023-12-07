@@ -74,6 +74,13 @@ exports.createUser = factory.createOne(User)
 exports.getAllUsers = factory.getAll(User, filterUser)
 exports.getUser = factory.getOne(User)
 //Do not update password with this!
+exports.checkDisabledUser = catchAsync(async (req, res, next) => {
+  if (req.body.status == 'Disabled') {
+    let user = await User.findByPk(req.params.id)
+    if (user.role == 2) return next(new AppError('You can\'t disabled the Admin account', 403))
+  }
+  next()
+})
 exports.updateUser = factory.updateOne(User);
 exports.deleteUser = catchAsync(async (req, res, next) => {
 
