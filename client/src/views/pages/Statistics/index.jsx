@@ -3,11 +3,13 @@ import Chart from 'react-apexcharts';
 import { toast } from 'react-toastify';
 import Axios from '../../../api/index';
 import { useForm } from 'react-hook-form';
-
+import { useDownloadExcel } from 'react-export-table-to-excel'
+import { IoPrintOutline } from "react-icons/io5";
 const Statistics = () => {
 	const [selectedFilter, setSelectedFilter] = useState('Violation');
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 	const [chartData, setChartData] = useState({ categories: [], data: [] });
+	const [dataTable, setDataTable] = useState([])
 	const modalRef = useRef(null);
 	const { register, handleSubmit, formState: { errors }, setFocus } = useForm({
 		defaultValues: {
@@ -59,6 +61,7 @@ const Statistics = () => {
 				}
 				const categories = statisticsData.map((item) => item.date_col_formed);
 				const data = statisticsData.map((item) => item.count);
+				setDataTable(response.data.violatedUsers)
 				setChartData({ categories, data });
 			}
 		} catch (error) {
@@ -91,8 +94,12 @@ const Statistics = () => {
 			data: chartData.data,
 		},
 	];
-	console.log(chartData)
-
+	const tableRef = useRef(null)
+	const { onDownload } = useDownloadExcel({
+		currentTableRef: tableRef.current,
+		filename: "Violation Posts",
+		sheet: "Example 1"
+	})
 	return (
 		<div className="relative w-full h-full">
 			<div className="flex items-center pb-4 pt-[15px] bg-white space-x-4">
@@ -164,35 +171,50 @@ const Statistics = () => {
 				</form>
 			</div>
 			{/* <!-- BarChart --> */}
-			<div className="w-full h-[55%] mt-10">
+			<div className="w-full h-1/2 mt-10">
 				<div className="h-full w-full flex justify-center">
 					<Chart options={options} series={series} type="bar" width={1000} height={"100%"} />
 				</div>
 			</div>
-			<div className="w-full mt-3">
-				<table className='w-full text-sm text-left text-gray-500 border rounded-md'>
-					<thead className='text-xs text-gray-700 uppercase bg-gray-50'>
-						<tr>
-							<th scope="col" className="px-6 py-3">ID</th>
-							<th scope="col" className="px-6 py-3">Name</th>
-							<th scope="col" className="px-6 py-3">Quantity</th>
-							<th scope="col" className="px-6 py-3">Hello</th>
-						</tr>
-					</thead>
-					<tbody key={1}>
-						{
-							[...Array(5)].fill(null).map((_, index) => (
-								<tr key={index} className='bg-white border-b hover:bg-gray-50'>
-									<td className="px-6 py-4">Hello world</td>
-									<td className="px-6 py-4">Hello world</td>
-									<td className="px-6 py-4">Hello world</td>
-									<td className="px-6 py-4">Hello world</td>
+			{
+				dataTable.length > 0 && (
+					<div className="w-full flex flex-col mt-3">
+						<button
+							onClick={onDownload}
+							className='self-end flex items-center gap-1 mb-2 group transition-all px-3 py-1 mr-1 hover:bg-[#C5E898] rounded-md'>
+							<IoPrintOutline size={30} className='' />
+							<span className='w-0 hidden transition-all group-hover:block group-hover:w-auto '>Export to excel</span>
+						</button>
+
+						<table ref={tableRef} className='w-full text-sm text-left text-gray-500 border rounded-md'>
+							<thead className='text-xs text-gray-700 uppercase bg-gray-50'>
+								<tr>
+									<th scope="col" className="px-6 py-3">ID</th>
+									<th scope="col" className="px-6 py-3">Name</th>
+									<th scope="col" className="px-6 py-3">Quantity</th>
+									<th scope="col" className="px-6 py-3">Total</th>
 								</tr>
-							))
-						}
-					</tbody>
-				</table>
-			</div>
+							</thead>
+							{
+								dataTable.map((item, index) => (
+									<tbody key={1}>
+										{
+											[...Array(5)].fill(null).map((_, index) => (
+												<tr key={index} className='bg-white border-b hover:bg-gray-50'>
+													<td className="px-6 py-4">{item.userPostData.id}</td>
+													<td className="px-6 py-4">{item.userPostData.username}</td>
+													<td className="px-6 py-4">{item.count}</td>
+													<td className="px-6 py-4">{item.countAll}</td>
+												</tr>
+											))
+										}
+									</tbody>
+								))
+							}
+						</table>
+					</div>
+				)
+			}
 		</div>
 	);
 };
