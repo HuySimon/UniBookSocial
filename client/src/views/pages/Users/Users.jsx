@@ -38,7 +38,12 @@ const Users = () => {
 					url += `&filter=` + newQuery
 				} else {
 					let temp = url.substring(0, 67)
-					var newQuery = `contains(email,'${data.query}')`
+					var newQuery
+					if(/^\d+$/.test(data.query)){
+						newQuery = `contains(email,'"${data.query}"')`
+					}else {
+						newQuery = `contains(email,'${data.query}')`
+					}
 					url = temp + 'and(' + url.substring(67, url.length) + ',' + newQuery + ')'
 				}
 			}
@@ -192,7 +197,7 @@ const Users = () => {
 									<td className="px-6 py-4">{user.roleData.name}</td>
 									<td className="px-6 py-4">
 										<div className="flex items-center">
-											<div className={`h-2.5 w-2.5 rounded-full ${user.status === "Active" ? "bg-green-500" : "bg-red-500"} mr-2`}></div>{' '}
+											<div className={`h-2.5 w-2.5 rounded-full ${user.status === "Active" ? "bg-green-500" : "bg-yellow-500"} mr-2`}></div>{' '}
 											{user.status}
 										</div>
 									</td>
