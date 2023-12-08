@@ -53,6 +53,7 @@ const Statistics = () => {
 		}
 		try {
 			const response = await Axios.get(`/api/v1/posts/statistics/${selectedFilter}/dayStart/${data.dayStart}/dayEnd/${data.dayEnd}`,);
+			console.log(selectedFilter);
 			if (response.status === 200) {
 				console.log(response)
 				const statisticsData = response.data.posts;
@@ -151,9 +152,9 @@ const Statistics = () => {
 								<li>
 									<a
 										href="#"
-										className={`block px-4 py-2 hover:bg-gray-100 ${selectedFilter === 'Check Post' ? 'bg-gray-100' : ''
+										className={`block px-4 py-2 hover:bg-gray-100 ${selectedFilter === 'CheckPost' ? 'bg-gray-100' : ''
 											}`}
-										onClick={() => handleFilterChange('Check Post')}
+										onClick={() => handleFilterChange('CheckPost')}
 									>
 										Check Post
 									</a>

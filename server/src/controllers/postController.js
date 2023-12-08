@@ -23,23 +23,51 @@ exports.statistics = catchAsync(async (req, res, next) => {
 		},
 		group: [fn('date_format', col('updatedAt'), '%Y-%m-%d'), 'date_col_formed'],
 	})
-	const users = await Post.findAll({
+	const violatedUsers = await Post.findAll({
 		attributes: [
-			[fn('date_format', col('updatedAt'), '%Y-%m-%d'), 'date_col_formed'],
-			[fn('COUNT', col('id')), 'count'],
+			[fn('COUNT', col('userPostData.id')), 'count'],
 		],
+		include: [{
+			model: User,
+			as: 'userPostData',
+			attributes: ['id', 'email', 'username'],
+			order: ['id', 'ASC']
+		}],
 		where: {
 			status: req.params.status,
 			updatedAt: {
 				[Op.between]: [new Date(req.params.dayStart), new Date(new Date(req.params.dayEnd).getTime() + 24 * 60 * 60 * 1000)]
 			}
 		},
-		group: [fn('date_format', col('updatedAt'), '%Y-%m-%d'), 'date_col_formed'],
+		group: ['userPostData.id'],
 	})
+	const allViolatedUsers = await Post.findAll({
+		attributes: [
+			[fn('COUNT', col('userPostData.id')), 'countAll'],
+		],
+		include: [{
+			model: User,
+			as: 'userPostData',
+			attributes: ['id'],
+			where: { id: { [Op.in]: violatedUsers.map(el => el.userPostData.id) } },
+			order: ['id', 'ASC']
+
+		}],
+		where: {
+			status: req.params.status,
+		},
+		group: ['userPostData.id'],
+	})
+	for (const violatedUser of violatedUsers) {
+		const matchUser = allViolatedUsers.find(user => user.dataValues.userPostData.dataValues.id === violatedUser.dataValues.userPostData.dataValues.id)
+		violatedUser.dataValues.countAll = matchUser.dataValues.countAll
+	}
 	res.status(200).json({
 		status: 'success',
-		posts,
-		users
+		data: {
+			posts,
+			violatedUsers
+		}
 	})
 })
 
