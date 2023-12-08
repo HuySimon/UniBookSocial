@@ -39,9 +39,9 @@ const Users = () => {
 				} else {
 					let temp = url.substring(0, 67)
 					let newQuery
-					if(/^\d+$/.test(data.query)){
+					if (/^\d+$/.test(data.query)) {
 						newQuery = `contains(email,'"${data.query}"')`
-					}else {
+					} else {
 						newQuery = `contains(email,'${data.query}')`
 					}
 					url = temp + 'and(' + url.substring(67, url.length) + ',' + newQuery + ')'
@@ -49,6 +49,7 @@ const Users = () => {
 			}
 			const res = await Axios.get(url)
 			if (res.status === 200) {
+				console.log(res)
 				setUserList(res.data.data.data)
 				const totalItems = res.data.totalItem;
 				setTotalPages(Math.ceil(totalItems / itemsPerPage));
@@ -133,7 +134,9 @@ const Users = () => {
 							<option value="3">Post management</option>
 						</select>
 						<input type="text" {...register("query")} className='p-2 rounded-md w-[30vh] placeholder:text-sm' placeholder='Search by email...' />
-						<button type="submit" className='px-3 py-2 bg-primary-main text-white rounded-md'>Search</button>
+						<button
+							onClick={() => { setCurrentPage(1) }}
+							type="submit" className='px-3 py-2 bg-primary-main text-white rounded-md'>Search</button>
 					</form>
 					<button
 						className="w-fit py-2 px-3 bg-primary-900 rounded-md text-white inline-flex items-center justify-center hover:bg-primary-700 transition-all"
