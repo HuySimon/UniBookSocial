@@ -54,6 +54,9 @@ const Statistics = () => {
 			if (response.status === 200) {
 				console.log(response)
 				const statisticsData = response.data.posts;
+				if (statisticsData.length === 0) {
+					toast.success("No data found between the selected date")
+				}
 				const categories = statisticsData.map((item) => item.date_col_formed);
 				const data = statisticsData.map((item) => item.count);
 				setChartData({ categories, data });
@@ -62,17 +65,6 @@ const Statistics = () => {
 			console.error('Error fetching statistics data:', error);
 		}
 	};
-
-	// useEffect(() => {
-	// 	if (selectedStartDate && selectedEndDate) {
-	// 		updateChartData(selectedStartDate, selectedEndDate);
-	// 	}
-	// }, [selectedStartDate, selectedEndDate]);
-
-	// useEffect(() => {
-	// 	updateChartData(selectedStartDate, selectedEndDate);
-	// }, [selectedFilter]);
-
 	const options = {
 		chart: {
 			id: 'apexchart-example',
@@ -172,10 +164,34 @@ const Statistics = () => {
 				</form>
 			</div>
 			{/* <!-- BarChart --> */}
-			<div className="w-full h-[86%] mt-10">
+			<div className="w-full h-[55%] mt-10">
 				<div className="h-full w-full flex justify-center">
-					<Chart options={options} series={series} type="bar" width={900} height={"90%"} />
+					<Chart options={options} series={series} type="bar" width={1000} height={"100%"} />
 				</div>
+			</div>
+			<div className="w-full mt-3">
+				<table className='w-full text-sm text-left text-gray-500 border rounded-md'>
+					<thead className='text-xs text-gray-700 uppercase bg-gray-50'>
+						<tr>
+							<th scope="col" className="px-6 py-3">ID</th>
+							<th scope="col" className="px-6 py-3">Name</th>
+							<th scope="col" className="px-6 py-3">Quantity</th>
+							<th scope="col" className="px-6 py-3">Hello</th>
+						</tr>
+					</thead>
+					<tbody key={1}>
+						{
+							[...Array(5)].fill(null).map((_, index) => (
+								<tr className='bg-white border-b hover:bg-gray-50'>
+									<td className="px-6 py-4">Hello world</td>
+									<td className="px-6 py-4">Hello world</td>
+									<td className="px-6 py-4">Hello world</td>
+									<td className="px-6 py-4">Hello world</td>
+								</tr>
+							))
+						}
+					</tbody>
+				</table>
 			</div>
 		</div>
 	);

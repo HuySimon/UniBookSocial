@@ -55,7 +55,7 @@ function UserCardProfile({ onClose, user }) {
 						<AiOutlineClose
 							onClick={() => onClose([false, null])}
 							size={40}
-							className="fixed top-[22%] right-[31%] bg-black/50 rounded-full p-2 text-white cursor-pointer hover:rotate-[720deg] transition-all duration-700 z-20"
+							className="absolute top-4 right-4 bg-black/50 rounded-full p-2 text-white cursor-pointer hover:rotate-[720deg] transition-all duration-700 z-20"
 						/>
 					</div>
 				</div>
