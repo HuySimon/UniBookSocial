@@ -67,8 +67,15 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
     data: null
   });
 });
+const filterUser = (queryObj) => {
+  if (queryObj.data.where)
+    queryObj.data.where.status = { [Op.ne]: 'Deleted' }
+  else
+    queryObj.data.where = { status: { [Op.ne]: 'Deleted' } }
+  return queryObj
+}
 exports.createUser = factory.createOne(User)
-exports.getAllUsers = factory.getAll(User)
+exports.getAllUsers = factory.getAll(User, filterUser)
 exports.getUser = factory.getOne(User)
 //Do not update password with this!
 exports.checkDisabledUser = catchAsync(async (req, res, next) => {
