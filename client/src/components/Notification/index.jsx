@@ -191,6 +191,7 @@ const Index = ({ isVisibleNotify, handleNotify }) => {
 																	__html: notiItem.content
 																		.replace("title", `<i class="text-black/70">' ${item.postData.title} '</i>`)
 																		.replace("username", `<i class="font-medium text-black/70">${item.userSendData.username}</i>`)
+																		.replace("content",`<i class="text-black>${item.content}</i>`)
 																}}></p>
 															)
 														))
