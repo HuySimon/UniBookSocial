@@ -21,12 +21,12 @@ const SendEmail = ({ title, handleNextStep }) => {
 		, resolver: yupResolver(emailValidation)
 	})
 
-	const onSubmit = (data) => {
+	const onSubmit = async (data) => {
 		setIsLoading(true)
 		const user = {
 			email: data.email
 		}
-		Axios.post('/api/v1/users/forgotPassword', user).then(res => {
+		await Axios.post('/api/v1/users/forgotPassword', user).then(res => {
 			console.log(res)
 			dispatch({ type: "RESET_PASSWORD", value: res.data.resetToken, email: data.email })
 			toast.success("OTP has been sent to your email")

@@ -16,9 +16,7 @@ function EditUser({ data, onUpdateUser, onClose }) {
 	};
 	const handleResetPassword = async (id) => {
 		try {
-			const res = await Axios.patch(`/api/v1/users/${id}`, {
-				password: "123456789"
-			})
+			const res = await Axios.patch(`/api/v1/users/${id}/resetDefaultPassword`)
 			if (res.status === 200) {
 				console.log(res)
 				toast.success("Reset password successfully")
