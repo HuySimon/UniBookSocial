@@ -1,13 +1,18 @@
 const querystringParser = require("@bitovi/sequelize-querystring-parser");
 const catchAsync = require("./../utils/catchAsync");
 const AppError = require("./../utils/appError");
+const { Op } = require('sequelize')
 
-exports.getAll = (Model) =>
+exports.getAll = (Model, filterObj) =>
 	catchAsync(async (req, res, next) => {
-		const queryObj = querystringParser.parse(req.url.split("?")[1]);
+		let queryObj = querystringParser.parse(req.url.split("?")[1]);
 		if (queryObj.errors.length)
 			return next(new AppError("Invalid parameter!", 400));
+		if (filterObj) {
+			queryObj = filterObj(queryObj)
+		}
 		let data = await Model.findAndCountAll(queryObj.data);
+
 		res.status(200).json({
 			status: "success",
 			totalItem: data.count,
