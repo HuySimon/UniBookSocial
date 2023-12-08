@@ -67,11 +67,8 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
     data: null
   });
 });
-const filterUser = (users) => {
-  return users.filter(user => user.status != 'Deleted')
-}
 exports.createUser = factory.createOne(User)
-exports.getAllUsers = factory.getAll(User, filterUser)
+exports.getAllUsers = factory.getAll(User)
 exports.getUser = factory.getOne(User)
 //Do not update password with this!
 exports.checkDisabledUser = catchAsync(async (req, res, next) => {
