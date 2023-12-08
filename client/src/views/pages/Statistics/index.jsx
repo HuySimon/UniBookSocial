@@ -56,13 +56,13 @@ const Statistics = () => {
 			console.log(selectedFilter);
 			if (response.status === 200) {
 				console.log(response)
-				const statisticsData = response.data.posts;
+				const statisticsData = response.data.data.posts;
 				if (statisticsData.length === 0) {
 					toast.success("No data found between the selected date")
 				}
 				const categories = statisticsData.map((item) => item.date_col_formed);
 				const data = statisticsData.map((item) => item.count);
-				setDataTable(response.data.violatedUsers)
+				setDataTable(response.data.data.violatedUsers)
 				setChartData({ categories, data });
 			}
 		} catch (error) {
@@ -101,6 +101,7 @@ const Statistics = () => {
 		filename: "Violation Posts",
 		sheet: "Example 1"
 	})
+	console.log(dataTable)
 	return (
 		<div className="relative w-full h-full">
 			<div className="flex items-center pb-4 pt-[15px] bg-white space-x-4">
@@ -180,35 +181,36 @@ const Statistics = () => {
 			{
 				dataTable.length > 0 && (
 					<div className="w-full flex flex-col mt-3">
-						<button
-							onClick={onDownload}
-							className='self-end flex items-center gap-1 mb-2 group transition-all px-3 py-1 mr-1 hover:bg-[#C5E898] rounded-md'>
-							<IoPrintOutline size={30} className='' />
-							<span className='w-0 hidden transition-all group-hover:block group-hover:w-auto '>Export to excel</span>
-						</button>
+						<div className="w-full flex justify-between items-center px-3 py-1">
+							<p className='font-medium'>Total: {dataTable.length}</p>
+							<button
+								onClick={onDownload}
+								className='flex items-center gap-1 group transition-all px-3 py-1 mr-1 hover:bg-[#C5E898] rounded-md'>
+								<IoPrintOutline size={30} className='' />
+								<span className='w-0 hidden transition-all group-hover:block group-hover:w-auto '>Export to excel</span>
+							</button>
+						</div>
 
 						<table ref={tableRef} className='w-full text-sm text-left text-gray-500 border rounded-md'>
 							<thead className='text-xs text-gray-700 uppercase bg-gray-50'>
 								<tr>
 									<th scope="col" className="px-6 py-3">ID</th>
 									<th scope="col" className="px-6 py-3">Name</th>
+									<th scope="col" className="px-6 py-3">Email</th>
 									<th scope="col" className="px-6 py-3">Quantity</th>
 									<th scope="col" className="px-6 py-3">Total</th>
 								</tr>
 							</thead>
 							{
 								dataTable.map((item, index) => (
-									<tbody key={1}>
-										{
-											[...Array(5)].fill(null).map((_, index) => (
-												<tr key={index} className='bg-white border-b hover:bg-gray-50'>
-													<td className="px-6 py-4">{item.userPostData.id}</td>
-													<td className="px-6 py-4">{item.userPostData.username}</td>
-													<td className="px-6 py-4">{item.count}</td>
-													<td className="px-6 py-4">{item.countAll}</td>
-												</tr>
-											))
-										}
+									<tbody key={index}>
+										<tr key={index} className='bg-white border-b hover:bg-gray-50'>
+											<td className="px-6 py-4">{item.userPostData.id}</td>
+											<td className="px-6 py-4">{item.userPostData.username}</td>
+											<td className="px-6 py-4">{item.userPostData.email}</td>
+											<td className="px-6 py-4">{item.count}</td>
+											<td className="px-6 py-4">{item.countAll}</td>
+										</tr>
 									</tbody>
 								))
 							}
