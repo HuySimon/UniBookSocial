@@ -1,6 +1,9 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useState, useRef, useEffect } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
+import Axios from '../../../api/index'
+import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
 // eslint-disable-next-line react/prop-types, no-unused-vars
 function EditUser({ data, onUpdateUser, onClose }) {
 	const [role, setRole] = useState(data[2]);
@@ -11,14 +14,39 @@ function EditUser({ data, onUpdateUser, onClose }) {
 			onClose([false, 0, 0]);
 		}
 	};
-
+	const handleResetPassword = async (id) => {
+		try {
+			const res = await Axios.patch(`/api/v1/users/${id}`, {
+				password: "123456789"
+			})
+			if (res.status === 200) {
+				console.log(res)
+				toast.success("Reset password successfully")
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	}
 	useEffect(() => {
 		document.addEventListener('mousedown', handleClickOutside);
 		return () => {
 			document.removeEventListener('mousedown', handleClickOutside);
 		};
 	}, []);
-	console.log(role, status)
+	const handleResetModal = () => {
+		Swal.fire({
+			title: `Are you sure you want to reset this user's password?`,
+			icon: 'info',
+			showCancelButton: true,
+			confirmButtonText: 'Confirm',
+			cancelButtonText: 'Cancel',
+			allowOutsideClick: false,
+		}).then((result) => {
+			if (result.isConfirmed) {
+				handleResetPassword(data[1])
+			}
+		});
+	};
 	return (
 		<div
 			id="editUserModal"
@@ -41,7 +69,7 @@ function EditUser({ data, onUpdateUser, onClose }) {
 					{/* <!-- Modal body --> */}
 					<div className="p-6 space-y-6">
 						<div className="flex flex-col gap-3 w-1/2">
-							<label htmlFor="department" className="block mb-2 text-sm font-medium text-gray-900 ">
+							<label htmlFor="department" className="block text-sm font-medium text-gray-900 ">
 								Role
 							</label>
 							<select
@@ -56,6 +84,9 @@ function EditUser({ data, onUpdateUser, onClose }) {
 								<option value="2">Admin</option>
 								<option value="3">Post management</option>
 							</select>
+							<label htmlFor="department" className="block text-sm font-medium text-gray-900 ">
+								Status
+							</label>
 							<select
 								id="status"
 								defaultValue={data[3]}
@@ -67,7 +98,9 @@ function EditUser({ data, onUpdateUser, onClose }) {
 								<option value="Active">Active</option>
 								<option value="Disabled">Disabled</option>
 							</select>
-							<button type="button" className='w-fit px-3 py-2 bg-red-500 rounded-md text-white'>Reset Password</button>
+							<button
+								onClick={handleResetModal}
+								type="button" className='w-fit px-3 py-2 bg-red-500 rounded-md text-white'>Reset Password</button>
 						</div>
 					</div>
 					{/* <!-- Modal footer --> */}

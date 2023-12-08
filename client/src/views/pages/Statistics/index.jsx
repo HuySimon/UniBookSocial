@@ -182,7 +182,7 @@ const Statistics = () => {
 					<tbody key={1}>
 						{
 							[...Array(5)].fill(null).map((_, index) => (
-								<tr className='bg-white border-b hover:bg-gray-50'>
+								<tr key={index} className='bg-white border-b hover:bg-gray-50'>
 									<td className="px-6 py-4">Hello world</td>
 									<td className="px-6 py-4">Hello world</td>
 									<td className="px-6 py-4">Hello world</td>
