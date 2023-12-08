@@ -226,7 +226,17 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
 	// 5) Log user in, send JWT
 	createSendToken(user, 200, res)
 });
-
+exports.resetDefaultPassword = catchAsync(async (req, res, next) => {
+	const user = await User.findByPk(req.params.id)
+	user.password = '123456789'
+	await user.save()
+	res.status(200).json({
+		status: 'success',
+		data: {
+			data: user
+		}
+	})
+})
 exports.logout = (req, res) => {
 	res.cookie('jwt', 'loggedout', {
 		expires: new Date(Date.now() + 5 * 1000),

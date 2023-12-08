@@ -74,10 +74,10 @@ const filterUser = (queryObj) => {
     queryObj.data.where = { status: { [Op.ne]: 'Deleted' } }
   return queryObj
 }
+
 exports.createUser = factory.createOne(User)
 exports.getAllUsers = factory.getAll(User, filterUser)
 exports.getUser = factory.getOne(User)
-//Do not update password with this!
 exports.checkDisabledUser = catchAsync(async (req, res, next) => {
   if (req.body.status == 'Disabled') {
     let user = await User.findByPk(req.params.id)
@@ -85,6 +85,7 @@ exports.checkDisabledUser = catchAsync(async (req, res, next) => {
   }
   next()
 })
+//Do not update password with this!
 exports.updateUser = factory.updateOne(User);
 exports.deleteUser = catchAsync(async (req, res, next) => {
 

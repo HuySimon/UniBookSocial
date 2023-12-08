@@ -28,6 +28,8 @@ router.patch(
 router.delete('/deleteMe', userController.deleteMe);
 
 router
+  .patch('/:id/resetDefaultPassword', authController.restrictTo(2), authController.resetDefaultPassword)
+router
   .route('/')
   .get(authController.restrictTo(2), userController.getAllUsers)
   .post(authController.restrictTo(2), userController.createUser);

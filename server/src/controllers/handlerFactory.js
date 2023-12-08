@@ -49,12 +49,14 @@ exports.createOne = (Model, options) =>
 		});
 	});
 
-exports.updateOne = (Model) =>
+exports.updateOne = (Model, optionsHooks) =>
 	catchAsync(async (req, res, next) => {
 		const data = await Model.update(req.body, {
 			where: { id: req.params.id },
+			...optionsHooks
 		});
-		if (!data) {
+		console.log(data, req.body, req.params.id);
+		if (!data[0]) {
 			return next(new AppError("No data found with that ID", 404));
 		}
 		const updateData = await Model.findByPk(req.params.id);

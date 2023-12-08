@@ -10,7 +10,6 @@ const User = db.User;
 const Notification = db.Notification;
 
 exports.statistics = catchAsync(async (req, res, next) => {
-	console.log(new Date(new Date(req.params.dayEnd).getTime() + 24 * 60 * 60 * 1000))
 	const posts = await Post.findAll({
 		attributes: [
 			[fn('date_format', col('updatedAt'), '%Y-%m-%d'), 'date_col_formed'],
@@ -19,10 +18,19 @@ exports.statistics = catchAsync(async (req, res, next) => {
 		where: {
 			status: req.params.status,
 			updatedAt: {
-				// [Op.and]: {
-				// 	[Op.gte]: new Date(req.params.dayStart),
-				// 	[Op.lte]: new Date(req.params.dayEnd)
-				// }
+				[Op.between]: [new Date(req.params.dayStart), new Date(new Date(req.params.dayEnd).getTime() + 24 * 60 * 60 * 1000)]
+			}
+		},
+		group: [fn('date_format', col('updatedAt'), '%Y-%m-%d'), 'date_col_formed'],
+	})
+	const users = await Post.findAll({
+		attributes: [
+			[fn('date_format', col('updatedAt'), '%Y-%m-%d'), 'date_col_formed'],
+			[fn('COUNT', col('id')), 'count'],
+		],
+		where: {
+			status: req.params.status,
+			updatedAt: {
 				[Op.between]: [new Date(req.params.dayStart), new Date(new Date(req.params.dayEnd).getTime() + 24 * 60 * 60 * 1000)]
 			}
 		},
@@ -30,7 +38,8 @@ exports.statistics = catchAsync(async (req, res, next) => {
 	})
 	res.status(200).json({
 		status: 'success',
-		posts
+		posts,
+		users
 	})
 })
 

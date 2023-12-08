@@ -90,9 +90,9 @@ module.exports = (sequelize, DataTypes) => {
 				instance.status = 'Active'
 			},
 			beforeSave: async function (instance, options) {
+				console.log('abcd2')
 				if (instance.changed('password')) {
 					instance.password = await bcrypt.hash(instance.password, 12);
-
 				}
 			}
 		},
