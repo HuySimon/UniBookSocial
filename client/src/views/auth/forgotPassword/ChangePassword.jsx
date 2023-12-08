@@ -35,7 +35,7 @@ const ChangePassword = ({ title }) => {
 			password: data.password,
 			confirmPassword: data.confirmPassword
 		}
-		Axios.patch(`/api/v1/users/resetPassword/${state.resetToken}`, newPassword).then(res => {
+		Axios.patch(`/api/v1/users/resetPassword/${state.resetPasswordToken}`, newPassword).then(res => {
 			toast.success("Change password success!")
 			navigate('/login')
 		}).catch(err => {
