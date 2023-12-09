@@ -9,6 +9,7 @@ const Statistics = () => {
 	const [selectedFilter, setSelectedFilter] = useState('Violation');
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 	const [chartData, setChartData] = useState({ categories: [], data: [] });
+	const [dateFilter, setDateFilter] = useState([])
 	const [dataTable, setDataTable] = useState([])
 	const modalRef = useRef(null);
 	const { register, handleSubmit, formState: { errors }, setFocus } = useForm({
@@ -51,6 +52,7 @@ const Statistics = () => {
 			toast.error("The limit between 2 dates is less or equal than 30 days")
 			return setFocus("dayStart")
 		}
+		setDateFilter([data.dayStart, data.dayEnd])
 		try {
 			const response = await Axios.get(`/api/v1/posts/statistics/${selectedFilter}/dayStart/${data.dayStart}/dayEnd/${data.dayEnd}`,);
 			console.log(selectedFilter);
@@ -71,13 +73,13 @@ const Statistics = () => {
 	};
 	const options = {
 		chart: {
-			id: 'apexchart-example',
+			id: `Data-of-${selectedFilter === "Violation" ? "Violated" : "Checking"}-Posts `,
 		},
 		xaxis: {
 			categories: chartData.categories,
 		},
 		title: {
-			text: `Number of ${selectedFilter === "Violation" ? "violated" : "checking"} posts`,
+			text: `Number of ${selectedFilter === "Violation" ? "violated" : "checking"} posts ${dateFilter.length !== 0 ? ` between ${dateFilter[0]} - ${dateFilter[1]}` : ''} `,
 			offsetX: 0,
 			offsetY: 0,
 			align: 'center',
@@ -185,9 +187,9 @@ const Statistics = () => {
 							<p className='font-medium'>Total: {dataTable.length}</p>
 							<button
 								onClick={onDownload}
-								className='flex items-center gap-1 group transition-all px-3 py-1 mr-1 hover:bg-[#C5E898] rounded-md'>
-								<IoPrintOutline size={30} className='' />
-								<span className='w-0 hidden transition-all group-hover:block group-hover:w-auto '>Export to excel</span>
+								className='flex items-center gap-1 group transition-all px-3 py-1 mr-1 hover:bg-primary-main rounded-md'>
+								<IoPrintOutline size={30} className='group-hover:text-white' />
+								<span className='w-0 hidden transition-all group-hover:block group-hover:text-white group-hover:w-auto '>Export to excel</span>
 							</button>
 						</div>
 
@@ -201,9 +203,9 @@ const Statistics = () => {
 									<th scope="col" className="px-6 py-3">Total</th>
 								</tr>
 							</thead>
-							{
-								dataTable.map((item, index) => (
-									<tbody key={index}>
+							<tbody key={1}>
+								{
+									dataTable.map((item, index) => (
 										<tr key={index} className='bg-white border-b hover:bg-gray-50'>
 											<td className="px-6 py-4">{item.userPostData.id}</td>
 											<td className="px-6 py-4">{item.userPostData.username}</td>
@@ -211,9 +213,9 @@ const Statistics = () => {
 											<td className="px-6 py-4">{item.count}</td>
 											<td className="px-6 py-4">{item.countAll}</td>
 										</tr>
-									</tbody>
-								))
-							}
+									))
+								}
+							</tbody>
 						</table>
 					</div>
 				)

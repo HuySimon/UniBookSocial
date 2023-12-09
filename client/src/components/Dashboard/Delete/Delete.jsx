@@ -11,7 +11,7 @@ import { toast } from 'react-toastify';
 const Delete = ({ userId, onDeleteSuccess }) => {
 	const onDeleteUser = async () => {
 		try {
-			const res = await Axios.delete(`${apiUrl}/${userId}`);
+			const res = await Axios.delete(`/api/v1/users/${userId}`);
 			console.log(userId)
 			if (res && +res.status === 204) {
 				// onDeleteSuccess(userId);
