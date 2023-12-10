@@ -1,10 +1,9 @@
--- Active: 1695113499338@@127.0.0.1@3306@unibooksocial
 -- phpMyAdmin SQL Dump
 -- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 03, 2023 at 07:58 AM
+-- Generation Time: Dec 10, 2023 at 08:24 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -35,7 +34,7 @@ CREATE TABLE `notifications` (
   `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `userSend` int NOT NULL,
   `userReceive` int NOT NULL,
-  `post` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
+  `post` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -76,7 +75,15 @@ INSERT INTO `notifications` (`id`, `isSeen`, `typeNoti`, `content`, `userSend`, 
 (29, 1, 'Unconfirmed', NULL, 6, 16, '22', '2023-11-29 21:23:51', '2023-12-02 19:47:19'),
 (30, 1, 'Confirm', NULL, 6, 16, '22', '2023-11-29 21:23:53', '2023-12-02 19:47:14'),
 (31, 0, 'Confirm', NULL, 16, 6, '24', '2023-11-29 21:25:03', '2023-11-29 21:25:03'),
-(32, 0, 'Unconfirmed', NULL, 16, 6, '24', '2023-11-29 21:26:52', '2023-11-29 21:26:52');
+(32, 0, 'Unconfirmed', NULL, 16, 6, '24', '2023-11-29 21:26:52', '2023-11-29 21:26:52'),
+(33, 0, 'Confirm', NULL, 16, 6, '1012230003', '2023-12-10 14:47:24', '2023-12-10 14:47:24'),
+(34, 0, 'Confirm', NULL, 16, 6, '1012230002', '2023-12-10 14:48:57', '2023-12-10 14:48:57'),
+(35, 0, 'CheckPost', NULL, 6, 16, '1012230011', '2023-12-10 14:51:01', '2023-12-10 14:51:01'),
+(36, 0, 'Confirm', NULL, 6, 16, '1012230009', '2023-12-10 14:51:19', '2023-12-10 14:51:19'),
+(37, 0, 'Confirm', NULL, 6, 16, '1012230008', '2023-12-10 14:51:49', '2023-12-10 14:51:49'),
+(38, 0, 'CheckPost', NULL, 16, 6, '1012230012', '2023-12-10 14:56:45', '2023-12-10 14:56:45'),
+(39, 0, 'CheckPost', NULL, 16, 6, '1012230013', '2023-12-10 15:00:40', '2023-12-10 15:00:40'),
+(40, 0, 'Violation', 'Ảnh không phù hợp', 3, 6, '1012230013', '2023-12-10 15:01:10', '2023-12-10 15:01:10');
 
 -- --------------------------------------------------------
 
@@ -111,7 +118,7 @@ INSERT INTO `permissions` (`id`, `name`, `createdAt`, `updatedAt`) VALUES
 --
 
 CREATE TABLE `posts` (
-  `id` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
+  `id` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `price` float NOT NULL,
   `mainImage` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
@@ -130,18 +137,31 @@ CREATE TABLE `posts` (
 --
 
 INSERT INTO `posts` (`id`, `title`, `price`, `mainImage`, `description`, `status`, `isNew`, `isGeneralSubject`, `userConfirm`, `userPost`, `createdAt`, `updatedAt`) VALUES
-('0312230001', 'ad', 3, '1701588665043-715470976.png', 'aef', 'Unconfirmed', 1, 0, NULL, 16, '2023-12-03 14:31:05', '2023-12-03 14:31:05'),
-('0312230002', 'aef', 4, '1701588924771-855617018.jpg', 'afe', 'Unconfirmed', 1, 0, NULL, 16, '2023-12-03 14:35:24', '2023-12-03 14:35:24'),
-('0312230003', 'asef', 45, '1701588954321-110700971.png', 'aef', 'Unconfirmed', 1, 0, NULL, 16, '2023-12-03 14:35:54', '2023-12-03 14:35:54'),
+('0312230001', 'ad', 3, '1702192297348-871301673.jpg', 'aef', 'Unconfirmed', 1, 0, NULL, 16, '2023-12-03 14:31:05', '2023-12-03 14:31:05'),
+('0312230002', 'aef', 4, '1702192297348-871301673.jpg', 'afe', 'Unconfirmed', 1, 0, NULL, 16, '2023-12-03 14:35:24', '2023-12-03 14:35:24'),
+('0312230003', 'asef', 45, '1702192297348-871301673.jpg', 'aef', 'Unconfirmed', 1, 0, NULL, 16, '2023-12-03 14:35:54', '2023-12-03 14:35:54'),
 ('0312230004', 'asfe', 15000, '1701589067161-712249949.jfif', 'awfe', 'Unconfirmed', 0, 0, NULL, 16, '2023-12-03 14:37:47', '2023-12-03 14:41:59'),
 ('1', 'Kinh tế chính trị', 15000, 'mainImage.png', 'Tài liệu tham khảo', 'Confirm', 1, 0, 2, 5, '2023-09-25 02:02:24', '2023-09-25 02:02:24'),
 ('10', 'Lịch sử Đảng cộng sản Việt Nam', 35000, 'mainImage.png', 'Tài liệu tham khảo', 'Delivered', 1, 0, 16, 11, '2023-09-25 02:02:24', '2023-11-10 19:34:02'),
+('1012230001', 'Tiếng Anh I', 30000, '1702192297348-871301673.jpg', 'Đã cào code (ghi chép đầy đủ)', 'Unconfirmed', 0, 0, NULL, 6, '2023-12-10 14:11:37', '2023-12-10 14:13:36'),
+('1012230002', 'Tiếng Anh III', 80000, '1702192646657-375441002.jpg', '\r\nBật mí là mấy môn này chị học toàn được A, nên bạn nào mua có khi cũng được A nè ( chị có giải bài tập trong đó khá chi tiết nên là bạn nào phát biểu nhiều thì điểm quá trình sẽ cao lắm đó nha ). Sách hết code\r\n', 'Confirm', 0, 0, 16, 6, '2023-12-10 14:17:26', '2023-12-10 14:48:57'),
+('1012230003', 'Pháp luật đại cương', 20000, '1702192731790-746939778.jpg', 'Bạn nào có nhu cầu thì ib để mình quay clip coi tình trạng sách rõ hơn nhaa. Bìa sách mình hay nghịch vẽ nên v thoi chứ bên trong vẫn okela nha.', 'Delivered', 1, 0, 16, 6, '2023-12-10 14:18:51', '2023-12-10 14:47:56'),
+('1012230004', 'Luật ngân sách nhà nước', 15000, '1702192884203-134072660.jpg', 'Giáo trình new 99% ít highlight cần pass.', 'Unconfirmed', 1, 1, NULL, 6, '2023-12-10 14:21:24', '2023-12-10 14:21:24'),
+('1012230005', 'Luật thương mại Việt Nam', 40000, '1702193013477-727518934.jpg', 'GT new 99% ít highlight.', 'Unconfirmed', 1, 1, NULL, 6, '2023-12-10 14:23:33', '2023-12-10 14:23:33'),
+('1012230006', 'Chủ nghĩa xã hội', 25000, '1702193260803-968656592.jpg', 'Kèm tài liệu giấy mình tìm được trong quá trình học.', 'Unconfirmed', 1, 0, NULL, 16, '2023-12-10 14:27:40', '2023-12-10 14:27:40'),
+('1012230007', 'Luật hiến pháp Việt Nam', 20000, '1702193516820-640508167.jpg', 'Ngoại hình tà tà vậy, bên trong thì nguyên.', 'Unconfirmed', 0, 1, NULL, 16, '2023-12-10 14:31:56', '2023-12-10 14:31:56'),
+('1012230008', 'Kinh tế vĩ mô', 20000, '1702193849750-628783579.jpg', 'giáo trình+slide bài giảng có ghi chú', 'Confirm', 0, 1, 6, 16, '2023-12-10 14:37:29', '2023-12-10 14:51:49'),
+('1012230009', 'Lịch sử Đảng Cộng sản Việt Nam', 45000, '1702194124331-468474204.jpg', 'sách gốc còn mới 95%, mình có ghi một vài chỗ thôi ạ, giá bìa 90k mình pass 45k', 'Delivered', 1, 0, 6, 16, '2023-12-10 14:42:04', '2023-12-10 14:51:21'),
+('1012230010', 'Dùng từ viết câu', 15000, '1702194206207-578690322.jpg', 'Cuốn này cho bạn nào học môn tiếng việt thực hành, mình có tặng kèm bài tập.', 'Unconfirmed', 1, 1, NULL, 16, '2023-12-10 14:43:26', '2023-12-10 14:43:26'),
+('1012230011', 'Sách nhập môn khoa học du lịch', 10000, '1702194420631-567309075.jpg', 'Tặng thêm file pdf bài giảng cô Hạnh.', 'CheckPost', 0, 1, NULL, 16, '2023-12-10 14:47:00', '2023-12-10 14:51:01'),
+('1012230012', 'Kinh tế chính trị', 20000, '1702194928934-473670421.jpg', 'Giáo trình mới xài một kì nên mới nha', 'CheckPost', 1, 0, NULL, 6, '2023-12-10 14:55:28', '2023-12-10 14:56:45'),
+('1012230013', 'Tiếng Anh II', 20000, '1702195175373-839439421.jpg', 'Sách mới', 'Violation', 1, 1, NULL, 6, '2023-12-10 14:59:35', '2023-12-10 15:01:10'),
 ('2', 'Chủ nghĩa xã hội khoa học', 30000, 'mainImage.png', 'Tài liệu tham khảo', 'Violation', 1, 0, NULL, 20, '2023-09-25 02:02:24', '2023-10-22 20:13:52'),
 ('21', 'Test2', 150000, '1697789874796-804553370.png', 'oke', 'Delivered', 1, 0, 3, 16, '2023-10-20 15:17:54', '2023-11-10 18:57:02'),
 ('22', 'Hóa 2', 8, '1699620174133-489063823.jfif', 'oke', 'Delivered', 0, 0, 6, 16, '2023-11-10 19:42:54', '2023-11-29 21:23:58'),
 ('23', 'abc', 12, '1699620421278-845035065.jpg', 'dd', 'Delivered', 1, 1, 41, 16, '2023-11-10 19:47:01', '2023-11-17 20:00:24'),
-('24', 'áef', 34, '1701267882560-140506328.jpg', 'ádfe', 'Unconfirmed', 1, 0, NULL, 6, '2023-11-29 21:24:42', '2023-11-29 21:26:52'),
-('25', 'aefa', 555, '1701268281247-5068557.jfif', 'áef', 'Unconfirmed', 1, 0, NULL, 16, '2023-11-29 21:31:21', '2023-11-29 21:31:21'),
+('24', 'áef', 34, '1702192297348-871301673.jpg', 'ádfe', 'Unconfirmed', 1, 0, NULL, 6, '2023-11-29 21:24:42', '2023-11-29 21:26:52'),
+('25', 'aefa', 555, '1702192297348-871301673.jpg', 'áef', 'Unconfirmed', 1, 0, NULL, 16, '2023-11-29 21:31:21', '2023-11-29 21:31:21'),
 ('3', 'Kỹ thuật lập trình', 20000, 'mainImage.png', 'Tài liệu tham khảo', 'Delivery', 1, 1, 17, 6, '2023-09-25 02:02:24', '2023-09-25 02:02:24'),
 ('4', 'GDQP và AN I', 10000, 'mainImage.png', 'Tài liệu học tập', 'Confirm', 1, 0, 10, 7, '2023-09-25 02:02:24', '2023-09-25 02:02:24'),
 ('5', 'Triết học Mac-Lenin', 25000, 'mainImage.png', 'Tài liệu tham khảo', 'Violation', 0, 0, NULL, 15, '2023-09-25 02:02:24', '2023-11-09 21:25:14'),
@@ -157,7 +177,7 @@ INSERT INTO `posts` (`id`, `title`, `price`, `mainImage`, `description`, `status
 
 CREATE TABLE `reports` (
   `user` int NOT NULL,
-  `post` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
+  `post` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL
@@ -169,8 +189,11 @@ CREATE TABLE `reports` (
 
 INSERT INTO `reports` (`user`, `post`, `content`, `createdAt`, `updatedAt`) VALUES
 (2, '1', 'Tài liệu không giống ảnh', '2023-10-06 07:47:01', '2023-10-06 07:47:01'),
+(6, '1012230011', 'Ảnh không phù hợp', '2023-12-10 14:51:01', '2023-12-10 14:51:01'),
 (10, '4', 'Tài liệu mờ một số trang', '2023-10-06 07:49:36', '2023-10-06 07:49:36'),
 (12, '6', 'Bán giá quá đắt', '2023-10-06 07:48:22', '2023-10-06 07:48:22'),
+(16, '1012230012', 'Ảnh không giống giáo trình', '2023-12-10 14:56:45', '2023-12-10 14:56:45'),
+(16, '1012230013', 'Ảnh không phù hợp', '2023-12-10 15:00:40', '2023-12-10 15:00:40'),
 (16, '2', 'Nội dung không phù hợp', '2023-10-22 21:04:12', '2023-10-22 21:04:12');
 
 -- --------------------------------------------------------
@@ -217,7 +240,7 @@ CREATE TABLE `reviews` (
   `numStars` int NOT NULL,
   `content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `user` int NOT NULL,
-  `post` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
+  `post` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `isShow` tinyint(1) NOT NULL DEFAULT '1',
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL
@@ -229,7 +252,9 @@ CREATE TABLE `reviews` (
 
 INSERT INTO `reviews` (`id`, `numStars`, `content`, `user`, `post`, `isShow`, `createdAt`, `updatedAt`) VALUES
 (1, 3, 'Sản phẩm good nha', 17, '3', 1, '2023-10-06 08:54:13', '2023-10-06 08:54:13'),
-(3, 5, 'abc', 16, '10', 1, '2023-11-29 21:27:54', '2023-11-29 21:27:54');
+(3, 5, 'abc', 16, '10', 1, '2023-11-29 21:27:54', '2023-11-29 21:27:54'),
+(4, 5, 'Giáo trình còn mới với đầy đủ nha', 16, '1012230003', 1, '2023-12-10 14:48:48', '2023-12-10 14:48:48'),
+(5, 4, 'Sản phẩm giống mô tả', 6, '1012230009', 1, '2023-12-10 14:51:41', '2023-12-10 14:51:41');
 
 -- --------------------------------------------------------
 
@@ -445,7 +470,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `permissions`
@@ -463,7 +488,7 @@ ALTER TABLE `resetpasswordtokens`
 -- AUTO_INCREMENT for table `reviews`
 --
 ALTER TABLE `reviews`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `roles`
