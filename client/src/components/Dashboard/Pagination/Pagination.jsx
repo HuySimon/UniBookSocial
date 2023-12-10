@@ -88,7 +88,7 @@ function Pagination({ totalPages, currentPage, onPageChange }) {
 					)}
 				</div>
 				{
-					currentPage != totalPages ? (
+					currentPage != totalPages && totalPages > 1 ? (
 						<div
 							className={`flex items-center pt-3 text-gray-600 ${currentPage === totalPages ? '' : 'hover:text-indigo-700 cursor-pointer'
 								}`}

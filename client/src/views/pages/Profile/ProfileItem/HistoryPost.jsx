@@ -10,7 +10,7 @@ import { useReviewContext } from '../../../../hooks/useReviewContext'
 import { motion } from 'framer-motion'
 import { RiSearch2Line } from 'react-icons/ri'
 const HistoryPost = () => {
-	const menu = ["All", "Unconfirmed", "Confirm", "Delivered"]
+	const menu = ["All", "Unconfirmed", "Confirmed", "Delivered"]
 	const [activeButton, setActiveButton] = useState(0)
 	const [query, setQuery] = useState("")
 	const [state, dispatch] = useAuthContext()
@@ -27,7 +27,7 @@ const HistoryPost = () => {
 		} else if (activeButton === 1) {
 			url = `/api/v1/posts?filter=and(equals(userPost,'${userID.id}'),equals(status,'Unconfirmed'))&include=userPostData&sort=-createdAt`
 		} else if (activeButton === 2) {
-			url = `/api/v1/posts?filter=and(equals(userPost,'${userID.id}'),equals(status,'Confirm'))&include=userPostData&sort=-createdAt`
+			url = `/api/v1/posts?filter=and(equals(userPost,'${userID.id}'),equals(status,'Confirmed'))&include=userPostData&sort=-createdAt`
 		} else {
 			url = `/api/v1/posts?filter=and(equals(userPost,'${userID.id}'),equals(status,'Delivered'))&include=userPostData&sort=-createdAt`
 		}

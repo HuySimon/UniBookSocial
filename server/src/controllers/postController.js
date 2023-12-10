@@ -174,6 +174,5 @@ exports.createPost = catchAsync(async (req, res, next) => {
 })
 exports.getAllPosts = factory.getAll(Post);
 exports.updatePost = factory.updateOne(Post);
-const optionGetPost = { include: [User, 'userPostData'] };
-exports.getPost = factory.getOne(Post, postOptions);
+exports.getPost = factory.getOne(Post);
 exports.deletePost = factory.deleteOne(Post);

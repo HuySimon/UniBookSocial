@@ -23,7 +23,10 @@ exports.getAll = (Model, filterObj) =>
 	});
 exports.getOne = (Model, options) =>
 	catchAsync(async (req, res, next) => {
-		const data = await Model.findByPk(req.params.id, options);
+		let queryObj = querystringParser.parse(req.url.split("?")[1]);
+		if (queryObj.errors.length)
+			return next(new AppError("Invalid parameter!", 400));
+		const data = await Model.findByPk(req.params.id, queryObj.data);
 		if (!data) {
 			return next(new AppError("No data found with that ID", 404));
 		}

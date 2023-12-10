@@ -108,20 +108,23 @@ const Index = ({ isVisibleNotify, handleNotify }) => {
 	]
 	const notifySend = [
 		{
-			type: "Confirm",
+			type: "Confirmed",
 			content: `Bài đăng title được xác nhận bởi username`
 		},
 		{
 			type: "Unconfirmed",
-			content: `Bài đăng title bị hủy xác nhận bởi username`
+			content: `The post 'title' is rejected by username`
 		},
 		{
-			type: "Checkpost",
-			content: "Bài đăng title của bạn bị báo cáo",
+			type: "Checking",
+			content: "Your post 'title' got reported",
 		},
 		{
-			type: "Violation",
-			content: "Nội dung vi phạm: content"
+			type: "Violated",
+			content: "Violated content reports: content"
+		},{
+			type: "Clear",
+			content: "Congratulations! Your post is cleared of any violations."
 		}
 	]
 	return (
@@ -167,7 +170,7 @@ const Index = ({ isVisibleNotify, handleNotify }) => {
 											<div
 												onClick={() => { navigate(`/detailPost/${item.post}`) }}
 												key={index} className={`w-full flex items-center py-2 cursor-pointer transition-all bg-transparent hover:bg-gray-100`}>
-												{item.typeNoti === 'Confirm' ? (
+												{item.typeNoti === 'Confirmed' ? (
 													<GiConfirmed size={52} color='green' className='w-1/4' />
 												) : item.typeNoti === 'Violation' ? (
 													<PiWarningBold size={52} color='red' className='w-1/4' />
