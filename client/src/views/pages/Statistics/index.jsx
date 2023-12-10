@@ -99,7 +99,7 @@ const Statistics = () => {
 			categories: chartData.categories,
 		},
 		title: {
-			text: `Number of ${selectedFilter === "Violated" ? "violated" : "checking"} posts ${dateFilter.length !== 0 ? ` between ${dateFilter[0]} and ${dateFilter[1]}` : ''} `,
+			text: `Number of ${selectedFilter === "Violation" ? "violated" : "checking"} posts ${dateFilter.length !== 0 ? ` between ${dateFilter[0]} - ${dateFilter[1]}` : ''} `,
 			offsetX: 0,
 			offsetY: 0,
 			align: 'center',
