@@ -1,12 +1,9 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
 import { RiSearch2Line } from 'react-icons/ri'
-import { ImSpinner9 } from 'react-icons/im'
 import Axios from '../../../../api/index'
 import ConfirmPost from './HistoryConfirmComponents/ConfirmPost'
 import { useAuthContext } from '../../../../hooks/useAuthContext'
-import { useForm } from 'react-hook-form'
 import { useReviewContext } from '../../../../hooks/useReviewContext'
 import { usePostContext } from '../../../../hooks/usePostContext'
 const HistoryConfirm = () => {
@@ -19,12 +16,6 @@ const HistoryConfirm = () => {
 	const [activeButton, setActiveButton] = useState(0)
 	const [data, setData] = useState([])
 	const curUser = state.user.user
-	const { register, handleSubmit } = useForm({
-		defaultValues: {
-			query: ""
-		},
-		mode: "onChange"
-	})
 	const fetchConfirmPost = async () => {
 		setIsLoading(true)
 		let url = `/api/v1/posts?filter=and(equals(status,'Confirmed'),equals(userConfirm,'${curUser.id}'))&include=userPostData&sort=-updatedAt`
