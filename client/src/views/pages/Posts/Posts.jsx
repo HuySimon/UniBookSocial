@@ -197,22 +197,26 @@ function Posts() {
 								</div>
 								<table className="flex border border-gray-500 rounded-lg my-4">
 									<thead className="flex flex-col border-r w-1/2 xl:w-1/5 border-gray-500">
-										<th className="border-b p-2 border-gray-500 font-medium text-sm">Title</th>
-										<th className="border-b p-2 border-gray-500 font-medium text-sm">Price</th>
-										<th className="border-b p-2 border-gray-500 font-medium text-sm">Major</th>
-										<th className="border-b p-2 border-gray-500 font-medium text-sm">Type</th>
-										<th className="border-b p-2 border-gray-500 font-medium text-sm">Description</th>
-										<th className="border-b p-2 border-gray-500 font-medium text-sm">Email</th>
-										<th className="p-2 font-medium text-sm">Content Reports</th>
+										<tr>
+											<th className="border-b p-2 border-gray-500 font-medium text-sm">Title</th>
+											<th className="border-b p-2 border-gray-500 font-medium text-sm">Price</th>
+											<th className="border-b p-2 border-gray-500 font-medium text-sm">Major</th>
+											<th className="border-b p-2 border-gray-500 font-medium text-sm">Type</th>
+											<th className="border-b p-2 border-gray-500 font-medium text-sm">Description</th>
+											<th className="border-b p-2 border-gray-500 font-medium text-sm">Email</th>
+											<th className="p-2 font-medium text-sm">Content Reports</th>
+										</tr>
 									</thead>
 									<tbody className="flex flex-col w-1/2 xl:w-4/5">
-										<td className="p-2 text-sm">{post.title}</td>
-										<td className="p-2 border-t border-gray-500 text-sm">{post.price}</td>
-										<td className="p-2 border-t border-gray-500 text-sm">General Subject</td>
-										<td className="p-2 border-t border-gray-500 text-sm">Old</td>
-										<td className="p-2 border-t border-gray-500 text-sm">{post.description}</td>
-										<td className="p-2 border-t border-gray-500 text-sm">{post.userPostData.email}</td>
-										<td className="p-2 border-t border-gray-500 text-sm">{post.reportData.content}</td>
+										<tr>
+											<td className="p-2 text-sm">{post.title}</td>
+											<td className="p-2 border-t border-gray-500 text-sm">{post.price}</td>
+											<td className="p-2 border-t border-gray-500 text-sm">General Subject</td>
+											<td className="p-2 border-t border-gray-500 text-sm">Old</td>
+											<td className="p-2 border-t border-gray-500 text-sm">{post.description}</td>
+											<td className="p-2 border-t border-gray-500 text-sm">{post.userPostData.email}</td>
+											<td className="p-2 border-t border-gray-500 text-sm">{post.reportData.content}</td>
+										</tr>
 									</tbody>
 								</table>
 								<div className="flex justify-end gap-2 items-center">
@@ -251,11 +255,11 @@ function Posts() {
 			}
 			{/* Modal Popup Message */}
 			{selectedModalId[0] && (
-				<ModalMessage postID={selectedModalId[1]} onClose={setSelectedModalId} fetchData={fetchData}/>
+				<ModalMessage postID={selectedModalId[1]} onClose={setSelectedModalId} fetchData={fetchData} />
 			)}
 			{
 				isVisibleModal && (
-					<GenericModal alterType="CheckPost" actionType={["Unconfirmed", "Verify post has not been violated successfully!"]}
+					<GenericModal alterType="Checking" actionType={["Unconfirmed", "Verify post has not been violated successfully!"]}
 						setIsVisibleModal={setIsVisibleModal} confirmAction={handleConfirmViolation} postID={idConfirm} />
 				)
 			}

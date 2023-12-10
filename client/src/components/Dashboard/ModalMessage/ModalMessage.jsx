@@ -83,7 +83,7 @@ function ModalMessage({ postID, onClose,fetchData }) {
 					<div className="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b">
 						<button
 							onClick={() => {
-								handleSentClick(postID, "Violation")
+								handleSentClick(postID, "Violated")
 							}}
 							type="button"
 							id="message"

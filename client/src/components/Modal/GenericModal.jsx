@@ -28,7 +28,7 @@ const GenericModal = ({
 				<div className='p-5'>
 					<div className='flex flex-col items-center'>
 						{/* Adjust icon and text based on actionType */}
-						{actionType[0] === 'Confirm' ? (
+						{actionType[0] === 'Confirmed' ? (
 							<GoCheckCircleFill size={60} className='text-blue-600 mb-3' />
 						) : actionType[0] === 'Unconfirmed' ? (
 							/* Use delete icon or any other suitable icon */
@@ -36,18 +36,18 @@ const GenericModal = ({
 						) : actionType[0] === 'Delivered' ? (
 							<TbTruckDelivery size={60} className='text-green-600 mb-3'
 								style={{ path: { stroke: '#ffffff' } }} />
-						) : alterType === 'CheckPost' && (
+						) : alterType === 'Checking' && (
 							<GoAlertFill size={60} className='text-red-600 mb-3' />
 						)}
 						{/* Adjust text based on actionType */}
 						<p className='font-medium text-center'>
-							{actionType[0] === 'Confirm'
+							{actionType[0] === 'Confirmed'
 								? 'Are you sure you want to confirm this order?'
 								: actionType[0] === 'Unconfirmed' && alterType !== 'CheckPost' ?
 									'Are you sure you want to cancel this order?'
 									: actionType[0] === 'Delivered' ?
 										'Received your order?'
-										: actionType[0] === 'Unconfirmed' && alterType === 'CheckPost' && 'Are you sure this post isn\'t violated?'}
+										: actionType[0] === 'Unconfirmed' && alterType === 'Checking' && 'Are you sure this post isn\'t violated?'}
 						</p>
 						<p className='text-sm'>
 							This action cannot be undone
@@ -70,7 +70,7 @@ const GenericModal = ({
 
 								confirmAction(...args);
 							}}
-							className={`w-full p-2 ${actionType[0] === "Confirm" ? 'bg-blue-600 hover:bg-blue-500' : actionType[0] === "Unconfirmed" ? 'bg-red-600 hover:bg-red-500' : 'bg-green-600 hover:bg-green-500'} rounded-md text-white  transition-all`}
+							className={`w-full p-2 ${actionType[0] === "Confirmed" ? 'bg-blue-600 hover:bg-blue-500' : actionType[0] === "Unconfirmed" ? 'bg-red-600 hover:bg-red-500' : 'bg-green-600 hover:bg-green-500'} rounded-md text-white  transition-all`}
 						>
 							{
 								actionType[0] === "Delivered" ? "Received" : "Submit"
