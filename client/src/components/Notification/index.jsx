@@ -6,10 +6,12 @@ import { HiOutlineBellAlert } from 'react-icons/hi2';
 import {
 	PiWarningBold,
 } from 'react-icons/pi';
+import { SlLike } from "react-icons/sl";
 import { toast } from 'react-toastify';
 import Axios from '../../api/index';
 import { useAuthContext } from '../../hooks/useAuthContext';
 import { useNotificationContext } from '../../hooks/useNotificationContext';
+import { TiWarningOutline } from "react-icons/ti";
 import { useNavigate } from 'react-router-dom';
 
 const Index = ({ isVisibleNotify, handleNotify }) => {
@@ -121,8 +123,8 @@ const Index = ({ isVisibleNotify, handleNotify }) => {
 		},
 		{
 			type: "Violated",
-			content: "Violated content reports: content"
-		},{
+			content: "Content: description"
+		}, {
 			type: "Clear",
 			content: "Congratulations! Your post is cleared of any violations."
 		}
@@ -172,10 +174,14 @@ const Index = ({ isVisibleNotify, handleNotify }) => {
 												key={index} className={`w-full flex items-center py-2 cursor-pointer transition-all bg-transparent hover:bg-gray-100`}>
 												{item.typeNoti === 'Confirmed' ? (
 													<GiConfirmed size={52} color='green' className='w-1/4' />
-												) : item.typeNoti === 'Violation' ? (
+												) : item.typeNoti === 'Violated' ? (
 													<PiWarningBold size={52} color='red' className='w-1/4' />
-												) : (
+												) : item.typeNoti === "Unconfirmed" ? (
 													<GiCancel size={52} color='red' className='w-1/4' />
+												) : item.typeNoti === 'Clear' ? (
+													<SlLike size={52} color='green' className='w-1/4' />
+												) : (
+													<TiWarningOutline size={52} className='text-yellow-500 w-1/4' />
 												)}
 												<div className={`w-3/4 flex flex-col justify-between`}>
 													<div className="w-full flex justify-between items-center mb-1">
@@ -194,7 +200,7 @@ const Index = ({ isVisibleNotify, handleNotify }) => {
 																	__html: notiItem.content
 																		.replace("title", `<i class="text-black/70">' ${item.postData.title} '</i>`)
 																		.replace("username", `<i class="font-medium text-black/70">${item.userSendData.username}</i>`)
-																		.replace("content",`<i class="text-black>${item.content}</i>`)
+																		.replace("description", `<i class="text-black">${item.content}</i>`)
 																}}></p>
 															)
 														))

@@ -109,7 +109,7 @@ function Posts() {
 		}
 	};
 	const onSubmit = async (data) => {
-		let url = `/api/v1/posts?include=userPostData,reportData&page[number]=${currentPage}&page[size]=2&sort=-updatedAt&filter=(equals(status,'CheckPost'))`
+		let url = `/api/v1/posts?include=userPostData,reportData&page[number]=${currentPage}&page[size]=2&sort=-updatedAt&filter=(equals(status,'Checking'))`
 		try {
 			if (data.query != "") {
 				var newQuery = `or(contains(title,'${data.query}'),equals(id,'${data.query}'))`
