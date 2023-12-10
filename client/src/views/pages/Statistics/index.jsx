@@ -3,8 +3,9 @@ import Chart from 'react-apexcharts';
 import { toast } from 'react-toastify';
 import Axios from '../../../api/index';
 import { useForm } from 'react-hook-form';
-import { useDownloadExcel } from 'react-export-table-to-excel'
 import { IoPrintOutline } from "react-icons/io5";
+import { writeFile } from 'xlsx'
+import * as XLSX from 'xlsx'
 const Statistics = () => {
 	const [selectedFilter, setSelectedFilter] = useState('Violated');
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -12,7 +13,7 @@ const Statistics = () => {
 	const [dateFilter, setDateFilter] = useState([new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().substring(0, 10), new Date().toISOString().substring(0, 10)])
 	const [dataTable, setDataTable] = useState([])
 	const modalRef = useRef(null);
-	const tableRef = useRef(document.getElementById('table'))
+	const tableRef = useRef(null)
 	const { register, handleSubmit, formState: { errors }, setFocus } = useForm({
 		defaultValues: {
 			dayStart: new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().substring(0, 10),
@@ -99,7 +100,7 @@ const Statistics = () => {
 			categories: chartData.categories,
 		},
 		title: {
-			text: `Number of ${selectedFilter === "Violation" ? "violated" : "checking"} posts ${dateFilter.length !== 0 ? ` between ${dateFilter[0]} - ${dateFilter[1]}` : ''} `,
+			text: `Number of ${selectedFilter === "Violated" ? "violated" : "checking"} posts ${dateFilter.length !== 0 ? ` between ${dateFilter[0]} and ${dateFilter[1]}` : ''} `,
 			offsetX: 0,
 			offsetY: 0,
 			align: 'center',
@@ -118,21 +119,25 @@ const Statistics = () => {
 		},
 	];
 	useEffect(() => {
-
-	}, [tableRef])
-	useEffect(() => {
-		if (tableRef) {
-			tableRef.current = document.getElementById('table')
-		} else {
-			tableRef.current = document.getElementById('table')
-		}
 		getChartData()
 	}, [dateFilter])
-	const { onDownload } = useDownloadExcel({
-		currentTableRef: tableRef.current,
-		filename: "Violation Posts",
-		sheet: "Example 1",
-	})
+	const exportToExcel = () => {
+		const ws = XLSX.utils.json_to_sheet(dataTable.map(item => ({
+			'ID': item.userPostData.id,
+			'Name': item.userPostData.username,
+			'Email': item.userPostData.email,
+			'Quantity': item.count,
+			'Total': item.countAll,
+		})));
+
+		const wb = XLSX.utils.book_new();
+		XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+		const filename = 'exported_data.xlsx';
+
+		// Save the file
+		writeFile(wb, filename);
+	};
 	return (
 		<div className="relative w-full h-full">
 			<div className="flex items-center pb-4 pt-[15px] bg-white space-x-4">
@@ -212,14 +217,16 @@ const Statistics = () => {
 						<div className="w-full flex justify-between items-center px-3 py-1">
 							<p className='font-medium'>Total: {dataTable.length}</p>
 							<button
-								onClick={onDownload}
+								onClick={() => {
+									exportToExcel();
+									toast.success("Data exported to excel")
+								}}
 								className='flex items-center gap-1 group transition-all px-3 py-1 mr-1 hover:bg-primary-main rounded-md'>
 								<IoPrintOutline size={30} className='group-hover:text-white' />
 								<span className='w-0 hidden transition-all group-hover:block group-hover:text-white group-hover:w-auto '>Export to excel</span>
 							</button>
 						</div>
-
-						<table ref={tableRef} id='table' className='w-full text-sm text-left text-gray-500 border rounded-md'>
+						<table ref={(el) => tableRef.current = el} id='table' className='w-full text-sm text-left text-gray-500 border rounded-md'>
 							<thead className='text-xs text-gray-700 uppercase bg-gray-50'>
 								<tr>
 									<th scope="col" className="px-6 py-3">ID</th>

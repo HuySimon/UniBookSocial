@@ -31,8 +31,7 @@ function Posts() {
 			const response = await Axios.get(url);
 			const data = response.data.data.data;
 			setPostList(data);
-			console.log(data)
-
+			// console.log(data)
 			const totalItems = response.data.totalItem;
 			setTotalPages(Math.ceil(totalItems / itemsPerPage));
 		} catch (error) {
@@ -181,14 +180,16 @@ function Posts() {
 						>
 							<div className="w-full flex flex-col">
 								<div className="w-full flex justify-between items-center">
-									<div className="flex gap-3">
+									<div className="w-full flex gap-3">
 										<div className="w-14 h-14 rounded-full overflow-hidden">
 											<img src={`http://127.0.0.1:5000/public/images/users/avatar/${post.userPostData.avatar}`} alt="" className="w-full h-full object-cover" />
 										</div>
-										<div className="flex flex-col justify-stretch">
-											<span className="name text-base font-medium">{post.userPostData.username}</span>
-											<p className="text-sm leading-4 text-gray-600">{calculateTimeAgo(post.createdAt)}</p>
-											<p className="text-[12px] leading-4 text-gray-600">#{post.id}</p>
+										<div className="w-full flex justify-between items-center">
+											<div className="flex flex-col justify-stretch">
+												<span className="name text-base font-medium">{post.userPostData.username}</span>
+												<p className="text-sm leading-4 text-gray-600">{calculateTimeAgo(post.createdAt)}</p>
+											</div>
+											<p className=" leading-4 text-gray-600">#{post.id}</p>
 										</div>
 									</div>
 								</div>
