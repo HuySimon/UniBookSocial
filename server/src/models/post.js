@@ -60,11 +60,11 @@ module.exports = (sequelize, DataTypes) => {
 			},
 			description: {
 				type: DataTypes.TEXT,
-			},
+			},	
 			status: {
 				type: DataTypes.STRING,
 				validate: {
-					isIn: [["Confirm", "Unconfirmed", "Delivered", 'Violation', 'CheckPost']],
+					isIn: [["Confirmed", "Unconfirmed", "Delivered", 'Violated', 'Checking']],
 				},
 			},
 			isNew: {

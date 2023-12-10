@@ -92,47 +92,50 @@ exports.updateStatus = catchAsync(async (req, res, next) => {
 	const post = await Post.findByPk(req.params.id);
 	if (!post) return next(new AppError('No post found with that Id', 400));
 	switch (req.body.status) {
-		case 'Confirm':
+		case 'Confirmed':
 			if (post.userPost === req.user.id)
 				return next(new AppError('You can\'t confirm your post!', 403));
 			if (post.status !== 'Unconfirmed')
 				return next(new AppError('You can only confirm when the post is unconfirmed', 400));
 			req.body.userReceive = post.userPost
-			notificationController.createNotification('Confirm', req);
+			notificationController.createNotification('Confirmed', req);
 			req.body.userConfirm = req.user.id;
 			break;
 		case 'Unconfirmed':
-			if (post.status !== 'Confirm' && post.status !== 'CheckPost')
-				return next(new AppError('You can only unconfirmed when the post is confirm or checkPost', 400));
+			if (post.status !== 'Confirmed' && post.status !== 'Checking')
+				return next(new AppError('You can only unconfirmed when the post is confirmed or checking', 400));
 			if (post.userPost !== req.user.id && post.userConfirm !== req.user.id && req.user.role != 3) {
 				return next(new AppError('You are not belong to this post!', 403));
 			}
-			if (post.status === 'Confirm') {
+			if (post.status === 'Confirmed') {
 				if (req.user.id === post.userConfirm)
 					req.body.userReceive = post.userPost
 				else
 					req.body.userReceive = post.userConfirm
 				notificationController.createNotification('Unconfirmed', req);
 				req.body.userConfirm = null;
+			} else {
+				req.body.userReceive = post.userPost
+				notificationController.createNotification('Clear', req);
 			}
 			break;
 		case 'Delivered':
 			if (post.userConfirm !== req.user.id)
-				return next(new AppError('You are\'t user Confirm!', 403));
-			if (post.status !== 'Confirm')
-				return next(new AppError('You can only delivery when the post is confirm', 400));
+				return next(new AppError('You are\'t user confirm!', 403));
+			if (post.status !== 'Confirmed')
+				return next(new AppError('You can only deliver when the post is confirmed', 400));
 			break;
-		case 'CheckPost':
+		case 'Checking':
 			if (post.status !== 'Unconfirmed')
-				return next(new AppError('You can only checkPost when the post is unconfirmed', 400));
+				return next(new AppError('You can only checking when the post is unconfirmed', 400));
 			req.body.userReceive = post.userPost
-			notificationController.createNotificationHasContent('CheckPost', req);
+			notificationController.createNotificationHasContent('Checking', req);
 			break;
-		case 'Violation':
-			if (post.status !== 'CheckPost')
-				return next(new AppError('You can only violation when the post is checkPost', 400));
+		case 'Violated':
+			if (post.status !== 'Checking')
+				return next(new AppError('You can only violated when the post is checking', 400));
 			req.body.userReceive = post.userPost
-			notificationController.createNotificationHasContent('Violation', req);
+			notificationController.createNotificationHasContent('Violated', req);
 			break;
 	}
 	next();
@@ -144,7 +147,7 @@ exports.isNotDeliveryPost = catchAsync(async (req, res, next) => {
 		return next(
 			new AppError('You do not have permission to delete this post!', 403)
 		);
-	if (post.status === 'Delivery' || post.status === 'Confirm') {
+	if (post.status === 'Delivered' || post.status === 'Confirmed') {
 		return next(new AppError('You can not delete this post!', 403));
 	}
 	next();
