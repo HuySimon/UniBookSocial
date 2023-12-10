@@ -1,14 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { AiOutlineLogout } from 'react-icons/ai';
-import { PiHeartLight, PiEnvelopeLight, PiListBold, PiHouseLight, PiPlusCircleLight } from 'react-icons/pi';
 import { motion } from 'framer-motion';
-import { useAuthContext } from '../../hooks/useAuthContext';
 import { useHeaderContext } from '../../hooks/useHeaderContext';
+import Axios from '../../api/index'
+import { useAuthContext } from '../../hooks/useAuthContext';
+import { useNotificationContext } from '../../hooks/useNotificationContext';
 
 const SideBarItem = ({ title, href, index, activeOverlay, setActiveOverlay, expand, icon, handleCreate, target }) => {
-	const [state, dispatch] = useAuthContext()
 	const { stateHeader, dispatchHeader } = useHeaderContext()
+	const [state, dispatch] = useAuthContext()
+	const [stateNotify, dispatchNotify] = useNotificationContext()
+	const [quantity, setQuantity] = useState(0)
+	const getUnreadNotifications = async () => {
+		try {
+			const res = await Axios.get(`/api/v1/notifications?filter=and(equals(userReceive,'${state.user.user.id}'),equals(isSeen,'false'))`)
+			if (res.status === 200) {
+				console.log(res)
+				setQuantity(res.data.data.data.length)
+			}
+		} catch (error) {
+			console.log(error)
+		}
+	}
+	useEffect(() => {
+		getUnreadNotifications()
+	}, [stateNotify.isUpdateType])
+	console.log(quantity)
 	return (
 		<li
 			onClick={() => {
@@ -49,6 +66,11 @@ const SideBarItem = ({ title, href, index, activeOverlay, setActiveOverlay, expa
 						{title}
 					</div>
 				)}
+				{
+					title === "Notification" && (
+						<span className='absolute w-7 h-7 flex justify-center items-center text-white rounded-full p-2 bg-primary-main -top-2 -right-1'>{quantity}</span>
+					)
+				}
 			</Link>
 		</li>
 	);

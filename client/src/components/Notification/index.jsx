@@ -62,15 +62,18 @@ const Index = ({ isVisibleNotify, handleNotify }) => {
 		}
 	}
 	const updateNotifications = async (id, value) => {
+		dispatchNotify({ type: "UPDATE_TYPE", value: true })
 		try {
 			const res = await Axios.patch(`/api/v1/notifications/${id}`, {
 				isSeen: value
 			})
 			if (res.status === 200) {
 				toast.success("Update notifications successfully")
+				dispatchNotify({ type: "UPDATE_TYPE", value: false })
 			}
 		} catch (error) {
 			console.log(error)
+			dispatchNotify({ type: "UPDATE_TYPE", value: false })
 		}
 	}
 	const handleChange = (e, id) => {
@@ -97,7 +100,7 @@ const Index = ({ isVisibleNotify, handleNotify }) => {
 	useEffect(() => {
 		getNotifications(false)
 		setDataNotify(stateNotify.notifications)
-	}, [type])
+	}, [type,stateNotify.isUpdateType])
 	const menu = [
 		{
 			name: "Unread",
