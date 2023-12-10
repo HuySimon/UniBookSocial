@@ -7,10 +7,10 @@ import { toast } from 'react-toastify';
 import { useAuthContext } from '../../hooks/useAuthContext';
 import { AnimatePresence } from 'framer-motion';
 import Review from '../Review/Review';
-import { usePostContext } from '../../hooks/usePostContext';
 import Report from '../Report';
 import { useReviewContext } from '../../hooks/useReviewContext';
 import GenericModal from '../Modal/GenericModal';
+import { PiUserCircleLight } from 'react-icons/pi';
 
 const DetailPost = () => {
 	const postID = useParams();
@@ -168,50 +168,59 @@ const DetailPost = () => {
 					<div className="h-full flex flex-col justify-between">
 						<div className="flex flex-col">
 							<div className="w-full flex flex-col">
-							<p className='text-sm text-gray-500'>Post Information:</p>
-							<table className='flex border border-gray-500 rounded-md my-2'>
-								<thead className='flex flex-col border-r w-1/2 border-gray-500'>
-									<tr className='border-b p-2 border-gray-500 font-medium text-sm'>
-										<th>Title</th>
-									</tr>
-									<tr className='border-b p-2 border-gray-500 font-medium text-sm'>
-										<th>Price</th>
-									</tr>
-									<tr className='border-b p-2 border-gray-500 font-medium text-sm'>
-										<th>Major</th>
-									</tr>
-									<tr className='border-b p-2 border-gray-500 font-medium text-sm'>
-										<th>Type</th>
-									</tr>
-									<tr className='p-2 font-medium text-sm'>
-										<th>Description</th>
-									</tr>
-								</thead>
-								<tbody className='flex flex-col w-4/5'>
-									<tr className='p-2 text-sm break-words'>
-										<td>{detailPost.title}</td>
-									</tr>
-									<tr className='p-2 border-t border-gray-500 text-sm'>
-										<td>{detailPost.price}</td>
-									</tr>
-									<tr className='p-2 border-t border-gray-500 text-sm'>
-										<td>{
-											detailPost.isGeneralSubject === false ? "Yes" : "No"
-										}</td>
-									</tr>
-									<tr className='p-2 border-t border-gray-500 text-sm'>
-										<td>{detailPost.isNew ? "New" : "Old"}</td>
-									</tr>
-									<tr className='p-2 border-t border-gray-500 text-sm'>
-										<td>
-											{detailPost.description}
-										</td>
-									</tr>
-								</tbody>
-							</table>
+								<p className='text-sm text-gray-500'>Post Information:</p>
+								<table className='flex border border-gray-500 rounded-md my-2'>
+									<thead className='flex flex-col border-r w-1/2 border-gray-500'>
+										<tr className='border-b p-2 border-gray-500 font-medium text-sm'>
+											<th>Title</th>
+										</tr>
+										<tr className='border-b p-2 border-gray-500 font-medium text-sm'>
+											<th>Price</th>
+										</tr>
+										<tr className='border-b p-2 border-gray-500 font-medium text-sm'>
+											<th>Major</th>
+										</tr>
+										<tr className='border-b p-2 border-gray-500 font-medium text-sm'>
+											<th>Type</th>
+										</tr>
+										<tr className='p-2 font-medium text-sm'>
+											<th>Description</th>
+										</tr>
+									</thead>
+									<tbody className='flex flex-col w-4/5'>
+										<tr className='p-2 text-sm break-words'>
+											<td>{detailPost.title}</td>
+										</tr>
+										<tr className='p-2 border-t border-gray-500 text-sm'>
+											<td>{detailPost.price}</td>
+										</tr>
+										<tr className='p-2 border-t border-gray-500 text-sm'>
+											<td>{
+												detailPost.isGeneralSubject === false ? "Yes" : "No"
+											}</td>
+										</tr>
+										<tr className='p-2 border-t border-gray-500 text-sm'>
+											<td>{detailPost.isNew ? "New" : "Old"}</td>
+										</tr>
+										<tr className='p-2 border-t border-gray-500 text-sm'>
+											<td>
+												{detailPost.description}
+											</td>
+										</tr>
+									</tbody>
+								</table>
 							</div>
 							<div className="flex flex-col w-full">
-								<p className='text-sm text-gray-500'>User Post Information:</p>
+								<div className="flex items-center gap-1">
+									<p className='text-sm text-gray-500'>User Post Information:</p>
+									<Link
+										to={`/profile/${userPost.id}`}
+										target='_blank'
+										className="p-1 border text-sm flex items-center text-gray-700">
+										<PiUserCircleLight size={18} />
+										<span className='inline-block ml-1'>View Profile</span>
+									</Link>
+								</div>
 								<table className='flex border border-gray-500 rounded-md my-2'>
 									<thead className='flex flex-col border-r w-1/2 border-gray-500'>
 										<tr className='border-b p-2 border-gray-500 font-medium text-sm'>
@@ -240,7 +249,16 @@ const DetailPost = () => {
 							{
 								userConfirmData != null && Object.entries(userConfirmData).length > 0 && (
 									<div className="flex flex-col w-full">
-										<p className='text-sm text-gray-500'>User Confirm Information:</p>
+										<div className="flex items-center gap-1">
+											<p className='text-sm text-gray-500'>User Confirm Information:</p>
+											<Link
+												to={`/profile/${userConfirmData.id}`}
+												target='_blank'
+												className="p-1 border text-sm flex items-center text-gray-700">
+												<PiUserCircleLight size={18} />
+												<span className='inline-block ml-1'>View Profile</span>
+											</Link>
+										</div>
 										<table className='flex border border-gray-500 rounded-md my-2'>
 											<thead className='flex flex-col border-r w-1/2 border-gray-500'>
 												<tr className='border-b p-2 border-gray-500 font-medium text-sm'>
