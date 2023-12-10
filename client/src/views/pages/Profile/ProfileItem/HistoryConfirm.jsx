@@ -10,7 +10,7 @@ import { useForm } from 'react-hook-form'
 import { useReviewContext } from '../../../../hooks/useReviewContext'
 import { usePostContext } from '../../../../hooks/usePostContext'
 const HistoryConfirm = () => {
-	const menu = ["All", "Confirm", "Delivered"]
+	const menu = ["All", "Confirmed", "Delivered"]
 	const [isLoading, setIsLoading] = useState(false)
 	const [state, dispatch] = useAuthContext()
 	const [query, setQuery] = useState("")
@@ -32,7 +32,7 @@ const HistoryConfirm = () => {
 			url = `/api/v1/posts?filter=equals(userConfirm,'${curUser.id}')&include=userPostData&sort=-updatedAt`
 			// if(query.trim())
 		} else if (activeButton === 1) {
-			url = `/api/v1/posts?filter=and(equals(status,'Confirm'),equals(userConfirm,'${curUser.id}'))&include=userPostData&sort=-updatedAt`
+			url = `/api/v1/posts?filter=and(equals(status,'Confirmed'),equals(userConfirm,'${curUser.id}'))&include=userPostData&sort=-updatedAt`
 		} else {
 			url = `/api/v1/posts?filter=and(equals(status,'Delivered'),equals(userConfirm,'${curUser.id}'))&include=userPostData&sort=-updatedAt`
 		}

@@ -7,10 +7,14 @@ import Axios from '../../../api/index'
 import { useSearchContext } from '../../../hooks/useSearch';
 import { NoResultFound } from '../../../assets';
 import { toast } from 'react-toastify'
+import Pagination from '../../../components/Dashboard/Pagination';
 const Index = () => {
 
 	const [searchPost, setSearchPost] = useState([])
 	const [isLoading, setIsLoading] = useState(false)
+	const [currentPage, setCurrentPage] = useState(1)
+	const [totalPages, setTotalPages] = useState(0);
+	const [itemsPerPage] = useState(12);
 	const { searchValues, searchResults, updateSearch, clearSearch } = useSearchContext()
 	const { register, handleSubmit, formState: { errors, isDirty }, reset } = useForm({
 		mode: 'onChange',
@@ -26,25 +30,26 @@ const Index = () => {
 		setIsLoading(true)
 		console.log(data)
 		try {
-			let url = "/api/v1/posts?filter=equals(status,'Unconfirmed')"
-			let result = url.substring(0, 21)
+			let url = `/api/v1/posts?page[number]=${currentPage}&page[size]=12&filter=equals(status,'Unconfirmed')`
+			let result = url.substring(0, 50)
+			console.log(result)
 			if (isDirty) {
 				if (data.query != "") {
 					var queryUrl = `contains(title,'${data.query}')`
-					url = result + "and(" + url.substring(21, url.length) + "," + queryUrl + ")"
+					url = result + "and(" + url.substring(50, url.length) + "," + queryUrl + ")"
 				}
 				if (data.isGeneralSubject != -1) {
 					var isGeneralSubjectquery = `equals(isGeneralSubject,'${data.isGeneralSubject}')`
-					url = result + "and(" + url.substring(21, url.length) + "," + isGeneralSubjectquery + ")"
+					url = result + "and(" + url.substring(50, url.length) + "," + isGeneralSubjectquery + ")"
 				}
 				if (data.isNew != -1) {
 					var isNewquery = `equals(isNew,'${data.isNew}')`
-					url = result + "and(" + url.substring(21, url.length) + "," + isNewquery + ")"
+					url = result + "and(" + url.substring(50, url.length) + "," + isNewquery + ")"
 				}
 				if (data.minPrice != '') {
 					if (/^[+]?\d+([.]\d+)?$/.test(data.minPrice)) {
 						var minPricequery = `greaterOrEqual(price,'${data.minPrice}')`
-						url = result + "and(" + url.substring(21, url.length) + "," + minPricequery + ")"
+						url = result + "and(" + url.substring(50, url.length) + "," + minPricequery + ")"
 					} else {
 						return toast.error("Please provide an valid number")
 
@@ -53,7 +58,7 @@ const Index = () => {
 				if (data.maxPrice != '') {
 					if (/^[+]?\d+([.]\d+)?$/.test(data.maxPrice)) {
 						var maxPricequery = `lessOrEqual(price,'${data.maxPrice}')`
-						url = result + "and(" + url.substring(21, url.length) + "," + maxPricequery + ")"
+						url = result + "and(" + url.substring(50, url.length) + "," + maxPricequery + ")"
 					} else {
 						return toast.error("Please provide an valid number")
 					}
@@ -61,9 +66,12 @@ const Index = () => {
 				console.log(url)
 				const res = await Axios.get(url)
 				if (res.status === 200) {
+					console.log(res)
 					setSearchPost(res.data.data.data)
 					setIsLoading(false)
 					updateSearch(data, res.data.data.data)
+					const totalItems = res.data.data.totalItem;
+					setTotalPages(Math.ceil(totalItems / itemsPerPage));
 				}
 			}
 		} catch (err) {
@@ -73,15 +81,25 @@ const Index = () => {
 	}
 	const getPost = async () => {
 		try {
-			const res = await Axios.get(`/api/v1/posts?filter=equals(status,'Unconfirmed')&sort=-createdAt`)
+			const res = await Axios.get(`/api/v1/posts?page[number]=${currentPage}&page[size]=12&filter=equals(status,'Unconfirmed')&sort=-createdAt`)
 			if (res.status === 200) {
 				console.log(res.data.data.data)
 				setSearchPost(res.data.data.data)
+				const totalItems = res.data.totalItem;
+				setTotalPages(Math.ceil(totalItems / itemsPerPage));
 			}
 		} catch (err) {
 			console.log(err)
 		}
 	}
+	const handlePageChange = (pageNumber) => {
+		if (pageNumber < 1) {
+			pageNumber = 1;
+		} else if (pageNumber > totalPages) {
+			pageNumber = totalPages;
+		}
+		setCurrentPage(pageNumber);
+	};
 	const handleClearSeachValue = () => {
 		clearSearch()
 		reset()
@@ -97,6 +115,9 @@ const Index = () => {
 			document.title = "Home"
 		}
 	}, [])
+	useEffect(() => {
+		getPost()
+	}, [currentPage, itemsPerPage])
 	return (
 		<div className="w-full h-full px-10 py-6	">
 			<div className="w-full h-full flex flex-col">
@@ -202,31 +223,9 @@ const Index = () => {
 							</div>
 						)
 					}
-					{/* {
-						isSubmitted || searchResults.length != 0 ? (
-							isLoading ? (
-								<div className="w-full h-full flex justify-center items-center">
-									<ImSpinner9 className="animate-spin duration-500 text-primary-main" size={100} />
-								</div>
-							) : searchResults.length === 0 ? (
-								<div className="w-full h-fit flex flex-col justify-center items-center">
-									<img src={NoResultFound} alt="" className='w-[45vh] h-[45vh]' />
-									<p className='font-medium text-xl text-black/90 mb-2 tracking-wide'>No Result Found</p>
-									<p className='text-gray-400 text-sm'>Try adjusting your search terms or filters</p>
-								</div>
-							) : (
-								<div className="w-full mt-5 grid grid-cols-[repeat(2,minmax(0,3fr))] xl:grid-cols-[repeat(4,minmax(0,3fr))] 2xl:grid-cols-[repeat(6,minmax(0,3fr))] gap-2 gap-y-5">
-									{
-										searchResults.map((post, index) => (
-											<SearchPost key={index} post={post} />
-										))
-									}
-								</div>
-							)
-						) : (
-							<Outlet />
-						)
-					} */}
+				</div>
+				<div className="">
+					<Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={handlePageChange} />
 				</div>
 			</div>
 		</div>

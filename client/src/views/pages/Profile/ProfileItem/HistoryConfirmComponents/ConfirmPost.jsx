@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { PiUserCircleLight } from 'react-icons/pi'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuthContext } from '../../../../../hooks/useAuthContext'
 import { useReviewContext } from '../../../../../hooks/useReviewContext'
 import { toast } from 'react-toastify'
@@ -13,7 +13,6 @@ import { usePostContext } from '../../../../../hooks/usePostContext'
 import GenericModal from '../../../../../components/Modal/GenericModal'
 import { AiFillStar } from 'react-icons/ai'
 const ConfirmPost = ({ post }) => {
-	// console.log(post.title)
 	const [state, dispatch] = useAuthContext()
 	const [stateReview, dispatchReview] = useReviewContext()
 	const [statePost, dispatchPost] = usePostContext()
@@ -24,6 +23,7 @@ const ConfirmPost = ({ post }) => {
 	const [isVisibleEditReviewForm, setIsVisibleEditReviewForm] = useState(false)
 	const [isVisibleDeleteReviewModal, setIsVisibleDeleteReviewModal] = useState(false)
 	const [isVisibleModal, setIsVisibleModal] = useState(false)
+	const navigate = useNavigate()
 	const checkExistReview = () => {
 		const result = stateReview.reviews.find((review) => {
 			return review.post === post.id;
@@ -139,7 +139,9 @@ const ConfirmPost = ({ post }) => {
 					</div>
 				</div>
 				<div className="my-1">
-					<div className="w-full flex justify-between items-center border-y border-gray-400">
+					<div
+						onClick={() => { navigate(`/detailPost/${post.id}`) }}
+						className="w-full flex justify-between items-center border-y border-gray-400">
 						<div className="flex lg:flex-[4] py-4">
 							<div className="w-32 h-32 max-w-[128px]">
 								<img src={`http://127.0.0.1:5000/public/images/posts/${post.mainImage}`} alt="" className='w-full h-full object-cover' />
@@ -167,7 +169,7 @@ const ConfirmPost = ({ post }) => {
 									ref={toastId}
 									onClick={() => {
 										setIsVisibleModal(true)
-										setActionType(["Confirm", "Confirm success!"])
+										setActionType(["Confirmed", "Confirm success!"])
 									}}
 									className="w-32 xl:w-36 px-4 xl:px-6 py-3 bg-primary-main text-white rounded-md hover:shadow !shadow-primary-700 hover:bg-primary-700 transition-all">
 									Buy

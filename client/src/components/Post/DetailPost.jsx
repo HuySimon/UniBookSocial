@@ -167,7 +167,9 @@ const DetailPost = () => {
 					</div>
 					<div className="h-full flex flex-col justify-between">
 						<div className="flex flex-col">
-							<table className='flex border border-gray-500 rounded-md my-4'>
+							<div className="w-full flex flex-col">
+							<p className='text-sm text-gray-500'>Post Information:</p>
+							<table className='flex border border-gray-500 rounded-md my-2'>
 								<thead className='flex flex-col border-r w-1/2 border-gray-500'>
 									<tr className='border-b p-2 border-gray-500 font-medium text-sm'>
 										<th>Title</th>
@@ -207,35 +209,39 @@ const DetailPost = () => {
 									</tr>
 								</tbody>
 							</table>
-							<table className='flex border border-gray-500 rounded-md my-4'>
-								<thead className='flex flex-col border-r w-1/2 border-gray-500'>
-									<tr className='border-b p-2 border-gray-500 font-medium text-sm'>
-										<th>Name</th>
-									</tr>
-									<tr className='border-b p-2 border-gray-500 font-medium text-sm'>
-										<th>Email</th>
-									</tr>
-									<tr className='p-2 font-medium text-sm'>
-										<th>Contact</th>
-									</tr>
-								</thead>
-								<tbody className='flex flex-col w-4/5'>
-									<tr className='p-2 text-sm'>
-										<td>{userPost.username}</td>
-									</tr>
-									<tr className='p-2 border-t border-gray-500 text-sm break-words w-full'>
-										<td>{userPost.email}</td>
-									</tr>
-									<tr className='p-2 border-t border-gray-500 text-sm'>
-										<td>{!userPost.phoneNumber ? "This user don't have a phone number" : userPost.phoneNumber}</td>
-									</tr>
-								</tbody>
-							</table>
+							</div>
+							<div className="flex flex-col w-full">
+								<p className='text-sm text-gray-500'>User Post Information:</p>
+								<table className='flex border border-gray-500 rounded-md my-2'>
+									<thead className='flex flex-col border-r w-1/2 border-gray-500'>
+										<tr className='border-b p-2 border-gray-500 font-medium text-sm'>
+											<th>Name</th>
+										</tr>
+										<tr className='border-b p-2 border-gray-500 font-medium text-sm'>
+											<th>Email</th>
+										</tr>
+										<tr className='p-2 font-medium text-sm'>
+											<th>Contact</th>
+										</tr>
+									</thead>
+									<tbody className='flex flex-col w-4/5'>
+										<tr className='p-2 text-sm'>
+											<td>{userPost.username}</td>
+										</tr>
+										<tr className='p-2 border-t border-gray-500 text-sm break-words w-full'>
+											<td>{userPost.email}</td>
+										</tr>
+										<tr className='p-2 border-t border-gray-500 text-sm'>
+											<td>{!userPost.phoneNumber ? "This user don't have a phone number" : userPost.phoneNumber}</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
 							{
 								userConfirmData != null && Object.entries(userConfirmData).length > 0 && (
 									<div className="flex flex-col w-full">
-										<p>User Confirm Information:</p>
-										<table className='flex border border-gray-500 rounded-md my-4'>
+										<p className='text-sm text-gray-500'>User Confirm Information:</p>
+										<table className='flex border border-gray-500 rounded-md my-2'>
 											<thead className='flex flex-col border-r w-1/2 border-gray-500'>
 												<tr className='border-b p-2 border-gray-500 font-medium text-sm'>
 													<th>Name</th>
