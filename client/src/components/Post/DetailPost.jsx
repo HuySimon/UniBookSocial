@@ -232,7 +232,7 @@ const DetailPost = () => {
 								</tbody>
 							</table>
 							{
-								Object.entries(userConfirmData).length > 0 && (
+								userConfirmData != null && Object.entries(userConfirmData).length > 0 && (
 									<div className="flex flex-col w-full">
 										<p>User Confirm Information:</p>
 										<table className='flex border border-gray-500 rounded-md my-4'>
