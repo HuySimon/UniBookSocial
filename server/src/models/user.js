@@ -80,8 +80,8 @@ module.exports = (sequelize, DataTypes) => {
 		hooks: {
 			beforeCreate: async function (instance, options) {
 				instance.username = instance.firstName + ' ' + instance.lastName
-				instance.avatar = 'avatarDefault.jpg'
-				instance.coverImage = 'coverImageDefault.jpg'
+				instance.avatar = 'avatarDefault.png'
+				instance.coverImage = 'coverImageDefault.png'
 				// instance.password = await bcrypt.hash(instance.password, 12);
 				// console.log(instance.password)
 				if (!instance.role) {
