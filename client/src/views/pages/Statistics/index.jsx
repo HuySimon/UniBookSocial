@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { useDownloadExcel } from 'react-export-table-to-excel'
 import { IoPrintOutline } from "react-icons/io5";
 const Statistics = () => {
-	const [selectedFilter, setSelectedFilter] = useState('Violation');
+	const [selectedFilter, setSelectedFilter] = useState('Violated');
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 	const [chartData, setChartData] = useState({ categories: [], data: [] });
 	const [dateFilter, setDateFilter] = useState([])
@@ -73,13 +73,13 @@ const Statistics = () => {
 	};
 	const options = {
 		chart: {
-			id: `Data-of-${selectedFilter === "Violation" ? "Violated" : "Checking"}-Posts `,
+			id: `Data-of-${selectedFilter === "Violated" ? "Violated" : "Checking"}-Posts `,
 		},
 		xaxis: {
 			categories: chartData.categories,
 		},
 		title: {
-			text: `Number of ${selectedFilter === "Violation" ? "violated" : "checking"} posts ${dateFilter.length !== 0 ? ` between ${dateFilter[0]} - ${dateFilter[1]}` : ''} `,
+			text: `Number of ${selectedFilter === "Violated" ? "violated" : "Checking"} posts ${dateFilter.length !== 0 ? ` between ${dateFilter[0]} and ${dateFilter[1]}` : ''} `,
 			offsetX: 0,
 			offsetY: 0,
 			align: 'center',
@@ -145,9 +145,9 @@ const Statistics = () => {
                                 </a> */}
 									<a
 										href="#"
-										className={`block px-4 py-2 hover:bg-gray-100 ${selectedFilter === 'Violation' ? 'bg-gray-100' : ''
+										className={`block px-4 py-2 hover:bg-gray-100 ${selectedFilter === 'Violated' ? 'bg-gray-100' : ''
 											}`}
-										onClick={() => handleFilterChange('Violation')}
+										onClick={() => handleFilterChange('Violated')}
 									>
 										Violation
 									</a>
@@ -155,9 +155,9 @@ const Statistics = () => {
 								<li>
 									<a
 										href="#"
-										className={`block px-4 py-2 hover:bg-gray-100 ${selectedFilter === 'CheckPost' ? 'bg-gray-100' : ''
+										className={`block px-4 py-2 hover:bg-gray-100 ${selectedFilter === 'Checking' ? 'bg-gray-100' : ''
 											}`}
-										onClick={() => handleFilterChange('CheckPost')}
+										onClick={() => handleFilterChange('Checking')}
 									>
 										Check Post
 									</a>

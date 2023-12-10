@@ -27,6 +27,7 @@ const HistoryConfirm = () => {
 	})
 	const fetchConfirmPost = async () => {
 		setIsLoading(true)
+		let url = `/api/v1/posts?filter=and(equals(status,'Confirmed'),equals(userConfirm,'${curUser.id}'))&include=userPostData&sort=-updatedAt`
 		if (activeButton === 0) {
 			url = `/api/v1/posts?filter=and(equals(status,'Confirmed'),equals(userConfirm,'${curUser.id}'))&include=userPostData&sort=-updatedAt`
 		} else {
