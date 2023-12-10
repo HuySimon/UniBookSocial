@@ -27,7 +27,7 @@ function Posts() {
 	})
 	const fetchData = async () => {
 		try {
-			let url = `/api/v1/posts?include=userPostData,reportData&page[number]=${currentPage}&page[size]=2&filter=(equals(status,'CheckPost'))&sort=-updatedAt`
+			let url = `/api/v1/posts?include=userPostData,reportData&page[number]=${currentPage}&page[size]=2&filter=(equals(status,'Checking'))&sort=-updatedAt`
 			const response = await Axios.get(url);
 			const data = response.data.data.data;
 			setPostList(data);
@@ -196,8 +196,8 @@ function Posts() {
 									<img src={`http://127.0.0.1:5000/public/images/posts/${post.mainImage}`} alt="" className="w-full h-full object-contain" />
 								</div>
 								<table className="flex border border-gray-500 rounded-lg my-4">
-									<thead className="flex flex-col border-r w-1/2 xl:w-1/5 border-gray-500">
-										<tr>
+									<thead className="border-r w-1/2 xl:w-1/5 border-gray-500">
+										<tr className='w-full flex flex-col'>
 											<th className="border-b p-2 border-gray-500 font-medium text-sm">Title</th>
 											<th className="border-b p-2 border-gray-500 font-medium text-sm">Price</th>
 											<th className="border-b p-2 border-gray-500 font-medium text-sm">Major</th>
@@ -207,8 +207,8 @@ function Posts() {
 											<th className="p-2 font-medium text-sm">Content Reports</th>
 										</tr>
 									</thead>
-									<tbody className="flex flex-col w-1/2 xl:w-4/5">
-										<tr>
+									<tbody className="w-1/2 xl:w-4/5">
+										<tr className='w-full flex flex-col'>
 											<td className="p-2 text-sm">{post.title}</td>
 											<td className="p-2 border-t border-gray-500 text-sm">{post.price}</td>
 											<td className="p-2 border-t border-gray-500 text-sm">General Subject</td>
