@@ -8,8 +8,8 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-		Notification.belongsTo(models.Post,{ targetKey: 'id', foreignKey: 'post', as: 'postData' })
-		Notification.belongsTo(models.User,{ targetKey: 'id', foreignKey: 'userSend', as: 'userSendData' })
+      Notification.belongsTo(models.Post, { targetKey: 'id', foreignKey: 'post', as: 'postData' })
+      Notification.belongsTo(models.User, { targetKey: 'id', foreignKey: 'userSend', as: 'userSendData' })
 
       // define association here
     }
@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       typeNoti: {
         type: DataTypes.STRING,
         validate: {
-          isIn: [["Confirm", "Unconfirmed", "CheckPost", "Violation"]],
+          isIn: [["Confirmed", "Unconfirmed", "Checking", "Violated", "Clear"]],
         },
       },
       content: DataTypes.TEXT,
