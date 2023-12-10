@@ -6,12 +6,13 @@ import { useForm } from 'react-hook-form';
 import { useDownloadExcel } from 'react-export-table-to-excel'
 import { IoPrintOutline } from "react-icons/io5";
 const Statistics = () => {
-	const [selectedFilter, setSelectedFilter] = useState('Violation');
+	const [selectedFilter, setSelectedFilter] = useState('Violated');
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 	const [chartData, setChartData] = useState({ categories: [], data: [] });
 	const [dateFilter, setDateFilter] = useState([new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().substring(0, 10), new Date().toISOString().substring(0, 10)])
 	const [dataTable, setDataTable] = useState([])
 	const modalRef = useRef(null);
+	const tableRef = useRef(document.getElementById('table'))
 	const { register, handleSubmit, formState: { errors }, setFocus } = useForm({
 		defaultValues: {
 			dayStart: new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().substring(0, 10),
@@ -92,13 +93,13 @@ const Statistics = () => {
 	}
 	const options = {
 		chart: {
-			id: `Data-of-${selectedFilter === "Violation" ? "Violated" : "Checking"}-Posts `,
+			id: `Data-of-${selectedFilter === "Violated" ? "Violated" : "Checking"}-Posts `,
 		},
 		xaxis: {
 			categories: chartData.categories,
 		},
 		title: {
-			text: `Number of ${selectedFilter === "Violation" ? "violated" : "checking"} posts ${dateFilter.length !== 0 ? ` between ${dateFilter[0]} - ${dateFilter[1]}` : ''} `,
+			text: `Number of ${selectedFilter === "Violated" ? "violated" : "checking"} posts ${dateFilter.length !== 0 ? ` between ${dateFilter[0]} and ${dateFilter[1]}` : ''} `,
 			offsetX: 0,
 			offsetY: 0,
 			align: 'center',
@@ -116,16 +117,22 @@ const Statistics = () => {
 			data: chartData.data,
 		},
 	];
-	const tableRef = useRef(null)
+	useEffect(() => {
+
+	}, [tableRef])
+	useEffect(() => {
+		if (tableRef) {
+			tableRef.current = document.getElementById('table')
+		} else {
+			tableRef.current = document.getElementById('table')
+		}
+		getChartData()
+	}, [dateFilter])
 	const { onDownload } = useDownloadExcel({
 		currentTableRef: tableRef.current,
 		filename: "Violation Posts",
-		sheet: "Example 1"
+		sheet: "Example 1",
 	})
-	useEffect(() => {
-		getChartData()
-	}, [dateFilter])
-
 	return (
 		<div className="relative w-full h-full">
 			<div className="flex items-center pb-4 pt-[15px] bg-white space-x-4">
@@ -162,24 +169,21 @@ const Statistics = () => {
 						>
 							<ul className="py-1 text-sm text-gray-700 " aria-labelledby="dropdownActionButhrefn">
 								<li>
-									{/* <a href="#" className="block px-4 py-2 hover:bg-gray-100">
-                                    Month
-                                </a> */}
 									<a
 										href="#"
-										className={`block px-4 py-2 hover:bg-gray-100 ${selectedFilter === 'Violation' ? 'bg-gray-100' : ''
+										className={`block px-4 py-2 hover:bg-gray-100 ${selectedFilter === 'Violated' ? 'bg-gray-100' : ''
 											}`}
-										onClick={() => handleFilterChange('Violation')}
+										onClick={() => handleFilterChange('Violated')}
 									>
-										Violation
+										Violated
 									</a>
 								</li>
 								<li>
 									<a
 										href="#"
-										className={`block px-4 py-2 hover:bg-gray-100 ${selectedFilter === 'CheckPost' ? 'bg-gray-100' : ''
+										className={`block px-4 py-2 hover:bg-gray-100 ${selectedFilter === 'Checking' ? 'bg-gray-100' : ''
 											}`}
-										onClick={() => handleFilterChange('CheckPost')}
+										onClick={() => handleFilterChange('Checking')}
 									>
 										Check Post
 									</a>
@@ -215,7 +219,7 @@ const Statistics = () => {
 							</button>
 						</div>
 
-						<table ref={tableRef} className='w-full text-sm text-left text-gray-500 border rounded-md'>
+						<table ref={tableRef} id='table' className='w-full text-sm text-left text-gray-500 border rounded-md'>
 							<thead className='text-xs text-gray-700 uppercase bg-gray-50'>
 								<tr>
 									<th scope="col" className="px-6 py-3">ID</th>
