@@ -9,12 +9,12 @@ const Statistics = () => {
 	const [selectedFilter, setSelectedFilter] = useState('Violation');
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 	const [chartData, setChartData] = useState({ categories: [], data: [] });
-	const [dateFilter, setDateFilter] = useState([])
+	const [dateFilter, setDateFilter] = useState([new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().substring(0, 10), new Date().toISOString().substring(0, 10)])
 	const [dataTable, setDataTable] = useState([])
 	const modalRef = useRef(null);
 	const { register, handleSubmit, formState: { errors }, setFocus } = useForm({
 		defaultValues: {
-			dayStart: new Date().toISOString().substring(0, 10),
+			dayStart: new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().substring(0, 10),
 			dayEnd: new Date().toISOString().substring(0, 10)
 		}
 	})
@@ -71,6 +71,25 @@ const Statistics = () => {
 			console.error('Error fetching statistics data:', error);
 		}
 	};
+	const getChartData = async () => {
+		try {
+			const response = await Axios.get(`/api/v1/posts/statistics/Violated/dayStart/${dateFilter[0]}/dayEnd/${dateFilter[1]}`,);
+			console.log(selectedFilter);
+			if (response.status === 200) {
+				console.log(response)
+				const statisticsData = response.data.data.posts;
+				if (statisticsData.length === 0) {
+					toast.success("No data found between the selected date")
+				}
+				const categories = statisticsData.map((item) => item.date_col_formed);
+				const data = statisticsData.map((item) => item.count);
+				setDataTable(response.data.data.violatedUsers)
+				setChartData({ categories, data });
+			}
+		} catch (error) {
+			console.log(error)
+		}
+	}
 	const options = {
 		chart: {
 			id: `Data-of-${selectedFilter === "Violation" ? "Violated" : "Checking"}-Posts `,
@@ -103,7 +122,10 @@ const Statistics = () => {
 		filename: "Violation Posts",
 		sheet: "Example 1"
 	})
-	console.log(dataTable)
+	useEffect(() => {
+		getChartData()
+	}, [dateFilter])
+
 	return (
 		<div className="relative w-full h-full">
 			<div className="flex items-center pb-4 pt-[15px] bg-white space-x-4">
