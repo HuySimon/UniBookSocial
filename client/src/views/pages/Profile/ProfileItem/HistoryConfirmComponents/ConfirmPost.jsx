@@ -174,7 +174,7 @@ const ConfirmPost = ({ post }) => {
 									className="w-32 xl:w-36 px-4 xl:px-6 py-3 bg-primary-main text-white rounded-md hover:shadow !shadow-primary-700 hover:bg-primary-700 transition-all">
 									Buy
 								</button>
-							) : post.status === "Confirm" ? (
+							) : post.status === "Confirmed" ? (
 								<div className="flex justify-start gap-5 items-center">
 									<button
 										type="submit"

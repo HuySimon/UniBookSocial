@@ -36,14 +36,14 @@ const GenericModal = ({
 						) : actionType[0] === 'Delivered' ? (
 							<TbTruckDelivery size={60} className='text-green-600 mb-3'
 								style={{ path: { stroke: '#ffffff' } }} />
-						) : alterType === 'Checking' && (
+						) : alterType[0] === 'Checking' && (
 							<GoAlertFill size={60} className='text-red-600 mb-3' />
 						)}
 						{/* Adjust text based on actionType */}
 						<p className='font-medium text-center'>
 							{actionType[0] === 'Confirmed'
 								? 'Are you sure you want to confirm this order?'
-								: actionType[0] === 'Unconfirmed' && alterType !== 'CheckPost' ?
+								: actionType[0] === 'Unconfirmed' && alterType !== 'Checking' ?
 									'Are you sure you want to cancel this order?'
 									: actionType[0] === 'Delivered' ?
 										'Received your order?'

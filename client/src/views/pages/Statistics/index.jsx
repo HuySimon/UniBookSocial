@@ -133,7 +133,7 @@ const Statistics = () => {
 		const wb = XLSX.utils.book_new();
 		XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
 
-		const filename = 'exported_data.xlsx';
+		const filename = `${selectedFilter === "Violated" ? "Violated" : "Checking"}_${dateFilter[0]}_${dateFilter[1]}.xlsx`;
 
 		// Save the file
 		writeFile(wb, filename);
@@ -232,7 +232,7 @@ const Statistics = () => {
 									<th scope="col" className="px-6 py-3">ID</th>
 									<th scope="col" className="px-6 py-3">Name</th>
 									<th scope="col" className="px-6 py-3">Email</th>
-									<th scope="col" className="px-6 py-3">Quantity</th>
+									<th scope="col" className="px-6 py-3">Quantity Filter Result</th>
 									<th scope="col" className="px-6 py-3">Total</th>
 								</tr>
 							</thead>

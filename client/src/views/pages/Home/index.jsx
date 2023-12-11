@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Axios from '../../../api/index';
 import Post from '../../../components/Post/Post';
-import BriefProfile from '../Profile/BriefProfile';
-import { ImSpinner9 } from 'react-icons/im';
-import { ScrollRestoration, useLoaderData, useNavigate } from 'react-router-dom';
+import { ScrollRestoration,} from 'react-router-dom';
 import { usePostContext } from '../../../hooks/usePostContext'
-import { AnimatePresence } from 'framer-motion';
 const Index = () => {
 	const [state, dispatch] = usePostContext()
 	const [isLoading, setIsLoading] = useState(state.isLoading)
@@ -18,7 +15,6 @@ const Index = () => {
 				{
 					state.isLoading ? (
 						<div className="w-full h-screen flex justify-center items-center">
-							<ImSpinner9 className='animate-spin duration-500 text-primary-main' size={25} />
 						</div>
 					) : (
 						<>
