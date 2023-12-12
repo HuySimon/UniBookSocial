@@ -75,6 +75,7 @@ const HeaderAdmin = () => {
 						<Link
 							className='flex justify-center items-center w-full grow-0 shrink-0'
 							to={"/"}
+							target='_blank'
 						>
 							<img src={Logo} alt="Logo" className='w-12 h-14 object-contain' />
 							<span className={`font-bold text-2xl overflow-hidden transition-all ml-2 ${expand ? "w-44" : "w-0"}`}>UnibookSocial</span>

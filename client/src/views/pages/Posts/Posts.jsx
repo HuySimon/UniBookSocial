@@ -184,7 +184,7 @@ function Posts() {
 										<div className="w-14 h-14 rounded-full overflow-hidden">
 											<img src={`http://127.0.0.1:5000/public/images/users/avatar/${post.userPostData.avatar}`} alt="" className="w-full h-full object-cover" />
 										</div>
-										<div className="w-full flex justify-between items-center">
+										<div className="flex-1 flex justify-between items-center">
 											<div className="flex flex-col justify-stretch">
 												<span className="name text-base font-medium">{post.userPostData.username}</span>
 												<p className="text-sm leading-4 text-gray-600">{calculateTimeAgo(post.createdAt)}</p>

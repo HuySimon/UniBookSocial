@@ -67,7 +67,7 @@ const SideBarItem = ({ title, href, index, activeOverlay, setActiveOverlay, expa
 					</div>
 				)}
 				{
-					title === "Notification" && (
+					quantity != 0 && title === "Notification" && (
 						<span className='absolute w-7 h-7 flex justify-center items-center text-white rounded-full p-2 bg-primary-main -top-2 -right-1'>{quantity}</span>
 					)
 				}

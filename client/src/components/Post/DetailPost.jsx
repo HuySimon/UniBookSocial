@@ -165,7 +165,7 @@ const DetailPost = () => {
 							</div>
 						)}
 					</div>
-					<div className="h-full flex flex-col justify-between">
+					<div className="h-full flex flex-col justify-between mt-2">
 						<div className="flex flex-col">
 							<div className="w-full flex flex-col">
 								<p className='text-sm text-gray-500'>Post Information:</p>

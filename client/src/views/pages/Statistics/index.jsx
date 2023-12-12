@@ -75,7 +75,7 @@ const Statistics = () => {
 	};
 	const getChartData = async () => {
 		try {
-			const response = await Axios.get(`/api/v1/posts/statistics/Violated/dayStart/${dateFilter[0]}/dayEnd/${dateFilter[1]}`,);
+			const response = await Axios.get(`/api/v1/posts/statistics/${selectedFilter}/dayStart/${dateFilter[0]}/dayEnd/${dateFilter[1]}`,);
 			console.log(selectedFilter);
 			if (response.status === 200) {
 				console.log(response)
@@ -120,7 +120,7 @@ const Statistics = () => {
 	];
 	useEffect(() => {
 		getChartData()
-	}, [dateFilter])
+	}, [dateFilter,selectedFilter])
 	const exportToExcel = () => {
 		const ws = XLSX.utils.json_to_sheet(dataTable.map(item => ({
 			'ID': item.userPostData.id,

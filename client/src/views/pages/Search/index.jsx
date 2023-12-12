@@ -176,7 +176,7 @@ const Index = () => {
 									<HiChevronDown size={18} className="absolute right-2" />
 								</div>
 							</div>
-							<div className="flex flex-row lg:flex-col justify-between gap-4 lg:ml-5 lg:mt-0 mt-3">
+							<div className="flex flex-row lg:flex-col justify-between gap-4 lg:ml-5 lg:mt-0 mt-3 border-l border-gray-500 px-5">
 								<p className="h-full flex justify-start items-center w-32 lg:w-full">Price</p>
 								<div className="w-full flex justify-between items-center lg:gap-5 ">
 									<input

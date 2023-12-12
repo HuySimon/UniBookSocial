@@ -83,7 +83,7 @@ const EditPost = ({ post, handleEditPost, isVisibleEditPost }) => {
 				dispatchPost({ type: 'EDIT_POST', value: false });
 			}
 		} else {
-			return toast.error("This post is confirmed")
+			return toast.error("This post is confirmed.You can no longer edit this post.")
 		}
 	};
 	return (
