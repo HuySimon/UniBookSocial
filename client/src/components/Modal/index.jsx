@@ -1,47 +1,10 @@
 import React, { useRef, useState } from 'react'
 import { GoAlertFill, GoX } from 'react-icons/go'
 import { motion } from 'framer-motion'
-import Axios from '../../api/index'
-import { toast } from 'react-toastify'
-import { usePostContext } from '../../hooks/usePostContext'
 import { ImSpinner9 } from 'react-icons/im'
-const Index = ({ postID, setIsVisibleModalDelete }) => {
+const Index = ({ setIsVisibleModalDelete, handleDeletePost, isLoading }) => {
 
-	const [state, dispatch] = usePostContext()
-	const [isLoading, setIsLoading] = useState(false)
 	const toastID = useRef(null)
-	console.log(state)
-	const handleDeletePost = async () => {
-		try {
-			setTimeout(() => {
-				dispatch({ type: "DELETE_POST", value: true })
-			}, 2000);
-			setIsLoading(true)
-			const response = await Axios.delete(`/api/v1/posts/${postID}`);
-			if (response.status === 200) {
-				console.log(response);
-				setIsVisibleModalDelete(false)
-				setIsLoading(false)
-				setTimeout(() => {
-					dispatch({ type: "DELETE_POST", value: false })
-				}, 2000);
-			}
-		} catch (err) {
-			if (err.response) {
-				toast.error(err.response.data.message);
-				console.log(err.response);
-				setIsLoading(false)
-				setIsVisibleModalDelete(false)
-				setTimeout(() => {
-					dispatch({ type: "DELETE_POST", value: false })
-				}, 2000);
-			} else {
-				toast.error("An error occurred while deleting the post.");
-				console.error(err);
-			}
-		}
-	};
-
 
 	return (
 		<>

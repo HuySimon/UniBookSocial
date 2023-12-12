@@ -11,7 +11,11 @@ import Report from '../Report';
 import { useReviewContext } from '../../hooks/useReviewContext';
 import GenericModal from '../Modal/GenericModal';
 import { PiUserCircleLight } from 'react-icons/pi';
-
+const CustomToastWithLink = () => (
+	<div>
+		<Link to="/login">Please login.Click here to buy</Link>
+	</div>
+);
 const DetailPost = () => {
 	const postID = useParams();
 	const [state, dispatch] = useAuthContext();
@@ -80,9 +84,12 @@ const DetailPost = () => {
 		fetchData();
 	}, [detailPost.createdAt, stateReview]);
 
+	useEffect(() => {
+		fetchData();
+	}, [userConfirmData])
 	const confirmAction = async (status, message) => {
 		if (Object.entries(state.user).length === 0) {
-			toast.warning("Please log in to buy");
+			toast.info(CustomToastWithLink);
 		} else {
 			toastId.current = toast.loading("Please wait ....");
 			const data = { status };
@@ -211,12 +218,12 @@ const DetailPost = () => {
 								</table>
 							</div>
 							<div className="flex flex-col w-full">
-								<div className="flex items-center gap-1">
+								<div className="flex flex-col xl:flex-row xl:items-center gap-1">
 									<p className='text-sm text-gray-500'>User Post Information:</p>
 									<Link
 										to={`/profile/${userPost.id}`}
 										target='_blank'
-										className="p-1 border text-sm flex items-center text-gray-700">
+										className="p-1 border text-sm w-fit flex items-center text-gray-700">
 										<PiUserCircleLight size={18} />
 										<span className='inline-block ml-1'>View Profile</span>
 									</Link>
@@ -249,7 +256,7 @@ const DetailPost = () => {
 							{
 								userConfirmData != null && Object.entries(userConfirmData).length > 0 && (
 									<div className="flex flex-col w-full">
-										<div className="flex items-center gap-1">
+										<div className="flex flex-col xl:flex-row items-center gap-1">
 											<p className='text-sm text-gray-500'>User Confirm Information:</p>
 											<Link
 												to={`/profile/${userConfirmData.id}`}
@@ -300,7 +307,7 @@ const DetailPost = () => {
 										ref={toastId}
 										onClick={() => {
 											setIsVisibleModal(true)
-											setActionType(["Confirm", "Confirm success!"])
+											setActionType(["Confirmed", "Confirm success!"])
 										}}
 										className="w-28 xl:w-36 px-4 xl:px-6 py-3 bg-primary-main text-white rounded-lg hover:shadow !shadow-primary-700 hover:bg-primary-700 transition-all">
 										Buy

@@ -17,6 +17,7 @@ const ProfilePost = ({ post }) => {
 	const [isVisibleEditPost, setIsVisibleEditPost] = useState(false)
 	const [isVisibleModalDelete, setIsVisibleModalDelete] = useState(false)
 	const [selectedFile, setSelectedFile] = useState(null);
+	const [isLoading, setIsLoading] = useState(false);
 	const [timeAgo, setTimeAgo] = useState('');
 	const [state, dispatch] = useAuthContext()
 	const [statePost, dispatchPost] = usePostContext()
@@ -39,6 +40,30 @@ const ProfilePost = ({ post }) => {
 			},
 		},
 	];
+	const handleDeletePost = async () => {
+		try {
+			dispatchPost({ type: "DELETE_POST", value: true })
+			setIsLoading(true)
+			const response = await Axios.delete(`/api/v1/posts/${post.id}`);
+			if (response.status === 204) {
+				toast.success("Delete post successfully")
+				setIsVisibleModalDelete(false)
+				setIsLoading(false)
+				dispatchPost({ type: "DELETE_POST", value: false })
+			}
+		} catch (err) {
+			if (err.response) {
+				toast.error(err.response.data.message);
+				console.log(err.response);
+				setIsLoading(false)
+				setIsVisibleModalDelete(false)
+				dispatchPost({ type: "DELETE_POST", value: false })
+			} else {
+				toast.error("An error occurred while deleting the post.");
+				console.error(err);
+			}
+		}
+	};
 	useEffect(() => {
 		const calculateTimeAgo = () => {
 			const now = new Date();
@@ -184,11 +209,11 @@ const ProfilePost = ({ post }) => {
 			<AnimatePresence mode="wait">
 				{isVisibleModalDelete && (
 					<Modal
-						postID={post.id}
+						isLoading={isLoading}
 						setIsVisibleModalDelete={setIsVisibleModalDelete}
+						handleDeletePost={handleDeletePost}
 					/>
 				)}
-				{statePost.isDeletePost && toast.success("Delete success")}
 			</AnimatePresence>
 		</>
 	);

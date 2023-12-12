@@ -96,7 +96,7 @@ export const PostProvider = ({ children }) => {
 
 	useEffect(() => {
 		getPosts(url);
-	}, [state.isLoadingEdit, state.isCancelOrder, state.isLoadingHistoryConfirm,state.isReport]);
+	}, [state.isLoadingEdit, state.isCancelOrder, state.isLoadingHistoryConfirm,state.isReport,state.isDeletePost]);
 
 
 	return (
