@@ -1,12 +1,11 @@
--- Active: 1680850809935@@127.0.0.1@3306@unibooksocial
 -- phpMyAdmin SQL Dump
 -- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Dec 10, 2023 at 09:56 AM
--- Server version: 8.0.30
--- PHP Version: 8.1.10
+-- Host: 127.0.0.1
+-- Generation Time: Dec 12, 2023 at 02:46 PM
+-- Server version: 10.4.27-MariaDB
+-- PHP Version: 8.2.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -29,13 +28,13 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `notifications` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `isSeen` tinyint(1) NOT NULL,
-  `typeNoti` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
-  `userSend` int NOT NULL,
-  `userReceive` int NOT NULL,
-  `post` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `typeNoti` varchar(255) NOT NULL,
+  `content` text DEFAULT NULL,
+  `userSend` int(11) NOT NULL,
+  `userReceive` int(11) NOT NULL,
+  `post` varchar(10) NOT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -53,7 +52,7 @@ INSERT INTO `notifications` (`id`, `isSeen`, `typeNoti`, `content`, `userSend`, 
 (6, 0, 'Unconfirmed', NULL, 17, 6, '3', '2023-10-06 08:50:31', '2023-10-06 08:50:31'),
 (7, 0, 'Checking', NULL, 16, 20, '2', '2023-10-22 21:04:12', '2023-10-22 21:04:12'),
 (8, 0, 'Confirmed', NULL, 42, 15, '5', '2023-11-09 21:15:23', '2023-11-09 21:15:23'),
-(9, 0, 'Unconfirmed', NULL, 42, 15, '5', '2023-11-09 21:17:11', '2023-11-09 21:17:11'),
+(9, 1, 'Unconfirmed', NULL, 42, 15, '5', '2023-11-09 21:17:11', '2023-12-12 15:10:06'),
 (10, 0, 'Confirmed', NULL, 42, 15, '5', '2023-11-09 21:18:02', '2023-11-09 21:18:02'),
 (11, 0, 'Unconfirmed', NULL, 15, 42, '5', '2023-11-09 21:18:59', '2023-11-09 21:18:59'),
 (12, 0, 'Checking', 'Nội dung không phù hợphợp', 16, 15, '5', '2023-11-09 21:21:00', '2023-11-09 21:21:00'),
@@ -75,17 +74,21 @@ INSERT INTO `notifications` (`id`, `isSeen`, `typeNoti`, `content`, `userSend`, 
 (28, 1, 'Confirmed', NULL, 6, 16, '22', '2023-11-29 21:23:43', '2023-12-02 19:47:49'),
 (29, 1, 'Unconfirmed', NULL, 6, 16, '22', '2023-11-29 21:23:51', '2023-12-02 19:47:19'),
 (30, 1, 'Confirmed', NULL, 6, 16, '22', '2023-11-29 21:23:53', '2023-12-02 19:47:14'),
-(31, 0, 'Confirmed', NULL, 16, 6, '24', '2023-11-29 21:25:03', '2023-11-29 21:25:03'),
-(32, 0, 'Unconfirmed', NULL, 16, 6, '24', '2023-11-29 21:26:52', '2023-11-29 21:26:52'),
+(31, 1, 'Confirmed', NULL, 16, 6, '24', '2023-11-29 21:25:03', '2023-12-10 17:49:25'),
+(32, 1, 'Unconfirmed', NULL, 16, 6, '24', '2023-11-29 21:26:52', '2023-12-10 17:49:20'),
 (33, 0, 'Confirmed', NULL, 16, 6, '1012230003', '2023-12-10 14:47:24', '2023-12-10 14:47:24'),
 (34, 0, 'Confirmed', NULL, 16, 6, '1012230002', '2023-12-10 14:48:57', '2023-12-10 14:48:57'),
 (35, 0, 'Checking', NULL, 6, 16, '1012230011', '2023-12-10 14:51:01', '2023-12-10 14:51:01'),
 (36, 0, 'Confirmed', NULL, 6, 16, '1012230009', '2023-12-10 14:51:19', '2023-12-10 14:51:19'),
 (37, 0, 'Confirmed', NULL, 6, 16, '1012230008', '2023-12-10 14:51:49', '2023-12-10 14:51:49'),
 (38, 0, 'Checking', NULL, 16, 6, '1012230012', '2023-12-10 14:56:45', '2023-12-10 14:56:45'),
-(39, 0, 'Checking', NULL, 16, 6, '1012230013', '2023-12-10 15:00:40', '2023-12-10 15:00:40'),
-(40, 0, 'Violated', 'Ảnh không phù hợp', 3, 6, '1012230013', '2023-12-10 15:01:10', '2023-12-10 15:01:10'),
-(41, 0, 'Clear', NULL, 3, 6, '1012230012', '2023-12-10 16:46:32', '2023-12-10 16:46:32');
+(39, 1, 'Checking', NULL, 16, 6, '1012230013', '2023-12-10 15:00:40', '2023-12-10 17:46:47'),
+(40, 1, 'Violated', 'Ảnh không phù hợp', 3, 6, '1012230013', '2023-12-10 15:01:10', '2023-12-10 17:48:01'),
+(41, 0, 'Clear', NULL, 3, 6, '1012230012', '2023-12-10 16:46:32', '2023-12-10 16:46:32'),
+(42, 0, 'Checking', NULL, 15, 16, '0312230002', '2023-12-12 15:14:32', '2023-12-12 15:14:32'),
+(43, 0, 'Checking', NULL, 17, 16, '0312230004', '2023-12-12 15:51:52', '2023-12-12 15:51:52'),
+(44, 0, 'Checking', NULL, 17, 16, '0312230003', '2023-12-12 15:52:04', '2023-12-12 15:52:04'),
+(45, 0, 'Checking', NULL, 13, 16, '25', '2023-12-12 15:52:38', '2023-12-12 15:52:38');
 
 -- --------------------------------------------------------
 
@@ -94,8 +97,8 @@ INSERT INTO `notifications` (`id`, `isSeen`, `typeNoti`, `content`, `userSend`, 
 --
 
 CREATE TABLE `permissions` (
-  `id` int NOT NULL,
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -120,16 +123,16 @@ INSERT INTO `permissions` (`id`, `name`, `createdAt`, `updatedAt`) VALUES
 --
 
 CREATE TABLE `posts` (
-  `id` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `id` varchar(10) NOT NULL,
+  `title` varchar(255) NOT NULL,
   `price` float NOT NULL,
-  `mainImage` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
-  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `mainImage` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL,
+  `status` varchar(255) NOT NULL,
   `isNew` tinyint(1) NOT NULL,
   `isGeneralSubject` tinyint(1) NOT NULL,
-  `userConfirm` int DEFAULT NULL,
-  `userPost` int NOT NULL,
+  `userConfirm` int(11) DEFAULT NULL,
+  `userPost` int(11) NOT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -140,9 +143,9 @@ CREATE TABLE `posts` (
 
 INSERT INTO `posts` (`id`, `title`, `price`, `mainImage`, `description`, `status`, `isNew`, `isGeneralSubject`, `userConfirm`, `userPost`, `createdAt`, `updatedAt`) VALUES
 ('0312230001', 'ad', 3, '1702192297348-871301673.jpg', 'aef', 'Unconfirmed', 1, 0, NULL, 16, '2023-12-03 14:31:05', '2023-12-03 14:31:05'),
-('0312230002', 'aef', 4, '1702192297348-871301673.jpg', 'afe', 'Unconfirmed', 1, 0, NULL, 16, '2023-12-03 14:35:24', '2023-12-03 14:35:24'),
-('0312230003', 'asef', 45, '1702192297348-871301673.jpg', 'aef', 'Unconfirmed', 1, 0, NULL, 16, '2023-12-03 14:35:54', '2023-12-03 14:35:54'),
-('0312230004', 'asfe', 15000, '1701589067161-712249949.jfif', 'awfe', 'Unconfirmed', 0, 0, NULL, 16, '2023-12-03 14:37:47', '2023-12-03 14:41:59'),
+('0312230002', 'aef', 4, '1702192297348-871301673.jpg', 'afe', 'Checking', 1, 0, NULL, 16, '2023-12-03 14:35:24', '2023-12-12 15:14:32'),
+('0312230003', 'asef', 45, '1702192297348-871301673.jpg', 'aef', 'Checking', 1, 0, NULL, 16, '2023-12-03 14:35:54', '2023-12-12 15:52:04'),
+('0312230004', 'asfe', 15000, '1701589067161-712249949.jfif', 'awfe', 'Checking', 0, 0, NULL, 16, '2023-12-03 14:37:47', '2023-12-12 15:51:52'),
 ('1', 'Kinh tế chính trị', 15000, 'mainImage.png', 'Tài liệu tham khảo', 'Confirmed', 1, 0, 2, 5, '2023-09-25 02:02:24', '2023-09-25 02:02:24'),
 ('10', 'Lịch sử Đảng cộng sản Việt Nam', 35000, 'mainImage.png', 'Tài liệu tham khảo', 'Delivered', 1, 0, 16, 11, '2023-09-25 02:02:24', '2023-11-10 19:34:02'),
 ('1012230001', 'Tiếng Anh I', 30000, '1702192297348-871301673.jpg', 'Đã cào code (ghi chép đầy đủ)', 'Unconfirmed', 0, 0, NULL, 6, '2023-12-10 14:11:37', '2023-12-10 14:13:36'),
@@ -158,12 +161,18 @@ INSERT INTO `posts` (`id`, `title`, `price`, `mainImage`, `description`, `status
 ('1012230011', 'Sách nhập môn khoa học du lịch', 10000, '1702194420631-567309075.jpg', 'Tặng thêm file pdf bài giảng cô Hạnh.', 'Checking', 0, 1, NULL, 16, '2023-12-10 14:47:00', '2023-12-10 14:51:01'),
 ('1012230012', 'Kinh tế chính trị', 20000, '1702194928934-473670421.jpg', 'Giáo trình mới xài một kì nên mới nha', 'Unconfirmed', 1, 0, NULL, 6, '2023-12-10 14:55:28', '2023-12-10 16:46:32'),
 ('1012230013', 'Tiếng Anh II', 20000, '1702195175373-839439421.jpg', 'Sách mới', 'Violated', 1, 1, NULL, 6, '2023-12-10 14:59:35', '2023-12-10 15:01:10'),
+('1212230001', 'Thương Nguyên Đồ', 12345, '1702368223935-607935238.jpg', 'Ảnh đẹp quá ạ.xuất sắc', 'Unconfirmed', 0, 1, NULL, 15, '2023-12-12 15:03:43', '2023-12-12 15:09:01'),
+('1212230002', 'sách Triết Học Mác-Lênin', 20000, '1702369860544-618304811.jpg', 'Sách mới\r\n', 'Unconfirmed', 1, 0, NULL, 11, '2023-12-12 15:31:00', '2023-12-12 15:31:00'),
+('1212230003', 'Kinh tế chính trị Mác-Lênin', 15000, '1702369943295-13567474.png', 'Sách mới dùng cũng còn mới', 'Unconfirmed', 0, 0, NULL, 12, '2023-12-12 15:32:23', '2023-12-12 15:32:23'),
+('1212230004', 'Chủ nghĩa xã hội khoa học', 25000, '1702370005928-789033810.jpg', 'Mình cũng mua lại nên pass giá rẻ cho mọi người', 'Unconfirmed', 0, 0, NULL, 13, '2023-12-12 15:33:25', '2023-12-12 15:33:25'),
+('1212230005', 'Tư tưởng Hồ Chí Minh', 20000, '1702370148296-931970136.jpg', 'Sách mới mua dùng 1 lần cho thi ', 'Unconfirmed', 1, 0, NULL, 17, '2023-12-12 15:35:48', '2023-12-12 15:35:48'),
+('1212230006', 'Lịch sử đảng Việt Nam', 35000, '1702370181008-568316902.jpg', 'Mua tặng kèm slide luôn ạ ', 'Unconfirmed', 0, 1, NULL, 17, '2023-12-12 15:36:21', '2023-12-12 15:36:21'),
 ('2', 'Chủ nghĩa xã hội khoa học', 30000, 'mainImage.png', 'Tài liệu tham khảo', 'Violated', 1, 0, NULL, 20, '2023-09-25 02:02:24', '2023-10-22 20:13:52'),
 ('21', 'Test2', 150000, '1697789874796-804553370.png', 'oke', 'Delivered', 1, 0, 3, 16, '2023-10-20 15:17:54', '2023-11-10 18:57:02'),
 ('22', 'Hóa 2', 8, '1699620174133-489063823.jfif', 'oke', 'Delivered', 0, 0, 6, 16, '2023-11-10 19:42:54', '2023-11-29 21:23:58'),
 ('23', 'abc', 12, '1699620421278-845035065.jpg', 'dd', 'Delivered', 1, 1, 41, 16, '2023-11-10 19:47:01', '2023-11-17 20:00:24'),
 ('24', 'áef', 34, '1702192297348-871301673.jpg', 'ádfe', 'Unconfirmed', 1, 0, NULL, 6, '2023-11-29 21:24:42', '2023-11-29 21:26:52'),
-('25', 'aefa', 555, '1702192297348-871301673.jpg', 'áef', 'Unconfirmed', 1, 0, NULL, 16, '2023-11-29 21:31:21', '2023-11-29 21:31:21'),
+('25', 'aefa', 555, '1702192297348-871301673.jpg', 'áef', 'Checking', 1, 0, NULL, 16, '2023-11-29 21:31:21', '2023-12-12 15:52:38'),
 ('3', 'Kỹ thuật lập trình', 20000, 'mainImage.png', 'Tài liệu tham khảo', 'Delivery', 1, 1, 17, 6, '2023-09-25 02:02:24', '2023-09-25 02:02:24'),
 ('4', 'GDQP và AN I', 10000, 'mainImage.png', 'Tài liệu học tập', 'Confirmed', 1, 0, 10, 7, '2023-09-25 02:02:24', '2023-09-25 02:02:24'),
 ('5', 'Triết học Mac-Lenin', 25000, 'mainImage.png', 'Tài liệu tham khảo', 'Violated', 0, 0, NULL, 15, '2023-09-25 02:02:24', '2023-11-09 21:25:14'),
@@ -178,9 +187,9 @@ INSERT INTO `posts` (`id`, `title`, `price`, `mainImage`, `description`, `status
 --
 
 CREATE TABLE `reports` (
-  `user` int NOT NULL,
-  `post` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `user` int(11) NOT NULL,
+  `post` varchar(10) NOT NULL,
+  `content` varchar(255) NOT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -194,9 +203,13 @@ INSERT INTO `reports` (`user`, `post`, `content`, `createdAt`, `updatedAt`) VALU
 (6, '1012230011', 'Ảnh không phù hợp', '2023-12-10 14:51:01', '2023-12-10 14:51:01'),
 (10, '4', 'Tài liệu mờ một số trang', '2023-10-06 07:49:36', '2023-10-06 07:49:36'),
 (12, '6', 'Bán giá quá đắt', '2023-10-06 07:48:22', '2023-10-06 07:48:22'),
+(13, '25', 'Khứa này spam bài liên tục', '2023-12-12 15:52:38', '2023-12-12 15:52:38'),
+(15, '0312230002', 'Sách không giống trong hình', '2023-12-12 15:14:32', '2023-12-12 15:14:32'),
 (16, '1012230012', 'Ảnh không giống giáo trình', '2023-12-10 14:56:45', '2023-12-10 14:56:45'),
 (16, '1012230013', 'Ảnh không phù hợp', '2023-12-10 15:00:40', '2023-12-10 15:00:40'),
-(16, '2', 'Nội dung không phù hợp', '2023-10-22 21:04:12', '2023-10-22 21:04:12');
+(16, '2', 'Nội dung không phù hợp', '2023-10-22 21:04:12', '2023-10-22 21:04:12'),
+(17, '0312230003', 'Người này để tên không phù hợp', '2023-12-12 15:52:04', '2023-12-12 15:52:04'),
+(17, '0312230004', 'Người này spam bài', '2023-12-12 15:51:52', '2023-12-12 15:51:52');
 
 -- --------------------------------------------------------
 
@@ -205,11 +218,11 @@ INSERT INTO `reports` (`user`, `post`, `content`, `createdAt`, `updatedAt`) VALU
 --
 
 CREATE TABLE `resetpasswordtokens` (
-  `id` int NOT NULL,
-  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `value` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `id` int(11) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `value` varchar(255) DEFAULT NULL,
   `expired_at` datetime DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '0',
+  `status` tinyint(1) NOT NULL DEFAULT 0,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -238,12 +251,12 @@ INSERT INTO `resetpasswordtokens` (`id`, `email`, `value`, `expired_at`, `status
 --
 
 CREATE TABLE `reviews` (
-  `id` int NOT NULL,
-  `numStars` int NOT NULL,
-  `content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `user` int NOT NULL,
-  `post` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `isShow` tinyint(1) NOT NULL DEFAULT '1',
+  `id` int(11) NOT NULL,
+  `numStars` int(11) NOT NULL,
+  `content` varchar(255) DEFAULT NULL,
+  `user` int(11) NOT NULL,
+  `post` varchar(10) NOT NULL,
+  `isShow` tinyint(1) NOT NULL DEFAULT 1,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -265,8 +278,8 @@ INSERT INTO `reviews` (`id`, `numStars`, `content`, `user`, `post`, `isShow`, `c
 --
 
 CREATE TABLE `rolepermissions` (
-  `permission` int NOT NULL,
-  `role` int NOT NULL,
+  `permission` int(11) NOT NULL,
+  `role` int(11) NOT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -291,8 +304,8 @@ INSERT INTO `rolepermissions` (`permission`, `role`, `createdAt`, `updatedAt`) V
 --
 
 CREATE TABLE `roles` (
-  `id` int NOT NULL,
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -313,8 +326,8 @@ INSERT INTO `roles` (`id`, `name`, `createdAt`, `updatedAt`) VALUES
 --
 
 CREATE TABLE `sequelizemeta` (
-  `name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+  `name` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `sequelizemeta`
@@ -337,20 +350,20 @@ INSERT INTO `sequelizemeta` (`name`) VALUES
 --
 
 CREATE TABLE `users` (
-  `id` int NOT NULL,
-  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `firstName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `lastName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `coverImage` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `role` int NOT NULL,
-  `linkFacebook` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `linkZalo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `linkInstagram` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `phoneNumber` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `id` int(11) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `firstName` varchar(255) NOT NULL,
+  `lastName` varchar(255) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `avatar` varchar(255) NOT NULL,
+  `coverImage` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `status` varchar(255) NOT NULL,
+  `role` int(11) NOT NULL,
+  `linkFacebook` varchar(255) DEFAULT NULL,
+  `linkZalo` varchar(255) DEFAULT NULL,
+  `linkInstagram` varchar(255) DEFAULT NULL,
+  `phoneNumber` varchar(255) DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -360,27 +373,27 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `email`, `firstName`, `lastName`, `username`, `avatar`, `coverImage`, `password`, `status`, `role`, `linkFacebook`, `linkZalo`, `linkInstagram`, `phoneNumber`, `createdAt`, `updatedAt`) VALUES
-(1, 'anhhuy2452003@gmail.com', 'Huy', 'Nguyễn', 'Anh Huy Nguyễn', 'avatarDefault.png', 'coverImageDefault.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 2, NULL, NULL, NULL, NULL, '2023-09-24 22:03:51', '2023-09-24 22:03:51'),
-(2, 'HHH@gmail.com', 'BB', 'Nguyen Van', 'BBNguyen Van', 'avatarDefault.png', 'coverImageDefault.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 1, NULL, NULL, NULL, NULL, '2023-09-29 19:06:01', '2023-09-29 19:06:01'),
+(1, 'anhhuy2452003@gmail.com', 'Huy', 'Nguyễn', 'Anh Huy Nguyễn', 'avatarDefault.png', 'coverImageDefault.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 2, NULL, NULL, NULL, '0908141356', '2023-09-24 22:03:51', '2023-09-24 22:03:51'),
+(2, 'HHH@gmail.com', 'BB', 'Nguyen Van', 'BBNguyen Van', 'avatarDefault.png', 'coverImageDefault.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 1, NULL, NULL, NULL, '0344248392', '2023-09-29 19:06:01', '2023-09-29 19:06:01'),
 (3, 'hongbao2003@gmail.com', 'Bảo', 'Bùi', 'Bùi Bảo', 'avatarDefault.png', 'coverImageDefault.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 3, NULL, NULL, NULL, '0908141453', '2023-09-24 22:03:51', '2023-11-17 20:15:49'),
-(4, 'langueofdie@gmail.com', 'Nam', 'Trần', 'Trần Nam', 'avatarDefault.png', 'coverImageDefault.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 2, NULL, NULL, NULL, NULL, '2023-09-24 22:03:51', '2023-09-24 22:03:51'),
-(5, 'nguoidung10@gmail.com', 'Bảo', 'Võ', 'Gia Bảo', 'avatarDefault.png', 'coverImageDefault.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 1, NULL, NULL, NULL, NULL, '2023-09-24 22:03:51', '2023-09-24 22:03:51'),
-(6, 'nguoidung11@gmail.com', 'Cảnh', 'Mai', 'Cảnh Mai', 'avatarDefault.png', 'coverImageDefault.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 1, NULL, NULL, NULL, NULL, '2023-09-24 22:03:51', '2023-09-24 22:03:51'),
-(7, 'nguoidung12@gmail.com', 'Công', 'Nguyễn', 'Chí Công Nguyễn', 'avatarDefault.png', 'coverImageDefault.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 1, NULL, NULL, NULL, NULL, '2023-09-24 22:03:51', '2023-09-24 22:03:51'),
-(8, 'nguoidung13@gmail.com', 'Danh', 'Huỳnh', 'Thanh Danh', 'avatarDefault.png', 'coverImageDefault.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 1, NULL, NULL, NULL, NULL, '2023-09-24 22:03:51', '2023-09-24 22:03:51'),
-(9, 'nguoidung14@gmail.com', 'Dũng', 'Huỳnh', 'Tiến Dũng', 'avatarDefault.png', 'coverImageDefault.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 1, NULL, NULL, NULL, NULL, '2023-09-24 22:03:51', '2023-09-24 22:03:51'),
-(10, 'nguoidung1@gmail.com', 'Sang', 'Nguyễn', 'Sang Nguyễn', 'avatarDefault.png', 'coverImageDefault.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Disabled', 2, NULL, NULL, NULL, NULL, '2023-09-24 22:03:51', '2023-10-08 12:29:36'),
-(11, 'nguoidung2@gmail.com', 'Đình', 'Lê', 'Đình Đình', 'avatarDefault.png', 'coverImageDefault.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 1, NULL, NULL, NULL, NULL, '2023-09-24 22:03:51', '2023-09-24 22:03:51'),
-(12, 'nguoidung3@gmail.com', 'Minh', 'Nguyễn', 'Nguyễn Minh', 'avatarDefault.png', 'coverImageDefault.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 1, NULL, NULL, NULL, NULL, '2023-09-24 22:03:51', '2023-09-24 22:03:51'),
-(13, 'nguoidung4@gmail.com', 'Duy', 'Trần', 'Duy Trần', 'avatarDefault.png', 'coverImageDefault.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 1, NULL, NULL, NULL, NULL, '2023-09-24 22:03:51', '2023-09-24 22:03:51'),
-(14, 'nguoidung5@gmail.com', 'Dương', 'Trần', 'Trần Đại Dương', 'avatarDefault.png', 'coverImageDefault.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 3, NULL, NULL, NULL, NULL, '2023-09-24 22:03:51', '2023-09-24 22:03:51'),
-(15, 'nguoidung6@gmail.com', 'Quân', 'Tăng', 'Quân Tăng Đặng', 'avatarDefault.png', 'coverImageDefault.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 1, NULL, NULL, NULL, NULL, '2023-09-24 22:03:51', '2023-09-24 22:03:51'),
-(16, 'nguoidung7@gmail.com', 'Tài', 'cc', 'Nhữ Tài', '1699873163987-415762560.png', '1699873238240-423632442.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 1, NULL, NULL, NULL, NULL, '2023-09-24 22:03:51', '2023-11-13 18:12:38'),
-(17, 'nguoidung8@gmail.com', 'Anh', 'Võ', 'Võ Mai Anh', 'avatarDefault.png', 'coverImageDefault.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 1, NULL, NULL, NULL, NULL, '2023-09-24 22:03:51', '2023-09-24 22:03:51'),
-(18, 'nguoidung9@gmail.com', 'Bảo', 'Nguyễn', 'Bảo Nguyễn', 'avatarDefault.png', 'coverImageDefault.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 1, NULL, NULL, NULL, NULL, '2023-09-24 22:03:51', '2023-09-24 22:03:51'),
-(19, 'tangquoctuan2003@gmail.com', 'Tuấn', 'Tăng', 'Tăng Quốc Tuấn', 'avatarDefault.png', 'coverImageDefault.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 2, NULL, NULL, NULL, NULL, '2023-09-24 22:03:51', '2023-09-24 22:03:51'),
-(20, 'tienphan09098@gmail.com', 'Tiến', 'Phan', 'Tiến Tiến', 'avatarDefault.png', 'coverImageDefault.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 2, NULL, NULL, NULL, NULL, '2023-09-24 22:03:51', '2023-09-24 22:03:51'),
-(21, 'tienphatng.693@gmail.com', 'Phát', 'Nguyễn', 'Phát Nguyễn', 'avatarDefault.png', 'coverImageDefault.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 2, NULL, NULL, NULL, NULL, '2023-09-24 22:03:51', '2023-09-24 22:03:51'),
+(4, 'langueofdie@gmail.com', 'Nam', 'Trần', 'Trần Nam', 'avatarDefault.png', 'coverImageDefault.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 2, NULL, NULL, NULL, '0344258369', '2023-09-24 22:03:51', '2023-09-24 22:03:51'),
+(5, 'nguoidung10@gmail.com', 'Bảo', 'Võ', 'Gia Bảo', 'avatarDefault.png', 'coverImageDefault.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 1, NULL, NULL, NULL, '0909251478', '2023-09-24 22:03:51', '2023-09-24 22:03:51'),
+(6, 'nguoidung11@gmail.com', 'Cảnh', 'Mai', 'Cảnh Mai', 'avatarDefault.png', 'coverImageDefault.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 1, NULL, NULL, NULL, '0905632587', '2023-09-24 22:03:51', '2023-09-24 22:03:51'),
+(7, 'nguoidung12@gmail.com', 'Công', 'Nguyễn', 'Chí Công Nguyễn', 'avatarDefault.png', 'coverImageDefault.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 1, NULL, NULL, NULL, '0902159358', '2023-09-24 22:03:51', '2023-09-24 22:03:51'),
+(8, 'nguoidung13@gmail.com', 'Danh', 'Huỳnh', 'Thanh Danh', 'avatarDefault.png', 'coverImageDefault.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 1, NULL, NULL, NULL, '0909456789', '2023-09-24 22:03:51', '2023-09-24 22:03:51'),
+(9, 'nguoidung14@gmail.com', 'Dũng', 'Huỳnh', 'Tiến Dũng', 'avatarDefault.png', 'coverImageDefault.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 1, NULL, NULL, NULL, '0255348396', '2023-09-24 22:03:51', '2023-09-24 22:03:51'),
+(10, 'nguoidung1@gmail.com', 'Sang', 'Nguyễn', 'Sang Nguyễn', 'avatarDefault.png', 'coverImageDefault.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Disabled', 2, NULL, NULL, NULL, '0256315456', '2023-09-24 22:03:51', '2023-10-08 12:29:36'),
+(11, 'nguoidung2@gmail.com', 'Đình', 'Lê', 'Đình Đình', 'avatarDefault.png', 'coverImageDefault.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 1, NULL, NULL, NULL, '0365256874', '2023-09-24 22:03:51', '2023-09-24 22:03:51'),
+(12, 'nguoidung3@gmail.com', 'Minh', 'Nguyễn', 'Nguyễn Minh', 'avatarDefault.png', 'coverImageDefault.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 1, NULL, NULL, NULL, '0335678999', '2023-09-24 22:03:51', '2023-09-24 22:03:51'),
+(13, 'nguoidung4@gmail.com', 'Duy', 'Trần', 'Duy Trần', 'avatarDefault.png', 'coverImageDefault.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 1, NULL, NULL, NULL, '0901122334', '2023-09-24 22:03:51', '2023-09-24 22:03:51'),
+(14, 'nguoidung5@gmail.com', 'Dương', 'Trần', 'Trần Đại Dương', 'avatarDefault.png', 'coverImageDefault.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 3, NULL, NULL, NULL, '0978888999', '2023-09-24 22:03:51', '2023-09-24 22:03:51'),
+(15, 'nguoidung6@gmail.com', 'Quân', 'Tăng', 'Quân Tăng Đặng', 'avatarDefault.png', '1702368291728-667216275.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 1, NULL, NULL, NULL, '0156789888', '2023-09-24 22:03:51', '2023-12-12 15:04:51'),
+(16, 'nguoidung7@gmail.com', 'Tài', 'Nhữ', 'Nhữ Tài', '1699873163987-415762560.png', '1699873238240-423632442.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 1, NULL, NULL, NULL, '0397359745', '2023-09-24 22:03:51', '2023-11-13 18:12:38'),
+(17, 'nguoidung8@gmail.com', 'Anh', 'Võ', 'Võ Mai Anh', 'avatarDefault.png', 'coverImageDefault.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 1, NULL, NULL, NULL, '0974097749', '2023-09-24 22:03:51', '2023-09-24 22:03:51'),
+(18, 'nguoidung9@gmail.com', 'Bảo', 'Nguyễn', 'Bảo Nguyễn', 'avatarDefault.png', 'coverImageDefault.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 1, NULL, NULL, NULL, '0947970497', '2023-09-24 22:03:51', '2023-09-24 22:03:51'),
+(19, 'tangquoctuan2003@gmail.com', 'Tuấn', 'Tăng', 'Tăng Quốc Tuấn', 'avatarDefault.png', 'coverImageDefault.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 2, NULL, NULL, NULL, '0403567895', '2023-09-24 22:03:51', '2023-09-24 22:03:51'),
+(20, 'tienphan09098@gmail.com', 'Tiến', 'Phan', 'Tiến Tiến', 'avatarDefault.png', 'coverImageDefault.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 2, NULL, NULL, NULL, '0698732564', '2023-09-24 22:03:51', '2023-09-24 22:03:51'),
+(21, 'tienphatng.693@gmail.com', 'Phát', 'Nguyễn', 'Phát Nguyễn', 'avatarDefault.png', 'coverImageDefault.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 2, NULL, NULL, NULL, '0222598765', '2023-09-24 22:03:51', '2023-09-24 22:03:51'),
 (41, 'test123@gmail.com', 'Test33333', 'Nguyen Van', 'Test33 Nguyen Van', 'avatarDefault.png', '1700224365290-486503796.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 1, NULL, NULL, NULL, '0908141453', '2023-11-05 00:35:18', '2023-11-17 20:06:18'),
 (42, 'testnha@gmail.com', 'Test33', 'Nguyen Van', 'Test33 Nguyen Van', 'avatarDefault.png', 'coverImageDefault.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 1, NULL, NULL, NULL, '0908141453', '2023-11-07 15:15:44', '2023-11-07 15:15:44'),
 (43, 'hongbao2@gmail.com', 'Bao', 'Bui', 'Bao Bui', 'avatarDefault.png', 'coverImageDefault.png', '$2a$12$bYHcLnCYh5lfKKr4D7wmgO1m25mIynEw7nPnx3.SzD67AVOCdhBea', 'Active', 1, NULL, NULL, NULL, '0908141453', '2023-11-07 15:17:28', '2023-11-07 15:17:28');
@@ -470,37 +483,37 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT for table `permissions`
 --
 ALTER TABLE `permissions`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `resetpasswordtokens`
 --
 ALTER TABLE `resetpasswordtokens`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `reviews`
 --
 ALTER TABLE `reviews`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- Constraints for dumped tables
@@ -512,14 +525,14 @@ ALTER TABLE `users`
 ALTER TABLE `notifications`
   ADD CONSTRAINT `notifications_ibfk_1` FOREIGN KEY (`userSend`) REFERENCES `users` (`id`),
   ADD CONSTRAINT `notifications_ibfk_2` FOREIGN KEY (`userReceive`) REFERENCES `users` (`id`),
-  ADD CONSTRAINT `notifications_ibfk_3` FOREIGN KEY (`post`) REFERENCES `posts` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT `notifications_ibfk_3` FOREIGN KEY (`post`) REFERENCES `posts` (`id`);
 
 --
 -- Constraints for table `reports`
 --
 ALTER TABLE `reports`
   ADD CONSTRAINT `reports_ibfk_1` FOREIGN KEY (`user`) REFERENCES `users` (`id`),
-  ADD CONSTRAINT `reports_ibfk_2` FOREIGN KEY (`post`) REFERENCES `posts` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT `reports_ibfk_2` FOREIGN KEY (`post`) REFERENCES `posts` (`id`);
 
 --
 -- Constraints for table `resetpasswordtokens`
@@ -532,7 +545,7 @@ ALTER TABLE `resetpasswordtokens`
 --
 ALTER TABLE `reviews`
   ADD CONSTRAINT `reviews_ibfk_1` FOREIGN KEY (`user`) REFERENCES `users` (`id`),
-  ADD CONSTRAINT `reviews_ibfk_2` FOREIGN KEY (`post`) REFERENCES `posts` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT `reviews_ibfk_2` FOREIGN KEY (`post`) REFERENCES `posts` (`id`);
 
 --
 -- Constraints for table `rolepermissions`
