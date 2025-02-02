@@ -8,8 +8,8 @@ git clone https://github.com/HuySimon/UniBookSocial.git
 cd UniBookSocial
 
 ## Backend Setup
-Open Xampp App and Import file Unibooksocial.sql into Xampp
-Run Xampp
+Open run Xampp App ---> Start Apache và MySQL
+Import file Unibooksocial.sql into MySQL
 Open new terminal in Visual Studio Code
 cd server
 npm install
